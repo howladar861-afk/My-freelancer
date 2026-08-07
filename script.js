@@ -1,6 +1,11 @@
 // Firebase SDK Import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
+  getFirestore,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
@@ -20,9 +25,9 @@ const firebaseConfig = {
 // Firebase চালু
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
+const db = getFirestore(app);
 // Register
-document.getElementById("registerBtn").onclick = () => {
+document.getElementById("registerBtn").onclick = async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 const referral = document.getElementById("referral").value.trim();
@@ -31,8 +36,12 @@ if (referral === "") {
     alert("Referral Code is required!");
     return;
 }
-  alert("TEST");
-return;
+  const refDoc = await getDoc(doc(db, "users", referral));
+
+if (!refDoc.exists()) {
+    alert("Invalid Referral Code!");
+    return;
+}
   createUserWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("Registration Successful");
