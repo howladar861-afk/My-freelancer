@@ -25,11 +25,13 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     document.getElementById("userEmail").textContent = user.email;
     const userDoc = await getDoc(doc(db, "users", user.uid));
-
 if (userDoc.exists()) {
-  
-    document.getElementById("referralCode").textContent =
-        "Referral Code: " + userDoc.data().referralCode;
+  document.getElementById("userEmail").textContent = user.email;
+  document.getElementById("referralCode").textContent =
+    "Referral Code: " + userDoc.data().referralCode;
+} else {
+  document.getElementById("referralCode").textContent =
+    "Referral Code: Not Found";
 }
   } else {
     window.location.href = "index.html";
