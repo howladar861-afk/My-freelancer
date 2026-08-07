@@ -2,9 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebas
 
 import {
   getFirestore,
+  collection,
   doc,
   getDoc,
-  setDoc
+  setDoc,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import {
   getAuth,
@@ -38,12 +42,17 @@ document.getElementById("registerBtn").onclick = async () => {
     return;
   }
 
-  const refDoc = await getDoc(doc(db, "users", referral));
+  const q = query(
+  collection(db, "users"),
+  where("referralCode", "==", referral)
+);
 
-  if (!refDoc.exists()) {
-    alert("Invalid Referral Code!");
-    return;
-  }
+const querySnapshot = await getDocs(q);
+
+if (querySnapshot.empty) {
+  alert("Invalid Referral Code!");
+  return;
+}
 
   createUserWithEmailAndPassword(auth, email, password)
     .then(async (userCredential) => {
