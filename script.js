@@ -42,6 +42,7 @@ if (referral === "") {
 if (!refDoc.exists()) {
     alert("Invalid Referral Code!");
     return;
+}
   createUserWithEmailAndPassword(auth, email, password)
   .then(async (userCredential) => {
 
