@@ -31,34 +31,35 @@ const db = getFirestore(app);
 document.getElementById("registerBtn").onclick = async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-const referral = document.getElementById("referral").value.trim();
+  const referral = document.getElementById("referral").value.trim();
 
-if (referral === "") {
+  if (referral === "") {
     alert("Referral Code is required!");
     return;
-}
+  }
+
   const refDoc = await getDoc(doc(db, "users", referral));
 
-if (!refDoc.exists()) {
+  if (!refDoc.exists()) {
     alert("Invalid Referral Code!");
     return;
-}
-}
+  }
+
   createUserWithEmailAndPassword(auth, email, password)
-  .then(async (userCredential) => {
+    .then(async (userCredential) => {
 
-  const myReferral = Math.random().toString(36).substring(2, 8).toUpperCase();
+      const myReferral = Math.random().toString(36).substring(2, 8).toUpperCase();
 
-  await setDoc(doc(db, "users", userCredential.user.uid), {
-    uid: userCredential.user.uid,
-    email: email,
-    referralCode: myReferral,
-    referredBy: referral
-  });
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        email: email,
+        referralCode: myReferral,
+        referredBy: referral
+      });
 
-  alert("Registration Successful!\nYour Referral Code: " + myReferral);
-
-})
+      alert("Registration Successful!\nYour Referral Code: " + myReferral);
+      window.location.href = "dashboard.html";
+    })
     .catch((error) => {
       alert(error.message);
     });
