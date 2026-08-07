@@ -24,6 +24,13 @@ const db = getFirestore(app);
 onAuthStateChanged(auth, (user) => {
   if (user) {
     document.getElementById("userEmail").textContent = user.email;
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+
+if (userDoc.exists()) {
+  
+    document.getElementById("referralCode").textContent =
+        "Referral Code: " + userDoc.data().referralCode;
+}
   } else {
     window.location.href = "index.html";
   }
