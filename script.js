@@ -1,9 +1,10 @@
-// Firebase SDK Import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 import {
   getFirestore,
   doc,
-  getDoc
+  getDoc,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import {
   getAuth,
@@ -41,11 +42,21 @@ if (referral === "") {
 if (!refDoc.exists()) {
     alert("Invalid Referral Code!");
     return;
-}
   createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("Registration Successful");
-    })
+  .then(async (userCredential) => {
+
+  const myReferral = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+  await setDoc(doc(db, "users", myReferral), {
+    uid: userCredential.user.uid,
+    email: email,
+    referralCode: myReferral,
+    referredBy: referral
+  });
+
+  alert("Registration Successful!\nYour Referral Code: " + myReferral);
+
+})
     .catch((error) => {
       alert(error.message);
     });
