@@ -98,3 +98,29 @@ footer{
     margin-top:40px;
     background:rgba(0,0,0,.3);
 }
+.auth{
+    background:#fff;
+    padding:20px;
+    margin:30px;
+    border-radius:10px;
+}
+
+.auth input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+    box-sizing:border-box;
+}
+
+#registerBtn,
+#loginBtn{
+    width:100%;
+    background:#0d6efd;
+    color:#fff;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
