@@ -4,7 +4,11 @@ import {
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
+import {
+  getFirestore,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
   authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
@@ -16,7 +20,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
+const db = getFirestore(app);
 onAuthStateChanged(auth, (user) => {
   if (user) {
     document.getElementById("userEmail").textContent = user.email;
