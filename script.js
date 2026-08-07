@@ -25,7 +25,12 @@ const auth = getAuth(app);
 document.getElementById("registerBtn").onclick = () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+const referral = document.getElementById("referral").value.trim();
 
+if (referral === "") {
+    alert("Referral Code is required!");
+    return;
+}
   createUserWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("Registration Successful");
