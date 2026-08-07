@@ -71,6 +71,7 @@ document.getElementById("loginBtn").onclick = () => {
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("Login Successful");
+      window.location.href = "dashboard.html";
     })
     .catch((error) => {
       alert(error.message);
