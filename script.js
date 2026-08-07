@@ -31,6 +31,8 @@ if (referral === "") {
     alert("Referral Code is required!");
     return;
 }
+  alert("TEST");
+return;
   createUserWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("Registration Successful");
