@@ -43,12 +43,13 @@ if (!refDoc.exists()) {
     alert("Invalid Referral Code!");
     return;
 }
+}
   createUserWithEmailAndPassword(auth, email, password)
   .then(async (userCredential) => {
 
   const myReferral = Math.random().toString(36).substring(2, 8).toUpperCase();
 
-  await setDoc(doc(db, "users", myReferral), {
+  await setDoc(doc(db, "users", userCredential.user.uid), {
     uid: userCredential.user.uid,
     email: email,
     referralCode: myReferral,
