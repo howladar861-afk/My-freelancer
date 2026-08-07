@@ -6,8 +6,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import {
   getFirestore,
+  collection,
   doc,
-  getDoc
+  getDoc,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
@@ -29,7 +33,17 @@ if (userDoc.exists()) {
   document.getElementById("userEmail").textContent = user.email;
   document.getElementById("referralCode").textContent =
     "Referral Code: " + userDoc.data().referralCode;
+  const q = query(
+  collection(db, "users"),
+  where("referredBy", "==", userDoc.data().referralCode)
+);
+
+const querySnapshot = await getDocs(q);
+
+document.getElementById("referralCount").textContent =
+  "Referral Count: " + querySnapshot.size;
 } else {
+  
   document.getElementById("referralCode").textContent =
     "Referral Code: Not Found";
 }
