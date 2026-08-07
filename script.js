@@ -49,6 +49,8 @@ document.getElementById("registerBtn").onclick = async () => {
 
 const querySnapshot = await getDocs(q);
 
+alert("Query Success");
+
 if (querySnapshot.empty) {
   alert("Invalid Referral Code!");
   return;
