@@ -317,28 +317,27 @@ document.getElementById("editProfileBtn").onclick = async () => {
     }
 
     const userRef = doc(db, "users", user.uid);
-  const userRef = doc(db, "users", user.uid);
-  const userDoc = await getDoc(userRef);
+    const userDoc = await getDoc(userRef);
 
-  const data = userDoc.exists() ? userDoc.data() : {};
+    const data = userDoc.exists() ? userDoc.data() : {};
 
-  const oldName = data.name || user.displayName || "";
+    const oldName = data.name || user.displayName || "";
 
-  const newName = prompt(
-    "আপনার নতুন নাম লিখুন:",
-    oldName
-  );
+    const newName = prompt(
+        "আপনার নতুন নাম লিখুন:",
+        oldName
+    );
 
-  if (!newName || newName.trim() === "") {
-    return;
-  }
+    if (!newName || newName.trim() === "") {
+        return;
+    }
 
-  await updateDoc(userRef, {
-    name: newName.trim()
-  });
+    await updateDoc(userRef, {
+        name: newName.trim()
+    });
 
-  document.getElementById("profileName").textContent =
-    newName.trim();
+    document.getElementById("profileName").textContent =
+        newName.trim();
 
   alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
 };
