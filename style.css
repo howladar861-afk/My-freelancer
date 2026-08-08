@@ -124,3 +124,86 @@ footer{
     border-radius:6px;
     cursor:pointer;
 }
+/* ===== HOME PAGE BEAUTIFUL DESIGN ===== */
+
+header {
+    box-shadow: 0 4px 20px rgba(0,0,0,.25);
+}
+
+header nav a {
+    transition: .3s;
+}
+
+header nav a:hover {
+    color: #00ffff;
+    transform: translateY(-2px);
+}
+
+.hero {
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 46px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 20px rgba(0,255,255,.35);
+}
+
+.hero p {
+    max-width: 650px;
+    line-height: 1.7;
+}
+
+.features .card {
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+
+.features .card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0,0,0,.3);
+}
+
+.auth {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+@media (max-width: 600px) {
+
+    header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    header nav a {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .hero {
+        min-height: 350px;
+        padding: 40px 15px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+        padding: 30px 15px;
+    }
+
+}
