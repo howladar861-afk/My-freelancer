@@ -41,7 +41,7 @@ document.getElementById("registerBtn").onclick = async () => {
   const referral = document.getElementById("referral").value.trim();
 
   if (referral === "") {
-    alert("Referral Code is required!");
+    showCustomPopup("Referral Code is required!");
     return;
   }
 
@@ -52,10 +52,10 @@ document.getElementById("registerBtn").onclick = async () => {
 
 const querySnapshot = await getDocs(q);
 
-alert("Query Success");
+
 
 if (querySnapshot.empty) {
-  alert("Invalid Referral Code!");
+  showCustomPopup("Invalid Referral Code!");
   return;
 }
 
@@ -71,11 +71,11 @@ if (querySnapshot.empty) {
         referredBy: referral
       });
 
-      alert("Registration Successful!\nYour Referral Code: " + myReferral);
+      showCustomPopup("Registration Successful!\nYour Referral Code: " + myReferral);
       window.location.href = "dashboard.html";
     })
     .catch((error) => {
-      alert(error.message);
+      showCustomPopup(error.message);
     });
 };
 
@@ -97,7 +97,7 @@ document.getElementById("loginBtn").onclick = async () => {
 
   } catch (error) {
 
-    alert(error.message);
+    showCustomPopup(error.message);
 
   }
 
