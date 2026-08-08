@@ -58,15 +58,21 @@ document.getElementById("logoutBtn").onclick = async () => {
 };
 const balanceDate = document.getElementById("balanceDate");
 
-if (balanceDate) {
-  const now = new Date();
+function updateBalanceDate() {
+  if (balanceDate) {
+    const now = new Date();
 
-  balanceDate.textContent = now.toLocaleString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true
-  });
+    balanceDate.textContent = now.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
+    });
+  }
 }
+
+updateBalanceDate();
+setInterval(updateBalanceDate, 1000);
