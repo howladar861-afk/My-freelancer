@@ -309,20 +309,18 @@ currentUser = user;
 
 document.getElementById("editProfileBtn").onclick = async () => {
 
-    await new Promise(resolve => {
-    const unsubscribe = onAuthStateChanged(auth, user => {
-        currentUser = user;
-        unsubscribe();
-        resolve();
+    // Firebase login status নিশ্চিত হওয়া পর্যন্ত অপেক্ষা করবে
+    const user = await new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            unsubscribe();
+            resolve(user);
+        });
     });
-});
 
-const user = currentUser;
-
-if (!user) {
-    alert("আগে Login করুন");
-    return;
-}
+    if (!user) {
+        alert("আগে Login করুন");
+        return;
+    }
 
     const userRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userRef);
@@ -347,8 +345,10 @@ if (!user) {
     document.getElementById("profileName").textContent =
         newName.trim();
 
-  alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
+    alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
 };
+
+    
 document.getElementById("logoutBtn").onclick = async () => {
 
     await signOut(auth);
