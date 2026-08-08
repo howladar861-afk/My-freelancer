@@ -301,6 +301,21 @@
 
 </div>
 <script type="module" src="dashboard.js"></script>
+<script>
+const balanceDate = document.getElementById("balanceDate");
 
+if (balanceDate) {
+  const now = new Date();
+
+  balanceDate.textContent = now.toLocaleString("bn-BD", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  });
+}
+</script>
 </body>
 </html>
