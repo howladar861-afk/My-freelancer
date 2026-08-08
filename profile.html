@@ -309,7 +309,7 @@ currentUser = user;
 
 document.getElementById("editProfileBtn").onclick = async () => {
 
-    const user = auth.currentUser;
+    const user = currentUser || auth.currentUser;
 
     if (!user) {
         alert("আগে Login করুন");
