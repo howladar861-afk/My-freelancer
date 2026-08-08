@@ -102,3 +102,12 @@ document.getElementById("loginBtn").onclick = async () => {
   }
 
 };
+function showCustomPopup(message) {
+  const popup = document.getElementById("customPopup");
+  const popupMessage = document.getElementById("popupMessage");
+
+  if (popup && popupMessage) {
+    popupMessage.textContent = message;
+    popup.style.display = "flex";
+  }
+}
