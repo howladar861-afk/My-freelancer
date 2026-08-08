@@ -56,3 +56,17 @@ document.getElementById("logoutBtn").onclick = async () => {
   await signOut(auth);
   window.location.href = "index.html";
 };
+const balanceDate = document.getElementById("balanceDate");
+
+if (balanceDate) {
+  const now = new Date();
+
+  balanceDate.textContent = now.toLocaleString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  });
+}
