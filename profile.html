@@ -262,9 +262,12 @@ const db = getFirestore(app);
 
 await setPersistence(auth, browserLocalPersistence);
 
-
+let currentUser = null;
+    
 onAuthStateChanged(auth, async (user) => {
-
+    
+currentUser = user;
+    
     if(user){
 
         document.getElementById("profileEmail").textContent =
