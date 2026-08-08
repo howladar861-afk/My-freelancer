@@ -13,7 +13,9 @@ import {
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 // আপনার Firebase Config
@@ -30,6 +32,7 @@ const firebaseConfig = {
 // Firebase চালু
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence);
 const db = getFirestore(app);
 // Register
 document.getElementById("registerBtn").onclick = async () => {
