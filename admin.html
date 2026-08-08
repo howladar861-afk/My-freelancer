@@ -3,135 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Rakib Freelancer - Admin Panel</title>
+<title>Rakib Freelancer - Admin</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
-
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#0d172a;
-  color:#fff;
-}
-
-.header{
-  background:#f9b900;
-  padding:22px 18px;
-  text-align:center;
-}
-
-.header h1{
-  margin:0;
-  font-size:28px;
-  color:#111;
+  background:#0d1628;
+  color:white;
 }
 
 .container{
-  padding:20px;
-  max-width:1000px;
-  margin:auto;
+  max-width:420px;
+  margin:80px auto;
+  padding:25px;
 }
 
 .card{
-  background:#fff;
-  color:#111;
+  background:#222;
+  padding:25px;
   border-radius:18px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 5px 20px rgba(0,0,0,.25);
+  box-shadow:0 5px 20px rgba(0,0,0,.4);
 }
 
-.card h2{
-  margin-top:0;
+h1{
+  text-align:center;
+  color:#ffc107;
 }
 
 input{
   width:100%;
-  padding:13px;
-  margin:7px 0;
-  border:1px solid #ccc;
+  box-sizing:border-box;
+  padding:14px;
+  margin:10px 0;
+  border:0;
   border-radius:10px;
   font-size:16px;
 }
 
 button{
-  border:0;
-  padding:12px 18px;
-  border-radius:10px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:8px;
-}
-
-.loginBtn{
-  background:#08a879;
-  color:white;
   width:100%;
-}
-
-.logoutBtn{
-  background:#e53935;
-  color:white;
-}
-
-.user{
-  border:1px solid #ddd;
-  border-radius:14px;
-  padding:15px;
-  margin-top:12px;
-}
-
-.user strong{
-  display:block;
-  margin-bottom:6px;
-}
-
-.addBtn{
-  background:#08a879;
-  color:white;
-}
-
-.removeBtn{
-  background:#e53935;
-  color:white;
+  padding:14px;
+  margin-top:10px;
+  border:0;
+  border-radius:10px;
+  background:#ffc107;
+  font-size:17px;
+  font-weight:bold;
 }
 
 #adminPanel{
   display:none;
 }
 
-#loginBox{
-  max-width:450px;
-  margin:40px auto;
-}
-
-.status{
-  padding:12px;
-  border-radius:10px;
-  background:#eee;
-  color:#111;
-  margin-top:10px;
+#message{
+  text-align:center;
+  margin-top:15px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <h1>👑 Rakib Freelancer Admin</h1>
-</div>
-
 <div class="container">
 
-  <!-- ADMIN LOGIN -->
-  <div id="loginBox" class="card">
-
-    <h2>🔐 Admin Login</h2>
+  <!-- Admin Login -->
+  <div class="card" id="loginBox">
+    <h1>🔐 Admin Login</h1>
 
     <input
       type="email"
@@ -145,47 +83,26 @@ button{
       placeholder="Password"
     >
 
-    <button class="loginBtn" id="adminLoginBtn">
-      Admin Login
+    <button id="adminLoginBtn">
+      Login
     </button>
 
-    <div id="loginStatus" class="status">
-      Admin login করুন
-    </div>
-
+    <p id="message"></p>
   </div>
 
 
-  <!-- ADMIN PANEL -->
-  <div id="adminPanel">
+  <!-- Admin Panel -->
+  <div class="card" id="adminPanel">
 
-    <div class="card">
+    <h1>👑 Admin Panel</h1>
 
-      <h2>📊 Admin Dashboard</h2>
+    <p>
+      Admin সফলভাবে Login করেছেন।
+    </p>
 
-      <p>
-        Logged in as:
-        <strong id="currentAdmin"></strong>
-      </p>
-
-      <button class="logoutBtn" id="logoutBtn">
-        Logout
-      </button>
-
-    </div>
-
-
-    <div class="card">
-
-      <h2>👥 All Users</h2>
-
-      <button class="loginBtn" id="loadUsersBtn">
-        Users Load করুন
-      </button>
-
-      <div id="usersList"></div>
-
-    </div>
+    <button id="logoutBtn">
+      Logout
+    </button>
 
   </div>
 
@@ -194,64 +111,46 @@ button{
 
 <script type="module">
 
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 import {
   getAuth,
   signInWithEmailAndPassword,
-  onAuthStateChanged,
   signOut
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
   getFirestore,
-  collection,
-  getDocs,
   doc,
-  getDoc,
-  updateDoc,
-  increment
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+  getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-
-/* Firebase Config */
 
 const firebaseConfig = {
-
   apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
-
-  authDomain:
-  "rakib-freelancer-9c66b.firebaseapp.com",
-
-  projectId:
-  "rakib-freelancer-9c66b",
-
-  storageBucket:
-  "rakib-freelancer-9c66b.firebasestorage.app",
-
-  messagingSenderId:
-  "541209844482",
-
-  appId:
-  "1:541209844482:web:510568d5226c9bf47ac01b",
-
-  measurementId:
-  "G-F6QNE0QN5K"
+  authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+  projectId: "rakib-freelancer-9c66b",
+  storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+  messagingSenderId: "541209844482",
+  appId: "1:541209844482:web:510568d5226c9bf47ac01b",
+  measurementId: "G-F6QNE0QN5K"
 };
 
-
-/* Firebase চালু */
 
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-
 const db = getFirestore(app);
 
 
-/* Elements */
+const loginBtn =
+document.getElementById("adminLoginBtn");
+
+const message =
+document.getElementById("message");
 
 const loginBox =
 document.getElementById("loginBox");
@@ -259,337 +158,97 @@ document.getElementById("loginBox");
 const adminPanel =
 document.getElementById("adminPanel");
 
-const loginStatus =
-document.getElementById("loginStatus");
-
-const currentAdmin =
-document.getElementById("currentAdmin");
-
-const usersList =
-document.getElementById("usersList");
+const logoutBtn =
+document.getElementById("logoutBtn");
 
 
-/* Admin Login */
-
-document
-.getElementById("adminLoginBtn")
-.onclick = async () => {
+loginBtn.onclick = async () => {
 
   const email =
-  document.getElementById("adminEmail")
-  .value
-  .trim();
+    document.getElementById("adminEmail").value.trim();
 
   const password =
-  document.getElementById("adminPassword")
-  .value;
+    document.getElementById("adminPassword").value;
 
-  if(!email || !password){
 
-    loginStatus.textContent =
-    "Email এবং Password দিন";
+  if (!email || !password) {
+
+    message.textContent =
+      "Email ও Password দিন।";
 
     return;
   }
 
-  try{
 
-    await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+  try {
 
-  }catch(error){
-
-    loginStatus.textContent =
-    error.message;
-
-  }
-
-};
+    const result =
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
 
-/* Login Check */
-
-onAuthStateChanged(
-  auth,
-  async (user) => {
-
-    if(!user){
-
-      loginBox.style.display =
-      "block";
-
-      adminPanel.style.display =
-      "none";
-
-      return;
-    }
+    const uid =
+      result.user.uid;
 
 
-    /*
-      এখানে আপাতত Firebase-এর
-      admins collection থেকে
-      Admin যাচাই করা হবে।
-    */
-
+    // admins collection থেকে Admin যাচাই
     const adminDoc =
-    await getDoc(
-      doc(db,"admins",user.uid)
-    );
+      await getDoc(
+        doc(db, "admins", uid)
+      );
 
 
-    if(!adminDoc.exists()){
+    if (!adminDoc.exists()) {
 
       await signOut(auth);
 
-      loginStatus.textContent =
-      "❌ আপনি Admin নন";
+      message.textContent =
+        "❌ আপনি Admin নন।";
 
       return;
     }
 
 
-    loginBox.style.display =
-    "none";
+    if (adminDoc.data().role !== "admin") {
 
-    adminPanel.style.display =
-    "block";
+      await signOut(auth);
 
-    currentAdmin.textContent =
-    user.email;
+      message.textContent =
+        "❌ Admin permission নেই।";
+
+      return;
+    }
+
+
+    // সফল Admin Login
+    loginBox.style.display = "none";
+    adminPanel.style.display = "block";
 
   }
-);
 
+  catch(error) {
 
-/* Users Load */
-
-document
-.getElementById("loadUsersBtn")
-.onclick = async () => {
-
-  usersList.innerHTML =
-  "⏳ Users loading...";
-
-  try{
-
-    const snapshot =
-    await getDocs(
-      collection(db,"users")
-    );
-
-    usersList.innerHTML = "";
-
-
-    if(snapshot.empty){
-
-      usersList.innerHTML =
-      "<p>কোনো User পাওয়া যায়নি।</p>";
-
-      return;
-    }
-
-
-    snapshot.forEach(
-      (userDoc) => {
-
-        const user =
-        userDoc.data();
-
-        const uid =
-        userDoc.id;
-
-        const balance =
-        Number(user.balance || 0);
-
-
-        const div =
-        document.createElement("div");
-
-        div.className =
-        "user";
-
-
-        div.innerHTML = `
-
-          <strong>📧 ${user.email || "No Email"}</strong>
-
-          <p>
-            🆔 UID:
-            ${uid}
-          </p>
-
-          <p>
-            🔗 Referral:
-            ${user.referralCode || "N/A"}
-          </p>
-
-          <p>
-            💰 Balance:
-            ৳${balance.toFixed(2)}
-          </p>
-
-          <input
-            type="number"
-            id="amount-${uid}"
-            placeholder="Amount"
-            step="0.01"
-          >
-
-          <button
-            class="addBtn"
-            data-uid="${uid}">
-            ➕ Balance Add
-          </button>
-
-          <button
-            class="removeBtn"
-            data-uid="${uid}">
-            ➖ Balance Remove
-          </button>
-
-        `;
-
-        usersList.appendChild(div);
-
-      }
-    );
-
-
-    /* Add Balance */
-
-    document
-    .querySelectorAll(".addBtn")
-    .forEach(button => {
-
-      button.onclick =
-      async () => {
-
-        const uid =
-        button.dataset.uid;
-
-        const amount =
-        Number(
-          document
-          .getElementById(
-            "amount-" + uid
-          ).value
-        );
-
-
-        if(!amount || amount <= 0){
-
-          alert(
-            "সঠিক Amount দিন"
-          );
-
-          return;
-        }
-
-
-        await updateDoc(
-          doc(db,"users",uid),
-          {
-            balance:
-            increment(amount)
-          }
-        );
-
-
-        alert(
-          "Balance সফলভাবে যোগ হয়েছে"
-        );
-
-        document
-        .getElementById(
-          "loadUsersBtn"
-        )
-        .click();
-
-      };
-
-    });
-
-
-    /* Remove Balance */
-
-    document
-    .querySelectorAll(".removeBtn")
-    .forEach(button => {
-
-      button.onclick =
-      async () => {
-
-        const uid =
-        button.dataset.uid;
-
-        const amount =
-        Number(
-          document
-          .getElementById(
-            "amount-" + uid
-          ).value
-        );
-
-
-        if(!amount || amount <= 0){
-
-          alert(
-            "সঠিক Amount দিন"
-          );
-
-          return;
-        }
-
-
-        await updateDoc(
-          doc(db,"users",uid),
-          {
-            balance:
-            increment(-amount)
-          }
-        );
-
-
-        alert(
-          "Balance কমানো হয়েছে"
-        );
-
-        document
-        .getElementById(
-          "loadUsersBtn"
-        )
-        .click();
-
-      };
-
-    });
-
-
-  }catch(error){
-
-    usersList.innerHTML =
-    "❌ Error: " +
-    error.message;
+    message.textContent =
+      "❌ " + error.message;
 
   }
 
 };
 
 
-/* Logout */
-
-document
-.getElementById("logoutBtn")
-.onclick = async () => {
+logoutBtn.onclick = async () => {
 
   await signOut(auth);
+
+  adminPanel.style.display = "none";
+  loginBox.style.display = "block";
 
 };
 
 </script>
 
 </body>
-  </html>
+</html>
