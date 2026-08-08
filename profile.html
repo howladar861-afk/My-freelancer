@@ -309,12 +309,14 @@ currentUser = user;
 
 document.getElementById("editProfileBtn").onclick = async () => {
 
-  const user = auth.currentUser;
+    const user = auth.currentUser;
 
-  
-    return;
-  }
+    if (!user) {
+        alert("আগে Login করুন");
+        return;
+    }
 
+    const userRef = doc(db, "users", user.uid);
   const userRef = doc(db, "users", user.uid);
   const userDoc = await getDoc(userRef);
 
