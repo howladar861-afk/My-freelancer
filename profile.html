@@ -302,17 +302,37 @@ onAuthStateChanged(auth, async (user) => {
 
 document.getElementById("editProfileBtn").onclick = async () => {
 
-    const newName = prompt("আপনার নতুন নাম লিখুন:", document.getElementById("profileName").textContent);
+    const user = auth.currentUser;
+
+    if (!user) {
+        alert("আগে Login করুন");
+        return;
+    }
+
+    const userDoc = await getDoc(
+        doc(db, "users", user.uid)
+    );
+
+    const data = userDoc.exists() ? userDoc.data() : {};
+
+    const newName = prompt(
+        "আপনার নতুন নাম লিখুন:",
+        data.name || user.displayName || ""
+    );
 
     if (!newName || newName.trim() === "") {
         return;
     }
 
-    await updateDoc(doc(db, "users", user.uid), {
-        name: newName.trim()
-    });
+    await updateDoc(
+        doc(db, "users", user.uid),
+        {
+            name: newName.trim()
+        }
+    );
 
-    document.getElementById("profileName").textContent = newName.trim();
+    document.getElementById("profileName").textContent =
+        newName.trim();
 
     alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
 };
