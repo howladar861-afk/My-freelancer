@@ -309,9 +309,9 @@ currentUser = user;
 
 document.getElementById("editProfileBtn").onclick = async () => {
 
-  const user = currentUser;
+  const user = auth.currentUser;
 
-  if (!user) {<button id="editProfileBtn">✏️ Profile Edit</button>
+  
     return;
   }
 
