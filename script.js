@@ -91,7 +91,7 @@ document.getElementById("loginBtn").onclick = async () => {
 
     await signInWithEmailAndPassword(auth, email, password);
 
-    showMessage("Login Successful!");
+    showCustomPopup("Login Successful!");
 
     window.location.href = "dashboard.html";
 
