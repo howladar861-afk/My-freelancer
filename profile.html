@@ -241,7 +241,8 @@ import {
 import {
     getFirestore,
     doc,
-    getDoc
+    getDoc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -299,7 +300,22 @@ onAuthStateChanged(auth, async (user) => {
 
 });
 
+document.getElementById("editProfileBtn").onclick = async () => {
 
+    const newName = prompt("আপনার নতুন নাম লিখুন:", document.getElementById("profileName").textContent);
+
+    if (!newName || newName.trim() === "") {
+        return;
+    }
+
+    await updateDoc(doc(db, "users", user.uid), {
+        name: newName.trim()
+    });
+
+    document.getElementById("profileName").textContent = newName.trim();
+
+    alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
+};
 document.getElementById("logoutBtn").onclick = async () => {
 
     await signOut(auth);
