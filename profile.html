@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#07172a,#123b73,#2563eb);
+    color:#fff;
+    padding-bottom:90px;
+}
+
+.header{
+    padding:22px 18px;
+    background:rgba(255,255,255,.10);
+    backdrop-filter:blur(12px);
+    text-align:center;
+    box-shadow:0 4px 20px rgba(0,0,0,.25);
+}
+
+.header h2{
+    font-size:24px;
+}
+
+.profile-box{
+    width:92%;
+    max-width:500px;
+    margin:30px auto;
+    background:rgba(255,255,255,.95);
+    color:#222;
+    border-radius:22px;
+    padding:30px 20px;
+    text-align:center;
+    box-shadow:0 10px 35px rgba(0,0,0,.25);
+}
+
+.avatar{
+    width:100px;
+    height:100px;
+    margin:0 auto 15px;
+    border-radius:50%;
+    background:#2563eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:52px;
+    box-shadow:0 5px 20px rgba(37,99,235,.4);
+}
+
+.profile-box h1{
+    font-size:25px;
+    margin-bottom:8px;
+}
+
+.email{
+    color:#666;
+    margin-bottom:25px;
+    word-break:break-word;
+}
+
+.info{
+    text-align:left;
+    margin-top:15px;
+}
+
+.info-item{
+    background:#f4f7fb;
+    border-radius:12px;
+    padding:15px;
+    margin:10px 0;
+}
+
+.info-item strong{
+    display:block;
+    color:#2563eb;
+    margin-bottom:5px;
+}
+
+.logout{
+    width:100%;
+    padding:14px;
+    margin-top:20px;
+    border:0;
+    border-radius:10px;
+    background:#2563eb;
+    color:#fff;
+    font-size:17px;
+    cursor:pointer;
+}
+
+.logout:hover{
+    background:#174fc1;
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:#fff;
+    color:#777;
+    display:flex;
+    justify-content:space-around;
+    padding:10px 0 8px;
+    box-shadow:0 -3px 15px rgba(0,0,0,.18);
+}
+
+.nav-item{
+    text-align:center;
+    font-size:12px;
+    cursor:pointer;
+}
+
+.nav-item .icon{
+    font-size:24px;
+    margin-bottom:3px;
+}
+
+.nav-item.active{
+    color:#2563eb;
+    font-weight:bold;
+}
+
+@media(max-width:600px){
+    .profile-box{
+        margin-top:20px;
+        padding:25px 16px;
+    }
+
+    .header h2{
+        font-size:21px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h2>👤 My Profile</h2>
+</div>
+
+<div class="profile-box">
+
+    <div class="avatar">👤</div>
+
+    <h1 id="profileName">Loading...</h1>
+
+    <p class="email" id="profileEmail">
+        Loading...
+    </p>
+
+    <div class="info">
+
+        <div class="info-item">
+            <strong>Referral Code</strong>
+            <span id="referralCode">Loading...</span>
+        </div>
+
+        <div class="info-item">
+            <strong>Referral Count</strong>
+            <span id="referralCount">0</span>
+        </div>
+
+    </div>
+
+    <button class="logout" id="logoutBtn">
+        Logout
+    </button>
+
+</div>
+
+<div class="bottom-nav">
+
+    <div class="nav-item" onclick="window.location.href='dashboard.html'">
+        <div class="icon">🏠</div>
+        Home
+    </div>
+
+    <div class="nav-item">
+        <div class="icon">🎬</div>
+        Reels
+    </div>
+
+    <div class="nav-item">
+        <div class="icon">🛒</div>
+        Reselling
+    </div>
+
+    <div class="nav-item">
+        <div class="icon">💼</div>
+        Micro Job
+    </div>
+
+    <div class="nav-item active">
+        <div class="icon">👤</div>
+        Profile
+    </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+    getFirestore,
+    doc,
+    getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBFUKPT76os6u0d09ff1jZgjdIaR5ew8m",
+    authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+    projectId: "rakib-freelancer-9c66b",
+    storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+    messagingSenderId: "541209844482",
+    appId: "1:541209844482:web:5105685226c9bf47ac01b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+onAuthStateChanged(auth, async (user) => {
+
+    if(user){
+
+        document.getElementById("profileEmail").textContent =
+            user.email || "No Email";
+
+        const userDoc = await getDoc(
+            doc(db, "users", user.uid)
+        );
+
+        if(userDoc.exists()){
+
+            const data = userDoc.data();
+
+            document.getElementById("profileName").textContent =
+                data.name || "My Profile";
+
+            document.getElementById("referralCode").textContent =
+                data.referralCode || "Not Found";
+
+        }else{
+
+            document.getElementById("profileName").textContent =
+                "My Profile";
+
+            document.getElementById("referralCode").textContent =
+                "Not Found";
+        }
+
+    }else{
+
+        window.location.href = "index.html";
+
+    }
+
+});
+
+
+document.getElementById("logoutBtn").onclick = async () => {
+
+    await signOut(auth);
+
+    window.location.href = "index.html";
+
+};
+
+</script>
+
+</body>
+      </html>
