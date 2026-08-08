@@ -108,6 +108,53 @@
   color:#f5b800;
   font-weight:bold;
 }
+    .balance-card{
+  width:90%;
+  max-width:400px;
+  margin:15px auto;
+  background:#fff;
+  color:#222;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 4px 15px rgba(0,0,0,0.12);
+  text-align:center;
+}
+
+.balance-title{
+  background:#333;
+  color:#fff;
+  padding:16px;
+  text-align:left;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.balance-wallet{
+  padding:30px 10px 10px;
+}
+
+.balance-wallet span{
+  display:block;
+  font-size:45px;
+  margin-bottom:10px;
+}
+
+.balance-wallet strong{
+  font-size:42px;
+  color:#172b4d;
+}
+
+.balance-label{
+  font-size:24px;
+  font-weight:bold;
+  margin-top:15px;
+}
+
+.balance-date{
+  color:#888;
+  font-size:16px;
+  padding:10px 0 25px;
+}
   </style>
 </head>
 <body>
@@ -115,7 +162,20 @@
   <header class="top-header">
   <h2>My Freelancer</h2>
   </header>
-  
+<div class="balance-card">
+  <div class="balance-title">💳 Balance</div>
+
+  <div class="balance-wallet">
+    <span>💰</span>
+    <strong>0.00৳</strong>
+  </div>
+
+  <div class="balance-label">বর্তমান ব্যালেন্স</div>
+
+  <div class="balance-date" id="balanceDate"></div>
+</div>
+
+<div class="box">
 <div class="box">
     <h1>My Freelancer</h1>
 <h2>💰 Easy Earning</h2>
