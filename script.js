@@ -32,7 +32,7 @@ const firebaseConfig = {
 // Firebase চালু
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-setPersistence(auth, browserLocalPersistence);
+await setPersistence(auth, browserLocalPersistence);
 const db = getFirestore(app);
 // Register
 document.getElementById("registerBtn").onclick = async () => {
