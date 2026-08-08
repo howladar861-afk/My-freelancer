@@ -275,7 +275,7 @@ onAuthStateChanged(auth, async (user) => {
             const data = userDoc.data();
 
             document.getElementById("profileName").textContent =
-                data.name || "My Profile";
+    data.name || user.displayName || "Profile";
 
             document.getElementById("referralCode").textContent =
                 data.referralCode || "Not Found";
