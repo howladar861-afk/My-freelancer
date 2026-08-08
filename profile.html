@@ -273,9 +273,12 @@ onAuthStateChanged(auth, async (user) => {
                 "Not Found";
         }
 
-    }else{
+}else{
 
-        window.location.href = "index.html";
+    document.getElementById("profileName").textContent = "Profile";
+    document.getElementById("profileEmail").textContent = "Please login first";
+    document.getElementById("referralCode").textContent = "Not Available";
+    document.getElementById("referralCount").textContent = "0";
 
     }
 
