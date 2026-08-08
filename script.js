@@ -80,16 +80,25 @@ if (querySnapshot.empty) {
 };
 
 // Login
-document.getElementById("loginBtn").onclick = () => {
-  const email = document.getElementById("loginEmail").value;
+document.getElementById("loginBtn").onclick = async () => {
+
+  const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value;
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("Login Successful");
-      window.location.href = "dashboard.html";
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
+  try {
+
+    await setPersistence(auth, browserLocalPersistence);
+
+    await signInWithEmailAndPassword(auth, email, password);
+
+    alert("Login Successful!");
+
+    window.location.href = "dashboard.html";
+
+  } catch (error) {
+
+    alert(error.message);
+
+  }
+
 };
