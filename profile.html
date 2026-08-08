@@ -306,39 +306,37 @@ onAuthStateChanged(auth, async (user) => {
 
 document.getElementById("editProfileBtn").onclick = async () => {
 
-    const user = auth.currentUser;
+  const user = auth.currentUser;
 
-    if (!user) {
-        alert("আগে Login করুন");
-        return;
-    }
+  if (!user) {
+    alert("আগে Login করুন");
+    return;
+  }
 
-    const userDoc = await getDoc(
-        doc(db, "users", user.uid)
-    );
+  const userRef = doc(db, "users", user.uid);
+  const userDoc = await getDoc(userRef);
 
-    const data = userDoc.exists() ? userDoc.data() : {};
+  const data = userDoc.exists() ? userDoc.data() : {};
 
-    const newName = prompt(
-        "আপনার নতুন নাম লিখুন:",
-        data.name || user.displayName || ""
-    );
+  const oldName = data.name || user.displayName || "";
 
-    if (!newName || newName.trim() === "") {
-        return;
-    }
+  const newName = prompt(
+    "আপনার নতুন নাম লিখুন:",
+    oldName
+  );
 
-    await updateDoc(
-        doc(db, "users", user.uid),
-        {
-            name: newName.trim()
-        }
-    );
+  if (!newName || newName.trim() === "") {
+    return;
+  }
 
-    document.getElementById("profileName").textContent =
-        newName.trim();
+  await updateDoc(userRef, {
+    name: newName.trim()
+  });
 
-    alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
+  document.getElementById("profileName").textContent =
+    newName.trim();
+
+  alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
 };
 document.getElementById("logoutBtn").onclick = async () => {
 
