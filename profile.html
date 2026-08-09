@@ -190,74 +190,7 @@ body{
             <strong>Referral Count</strong>
             <span id="referralCount">0</span>
         </div>
-<!-- Verification Section -->
-<div class="info-item" style="margin-top:15px;">
 
-    <strong>✅ Account Verification</strong>
-
-    <p id="verificationStatus"
-       style="margin:8px 0;color:#666;">
-        আপনার অ্যাকাউন্ট এখনো Verified নয়।
-    </p>
-
-    <button
-  id="verifyBtn"
-  onclick="document.getElementById('verificationForm').style.display='block'; this.style.display='none';"
-  style="
-    width:100%;
-    padding:13px;
-    margin-top:10px;
-    border:none;
-    border-radius:10px;
-    background:#16a34a;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-  "
->
-  💳 Verify Account — ৳100
-    </button>
-<!-- Verification Form -->
-<div id="verificationForm"
-     style="display:none;margin-top:15px;background:#f4f7fb;padding:15px;border-radius:12px;">
-
-    <strong style="color:#2563eb;font-size:18px;">
-        💳 Account Verification
-    </strong>
-
-    <p style="color:#555;margin:10px 0;">
-        ৳100 পাঠানোর পর নিচের তথ্য দিন।
-    </p>
-
-    <select id="paymentMethod"
-            style="width:100%;padding:13px;border:1px solid #ddd;border-radius:8px;margin-bottom:10px;">
-        <option value="">Payment Method নির্বাচন করুন</option>
-        <option value="bKash">bKash</option>
-        <option value="Nagad">Nagad</option>
-    </select>
-
-    <input
-        type="text"
-        id="senderNumber"
-        placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন"
-        style="width:100%;padding:13px;border:1px solid #ddd;border-radius:8px;margin-bottom:10px;"
-    >
-
-    <input
-        type="text"
-        id="transactionId"
-        placeholder="Transaction ID লিখুন"
-        style="width:100%;padding:13px;border:1px solid #ddd;border-radius:8px;margin-bottom:10px;"
-    >
-
-    <button type="button" id="submitVerification">
-    ✅ Submit Verification
-    </button>
-
-</div>
-</div>
-    </div>
 
     <button class="logout" id="logoutBtn">
         Logout
@@ -427,62 +360,7 @@ document.getElementById("editProfileBtn").onclick = async () => {
     alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
 };
 
-    document.getElementById("verifyBtn").onclick = function () {
-    document.getElementById("verificationForm").style.display = "block";
-
-    document.getElementById("verifyBtn").style.display = "none";
-};
-document.getElementById("submitVerification").onclick = async function () {
-
-    const senderNumber =
-        document.getElementById("senderNumber").value.trim();
-
-    const transactionId =
-        document.getElementById("transactionId").value.trim();
-
-    const user = auth.currentUser;
-
-    if (!user) {
-        alert("আপনার Login Session পাওয়া যাচ্ছে না। আবার Login করুন।");
-        return;
-    }
-
-    if (!senderNumber || !transactionId) {
-        alert("দয়া করে Sender Number এবং Transaction ID দিন!");
-        return;
-    }
-
-    try {
-
-        await addDoc(collection(db, "verificationRequests"), {
-            userId: user.uid,
-            userEmail: user.email || "",
-            paymentMethod:
-                document.getElementById("paymentMethod").value,
-            senderNumber: senderNumber,
-            transactionId: transactionId,
-            status: "pending",
-            createdAt: serverTimestamp()
-        });
-
-        alert(
-            "✅ আপনার Verification Request সফলভাবে পাঠানো হয়েছে!\n\n" +
-            "Admin যাচাই করে Approve বা Reject করবেন।"
-        );
-
-        document.getElementById("senderNumber").value = "";
-        document.getElementById("transactionId").value = "";
-
-    } catch (error) {
-
-        console.error("Verification Error:", error);
-
-        alert(
-            "❌ Request পাঠানো যায়নি!\n\n" +
-            error.message
-        );
-    }
-};
+    
 
 document.getElementById("logoutBtn").onclick = async function () {
     try {
