@@ -374,15 +374,13 @@ document.getElementById("editProfileBtn").onclick = async () => {
     alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
 };
 
-    document.getElementById("verifyBtn").onclick = () => {
+    const verifyBtn = document.getElementById("verifyBtn");
 
-    alert(
-        "Account Verification\n\n" +
-        "Verification Fee: ৳100\n\n" +
-        "পরবর্তী ধাপে bKash/Nagad নম্বর এবং Transaction ID দেওয়ার ফর্ম আসবে।"
-    );
-
-};
+if (verifyBtn) {
+    verifyBtn.addEventListener("click", function () {
+        alert("Account Verification\n\nVerification Fee: ৳100\n\nপরবর্তী ধাপে bKash/Nagad নম্বর এবং Transaction ID দিতে হবে।");
+    });
+}
 document.getElementById("logoutBtn").onclick = async () => {
 
     await signOut(auth);
