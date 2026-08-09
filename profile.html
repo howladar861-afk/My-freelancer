@@ -319,10 +319,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
-    getFirestore,
-    doc,
-    getDoc,
-    updateDoc
+  getFirestore,
+  doc,
+  getDoc,
+  updateDoc,
+  addDoc,
+  collection,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -431,25 +434,64 @@ document.getElementById("editProfileBtn").onclick = async () => {
 
     document.getElementById("verifyBtn").style.display = "none";
 };
-document.getElementById("submitVerification").onclick = function () {
+document.getElementById("submitVerification").onclick = async function () {
 
-    const senderNumber =
-        document.getElementById("senderNumber").value.trim();
+  const senderNumber =
+    document.getElementById("senderNumber").value.trim();
 
-    const transactionId =
-        document.getElementById("transactionId").value.trim();
+  const transactionId =
+    document.getElementById("transactionId").value.trim();
 
-    if (!senderNumber || !transactionId) {
-        alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন।");
-        return;
-    }
+  if (!senderNumber || !transactionId) {
+    alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন।");
+    return;
+  }
+
+  if (!currentUser) {
+    alert("দয়া করে আগে Login করুন।");
+    return;
+  }
+
+  try {
+
+    await addDoc(collection(db, "verificationRequests"), {
+
+      userId: currentUser.uid,
+
+      userEmail: currentUser.email || "",
+
+      paymentMethod: "bKash/Nagad",
+
+      senderNumber: senderNumber,
+
+      transactionId: transactionId,
+
+      status: "pending",
+
+      createdAt: serverTimestamp()
+
+    });
 
     alert(
-        "✅ Verification তথ্য গ্রহণ করা হয়েছে!\n\n" +
-        "Payment Method: bKash/Nagad\n" +
-        "Sender Number: " + senderNumber + "\n" +
-        "Transaction ID: " + transactionId
+      "✅ আপনার Verification Request সফলভাবে পাঠানো হয়েছে!\n\n" +
+      "Admin যাচাই করে Approve বা Reject করবেন।"
     );
+
+    document.getElementById("senderNumber").value = "";
+    document.getElementById("transactionId").value = "";
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "❌ Request পাঠানো যায়নি।\n\n" +
+      error.message
+    );
+
+  }
+
+};
 };
 
 document.getElementById("logoutBtn").onclick = async () => {
