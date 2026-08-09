@@ -431,20 +431,25 @@ document.getElementById("editProfileBtn").onclick = async () => {
 
     document.getElementById("verifyBtn").style.display = "none";
 };
-    document.getElementById("submitVerification").onclick = function () {
+    <script>
+document.getElementById("submitVerification").addEventListener("click", function(e) {
+    e.preventDefault();
+
     const senderNumber = document.getElementById("senderNumber").value.trim();
     const transactionId = document.getElementById("transactionId").value.trim();
 
     if (!senderNumber || !transactionId) {
-        alert("দয়া করে সব তথ্য পূরণ করুন।");
+        alert("দয়া করে Sender Number এবং Transaction ID দিন।");
         return;
     }
 
     alert(
         "✅ Verification তথ্য গ্রহণ করা হয়েছে!\n\n" +
-        "আপনার তথ্য যাচাই করা হবে।"
+        "Sender Number: " + senderNumber + "\n" +
+        "Transaction ID: " + transactionId
     );
-};
+});
+</script>
 document.getElementById("logoutBtn").onclick = async () => {
 
     await signOut(auth);
