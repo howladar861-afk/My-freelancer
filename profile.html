@@ -456,6 +456,11 @@ const transactionId =
 const user = await getLoggedInUser();
 
 if (!user) {
+    alert("অ্যাকাউন্ট সেশন প্রস্তুত হয়নি। একটু পরে আবার চেষ্টা করুন।");
+    return;
+}
+
+if (!user) {
     alert("লগইন করা আছে, কিন্তু Firebase সেশন লোড হয়নি। একটু অপেক্ষা করে আবার চেষ্টা করুন।");
     return;
 }
