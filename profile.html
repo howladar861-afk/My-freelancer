@@ -344,11 +344,19 @@ const db = getFirestore(app);
     await setPersistence(auth, browserLocalPersistence);
 
     const authReady = new Promise((resolve) => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-        unsubscribe();
-        resolve(user);
-    });
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    unsubscribe();
+    resolve(user);
+  });
 });
+
+async function getLoggedInUser() {
+  if (auth.currentUser) {
+    return auth.currentUser;
+  }
+
+  return await authReady;
+}
 let currentUser = null;
     
 onAuthStateChanged(auth, async (user) => {
@@ -439,62 +447,62 @@ document.getElementById("editProfileBtn").onclick = async () => {
 document.getElementById("submitVerification").onclick = async function () {
 
     
+const senderNumber =
+  document.getElementById("senderNumber").value.trim();
 
-  const senderNumber =
-    document.getElementById("senderNumber").value.trim();
+const transactionId =
+  document.getElementById("transactionId").value.trim();
 
-  const transactionId =
-    document.getElementById("transactionId").value.trim();
-    
-  
-
-  if (!senderNumber || !transactionId) {
-    alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন।");
-    return;
-  }
-
-  const user = currentUser || auth.currentUser || await authReady;
+const user = currentUser || auth.currentUser || await authReady;
 
 if (!user) {
   alert("দয়া করে আগে Login করুন");
   return;
 }
 
-  try {
-await addDoc(collection(db, "verificationRequests"), {
+if (!senderNumber || !transactionId) {
+  alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন!");
+  return;
+}
+
+try {
+
+  await addDoc(collection(db, "verificationRequests"), {
+
     userId: user.uid,
-userEmail: user.email || "",
 
-      paymentMethod: "bKash/Nagad",
+    userEmail: user.email || "",
 
-      senderNumber: senderNumber,
+    paymentMethod: "bKash/Nagad",
 
-      transactionId: transactionId,
+    senderNumber: senderNumber,
 
-      status: "pending",
+    transactionId: transactionId,
 
-      createdAt: serverTimestamp()
+    status: "pending",
 
-    });
+    createdAt: serverTimestamp()
 
-    alert(
-      "✅ আপনার Verification Request সফলভাবে পাঠানো হয়েছে!\n\n" +
-      "Admin যাচাই করে Approve বা Reject করবেন।"
-    );
+  });
 
-    document.getElementById("senderNumber").value = "";
-    document.getElementById("transactionId").value = "";
+  alert(
+    "✅ আপনার Verification Request সফলভাবে পাঠানো হয়েছে!\n\n" +
+    "Admin যাচাই করে Approve বা Reject করবেন।"
+  );
 
-  } catch (error) {
+  document.getElementById("senderNumber").value = "";
+  document.getElementById("transactionId").value = "";
 
-    console.error(error);
+} catch (error) {
 
-    alert(
-      "❌ Request পাঠানো যায়নি।\n\n" +
-      error.message
-    );
+  console.error(error);
 
-  }
+  alert(
+    "❌ Request পাঠানো যায়নি!\n\n" +
+    error.message
+  );
+
+}
 
 };
 
