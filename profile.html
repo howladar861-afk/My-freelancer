@@ -86,22 +86,6 @@ body{
     margin-bottom:5px;
 }
 
-.logout{
-    width:100%;
-    padding:14px;
-    margin-top:20px;
-    border:0;
-    border-radius:10px;
-    background:#2563eb;
-    color:#fff;
-    font-size:17px;
-    cursor:pointer;
-}
-
-.logout:hover{
-    background:#174fc1;
-}
-
 .bottom-nav{
     position:fixed;
     bottom:0;
@@ -141,22 +125,7 @@ body{
         font-size:21px;
     }
 }
-    .edit-profile-btn{
-    width:100%;
-    padding:14px;
-    margin:10px 0 20px;
-    border:none;
-    border-radius:10px;
-    background:#2563eb;
-    color:#fff;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
-}
 
-.edit-profile-btn:hover{
-    background:#174fc1;
-}
 </style>
 </head>
 
@@ -176,9 +145,6 @@ body{
         Loading...
     </p>
 
-    <button class="edit-profile-btn" id="editProfileBtn">
-    ✏️ Profile Edit
-    </button>
     <div class="info">
 
         <div class="info-item">
@@ -316,40 +282,3 @@ onAuthStateChanged(auth, async (user) => {
         console.error("Profile Error:", error);
     }
 });
-
-document.getElementById("editProfileBtn").onclick = async () => {
-
-    // Firebase login status নিশ্চিত হওয়া পর্যন্ত অপেক্ষা করবে
-    const user = await new Promise((resolve) => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            unsubscribe();
-            resolve(user);
-        });
-    });
-
-
-    const userRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userRef);
-
-    const data = userDoc.exists() ? userDoc.data() : {};
-
-    const oldName = data.name || user.displayName || "";
-
-    const newName = prompt(
-        "আপনার নতুন নাম লিখুন:",
-        oldName
-    );
-
-    if (!newName || newName.trim() === "") {
-        return;
-    }
-
-    await updateDoc(userRef, {
-        name: newName.trim()
-    });
-
-    document.getElementById("profileName").textContent =
-        newName.trim();
-
-    alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
-};
