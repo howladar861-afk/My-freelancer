@@ -36,6 +36,54 @@
 .top-header h2{
   margin:0;
 }
+    .menu-container{
+  position:relative;
+  margin-left:auto;
+}
+
+.top-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.menu-btn{
+  background:transparent;
+  color:#fff;
+  border:none;
+  font-size:32px;
+  font-weight:bold;
+  line-height:1;
+  width:45px;
+  padding:0;
+  cursor:pointer;
+}
+
+.three-dot-menu{
+  display:none;
+  position:absolute;
+  right:0;
+  top:45px;
+  width:210px;
+  background:#fff;
+  color:#222;
+  border-radius:12px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.25);
+  overflow:hidden;
+  z-index:9999;
+}
+
+.three-dot-menu div{
+  padding:15px;
+  text-align:left;
+  font-size:16px;
+  border-bottom:1px solid #eee;
+  cursor:pointer;
+}
+
+.three-dot-menu div:last-child{
+  border-bottom:none;
+}
     .cards{
     display:grid;
     grid-template-columns:repeat(2,1fr);
@@ -161,6 +209,16 @@
 
   <header class="top-header">
   <h2>My Freelancer</h2>
+
+  <div class="menu-container">
+    <button class="menu-btn" onclick="toggleMenu()">⋮</button>
+
+    <div id="threeDotMenu" class="three-dot-menu">
+      <div onclick="openWithdraw()">Withdraw</div>
+      <div onclick="openDeposit()">Deposit</div>
+      <div onclick="openVerification()">Account Verification</div>
+    </div>
+  </div>
   </header>
 <div class="balance-card">
   <div class="balance-title">💳 Balance</div>
@@ -301,6 +359,8 @@
 
 </div>
 <script type="module" src="dashboard.js?v=2"></script>
+
+<script>
 const balanceDate = document.getElementById("balanceDate");
 
 if (balanceDate) {
@@ -315,6 +375,29 @@ if (balanceDate) {
     hour12: true
   });
 }
+
+function toggleMenu() {
+  const menu = document.getElementById("threeDotMenu");
+
+  if (menu.style.display === "block") {
+    menu.style.display = "none";
+  } else {
+    menu.style.display = "block";
+  }
+}
+
+function openWithdraw() {
+  alert("Withdraw");
+}
+
+function openDeposit() {
+  alert("Deposit");
+}
+
+function openVerification() {
+  alert("Account Verification");
+}
 </script>
+
 </body>
 </html>
