@@ -88,7 +88,7 @@ window.toggleMenu = function () {
 
 // Withdraw
 window.openWithdraw = function () {
-  alert("Withdraw অপশন");
+  window.location.href = "withdraw.html";
 };
 
 // Deposit
