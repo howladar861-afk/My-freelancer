@@ -452,7 +452,7 @@ document.getElementById("submitVerification").onclick = async function () {
     const transactionId =
         document.getElementById("transactionId").value.trim();
 
-    const user = auth.currentUser;
+    const user = await getLoggedInUser();
 
     if (!user) {
         alert("আপনার Login Session পাওয়া যাচ্ছে না।");
