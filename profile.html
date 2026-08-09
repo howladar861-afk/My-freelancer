@@ -453,7 +453,7 @@ document.getElementById("submitVerification").onclick = async function () {
     return;
   }
 
-  const user = await authReady;
+  const user = auth.currentUser;
 
 if (!user) {
   alert("দয়া করে আগে Login করুন");
