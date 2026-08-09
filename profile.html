@@ -344,19 +344,18 @@ const db = getFirestore(app);
     await setPersistence(auth, browserLocalPersistence);
 
     const authReady = new Promise((resolve) => {
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    unsubscribe();
-    resolve(user);
-  async function getLoggedInUser() {
-    return new Promise((resolve) => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            unsubscribe();
-            resolve(user);
-        });
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe();
+        resolve(user);
     });
-  }
+});
 
-  return await authReady;
+async function getLoggedInUser() {
+    if (auth.currentUser) {
+        return auth.currentUser;
+    }
+
+    return await authReady;
 }
 let currentUser = null;
     
@@ -496,12 +495,6 @@ document.getElementById("submitVerification").onclick = async function () {
         );
     }
 };
-
-document.getElementById("logoutBtn").onclick = async () => {
-
-    await signOut(auth);
-
-    window.location.href = "index.html";
 
 document.getElementById("logoutBtn").onclick = async function () {
     try {
