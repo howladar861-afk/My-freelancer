@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdraw</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #222;
+    }
+
+    .header {
+      background: #f5b800;
+      color: white;
+      padding: 20px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .box {
+      width: 90%;
+      max-width: 420px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .balance {
+      background: #f1f5f9;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      margin: 20px 0;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 13px;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 25px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .back-btn {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #ddd;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    Withdraw
+  </div>
+
+  <div class="box">
+
+    <h2>💸 টাকা Withdraw</h2>
+
+    <div class="balance">
+      বর্তমান ব্যালেন্স: ৳0.00
+    </div>
+
+    <label>Payment Method</label>
+
+    <select id="withdrawMethod">
+      <option value="">নির্বাচন করুন</option>
+      <option value="bkash">bKash</option>
+      <option value="nagad">Nagad</option>
+    </select>
+
+    <label>যে নম্বরে টাকা নেবেন</label>
+
+    <input
+      type="tel"
+      id="withdrawNumber"
+      placeholder="01XXXXXXXXX"
+    >
+
+    <label>Withdraw Amount</label>
+
+    <input
+      type="number"
+      id="withdrawAmount"
+      placeholder="টাকার পরিমাণ"
+      min="1"
+    >
+
+    <button class="submit-btn" onclick="submitWithdraw()">
+      Withdraw Request
+    </button>
+
+    <button class="back-btn" onclick="history.back()">
+      Back
+    </button>
+
+  </div>
+
+  <script>
+    function submitWithdraw() {
+
+      const method =
+        document.getElementById("withdrawMethod").value;
+
+      const number =
+        document.getElementById("withdrawNumber").value.trim();
+
+      const amount =
+        document.getElementById("withdrawAmount").value.trim();
+
+      if (!method || !number || !amount) {
+        alert("সব তথ্য পূরণ করুন।");
+        return;
+      }
+
+      if (Number(amount) <= 0) {
+        alert("সঠিক টাকার পরিমাণ দিন।");
+        return;
+      }
+
+      alert("Withdraw request submitted.");
+
+      // পরের ধাপে Firebase-এ Withdraw Request পাঠানো হবে
+    }
+  </script>
+
+</body>
+</html>
