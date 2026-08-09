@@ -431,25 +431,27 @@ document.getElementById("editProfileBtn").onclick = async () => {
 
     document.getElementById("verifyBtn").style.display = "none";
 };
-    <script>
-document.getElementById("submitVerification").addEventListener("click", function(e) {
-    e.preventDefault();
+document.getElementById("submitVerification").onclick = function () {
 
-    const senderNumber = document.getElementById("senderNumber").value.trim();
-    const transactionId = document.getElementById("transactionId").value.trim();
+    const senderNumber =
+        document.getElementById("senderNumber").value.trim();
+
+    const transactionId =
+        document.getElementById("transactionId").value.trim();
 
     if (!senderNumber || !transactionId) {
-        alert("দয়া করে Sender Number এবং Transaction ID দিন।");
+        alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন।");
         return;
     }
 
     alert(
         "✅ Verification তথ্য গ্রহণ করা হয়েছে!\n\n" +
+        "Payment Method: bKash/Nagad\n" +
         "Sender Number: " + senderNumber + "\n" +
         "Transaction ID: " + transactionId
     );
-});
-</script>
+};
+
 document.getElementById("logoutBtn").onclick = async () => {
 
     await signOut(auth);
