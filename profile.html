@@ -453,12 +453,13 @@ const senderNumber =
 const transactionId =
   document.getElementById("transactionId").value.trim();
 
-const user = currentUser || auth.currentUser || await authReady;
+const user = await getLoggedInUser();
 
 if (!user) {
-  alert("দয়া করে আগে Login করুন");
+  showCustomPopup("দয়া করে আগে Login করুন");
   return;
 }
+
 
 if (!senderNumber || !transactionId) {
   alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন!");
