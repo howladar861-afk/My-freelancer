@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Rakib Freelancer - Admin</title>
 
 <style>
@@ -14,15 +15,16 @@ body{
 }
 
 .container{
-  max-width:420px;
-  margin:80px auto;
-  padding:25px;
+  max-width:600px;
+  margin:40px auto;
+  padding:20px;
 }
 
 .card{
   background:#222;
-  padding:25px;
+  padding:20px;
   border-radius:18px;
+  margin-bottom:20px;
   box-shadow:0 5px 20px rgba(0,0,0,.4);
 }
 
@@ -43,13 +45,55 @@ input{
 
 button{
   width:100%;
-  padding:14px;
+  padding:13px;
   margin-top:10px;
   border:0;
   border-radius:10px;
-  background:#ffc107;
-  font-size:17px;
+  font-size:16px;
   font-weight:bold;
+  cursor:pointer;
+}
+
+.login-btn{
+  background:#ffc107;
+}
+
+.logout-btn{
+  background:#dc3545;
+  color:white;
+}
+
+.request{
+  background:#f5f5f5;
+  color:#222;
+  padding:18px;
+  border-radius:14px;
+  margin-top:15px;
+}
+
+.request h3{
+  margin-top:0;
+  color:#2563eb;
+}
+
+.status{
+  font-weight:bold;
+  margin:10px 0;
+}
+
+.approve{
+  background:#16a34a;
+  color:white;
+}
+
+.reject{
+  background:#dc2626;
+  color:white;
+}
+
+.delete{
+  background:#555;
+  color:white;
 }
 
 #adminPanel{
@@ -60,6 +104,16 @@ button{
   text-align:center;
   margin-top:15px;
 }
+
+#requestList{
+  margin-top:20px;
+}
+
+.empty{
+  text-align:center;
+  color:#aaa;
+  padding:20px;
+}
 </style>
 </head>
 
@@ -69,6 +123,7 @@ button{
 
   <!-- Admin Login -->
   <div class="card" id="loginBox">
+
     <h1>🔐 Admin Login</h1>
 
     <input
@@ -83,11 +138,14 @@ button{
       placeholder="Password"
     >
 
-    <button id="adminLoginBtn">
+    <button
+      class="login-btn"
+      id="adminLoginBtn">
       Login
     </button>
 
     <p id="message"></p>
+
   </div>
 
 
@@ -97,12 +155,20 @@ button{
     <h1>👑 Admin Panel</h1>
 
     <p>
-      Admin সফলভাবে Login করেছেন।
+      Verification Requests
     </p>
 
-    <button id="logoutBtn">
+    <button
+      class="logout-btn"
+      id="logoutBtn">
       Logout
     </button>
+
+    <div id="requestList">
+      <p class="empty">
+        Request Loading...
+      </p>
+    </div>
 
   </div>
 
@@ -124,7 +190,13 @@ from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import {
   getFirestore,
   doc,
-  getDoc
+  getDoc,
+  collection,
+  onSnapshot,
+  updateDoc,
+  deleteDoc,
+  query,
+  orderBy
 }
 from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
@@ -161,6 +233,16 @@ document.getElementById("adminPanel");
 const logoutBtn =
 document.getElementById("logoutBtn");
 
+const requestList =
+document.getElementById("requestList");
+
+
+let unsubscribeRequests = null;
+
+
+/* =========================
+   ADMIN LOGIN
+========================= */
 
 loginBtn.onclick = async () => {
 
@@ -194,7 +276,6 @@ loginBtn.onclick = async () => {
       result.user.uid;
 
 
-    // admins collection থেকে Admin যাচাই
     const adminDoc =
       await getDoc(
         doc(db, "admins", uid)
@@ -223,9 +304,12 @@ loginBtn.onclick = async () => {
     }
 
 
-    // সফল Admin Login
     loginBox.style.display = "none";
+
     adminPanel.style.display = "block";
+
+
+    loadRequests();
 
   }
 
@@ -239,12 +323,259 @@ loginBtn.onclick = async () => {
 };
 
 
+/* =========================
+   LOAD VERIFICATION REQUESTS
+========================= */
+
+function loadRequests(){
+
+  const requestsRef =
+    collection(db, "verificationRequests");
+
+
+  const requestsQuery =
+    query(
+      requestsRef,
+      orderBy("createdAt", "desc")
+    );
+
+
+  unsubscribeRequests =
+    onSnapshot(
+      requestsQuery,
+      (snapshot) => {
+
+        requestList.innerHTML = "";
+
+
+        if (snapshot.empty) {
+
+          requestList.innerHTML =
+            '<p class="empty">কোনো Verification Request নেই।</p>';
+
+          return;
+        }
+
+
+        snapshot.forEach((requestDoc) => {
+
+          const data =
+            requestDoc.data();
+
+          const id =
+            requestDoc.id;
+
+
+          const request =
+            document.createElement("div");
+
+          request.className =
+            "request";
+
+
+          request.innerHTML = `
+
+            <h3>🧾 Verification Request</h3>
+
+            <p>
+              <b>Payment Method:</b>
+              ${data.paymentMethod || "N/A"}
+            </p>
+
+            <p>
+              <b>Sender Number:</b>
+              ${data.senderNumber || "N/A"}
+            </p>
+
+            <p>
+              <b>Transaction ID:</b>
+              ${data.transactionId || "N/A"}
+            </p>
+
+            <p>
+              <b>User ID:</b>
+              ${data.userId || "N/A"}
+            </p>
+
+            <p class="status">
+              Status:
+              ${data.status || "pending"}
+            </p>
+
+            <button
+              class="approve"
+              data-id="${id}">
+              ✅ Approve
+            </button>
+
+            <button
+              class="reject"
+              data-id="${id}">
+              ❌ Reject
+            </button>
+
+            <button
+              class="delete"
+              data-id="${id}">
+              🗑️ Delete
+            </button>
+
+          `;
+
+
+          /* APPROVE */
+
+          request
+          .querySelector(".approve")
+          .onclick = async () => {
+
+            try {
+
+              await updateDoc(
+                doc(
+                  db,
+                  "verificationRequests",
+                  id
+                ),
+                {
+                  status: "approved"
+                }
+              );
+
+              alert("✅ Request Approved");
+
+            }
+
+            catch(error){
+
+              alert(
+                "❌ Error: " +
+                error.message
+              );
+
+            }
+
+          };
+
+
+          /* REJECT */
+
+          request
+          .querySelector(".reject")
+          .onclick = async () => {
+
+            try {
+
+              await updateDoc(
+                doc(
+                  db,
+                  "verificationRequests",
+                  id
+                ),
+                {
+                  status: "rejected"
+                }
+              );
+
+              alert("❌ Request Rejected");
+
+            }
+
+            catch(error){
+
+              alert(
+                "❌ Error: " +
+                error.message
+              );
+
+            }
+
+          };
+
+
+          /* DELETE */
+
+          request
+          .querySelector(".delete")
+          .onclick = async () => {
+
+            const confirmDelete =
+              confirm(
+                "এই Request টি Delete করবেন?"
+              );
+
+
+            if (!confirmDelete){
+              return;
+            }
+
+
+            try {
+
+              await deleteDoc(
+                doc(
+                  db,
+                  "verificationRequests",
+                  id
+                )
+              );
+
+              alert("🗑️ Request Deleted");
+
+            }
+
+            catch(error){
+
+              alert(
+                "❌ Error: " +
+                error.message
+              );
+
+            }
+
+          };
+
+
+          requestList.appendChild(request);
+
+        });
+
+      },
+
+      (error) => {
+
+        requestList.innerHTML =
+          "<p class='empty'>❌ Request Load করা যায়নি: " +
+          error.message +
+          "</p>";
+
+      }
+
+    );
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
 logoutBtn.onclick = async () => {
+
+  if (unsubscribeRequests) {
+    unsubscribeRequests();
+    unsubscribeRequests = null;
+  }
+
 
   await signOut(auth);
 
-  adminPanel.style.display = "none";
-  loginBox.style.display = "block";
+
+  adminPanel.style.display =
+    "none";
+
+  loginBox.style.display =
+    "block";
 
 };
 
