@@ -76,3 +76,27 @@ function updateBalanceDate() {
 
 updateBalanceDate();
 setInterval(updateBalanceDate, 1000);
+// 3-dot menu
+window.toggleMenu = function () {
+  const menu = document.getElementById("threeDotMenu");
+
+  if (menu) {
+    menu.style.display =
+      menu.style.display === "block" ? "none" : "block";
+  }
+};
+
+// Withdraw
+window.openWithdraw = function () {
+  alert("Withdraw অপশন");
+};
+
+// Deposit
+window.openDeposit = function () {
+  alert("Deposit অপশন");
+};
+
+// Account Verification
+window.openVerification = function () {
+  alert("Account Verification — ৳60");
+};
