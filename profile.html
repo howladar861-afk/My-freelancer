@@ -452,57 +452,49 @@ document.getElementById("submitVerification").onclick = async function () {
     const transactionId =
         document.getElementById("transactionId").value.trim();
 
-    const user = await getLoggedInUser();
+    const user = auth.currentUser;
 
     if (!user) {
-        alert("দয়া করে আগে Login করুন।");
+        alert("আপনার Login Session পাওয়া যাচ্ছে না।");
         return;
     }
 
     if (!senderNumber || !transactionId) {
-        alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন!");
+        alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন!");
         return;
     }
 
-try {
+    try {
 
-  await addDoc(collection(db, "verificationRequests"), {
+        await addDoc(collection(db, "verificationRequests"), {
 
-    userId: user.uid,
+            userId: user.uid,
+            userEmail: user.email || "",
+            paymentMethod: "bKash/Nagad",
+            senderNumber: senderNumber,
+            transactionId: transactionId,
+            status: "pending",
+            createdAt: serverTimestamp()
 
-    userEmail: user.email || "",
+        });
 
-    paymentMethod: "bKash/Nagad",
+        alert(
+            "✅ আপনার Verification Request সফলভাবে পাঠানো হয়েছে!\n\n" +
+            "Admin যাচাই করে Approve বা Reject করবেন।"
+        );
 
-    senderNumber: senderNumber,
+        document.getElementById("senderNumber").value = "";
+        document.getElementById("transactionId").value = "";
 
-    transactionId: transactionId,
+    } catch (error) {
 
-    status: "pending",
+        console.error(error);
 
-    createdAt: serverTimestamp()
-
-  });
-
-  alert(
-    "✅ আপনার Verification Request সফলভাবে পাঠানো হয়েছে!\n\n" +
-    "Admin যাচাই করে Approve বা Reject করবেন।"
-  );
-
-  document.getElementById("senderNumber").value = "";
-  document.getElementById("transactionId").value = "";
-
-} catch (error) {
-
-  console.error(error);
-
-  alert(
-    "❌ Request পাঠানো যায়নি!\n\n" +
-    error.message
-  );
-
-}
-
+        alert(
+            "❌ Request পাঠানো যায়নি!\n\n" +
+            error.message
+        );
+    }
 };
 
 document.getElementById("logoutBtn").onclick = async () => {
