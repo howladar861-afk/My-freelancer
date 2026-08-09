@@ -266,8 +266,20 @@ onAuthStateChanged(auth, async (user) => {
             document.getElementById("profileName").textContent =
                 data.name || user.displayName || "Profile";
 
-            document.getElementById("referralCode").textContent =
-                data.referralCode || "Not Found";
+            let referralCode = data.referralCode;
+
+if (!referralCode) {
+    referralCode = "RF" + user.uid.substring(0, 8).toUpperCase();
+
+    await updateDoc(
+        doc(db, "users", user.uid),
+        {
+            referralCode: referralCode
+        }
+    );
+}
+
+document.getElementById("referralCode").textContent = referralCode;
 
         } else {
 
