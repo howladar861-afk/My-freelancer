@@ -431,6 +431,20 @@ document.getElementById("editProfileBtn").onclick = async () => {
 
     document.getElementById("verifyBtn").style.display = "none";
 };
+    document.getElementById("submitVerification").onclick = function () {
+    const senderNumber = document.getElementById("senderNumber").value.trim();
+    const transactionId = document.getElementById("transactionId").value.trim();
+
+    if (!senderNumber || !transactionId) {
+        alert("দয়া করে সব তথ্য পূরণ করুন।");
+        return;
+    }
+
+    alert(
+        "✅ Verification তথ্য গ্রহণ করা হয়েছে!\n\n" +
+        "আপনার তথ্য যাচাই করা হবে।"
+    );
+};
 document.getElementById("logoutBtn").onclick = async () => {
 
     await signOut(auth);
