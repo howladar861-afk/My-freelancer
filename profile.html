@@ -374,7 +374,15 @@ document.getElementById("editProfileBtn").onclick = async () => {
     alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
 };
 
-    
+    document.getElementById("verifyBtn").onclick = () => {
+
+    alert(
+        "Account Verification\n\n" +
+        "Verification Fee: ৳100\n\n" +
+        "পরবর্তী ধাপে bKash/Nagad নম্বর এবং Transaction ID দেওয়ার ফর্ম আসবে।"
+    );
+
+};
 document.getElementById("logoutBtn").onclick = async () => {
 
     await signOut(auth);
