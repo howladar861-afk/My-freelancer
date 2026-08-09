@@ -217,7 +217,57 @@ body{
 >
     💳 Verify Account — ৳100
     </button>
+<!-- Verification Form -->
+<div id="verificationForm"
+     style="display:none;margin-top:15px;background:#f4f7fb;padding:15px;border-radius:12px;">
 
+    <strong style="color:#2563eb;font-size:18px;">
+        💳 Account Verification
+    </strong>
+
+    <p style="color:#555;margin:10px 0;">
+        ৳100 পাঠানোর পর নিচের তথ্য দিন।
+    </p>
+
+    <select id="paymentMethod"
+            style="width:100%;padding:13px;border:1px solid #ddd;border-radius:8px;margin-bottom:10px;">
+        <option value="">Payment Method নির্বাচন করুন</option>
+        <option value="bKash">bKash</option>
+        <option value="Nagad">Nagad</option>
+    </select>
+
+    <input
+        type="text"
+        id="senderNumber"
+        placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন"
+        style="width:100%;padding:13px;border:1px solid #ddd;border-radius:8px;margin-bottom:10px;"
+    >
+
+    <input
+        type="text"
+        id="transactionId"
+        placeholder="Transaction ID লিখুন"
+        style="width:100%;padding:13px;border:1px solid #ddd;border-radius:8px;margin-bottom:10px;"
+    >
+
+    <button
+        id="submitVerification"
+        style="
+            width:100%;
+            padding:13px;
+            border:none;
+            border-radius:10px;
+            background:#2563eb;
+            color:white;
+            font-size:16px;
+            font-weight:bold;
+            cursor:pointer;
+        "
+    >
+        ✅ Submit Verification
+    </button>
+
+</div>
 </div>
     </div>
 
@@ -376,13 +426,11 @@ document.getElementById("editProfileBtn").onclick = async () => {
     alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
 };
 
-    const verifyBtn = document.getElementById("verifyBtn");
+    document.getElementById("verifyBtn").onclick = function () {
+    document.getElementById("verificationForm").style.display = "block";
 
-if (verifyBtn) {
-    verifyBtn.addEventListener("click", function () {
-        alert("Account Verification\n\nVerification Fee: ৳100\n\nপরবর্তী ধাপে bKash/Nagad নম্বর এবং Transaction ID দিতে হবে।");
-    });
-}
+    document.getElementById("verifyBtn").style.display = "none";
+};
 document.getElementById("logoutBtn").onclick = async () => {
 
     await signOut(auth);
