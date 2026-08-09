@@ -446,34 +446,23 @@ document.getElementById("editProfileBtn").onclick = async () => {
 };
 document.getElementById("submitVerification").onclick = async function () {
 
-    
-const senderNumber =
-  document.getElementById("senderNumber").value.trim();
+    const senderNumber =
+        document.getElementById("senderNumber").value.trim();
 
-const transactionId =
-  document.getElementById("transactionId").value.trim();
+    const transactionId =
+        document.getElementById("transactionId").value.trim();
 
-const user = await getLoggedInUser();
+    const user = await getLoggedInUser();
 
-if (!user) {
-    alert("অ্যাকাউন্ট সেশন প্রস্তুত হয়নি। একটু পরে আবার চেষ্টা করুন।");
-    return;
-}
+    if (!user) {
+        alert("দয়া করে আগে Login করুন।");
+        return;
+    }
 
-if (!user) {
-    alert("লগইন করা আছে, কিন্তু Firebase সেশন লোড হয়নি। একটু অপেক্ষা করে আবার চেষ্টা করুন।");
-    return;
-}
-
-if (!user) {
-    alert("Login Session পাওয়া যাচ্ছে না।");
-    return;
-}
-
-if (!senderNumber || !transactionId) {
-  alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন!");
-  return;
-}
+    if (!senderNumber || !transactionId) {
+        alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন!");
+        return;
+    }
 
 try {
 
