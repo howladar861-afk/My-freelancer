@@ -199,8 +199,31 @@ onAuthStateChanged(auth, async (user) => {
 
 
 // Withdraw Button
-window.submitWithdraw = function () {
+window.submitWithdraw = async function () {
+const user = auth.currentUser;
 
+if (!user) {
+  alert("আগে Login করুন");
+  window.location.href = "index.html";
+  return;
+}
+
+const userRef = doc(db, "users", user.uid);
+const userSnap = await getDoc(userRef);
+
+if (!userSnap.exists()) {
+  alert("Account Verification প্রয়োজন");
+  window.location.href = "verification.html";
+  return;
+}
+
+const userData = userSnap.data();
+
+if (userData.verified !== true) {
+  alert("Withdraw করতে আগে Account Verification সম্পন্ন করুন");
+  window.location.href = "verification.html";
+  return;
+}
   const method =
     document.getElementById("withdrawMethod").value;
 
