@@ -142,7 +142,7 @@
 
   </div>
 
-  <script>
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
@@ -155,7 +155,19 @@ import {
     setDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    function showPaymentNumber() {
+    const firebaseConfig = {
+  apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+  authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+  projectId: "rakib-freelancer-9c66b",
+  storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+  messagingSenderId: "541209844482",
+  appId: "1:541209844482:web:510568d5226c9bf47ac01b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+    window.showPaymentNumber = function () {
     const method = document.getElementById("paymentMethod").value;
 
     const info = document.getElementById("paymentInfo");
@@ -176,7 +188,7 @@ import {
         info.style.display = "none";
     }
     }
-    function submitVerification() {
+    window.submitVerification = async function () {
 
       const name = document.getElementById("userName").value.trim();
       const number = document.getElementById("paymentNumber").value.trim();
@@ -188,10 +200,32 @@ import {
         return;
       }
 
-      alert("Verification request submitted.");
+      try {
+  const user = auth.currentUser;
 
-      // Firebase database connection
-      // পরের ধাপে এখানে Firebase-এ তথ্য পাঠাব।
+  if (!user) {
+    alert("আগে Login করুন");
+    window.location.href = "index.html";
+    return;
+  }
+
+  const userRef = doc(db, "users", user.uid);
+
+  await setDoc(userRef, {
+    name: name,
+    verificationPaymentNumber: number,
+    verificationTransactionId: transactionId,
+    verificationStatus: "pending",
+    verified: false,
+    verificationSubmittedAt: serverTimestamp()
+  }, { merge: true });
+
+  alert("Verification request সফলভাবে জমা হয়েছে। Admin যাচাই করার পর Account Verified হবে.");
+
+} catch (error) {
+  console.error(error);
+  alert("Verification request জমা হয়নি। আবার চেষ্টা করুন।");
+        }
 
     }
   </script>
