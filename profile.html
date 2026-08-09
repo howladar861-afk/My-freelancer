@@ -303,30 +303,30 @@ async function loadProfile(user) {
             "0";
     }
 }
-
-
-// Login state
-onAuthStateChanged(auth, async (user) => {
-
-    console.log("Auth user:", user);
-
-    await loadProfile(user);
-
-});
-
-
 // Persistence
+    // Login state
 setPersistence(auth, browserLocalPersistence)
     .then(() => {
 
-        console.log("Auth persistence enabled");
+        console.log("Auth persistence enabled ✅");
+
+        onAuthStateChanged(auth, async (user) => {
+
+            console.log("Current User:", user);
+
+            if (!user) {
+                document.getElementById("profileName").textContent = "My Profile";
+                document.getElementById("profileEmail").textContent = "";
+                document.getElementById("referralCode").textContent = "Not Available";
+                document.getElementById("referralCount").textContent = "0";
+                return;
+            }
+
+            await loadProfile(user);
+
+        });
 
     })
     .catch((error) => {
-
-        console.error("Persistence Error:", error);
-
+        console.error("Auth Persistence Error:", error);
     });
-
-
-</script>
