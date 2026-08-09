@@ -452,27 +452,32 @@ document.getElementById("submitVerification").onclick = async function () {
     const transactionId =
         document.getElementById("transactionId").value.trim();
 
-    const user = await getLoggedInUser();
-
-    if (!user) {
-        alert("আপনার Login Session পাওয়া যাচ্ছে না।");
-        return;
-    }
-
     if (!senderNumber || !transactionId) {
         alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন!");
         return;
     }
 
     try {
+        await authReady;
+
+        const user = auth.currentUser;
+
+        if (!user) {
+            alert("আপনার Login Session পাওয়া যাচ্ছে না। আবার Login করুন।");
+            return;
+        }
 
         await addDoc(collection(db, "verificationRequests"), {
 
             userId: user.uid,
             userEmail: user.email || "",
-            paymentMethod: "bKash/Nagad",
+
+            paymentMethod:
+                document.getElementById("paymentMethod").value,
+
             senderNumber: senderNumber,
             transactionId: transactionId,
+
             status: "pending",
             createdAt: serverTimestamp()
 
@@ -488,7 +493,7 @@ document.getElementById("submitVerification").onclick = async function () {
 
     } catch (error) {
 
-        console.error(error);
+        console.error("Verification Error:", error);
 
         alert(
             "❌ Request পাঠানো যায়নি!\n\n" +
