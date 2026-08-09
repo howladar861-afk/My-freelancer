@@ -359,15 +359,3 @@ document.getElementById("editProfileBtn").onclick = async () => {
 
     alert("Profile নাম সফলভাবে পরিবর্তন হয়েছে ✅");
 };
-
-    
-
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-    try {
-        await signOut(auth);
-        window.location.replace("index.html");
-    } catch (error) {
-        console.error("Logout Error:", error);
-        alert("Logout করতে সমস্যা হয়েছে: " + error.message);
-    }
-});
