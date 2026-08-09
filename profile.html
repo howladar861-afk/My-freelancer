@@ -252,19 +252,21 @@ body{
     >
 
     <button
-        id="submitVerification"
-        style="
-            width:100%;
-            padding:13px;
-            border:none;
-            border-radius:10px;
-            background:#2563eb;
-            color:white;
-            font-size:16px;
-            font-weight:bold;
-            cursor:pointer;
-        "
-    >
+    id="submitVerification"
+    style="
+        width:100%;
+        padding:13px;
+        border:none;
+        border-radius:10px;
+        background:#2563eb;
+        color:white;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+    "
+>
+    ✅ Submit Verification
+    </button>
         ✅ Submit Verification
     </button>
 
@@ -347,12 +349,13 @@ const db = getFirestore(app);
   const unsubscribe = onAuthStateChanged(auth, (user) => {
     unsubscribe();
     resolve(user);
-  });
-});
-
-async function getLoggedInUser() {
-  if (auth.currentUser) {
-    return auth.currentUser;
+  async function getLoggedInUser() {
+    return new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            unsubscribe();
+            resolve(user);
+        });
+    });
   }
 
   return await authReady;
