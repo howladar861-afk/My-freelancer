@@ -145,19 +145,7 @@ body{
         Loading...
     </p>
 
-    <div class="info">
-
-        <div class="info-item">
-            <strong>Referral Code</strong>
-            <span id="referralCode">Loading...</span>
-        </div>
-
-        <div class="info-item">
-            <strong>Referral Count</strong>
-            <span id="referralCount">0</span>
-        </div>
-
-</div>
+    
 
 <div class="bottom-nav">
 
@@ -234,12 +222,6 @@ async function loadProfile(user) {
         document.getElementById("profileEmail").textContent =
             "Please login first";
 
-        document.getElementById("referralCode").textContent =
-            "Not Available";
-
-        document.getElementById("referralCount").textContent =
-            "0";
-
         return;
     }
 
@@ -259,68 +241,20 @@ async function loadProfile(user) {
         if (userSnap.exists()) {
 
             const data = userSnap.data();
-
-
-            // Name
-            document.getElementById("profileName").textContent =
-                data.name || user.displayName || "Profile";
-
-
-            // নিজের Referral Code
-            document.getElementById("referralCode").textContent =
-                data.referralCode || "Not Found";
-
-
-            // Referral Count
-            document.getElementById("referralCount").textContent =
-                data.referralCount || 0;
-
-
-        } else {
-
             document.getElementById("profileName").textContent =
                 user.displayName || "My Profile";
-
-            document.getElementById("referralCode").textContent =
-                "Not Found";
-
-            document.getElementById("referralCount").textContent =
-                "0";
         }
 
 
     } catch (error) {
 
         console.error("Firestore Error:", error);
-
-        document.getElementById("profileName").textContent =
-            user.displayName || "Profile";
-
-        document.getElementById("referralCode").textContent =
-            "Error";
-
-        document.getElementById("referralCount").textContent =
-            "0";
     }
 }
 // Login state
 onAuthStateChanged(auth, async (user) => {
 
-    console.log("Auth user:", user);
-
     if (!user) {
         document.getElementById("profileName").textContent = "Please Login";
         document.getElementById("profileEmail").textContent = "Please login first";
-        document.getElementById("referralCode").textContent = "Not Available";
-        document.getElementById("referralCount").textContent = "0";
-        return;
-    }
-
-    await loadProfile(user);
-});
-
-// Keep login session
-setPersistence(auth, browserLocalPersistence)
-    .catch((error) => {
-        console.error("Persistence Error:", error);
     });
