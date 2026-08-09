@@ -457,7 +457,7 @@ if (!user) {
 }
 
   try {
-
+await addDoc(collection(db, "verificationRequests"), {
     userId: user.uid,
 userEmail: user.email || "",
 
