@@ -98,5 +98,5 @@ window.openDeposit = function () {
 
 // Account Verification
 window.openVerification = function () {
-  alert("Account Verification — ৳60");
+  window.location.href = "verification.html";
 };
