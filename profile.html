@@ -455,35 +455,29 @@ document.getElementById("submitVerification").onclick = async function () {
     const transactionId =
         document.getElementById("transactionId").value.trim();
 
+    const user = auth.currentUser;
+
+    if (!user) {
+        alert("আপনার Login Session পাওয়া যাচ্ছে না। আবার Login করুন।");
+        return;
+    }
+
     if (!senderNumber || !transactionId) {
-        alert("দয়া করে bKash/Nagad নম্বর এবং Transaction ID দিন!");
+        alert("দয়া করে Sender Number এবং Transaction ID দিন!");
         return;
     }
 
     try {
-        await authReady;
-
-        const user = auth.currentUser;
-
-        if (!user) {
-            alert("আপনার Login Session পাওয়া যাচ্ছে না। আবার Login করুন।");
-            return;
-        }
 
         await addDoc(collection(db, "verificationRequests"), {
-
             userId: user.uid,
             userEmail: user.email || "",
-
             paymentMethod:
                 document.getElementById("paymentMethod").value,
-
             senderNumber: senderNumber,
             transactionId: transactionId,
-
             status: "pending",
             createdAt: serverTimestamp()
-
         });
 
         alert(
@@ -511,9 +505,12 @@ document.getElementById("logoutBtn").onclick = async () => {
 
     window.location.href = "index.html";
 
+document.getElementById("logoutBtn").onclick = async function () {
+    try {
+        await signOut(auth);
+        window.location.href = "index.html";
+    } catch (error) {
+        console.error("Logout Error:", error);
+        alert("Logout করা যায়নি: " + error.message);
+    }
 };
-
-</script>
-
-</body>
-      </html>
