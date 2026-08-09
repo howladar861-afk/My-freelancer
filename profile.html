@@ -187,29 +187,24 @@ body{
     </div>
 
 </div>
-
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 import {
-  getAuth,
-  onAuthStateChanged,
-  setPersistence,
-  browserLocalPersistence
+    getAuth,
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  addDoc,
-  collection,
-  serverTimestamp
+    getFirestore,
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-console.log("FIREBASE SCRIPT STARTED ✅");
+
+
 const firebaseConfig = {
     apiKey: "AIzaSyBFUKPT76os6u0d09ff1jZgjdIaR5ew8m",
     authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
@@ -218,45 +213,67 @@ const firebaseConfig = {
     messagingSenderId: "541209844482",
     appId: "1:541209844482:web:5105685226c9bf47ac01b"
 };
-    const app = initializeApp(firebaseConfig);
+
+
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-await setPersistence(auth, browserLocalPersistence);
 
-onAuthStateChanged(auth, async (user) => {
+console.log("Firebase started");
+
+
+async function loadProfile(user) {
 
     if (!user) {
-        document.getElementById("profileName").textContent = "Profile";
-        document.getElementById("profileEmail").textContent = "Please login first";
-        document.getElementById("referralCode").textContent = "Not Available";
-        document.getElementById("referralCount").textContent = "0";
+
+        document.getElementById("profileName").textContent =
+            "Profile";
+
+        document.getElementById("profileEmail").textContent =
+            "Please login first";
+
+        document.getElementById("referralCode").textContent =
+            "Not Available";
+
+        document.getElementById("referralCount").textContent =
+            "0";
+
         return;
     }
 
+
+    // Email
     document.getElementById("profileEmail").textContent =
         user.email || "No Email";
+
 
     try {
 
         const userRef = doc(db, "users", user.uid);
+
         const userSnap = await getDoc(userRef);
+
 
         if (userSnap.exists()) {
 
             const data = userSnap.data();
 
-            // User Name
+
+            // Name
             document.getElementById("profileName").textContent =
                 data.name || user.displayName || "Profile";
 
-            // এই ইউজারের নিজের Referral Code
+
+            // নিজের Referral Code
             document.getElementById("referralCode").textContent =
                 data.referralCode || "Not Found";
+
 
             // Referral Count
             document.getElementById("referralCount").textContent =
                 data.referralCount || 0;
+
 
         } else {
 
@@ -270,12 +287,13 @@ onAuthStateChanged(auth, async (user) => {
                 "0";
         }
 
+
     } catch (error) {
 
-        console.error("Profile Error:", error);
+        console.error("Firestore Error:", error);
 
         document.getElementById("profileName").textContent =
-            "Profile";
+            user.displayName || "Profile";
 
         document.getElementById("referralCode").textContent =
             "Error";
@@ -283,5 +301,31 @@ onAuthStateChanged(auth, async (user) => {
         document.getElementById("referralCount").textContent =
             "0";
     }
+}
+
+
+// Login state
+onAuthStateChanged(auth, async (user) => {
+
+    console.log("Auth user:", user);
+
+    await loadProfile(user);
 
 });
+
+
+// Persistence
+setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+
+        console.log("Auth persistence enabled");
+
+    })
+    .catch((error) => {
+
+        console.error("Persistence Error:", error);
+
+    });
+
+
+</script>
