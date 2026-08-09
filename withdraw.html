@@ -136,32 +136,90 @@
 
   </div>
 
-  <script>
-    function submitWithdraw() {
+  <script type="module">
 
-      const method =
-        document.getElementById("withdrawMethod").value;
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-      const number =
-        document.getElementById("withdrawNumber").value.trim();
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-      const amount =
-        document.getElementById("withdrawAmount").value.trim();
+import {
+  getFirestore,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-      if (!method || !number || !amount) {
-        alert("সব তথ্য পূরণ করুন।");
-        return;
-      }
 
-      if (Number(amount) <= 0) {
-        alert("সঠিক টাকার পরিমাণ দিন।");
-        return;
-      }
+const firebaseConfig = {
+  // এখানে আপনার dashboard.js-এর একই Firebase config বসাবেন
+};
 
-      alert("Withdraw request submitted.");
 
-      // পরের ধাপে Firebase-এ Withdraw Request পাঠানো হবে
-    }
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+// Account Verification Check
+onAuthStateChanged(auth, async (user) => {
+
+  if (!user) {
+    alert("প্রথমে Login করুন।");
+    window.location.href = "index.html";
+    return;
+  }
+
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
+
+  if (!userSnap.exists()) {
+    alert("Account Verification প্রয়োজন।");
+    window.location.href = "verification.html";
+    return;
+  }
+
+  const userData = userSnap.data();
+
+  if (userData.verified !== true) {
+    alert("Withdraw করতে আগে Account Verification সম্পন্ন করুন।");
+    window.location.href = "verification.html";
+    return;
+  }
+
+});
+
+
+// Withdraw Button
+window.submitWithdraw = function () {
+
+  const method =
+    document.getElementById("withdrawMethod").value;
+
+  const number =
+    document.getElementById("withdrawNumber").value.trim();
+
+  const amount =
+    document.getElementById("withdrawAmount").value.trim();
+
+
+  if (!method || !number || !amount) {
+    alert("সব তথ্য পূরণ করুন।");
+    return;
+  }
+
+  if (Number(amount) <= 0) {
+    alert("সঠিক টাকার পরিমাণ দিন।");
+    return;
+  }
+
+  alert("Withdraw request submitted.");
+
+};
+
   </script>
 
 </body>
