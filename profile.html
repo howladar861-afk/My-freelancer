@@ -341,9 +341,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+    await setPersistence(auth, browserLocalPersistence);
 
-await setPersistence(auth, browserLocalPersistence);
-
+    const authReady = new Promise((resolve) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe();
+        resolve(user);
+    });
+});
 let currentUser = null;
     
 onAuthStateChanged(auth, async (user) => {
@@ -399,10 +404,6 @@ document.getElementById("editProfileBtn").onclick = async () => {
         });
     });
 
-    if (!user) {
-        alert("আগে Login করুন");
-        return;
-    }
 
     const userRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userRef);
@@ -448,18 +449,17 @@ document.getElementById("submitVerification").onclick = async function () {
     return;
   }
 
-  if (!currentUser) {
-    alert("দয়া করে আগে Login করুন।");
-    return;
-  }
+  const user = await authReady;
+
+if (!user) {
+  alert("দয়া করে আগে Login করুন");
+  return;
+}
 
   try {
 
-    await addDoc(collection(db, "verificationRequests"), {
-
-      userId: currentUser.uid,
-
-      userEmail: currentUser.email || "",
+    userId: user.uid,
+userEmail: user.email || "",
 
       paymentMethod: "bKash/Nagad",
 
