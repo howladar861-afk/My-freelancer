@@ -174,7 +174,6 @@ button{
 
 </div>
 
-
 <script type="module">
 
 import { initializeApp }
@@ -189,14 +188,16 @@ from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
   getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot,
   doc,
   getDoc,
-  collection,
-  onSnapshot,
+  setDoc,
   updateDoc,
   deleteDoc,
-  query,
-  orderBy
+  serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
@@ -207,44 +208,45 @@ const firebaseConfig = {
   projectId: "rakib-freelancer-9c66b",
   storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
   messagingSenderId: "541209844482",
-  appId: "1:541209844482:web:510568d5226c9bf47ac01b",
-  measurementId: "G-F6QNE0QN5K"
+  appId: "1:541209844482:web:510568d5226c9bf47ac01b"
 };
+
+
+const ADMIN_UID =
+  "MwiyoLqCJeYERHAwUKAa17sLwop1";
 
 
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+
 const db = getFirestore(app);
 
 
 const loginBtn =
-document.getElementById("adminLoginBtn");
+  document.getElementById("adminLoginBtn");
 
 const message =
-document.getElementById("message");
+  document.getElementById("message");
 
 const loginBox =
-document.getElementById("loginBox");
+  document.getElementById("loginBox");
 
 const adminPanel =
-document.getElementById("adminPanel");
+  document.getElementById("adminPanel");
 
 const logoutBtn =
-document.getElementById("logoutBtn");
+  document.getElementById("logoutBtn");
 
 const requestList =
-document.getElementById("requestList");
-
-
-let unsubscribeRequests = null;
+  document.getElementById("requestList");
 
 
 /* =========================
    ADMIN LOGIN
 ========================= */
 
-loginBtn.onclick = async () => {
+loginBtn.onclick = async function () {
 
   const email =
     document.getElementById("adminEmail").value.trim();
@@ -272,17 +274,7 @@ loginBtn.onclick = async () => {
       );
 
 
-    const uid =
-      result.user.uid;
-
-
-    const adminDoc =
-      await getDoc(
-        doc(db, "admins", uid)
-      );
-
-
-    if (!adminDoc.exists()) {
+    if (result.user.uid !== ADMIN_UID) {
 
       await signOut(auth);
 
@@ -293,30 +285,26 @@ loginBtn.onclick = async () => {
     }
 
 
-    if (adminDoc.data().role !== "admin") {
+    loginBox.style.display =
+      "none";
 
-      await signOut(auth);
+    adminPanel.style.display =
+      "block";
 
-      message.textContent =
-        "❌ Admin permission নেই।";
-
-      return;
-    }
+    message.textContent = "";
 
 
-    loginBox.style.display = "none";
-
-    adminPanel.style.display = "block";
-
-
-    loadRequests();
+    loadVerificationRequests();
 
   }
 
-  catch(error) {
+  catch (error) {
+
+    console.error(error);
 
     message.textContent =
-      "❌ " + error.message;
+      "❌ Login করা যায়নি: " +
+      error.message;
 
   }
 
@@ -324,234 +312,395 @@ loginBtn.onclick = async () => {
 
 
 /* =========================
-   LOAD VERIFICATION REQUESTS
+   LOAD PENDING REQUESTS
 ========================= */
 
-function loadRequests(){
+function loadVerificationRequests() {
 
   const requestsRef =
-    collection(db, "verificationRequests");
+    collection(
+      db,
+      "verificationRequests"
+    );
 
 
   const requestsQuery =
     query(
       requestsRef,
-      orderBy("createdAt", "desc")
+      where(
+        "verificationStatus",
+        "==",
+        "pending"
+      )
     );
 
 
-  unsubscribeRequests =
-    onSnapshot(
-      requestsQuery,
-      (snapshot) => {
+  onSnapshot(
 
-        requestList.innerHTML = "";
+    requestsQuery,
 
+    function (snapshot) {
 
-        if (snapshot.empty) {
+      requestList.innerHTML = "";
 
-          requestList.innerHTML =
-            '<p class="empty">কোনো Verification Request নেই।</p>';
 
-          return;
-        }
-
-
-        snapshot.forEach((requestDoc) => {
-
-          const data =
-            requestDoc.data();
-
-          const id =
-            requestDoc.id;
-
-
-          const request =
-            document.createElement("div");
-
-          request.className =
-            "request";
-
-
-          request.innerHTML = `
-
-            <h3>🧾 Verification Request</h3>
-
-            <p>
-              <b>Payment Method:</b>
-              ${data.paymentMethod || "N/A"}
-            </p>
-
-            <p>
-              <b>Sender Number:</b>
-              ${data.senderNumber || "N/A"}
-            </p>
-
-            <p>
-              <b>Transaction ID:</b>
-              ${data.transactionId || "N/A"}
-            </p>
-
-            <p>
-              <b>User ID:</b>
-              ${data.userId || "N/A"}
-            </p>
-
-            <p class="status">
-              Status:
-              ${data.status || "pending"}
-            </p>
-
-            <button
-              class="approve"
-              data-id="${id}">
-              ✅ Approve
-            </button>
-
-            <button
-              class="reject"
-              data-id="${id}">
-              ❌ Reject
-            </button>
-
-            <button
-              class="delete"
-              data-id="${id}">
-              🗑️ Delete
-            </button>
-
-          `;
-
-
-          /* APPROVE */
-
-          request
-          .querySelector(".approve")
-          .onclick = async () => {
-
-            try {
-
-              await updateDoc(
-                doc(
-                  db,
-                  "verificationRequests",
-                  id
-                ),
-                {
-                  status: "approved"
-                }
-              );
-
-              alert("✅ Request Approved");
-
-            }
-
-            catch(error){
-
-              alert(
-                "❌ Error: " +
-                error.message
-              );
-
-            }
-
-          };
-
-
-          /* REJECT */
-
-          request
-          .querySelector(".reject")
-          .onclick = async () => {
-
-            try {
-
-              await updateDoc(
-                doc(
-                  db,
-                  "verificationRequests",
-                  id
-                ),
-                {
-                  status: "rejected"
-                }
-              );
-
-              alert("❌ Request Rejected");
-
-            }
-
-            catch(error){
-
-              alert(
-                "❌ Error: " +
-                error.message
-              );
-
-            }
-
-          };
-
-
-          /* DELETE */
-
-          request
-          .querySelector(".delete")
-          .onclick = async () => {
-
-            const confirmDelete =
-              confirm(
-                "এই Request টি Delete করবেন?"
-              );
-
-
-            if (!confirmDelete){
-              return;
-            }
-
-
-            try {
-
-              await deleteDoc(
-                doc(
-                  db,
-                  "verificationRequests",
-                  id
-                )
-              );
-
-              alert("🗑️ Request Deleted");
-
-            }
-
-            catch(error){
-
-              alert(
-                "❌ Error: " +
-                error.message
-              );
-
-            }
-
-          };
-
-
-          requestList.appendChild(request);
-
-        });
-
-      },
-
-      (error) => {
+      if (snapshot.empty) {
 
         requestList.innerHTML =
-          "<p class='empty'>❌ Request Load করা যায়নি: " +
-          error.message +
-          "</p>";
+          '<p class="empty">কোনো Pending Verification নেই।</p>';
 
+        return;
       }
 
+
+      snapshot.forEach(function (requestDoc) {
+
+        const data =
+          requestDoc.data();
+
+        const id =
+          requestDoc.id;
+
+
+        const request =
+          document.createElement("div");
+
+        request.className =
+          "request";
+
+
+        request.innerHTML = `
+
+          <h3>🧾 Verification Request</h3>
+
+          <p>
+            <b>Name:</b>
+            ${data.name || "নেই"}
+          </p>
+
+          <p>
+            <b>Email:</b>
+            ${data.email || "নেই"}
+          </p>
+
+          <p>
+            <b>Payment Number:</b>
+            ${data.verificationPaymentNumber || "নেই"}
+          </p>
+
+          <p>
+            <b>Transaction ID:</b>
+            ${data.verificationTransactionId || "নেই"}
+          </p>
+
+          <p>
+            <b>User ID:</b>
+            ${data.userId || "নেই"}
+          </p>
+
+          <p class="status">
+            Status:
+            ${data.verificationStatus || "pending"}
+          </p>
+
+          <button
+            class="approve">
+            ✅ Approve
+          </button>
+
+          <button
+            class="reject">
+            ❌ Reject
+          </button>
+
+          <button
+            class="delete">
+            🗑️ Delete
+          </button>
+
+        `;
+
+
+        requestList.appendChild(request);
+
+
+        /* APPROVE */
+
+        request
+          .querySelector(".approve")
+          .onclick = function () {
+
+            approveRequest(id);
+
+          };
+
+
+        /* REJECT */
+
+        request
+          .querySelector(".reject")
+          .onclick = function () {
+
+            rejectRequest(id);
+
+          };
+
+
+        /* DELETE */
+
+        request
+          .querySelector(".delete")
+          .onclick = function () {
+
+            deleteRequest(id);
+
+          };
+
+      });
+
+    },
+
+    function (error) {
+
+      console.error(
+        "Request Load Error:",
+        error
+      );
+
+      requestList.innerHTML =
+        `<p class="empty">
+          ❌ Request Load করা যায়নি:<br><br>
+          ${error.message}
+        </p>`;
+
+    }
+
+  );
+
+}
+
+
+/* =========================
+   APPROVE
+========================= */
+
+async function approveRequest(id) {
+
+  if (
+    !confirm(
+      "এই Verification Approve করবেন?"
+    )
+  ) {
+    return;
+  }
+
+
+  try {
+
+    const requestRef =
+      doc(
+        db,
+        "verificationRequests",
+        id
+      );
+
+
+    const requestSnap =
+      await getDoc(requestRef);
+
+
+    if (!requestSnap.exists()) {
+
+      alert(
+        "❌ Request পাওয়া যায়নি।"
+      );
+
+      return;
+    }
+
+
+    const requestData =
+      requestSnap.data();
+
+
+    const userId =
+      requestData.userId;
+
+
+    if (!userId) {
+
+      alert(
+        "❌ User ID পাওয়া যায়নি।"
+      );
+
+      return;
+    }
+
+
+    await updateDoc(
+      requestRef,
+      {
+
+        verificationStatus:
+          "approved",
+
+        verified:
+          true,
+
+        verifiedAt:
+          serverTimestamp()
+
+      }
     );
+
+
+    const userRef =
+      doc(
+        db,
+        "users",
+        userId
+      );
+
+
+    await setDoc(
+      userRef,
+      {
+
+        verified:
+          true,
+
+        verificationStatus:
+          "approved",
+
+        verifiedAt:
+          serverTimestamp()
+
+      },
+      {
+        merge: true
+      }
+    );
+
+
+    alert(
+      "✅ Verification Approved!\n\nAccount Verified হয়েছে।"
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Approve Error:",
+      error
+    );
+
+    alert(
+      "❌ Approve করা যায়নি:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   REJECT
+========================= */
+
+async function rejectRequest(id) {
+
+  if (
+    !confirm(
+      "এই Verification Reject করবেন?"
+    )
+  ) {
+    return;
+  }
+
+
+  try {
+
+    await updateDoc(
+      doc(
+        db,
+        "verificationRequests",
+        id
+      ),
+      {
+
+        verificationStatus:
+          "rejected",
+
+        verified:
+          false,
+
+        rejectedAt:
+          serverTimestamp()
+
+      }
+    );
+
+
+    alert(
+      "❌ Verification Rejected!"
+    );
+
+  }
+
+  catch (error) {
+
+    alert(
+      "❌ Reject করা যায়নি:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+async function deleteRequest(id) {
+
+  if (
+    !confirm(
+      "এই Request Delete করবেন?"
+    )
+  ) {
+    return;
+  }
+
+
+  try {
+
+    await deleteDoc(
+      doc(
+        db,
+        "verificationRequests",
+        id
+      )
+    );
+
+
+    alert(
+      "🗑️ Request Deleted!"
+    );
+
+  }
+
+  catch (error) {
+
+    alert(
+      "❌ Delete করা যায়নি:\n\n" +
+      error.message
+    );
+
+  }
 
 }
 
@@ -560,26 +709,32 @@ function loadRequests(){
    LOGOUT
 ========================= */
 
-logoutBtn.onclick = async () => {
+logoutBtn.onclick =
+  async function () {
 
-  if (unsubscribeRequests) {
-    unsubscribeRequests();
-    unsubscribeRequests = null;
-  }
+    try {
 
+      await signOut(auth);
 
-  await signOut(auth);
+      adminPanel.style.display =
+        "none";
 
+      loginBox.style.display =
+        "block";
 
-  adminPanel.style.display =
-    "none";
+      requestList.innerHTML =
+        '<p class="empty">Request Loading...</p>';
 
-  loginBox.style.display =
-    "block";
+    }
 
-};
+    catch (error) {
+
+      alert(
+        "❌ Logout করা যায়নি।"
+      );
+
+    }
+
+  };
 
 </script>
-
-</body>
-</html>
