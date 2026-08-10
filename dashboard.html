@@ -203,6 +203,56 @@
   font-size:16px;
   padding:10px 0 25px;
 }
+    /* Verification Card */
+
+.verification-card{
+  width:90%;
+  max-width:600px;
+  margin:15px auto;
+  padding:20px;
+  box-sizing:border-box;
+  border-radius:18px;
+  background:#ffe4e6;
+  border-left:8px solid #ef1d2d;
+  box-shadow:0 5px 18px rgba(0,0,0,.15);
+}
+
+.verification-title{
+  font-size:22px;
+  font-weight:bold;
+  color:#111827;
+  margin-bottom:12px;
+}
+
+.verification-card p{
+  color:#374151;
+  font-size:16px;
+  line-height:1.5;
+}
+
+.verification-btn{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:30px;
+  background:#ef1d2d;
+  color:white;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.verification-card.verified{
+  background:#dcfce7;
+  border-left-color:#16a34a;
+}
+
+.verification-card.verified .verification-title{
+  color:#15803d;
+}
+
+.verification-card.verified .verification-btn{
+  background:#16a34a;
+}
   </style>
 </head>
 <body>
@@ -232,7 +282,35 @@
 
   <div class="balance-date" id="balanceDate"></div>
 </div>
+<!-- ============================= -->
+<!-- VERIFICATION STATUS CARD -->
+<!-- ============================= -->
 
+<div id="verificationCard" class="verification-card">
+
+  <div id="verificationContent">
+
+    <div class="verification-title">
+      ⚠️ আপনার অ্যাকাউন্ট ভেরিফাই নয়
+    </div>
+
+    <p>
+      আপনার অ্যাকাউন্ট ব্যবহার করার জন্য আগে Verification সম্পন্ন করুন।
+    </p>
+
+    <button
+      class="verification-btn"
+      onclick="window.location.href='verification.html'">
+      🔒 এখনই ভেরিফাই করুন
+    </button>
+
+  </div>
+
+</div>
+
+<!-- ============================= -->
+<!-- END VERIFICATION CARD -->
+<!-- ============================= -->
 <div class="box">
 <div class="box">
     <h1>My Freelancer</h1>
@@ -360,7 +438,7 @@
 </div>
 <script type="module" src="dashboard.js?v=2"></script>
 
-<script>
+<script type="module">
 const balanceDate = document.getElementById("balanceDate");
 
 if (balanceDate) {
@@ -397,6 +475,116 @@ function openDeposit() {
 function openVerification() {
   alert("Account Verification");
 }
+  // =====================================
+// VERIFICATION STATUS
+// =====================================
+
+import { getApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+const verificationApp = getApp();
+
+const verificationAuth =
+  getAuth(verificationApp);
+
+const verificationDb =
+  getFirestore(verificationApp);
+
+
+onAuthStateChanged(
+  verificationAuth,
+  async (user) => {
+
+    if (!user) {
+      return;
+    }
+
+    try {
+
+      const userRef = doc(
+        verificationDb,
+        "users",
+        user.uid
+      );
+
+      const userSnap =
+        await getDoc(userRef);
+
+
+      if (!userSnap.exists()) {
+        return;
+      }
+
+
+      const userData =
+        userSnap.data();
+
+
+      const card =
+        document.getElementById(
+          "verificationCard"
+        );
+
+      const content =
+        document.getElementById(
+          "verificationContent"
+        );
+
+
+      if (!card || !content) {
+        return;
+      }
+
+
+      // ============================
+      // VERIFIED
+      // ============================
+
+      if (userData.verified === true) {
+
+        card.classList.add("verified");
+
+        content.innerHTML = `
+
+          <div class="verification-title">
+            ✅ আপনার অ্যাকাউন্ট ভেরিফাই করা হয়েছে
+          </div>
+
+          <p>
+            অভিনন্দন! আপনার অ্যাকাউন্ট সফলভাবে Verification সম্পন্ন করেছে।
+          </p>
+
+        `;
+
+      }
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Verification Status Error:",
+        error
+      );
+
+    }
+
+  }
+);
 </script>
 
 </body>
