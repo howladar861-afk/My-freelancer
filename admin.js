@@ -343,7 +343,15 @@ async function loadCompanyWallet() {
     }
 
   } catch (error) {
-    console.error("Company Wallet Load Error:", error);
+  console.error("Company Wallet Load Error:", error);
+
+  const walletElement =
+    document.getElementById("companyWallet");
+
+  if (walletElement) {
+    walletElement.textContent =
+      "❌ Wallet Error: " + error.message;
+  }
   }
 }
 
