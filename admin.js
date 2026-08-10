@@ -125,16 +125,7 @@ function loadVerificationRequests() {
     "verificationRequests"
   );
 
-
-  const q = query(
-    requestsRef,
-    where(
-      "verificationStatus",
-      "==",
-      "pending"
-    )
-  );
-
+  const q = requestsRef;
 
   onSnapshot(
 
