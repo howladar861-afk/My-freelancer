@@ -13,14 +13,17 @@ import {
   where,
   onSnapshot,
   doc,
+  getDoc,
+  setDoc,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-// ===============================
+// =====================================
 // FIREBASE CONFIG
-// ===============================
+// =====================================
 
 const firebaseConfig = {
   apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
@@ -32,16 +35,16 @@ const firebaseConfig = {
 };
 
 
-// ===============================
+// =====================================
 // ADMIN UID
-// ===============================
+// =====================================
 
 const ADMIN_UID = "MwiyoLqCJeYERHAwUKAa17sLwop1";
 
 
-// ===============================
+// =====================================
 // FIREBASE START
-// ===============================
+// =====================================
 
 const app = initializeApp(firebaseConfig);
 
@@ -50,18 +53,37 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-// ===============================
-// HTML ELEMENT
-// ===============================
+// =====================================
+// HTML ELEMENTS
+// =====================================
 
 const requestList = document.getElementById("requests");
 
 const logoutBtn = document.getElementById("logoutBtn");
 
 
-// ===============================
+// =====================================
+// ESCAPE HTML
+// =====================================
+
+function escapeHtml(value) {
+
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+// =====================================
 // ADMIN LOGIN CHECK
-// ===============================
+// =====================================
 
 onAuthStateChanged(auth, (user) => {
 
@@ -73,7 +95,7 @@ onAuthStateChanged(auth, (user) => {
   }
 
 
-  // Admin UID check
+  // শুধু নির্দিষ্ট Admin UID প্রবেশ করতে পারবে
 
   if (user.uid !== ADMIN_UID) {
 
@@ -85,203 +107,355 @@ onAuthStateChanged(auth, (user) => {
   }
 
 
-  // Admin হলে request load
+  // Admin হলে Pending request load
 
   loadVerificationRequests();
 
 });
 
 
-// ===============================
-// LOAD PENDING REQUESTS
-// ===============================
+// =====================================
+// LOAD PENDING VERIFICATION
+// =====================================
 
 function loadVerificationRequests() {
 
-  const requestsRef = collection(db, "verificationRequests");
-
-  const q = query(
-    requestsRef,
-    where("verificationStatus", "==", "pending")
+  const requestsRef = collection(
+    db,
+    "verificationRequests"
   );
 
 
-  onSnapshot(q, (snapshot) => {
+  const q = query(
+    requestsRef,
+    where(
+      "verificationStatus",
+      "==",
+      "pending"
+    )
+  );
 
-    requestList.innerHTML = "";
+
+  onSnapshot(
+
+    q,
+
+    (snapshot) => {
+
+      requestList.innerHTML = "";
 
 
-    if (snapshot.empty) {
+      // কোনো pending request নেই
+
+      if (snapshot.empty) {
+
+        requestList.innerHTML = `
+          <div class="message">
+            ✅ কোনো Pending Verification নেই।
+          </div>
+        `;
+
+        return;
+      }
+
+
+      // প্রতিটি request দেখানো
+
+      snapshot.forEach((docSnap) => {
+
+        const data = docSnap.data();
+
+        const id = docSnap.id;
+
+
+        const request = document.createElement("div");
+
+        request.className = "request-card";
+
+
+        request.innerHTML = `
+
+          <h3>
+            👤 ${escapeHtml(data.name || "নাম নেই")}
+          </h3>
+
+          <div class="info">
+            📧 Email:
+            ${escapeHtml(data.email || "নেই")}
+          </div>
+
+          <div class="info">
+            📞 Payment Number:
+            ${escapeHtml(
+              data.verificationPaymentNumber || "নেই"
+            )}
+          </div>
+
+          <div class="info">
+            🧾 Transaction ID:
+            ${escapeHtml(
+              data.verificationTransactionId || "নেই"
+            )}
+          </div>
+
+          <div class="info">
+            🆔 User ID:
+            ${escapeHtml(data.userId || "নেই")}
+          </div>
+
+          <div class="status">
+            ${escapeHtml(
+              data.verificationStatus || "pending"
+            )}
+          </div>
+
+          <div class="buttons">
+
+            <button
+              class="approve"
+              data-id="${escapeHtml(id)}">
+              ✅ Approve
+            </button>
+
+            <button
+              class="reject"
+              data-id="${escapeHtml(id)}">
+              ❌ Reject
+            </button>
+
+          </div>
+
+          <button
+            class="delete-btn"
+            data-id="${escapeHtml(id)}"
+            style="
+              width:100%;
+              margin-top:10px;
+              padding:10px;
+              border:0;
+              border-radius:8px;
+              background:#64748b;
+              color:#fff;
+              font-weight:bold;
+              cursor:pointer;
+            ">
+            🗑️ Delete
+          </button>
+
+        `;
+
+
+        requestList.appendChild(request);
+
+      });
+
+
+      // =================================
+      // APPROVE BUTTON
+      // =================================
+
+      document
+        .querySelectorAll(".approve")
+        .forEach((button) => {
+
+          button.onclick = () => {
+
+            approveRequest(
+              button.dataset.id
+            );
+
+          };
+
+        });
+
+
+      // =================================
+      // REJECT BUTTON
+      // =================================
+
+      document
+        .querySelectorAll(".reject")
+        .forEach((button) => {
+
+          button.onclick = () => {
+
+            rejectRequest(
+              button.dataset.id
+            );
+
+          };
+
+        });
+
+
+      // =================================
+      // DELETE BUTTON
+      // =================================
+
+      document
+        .querySelectorAll(".delete-btn")
+        .forEach((button) => {
+
+          button.onclick = () => {
+
+            deleteRequest(
+              button.dataset.id
+            );
+
+          };
+
+        });
+
+    },
+
+    (error) => {
+
+      console.error(
+        "Verification Load Error:",
+        error
+      );
+
 
       requestList.innerHTML = `
         <div class="message">
-          ✅ কোনো Pending Verification নেই।
+          ❌ Request Load করা যায়নি।<br><br>
+          ${escapeHtml(error.message)}
         </div>
       `;
+
+    }
+
+  );
+
+}
+
+
+// =====================================
+// APPROVE REQUEST
+// =====================================
+
+async function approveRequest(id) {
+
+  if (
+    !confirm(
+      "এই Verification Approve করবেন?"
+    )
+  ) {
+
+    return;
+  }
+
+
+  try {
+
+    // ================================
+    // Verification Request বের করা
+    // ================================
+
+    const requestRef = doc(
+      db,
+      "verificationRequests",
+      id
+    );
+
+
+    const requestSnap =
+      await getDoc(requestRef);
+
+
+    if (!requestSnap.exists()) {
+
+      alert(
+        "❌ Verification request পাওয়া যায়নি।"
+      );
 
       return;
     }
 
 
-    snapshot.forEach((docSnap) => {
-
-      const data = docSnap.data();
-
-      const id = docSnap.id;
+    const requestData =
+      requestSnap.data();
 
 
-      const request = document.createElement("div");
-
-      request.className = "request-card";
-
-
-      request.innerHTML = `
-
-        <h3>👤 ${data.name || "নাম নেই"}</h3>
-
-        <div class="info">
-          📞 Payment Number:
-          ${data.verificationPaymentNumber || "নেই"}
-        </div>
-
-        <div class="info">
-          🧾 Transaction ID:
-          ${data.verificationTransactionId || "নেই"}
-        </div>
-
-        <div class="info">
-          🆔 User ID:
-          ${data.userId || "নেই"}
-        </div>
-
-        <div class="status">
-          ${data.verificationStatus || "pending"}
-        </div>
-
-        <div class="buttons">
-
-          <button
-            class="approve"
-            data-id="${id}">
-            ✅ Approve
-          </button>
-
-          <button
-            class="reject"
-            data-id="${id}">
-            ❌ Reject
-          </button>
-
-        </div>
-
-        <button
-          class="delete-btn"
-          data-id="${id}"
-          style="
-            width:100%;
-            margin-top:10px;
-            padding:10px;
-            border:0;
-            border-radius:8px;
-            background:#64748b;
-            color:#fff;
-            font-weight:bold;
-          ">
-          🗑️ Delete
-        </button>
-      `;
+    const userId =
+      requestData.userId;
 
 
-      requestList.appendChild(request);
+    if (!userId) {
 
-    });
+      alert(
+        "❌ এই request-এর User ID নেই।"
+      );
 
-
-    // Approve buttons
-
-    document.querySelectorAll(".approve").forEach((button) => {
-
-      button.onclick = () => {
-
-        approveRequest(button.dataset.id);
-
-      };
-
-    });
+      return;
+    }
 
 
-    // Reject buttons
+    // ================================
+    // Verification Request Approved
+    // ================================
 
-    document.querySelectorAll(".reject").forEach((button) => {
+    await updateDoc(
+      requestRef,
+      {
 
-      button.onclick = () => {
+        verificationStatus: "approved",
 
-        rejectRequest(button.dataset.id);
+        verified: true,
 
-      };
+        verifiedAt:
+          serverTimestamp()
 
-    });
-
-
-    // Delete buttons
-
-    document.querySelectorAll(".delete-btn").forEach((button) => {
-
-      button.onclick = () => {
-
-        deleteRequest(button.dataset.id);
-
-      };
-
-    });
-
-  });
-
-}
-
-
-// ===============================
-// APPROVE
-// ===============================
-
-async function approveRequest(id) {
-
-  if (!confirm("এই Verification Approve করবেন?")) {
-
-    return;
-  }
-
-
-  try {
-
-    const requestRef = doc(
-      db,
-      "verificationRequests",
-      id
+      }
     );
 
 
-    await updateDoc(requestRef, {
+    // ================================
+    // USER ACCOUNT VERIFIED
+    // ================================
 
-      verificationStatus: "approved",
-
-      verified: true,
-
-      verifiedAt: new Date()
-
-    });
+    const userRef = doc(
+      db,
+      "users",
+      userId
+    );
 
 
-    alert("✅ Verification Approved!");
+    await setDoc(
+      userRef,
+      {
+
+        verified: true,
+
+        verificationStatus:
+          "approved",
+
+        verifiedAt:
+          serverTimestamp()
+
+      },
+      {
+        merge: true
+      }
+    );
+
+
+    alert(
+      "✅ Verification Approved!\n\nAccount Verified হয়েছে।"
+    );
 
   }
 
   catch (error) {
 
-    console.error(error);
+    console.error(
+      "Approve Error:",
+      error
+    );
+
 
     alert(
-      "❌ Approve করা যায়নি: " +
+      "❌ Approve করা যায়নি:\n\n" +
       error.message
     );
 
@@ -290,13 +464,17 @@ async function approveRequest(id) {
 }
 
 
-// ===============================
-// REJECT
-// ===============================
+// =====================================
+// REJECT REQUEST
+// =====================================
 
 async function rejectRequest(id) {
 
-  if (!confirm("এই Verification Reject করবেন?")) {
+  if (
+    !confirm(
+      "এই Verification Reject করবেন?"
+    )
+  ) {
 
     return;
   }
@@ -311,27 +489,38 @@ async function rejectRequest(id) {
     );
 
 
-    await updateDoc(requestRef, {
+    await updateDoc(
+      requestRef,
+      {
 
-      verificationStatus: "rejected",
+        verificationStatus:
+          "rejected",
 
-      verified: false,
+        verified: false,
 
-      rejectedAt: new Date()
+        rejectedAt:
+          serverTimestamp()
 
-    });
+      }
+    );
 
 
-    alert("❌ Verification Rejected!");
+    alert(
+      "❌ Verification Rejected!"
+    );
 
   }
 
   catch (error) {
 
-    console.error(error);
+    console.error(
+      "Reject Error:",
+      error
+    );
+
 
     alert(
-      "❌ Reject করা যায়নি: " +
+      "❌ Reject করা যায়নি:\n\n" +
       error.message
     );
 
@@ -340,13 +529,17 @@ async function rejectRequest(id) {
 }
 
 
-// ===============================
-// DELETE
-// ===============================
+// =====================================
+// DELETE REQUEST
+// =====================================
 
 async function deleteRequest(id) {
 
-  if (!confirm("এই Request Delete করবেন?")) {
+  if (
+    !confirm(
+      "এই Request Delete করবেন?"
+    )
+  ) {
 
     return;
   }
@@ -354,25 +547,34 @@ async function deleteRequest(id) {
 
   try {
 
-    await deleteDoc(
-      doc(
-        db,
-        "verificationRequests",
-        id
-      )
+    const requestRef = doc(
+      db,
+      "verificationRequests",
+      id
     );
 
 
-    alert("🗑️ Request Deleted!");
+    await deleteDoc(
+      requestRef
+    );
+
+
+    alert(
+      "🗑️ Request Deleted!"
+    );
 
   }
 
   catch (error) {
 
-    console.error(error);
+    console.error(
+      "Delete Error:",
+      error
+    );
+
 
     alert(
-      "❌ Delete করা যায়নি: " +
+      "❌ Delete করা যায়নি:\n\n" +
       error.message
     );
 
@@ -381,14 +583,32 @@ async function deleteRequest(id) {
 }
 
 
-// ===============================
+// =====================================
 // LOGOUT
-// ===============================
+// =====================================
 
 logoutBtn.onclick = async () => {
 
-  await signOut(auth);
+  try {
 
-  window.location.href = "index.html";
+    await signOut(auth);
+
+    window.location.href =
+      "index.html";
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Logout Error:",
+      error
+    );
+
+    alert(
+      "❌ Logout করা যায়নি।"
+    );
+
+  }
 
 };
