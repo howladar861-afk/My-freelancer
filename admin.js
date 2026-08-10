@@ -324,41 +324,53 @@ function loadVerificationRequests() {
 // ========================================
 
 async function loadCompanyWallet() {
-  document.getElementById("companyWallet").textContent =
-  "Function চলছে...";
-  try {
-    const walletRef =
-  doc(
-    db,
-    "company",
-    "wallet"
-  );
-    const walletSnap = await getDoc(walletRef);
-
-    if (!walletSnap.exists()) {
-      console.log("Company wallet পাওয়া যায়নি");
-      return;
-    }
-
-    const walletData = walletSnap.data();
-
-    const walletElement = document.getElementById("companyWallet");
-
-    if (walletElement) {
-      walletElement.innerText =
-        Number(walletData.balance || 0).toLocaleString("en-BD") + " টাকা";
-    }
-
-  } catch (error) {
-  console.error("Company Wallet Load Error:", error);
 
   const walletElement =
     document.getElementById("companyWallet");
 
-  if (walletElement) {
+  walletElement.textContent = "Loading...";
+
+  try {
+
+    const walletRef = doc(
+      db,
+      "company",
+      "wallet"
+    );
+
+    const walletSnap =
+      await getDoc(walletRef);
+
+    if (!walletSnap.exists()) {
+
+      walletElement.textContent = "৳ 0";
+
+      console.log(
+        "Company wallet পাওয়া যায়নি"
+      );
+
+      return;
+    }
+
+    const walletData =
+      walletSnap.data();
+
+    const balance =
+      walletData.balance || 0;
+
     walletElement.textContent =
-      "❌ Wallet Error: " + error.message;
-  }
+      "৳ " +
+      Number(balance).toLocaleString("en-BD");
+
+  } catch (error) {
+
+    console.error(
+      "Company Wallet Load Error:",
+      error
+    );
+
+    walletElement.textContent =
+      "❌ Wallet Error";
   }
 }
 
