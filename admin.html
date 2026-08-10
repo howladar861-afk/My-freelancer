@@ -153,7 +153,17 @@ button{
   <div class="card" id="adminPanel">
 
     <h1>👑 Admin Panel</h1>
+<div class="card" style="background:#111827; text-align:center;">
+  <h2 style="color:#ffc107; margin-bottom:10px;">
+    💰 Company Wallet
+  </h2>
 
+  <div
+    id="companyWallet"
+    style="font-size:28px; font-weight:bold; color:#22c55e;">
+    Loading...
+  </div>
+</div>
     <p>
       Verification Requests
     </p>
@@ -479,7 +489,57 @@ function loadVerificationRequests() {
 
 }
 
+/* =========================
+   LOAD COMPANY WALLET
+========================= */
 
+async function loadCompanyWallet() {
+
+  const walletElement =
+    document.getElementById("companyWallet");
+
+  try {
+
+    const walletRef =
+      doc(
+        db,
+        "settings",
+        "companyWallet"
+      );
+
+    const walletSnap =
+      await getDoc(walletRef);
+
+    if (walletSnap.exists()) {
+
+      const data =
+        walletSnap.data();
+
+      const balance =
+        data.balance || 0;
+
+      walletElement.textContent =
+        "৳ " +
+        Number(balance).toLocaleString("en-BD");
+
+    } else {
+
+      walletElement.textContent =
+        "৳ 0";
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Company Wallet Load Error:",
+      error
+    );
+
+    walletElement.textContent =
+      "৳ 0";
+  }
+}
 /* =========================
    APPROVE
 ========================= */
