@@ -327,7 +327,12 @@ async function loadCompanyWallet() {
   document.getElementById("companyWallet").textContent =
   "Function চলছে...";
   try {
-    const walletRef = doc(db, "company", "wallet");
+    const walletRef =
+  doc(
+    db,
+    "company",
+    "wallet"
+  );
     const walletSnap = await getDoc(walletRef);
 
     if (!walletSnap.exists()) {
