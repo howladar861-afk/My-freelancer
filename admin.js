@@ -17,7 +17,8 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  serverTimestamp
+  serverTimestamp,
+  increment
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -108,9 +109,8 @@ onAuthStateChanged(auth, (user) => {
 
 
   // Admin হলে Pending request load
-
   loadVerificationRequests();
-
+loadCompanyWallet();
 });
 
 
@@ -319,7 +319,33 @@ function loadVerificationRequests() {
   );
 
 }
+// ========================================
+// LOAD COMPANY WALLET
+// ========================================
 
+async function loadCompanyWallet() {
+  try {
+    const walletRef = doc(db, "company", "wallet");
+    const walletSnap = await getDoc(walletRef);
+
+    if (!walletSnap.exists()) {
+      console.log("Company wallet পাওয়া যায়নি");
+      return;
+    }
+
+    const walletData = walletSnap.data();
+
+    const walletElement = document.getElementById("companyWallet");
+
+    if (walletElement) {
+      walletElement.innerText =
+        Number(walletData.balance || 0).toLocaleString("en-BD") + " টাকা";
+    }
+
+  } catch (error) {
+    console.error("Company Wallet Load Error:", error);
+  }
+}
 
 // =====================================
 // APPROVE REQUEST
