@@ -340,7 +340,8 @@ async function loadCompanyWallet() {
 
     const walletSnap =
       await getDoc(walletRef);
-
+console.log("Wallet exists:", walletSnap.exists());
+console.log("Wallet data:", walletSnap.data());
     if (!walletSnap.exists()) {
 
       walletElement.textContent = "৳ 0";
