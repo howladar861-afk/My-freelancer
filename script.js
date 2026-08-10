@@ -64,78 +64,92 @@ document.getElementById("registerBtn").onclick = async () => {
   try {
 
     // =================================
-    // DIRECT REFERRER = A
-    // =================================
+// FIND DIRECT REFERRER FROM referralCodes
+// =================================
 
-    const q = query(
-      collection(db, "users"),
-      where("referralCode", "==", referral)
+const referralRef =
+  doc(
+    db,
+    "referralCodes",
+    referral
+  );
+
+const referralSnap =
+  await getDoc(referralRef);
+
+if (!referralSnap.exists()) {
+
+  showCustomPopup(
+    "Invalid Referral Code!"
+  );
+
+  return;
+}
+
+const referralData =
+  referralSnap.data();
+
+const directReferrerUid =
+  referralData.uid;
+
+if (!directReferrerUid) {
+
+  showCustomPopup(
+    "Referral Code-এর UID পাওয়া যায়নি!"
+  );
+
+  return;
+}
+
+
+// Direct Referrer = A
+const directReferrerRef =
+  doc(
+    db,
+    "users",
+    directReferrerUid
+  );
+
+
+// =================================
+// SECOND LEVEL REFERRER = B
+// =================================
+
+let secondLevelReferrerRef = null;
+
+const secondLevelReferralCode =
+  referralData.referredBy;
+
+if (secondLevelReferralCode) {
+
+  const secondReferralRef =
+    doc(
+      db,
+      "referralCodes",
+      secondLevelReferralCode
     );
 
+  const secondReferralSnap =
+    await getDoc(
+      secondReferralRef
+    );
 
-    const querySnapshot =
-      await getDocs(q);
+  if (secondReferralSnap.exists()) {
 
+    const secondReferralData =
+      secondReferralSnap.data();
 
-    if (querySnapshot.empty) {
+    if (secondReferralData.uid) {
 
-      showCustomPopup(
-        "Invalid Referral Code!"
-      );
-
-      return;
+      secondLevelReferrerRef =
+        doc(
+          db,
+          "users",
+          secondReferralData.uid
+        );
     }
-
-
-    // A-এর user document
-    const directReferrerDoc =
-      querySnapshot.docs[0];
-
-    const directReferrerData =
-      directReferrerDoc.data();
-
-
-    const directReferrerRef =
-      directReferrerDoc.ref;
-
-
-    // =================================
-    // SECOND LEVEL REFERRER = B
-    // =================================
-
-    let secondLevelReferrerRef = null;
-
-
-    const secondLevelReferralCode =
-      directReferrerData.referredBy;
-
-
-    if (secondLevelReferralCode) {
-
-      const q2 = query(
-        collection(db, "users"),
-        where(
-          "referralCode",
-          "==",
-          secondLevelReferralCode
-        )
-      );
-
-
-      const querySnapshot2 =
-        await getDocs(q2);
-
-
-      if (!querySnapshot2.empty) {
-
-        secondLevelReferrerRef =
-          querySnapshot2.docs[0].ref;
-
-      }
-
-    }
-
-
+  }
+}
     // =================================
     // CREATE NEW USER
     // =================================
