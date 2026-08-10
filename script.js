@@ -205,7 +205,27 @@ if (secondLevelReferralCode) {
           0
       }
     );
+// =================================
+// SAVE MY REFERRAL CODE
+// =================================
 
+const myReferralCodeRef =
+  doc(
+    db,
+    "referralCodes",
+    myReferral
+  );
+
+batch.set(
+  myReferralCodeRef,
+  {
+    uid:
+      userCredential.user.uid,
+
+    referredBy:
+      referral
+  }
+);
 
     // =================================
     // LEVEL 1 = A → 30 টাকা
