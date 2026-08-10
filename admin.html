@@ -501,11 +501,11 @@ async function loadCompanyWallet() {
   try {
 
     const walletRef =
-      doc(
-        db,
-        "settings",
-        "companyWallet"
-      );
+  doc(
+    db,
+    "company",
+    "wallet"
+  );
 
     const walletSnap =
       await getDoc(walletRef);
