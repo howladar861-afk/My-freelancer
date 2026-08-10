@@ -150,10 +150,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-    getFirestore,
-    doc,
-    setDoc,
-    serverTimestamp
+  getFirestore,
+  collection,
+  addDoc,
+  doc,
+  setDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     const firebaseConfig = {
   apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
@@ -190,44 +192,60 @@ const db = getFirestore(app);
     }
     window.submitVerification = async function () {
 
-      const name = document.getElementById("userName").value.trim();
-      const number = document.getElementById("paymentNumber").value.trim();
-      const transactionId =
-        document.getElementById("transactionId").value.trim();
+  const name = document.getElementById("userName").value.trim();
+  const number = document.getElementById("paymentNumber").value.trim();
+  const transactionId =
+    document.getElementById("transactionId").value.trim();
 
-      if (!name || !number || !transactionId) {
-        alert("সব তথ্য পূরণ করুন।");
-        return;
-      }
-
-      try {
-  const user = auth.currentUser;
-
-  if (!user) {
-    alert("আগে Login করুন");
-    window.location.href = "index.html";
+  if (!name || !number || !transactionId) {
+    alert("⚠️ সব তথ্য পূরণ করুন");
     return;
   }
 
-  const userRef = doc(db, "users", user.uid);
+  try {
 
-  await setDoc(userRef, {
-    name: name,
-    verificationPaymentNumber: number,
-    verificationTransactionId: transactionId,
-    verificationStatus: "pending",
-    verified: false,
-    verificationSubmittedAt: serverTimestamp()
-  }, { merge: true });
+    const user = auth.currentUser;
 
-  alert("Verification request সফলভাবে জমা হয়েছে। Admin যাচাই করার পর Account Verified হবে.");
-
-} catch (error) {
-  console.error(error);
-  alert("Verification request জমা হয়নি। আবার চেষ্টা করুন।");
-        }
-
+    if (!user) {
+      alert("⚠️ আগে Login করুন");
+      window.location.href = "index.html";
+      return;
     }
+
+    await addDoc(collection(db, "verificationRequests"), {
+
+      userId: user.uid,
+      email: user.email,
+      name: name,
+
+      verificationPaymentNumber: number,
+      verificationTransactionId: transactionId,
+
+      verificationStatus: "pending",
+      verified: false,
+
+      submittedAt: serverTimestamp()
+
+    });
+
+    alert(
+      "✅ Verification request সফলভাবে পাঠানো হয়েছে। Admin Approve করলে Account Verified হবে।"
+    );
+
+    window.location.href = "dashboard.html";
+
+  } catch (error) {
+
+    console.error("Verification Error:", error);
+
+    alert(
+      "❌ Verification Submit করা যায়নি: " +
+      error.message
+    );
+
+  }
+
+};
   </script>
 
 </body>
