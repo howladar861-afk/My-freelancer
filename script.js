@@ -45,6 +45,8 @@ document.getElementById("registerBtn").onclick = async () => {
   const email =
     document.getElementById("email").value.trim();
 
+  const name =
+  document.getElementById("name").value.trim();
   const password =
     document.getElementById("password").value;
 
@@ -194,7 +196,8 @@ if (secondLevelReferralCode) {
 
         email:
           email,
-
+name:
+  name,
         referralCode:
           myReferral,
 
