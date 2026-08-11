@@ -490,8 +490,7 @@ async function approveRequest(id) {
 
       const companyBalance =
         Number(walletData.balance || 0);
-console.log("Company Balance =", companyBalance);
-alert("Company Balance = " + companyBalance);
+
       const level1Amount = 30;
       const level2Amount = 10;
       const totalAmount = 40;
