@@ -341,12 +341,6 @@ async function loadCompanyWallet() {
 
     const walletSnap =
       await getDoc(walletRef);
-alert(
-  "Wallet exists: " +
-  walletSnap.exists() +
-  "\nData: " +
-  JSON.stringify(walletSnap.data())
-);
 console.log("Wallet exists:", walletSnap.exists());
 console.log("Wallet data:", walletSnap.data());
     if (!walletSnap.exists()) {
