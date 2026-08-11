@@ -104,54 +104,7 @@ if (!directReferrerUid) {
 }
 
 
-// Direct Referrer = A
-const directReferrerRef =
-  doc(
-    db,
-    "users",
-    directReferrerUid
-  );
 
-
-// =================================
-// SECOND LEVEL REFERRER = B
-// =================================
-
-let secondLevelReferrerRef = null;
-
-const secondLevelReferralCode =
-  referralData.referredBy;
-
-if (secondLevelReferralCode) {
-
-  const secondReferralRef =
-    doc(
-      db,
-      "referralCodes",
-      secondLevelReferralCode
-    );
-
-  const secondReferralSnap =
-    await getDoc(
-      secondReferralRef
-    );
-
-  if (secondReferralSnap.exists()) {
-
-    const secondReferralData =
-      secondReferralSnap.data();
-
-    if (secondReferralData.uid) {
-
-      secondLevelReferrerRef =
-        doc(
-          db,
-          "users",
-          secondReferralData.uid
-        );
-    }
-  }
-}
     // =================================
     // CREATE NEW USER
     // =================================
@@ -230,36 +183,7 @@ batch.set(
   }
 );
 
-    // =================================
-    // LEVEL 1 = A → 30 টাকা
-    // =================================
-
-    batch.update(
-      directReferrerRef,
-      {
-        balance:
-          increment(30)
-      }
-    );
-
-
-    // =================================
-    // LEVEL 2 = B → 10 টাকা
-    // =================================
-
-    if (secondLevelReferrerRef) {
-
-      batch.update(
-        secondLevelReferrerRef,
-        {
-          balance:
-            increment(10)
-        }
-      );
-
-    }
-
-
+    
     // সব একসাথে Save
     await batch.commit();
 
