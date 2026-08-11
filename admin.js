@@ -380,6 +380,10 @@ console.log("Wallet data:", walletSnap.data());
 // APPROVE REQUEST
 // ========================================
 
+// =====================================
+// APPROVE REQUEST + REFERRAL COMMISSION
+// =====================================
+
 async function approveRequest(id) {
 
   if (!confirm("এই Verification Approve করবেন?")) {
@@ -388,45 +392,11 @@ async function approveRequest(id) {
 
   try {
 
-    // ==============================
-    // VERIFICATION REQUEST
-    // ==============================
-
     const requestRef = doc(
       db,
       "verificationRequests",
       id
     );
-
-    const requestSnap = await getDoc(requestRef);
-
-    if (!requestSnap.exists()) {
-      alert("❌ Verification request পাওয়া যায়নি");
-      return;
-    }
-
-    const requestData = requestSnap.data();
-
-    const userId = requestData.userId;
-
-    if (!userId) {
-      alert("❌ এই request-এর User ID নেই");
-      return;
-    }
-
-    // ==============================
-    // USER
-    // ==============================
-
-    const userRef = doc(
-      db,
-      "users",
-      userId
-    );
-
-    // ==============================
-    // COMPANY WALLET
-    // ==============================
 
     const walletRef = doc(
       db,
@@ -434,15 +404,39 @@ async function approveRequest(id) {
       "wallet"
     );
 
-    // ==============================
-    // TRANSACTION
-    // ==============================
+    // ---------------------------------
+    // প্রথমে Request থেকে User ID নেওয়া
+    // ---------------------------------
+
+    const requestSnap = await getDoc(requestRef);
+
+    if (!requestSnap.exists()) {
+      throw new Error("Verification request পাওয়া যায়নি");
+    }
+
+    const requestData = requestSnap.data();
+
+    const userId = requestData.userId;
+
+    if (!userId) {
+      throw new Error("এই request-এর User ID নেই");
+    }
+
+    const userRef = doc(
+      db,
+      "users",
+      userId
+    );
+
+    // =================================
+    // FIRESTORE TRANSACTION
+    // =================================
 
     await runTransaction(db, async (transaction) => {
 
-      // --------------------------------
-      // READ ALL DATA FIRST
-      // --------------------------------
+      // ---------------------------------
+      // ALL READS FIRST
+      // ---------------------------------
 
       const latestRequestSnap =
         await transaction.get(requestRef);
@@ -454,15 +448,21 @@ async function approveRequest(id) {
         await transaction.get(walletRef);
 
       if (!latestRequestSnap.exists()) {
-        throw new Error("Verification request পাওয়া যায়নি");
+        throw new Error(
+          "Verification request পাওয়া যায়নি"
+        );
       }
 
       if (!userSnap.exists()) {
-        throw new Error("User account পাওয়া যায়নি");
+        throw new Error(
+          "User account পাওয়া যায়নি"
+        );
       }
 
       if (!walletSnap.exists()) {
-        throw new Error("Company Wallet পাওয়া যায়নি");
+        throw new Error(
+          "Company Wallet document পাওয়া যায়নি"
+        );
       }
 
       const latestRequest =
@@ -474,138 +474,145 @@ async function approveRequest(id) {
       const walletData =
         walletSnap.data();
 
-      // --------------------------------
-      // DUPLICATE PAYMENT CHECK
-      // --------------------------------
+      // ---------------------------------
+      // DUPLICATE CHECK
+      // ---------------------------------
 
       if (latestRequest.commissionPaid === true) {
         throw new Error(
-          "এই Verification-এর Referral Commission ইতিমধ্যে দেওয়া হয়েছে"
+          "এই Verification-এর commission ইতিমধ্যে দেওয়া হয়েছে"
         );
       }
 
-      // --------------------------------
-      // COMPANY WALLET BALANCE
-      // --------------------------------
+      // =================================
+      // COMMISSION
+      // =================================
+
+      const level1Amount = 30;
+      const level2Amount = 10;
+
+      const totalCommission =
+        level1Amount + level2Amount;
+
+      // =================================
+      // COMPANY WALLET
+      // =================================
 
       const companyBalance =
         Number(walletData.balance || 0);
 
-      const level1Amount = 30;
-      const level2Amount = 10;
-      const totalAmount = 40;
+      console.log(
+        "Company Wallet Before =",
+        companyBalance
+      );
 
-      if (companyBalance < totalAmount) {
+      if (companyBalance < totalCommission) {
         throw new Error(
           "Company Wallet-এ পর্যাপ্ত টাকা নেই"
         );
       }
 
-      // --------------------------------
+      // =================================
       // LEVEL 1 REFERRER
-      // --------------------------------
+      // =================================
 
       const level1Code =
         userData.referredBy;
 
-      let level1Ref = null;
-      let level1Snap = null;
-
-      if (level1Code) {
-
-        const level1CodeRef = doc(
-          db,
-          "referralCodes",
-          level1Code
-        );
-
-        level1Snap =
-          await transaction.get(level1CodeRef);
-
-        if (level1Snap.exists()) {
-
-          const level1Data =
-            level1Snap.data();
-
-          if (level1Data.uid) {
-
-            level1Ref = doc(
-              db,
-              "users",
-              level1Data.uid
-            );
-          }
-        }
-      }
-
-      // --------------------------------
-      // LEVEL 2 REFERRER
-      // --------------------------------
-
-      let level2Ref = null;
-      let level2Snap = null;
-
-      if (level1Ref) {
-
-        level2Snap =
-          await transaction.get(level1Ref);
-
-        if (level2Snap.exists()) {
-
-          const level1UserData =
-            level2Snap.data();
-
-          const level2Code =
-            level1UserData.referredBy;
-
-          if (level2Code) {
-
-            const level2CodeRef = doc(
-              db,
-              "referralCodes",
-              level2Code
-            );
-
-            const level2CodeSnap =
-              await transaction.get(level2CodeRef);
-
-            if (level2CodeSnap.exists()) {
-
-              const level2Data =
-                level2CodeSnap.data();
-
-              if (level2Data.uid) {
-
-                level2Ref = doc(
-                  db,
-                  "users",
-                  level2Data.uid
-                );
-
-              }
-            }
-          }
-        }
-      }
-
-      // --------------------------------
-      // CHECK REFERRERS
-      // --------------------------------
-
-      if (!level1Ref) {
+      if (!level1Code) {
         throw new Error(
           "Level-1 Referrer পাওয়া যায়নি"
         );
       }
 
-      if (!level2Ref) {
+      const level1CodeRef = doc(
+        db,
+        "referralCodes",
+        level1Code
+      );
+
+      const level1CodeSnap =
+        await transaction.get(level1CodeRef);
+
+      if (!level1CodeSnap.exists()) {
+        throw new Error(
+          "Level-1 Referral Code পাওয়া যায়নি"
+        );
+      }
+
+      const level1Data =
+        level1CodeSnap.data();
+
+      if (!level1Data.uid) {
+        throw new Error(
+          "Level-1 Referrer UID পাওয়া যায়নি"
+        );
+      }
+
+      const level1Ref = doc(
+        db,
+        "users",
+        level1Data.uid
+      );
+
+      // =================================
+      // LEVEL 2 REFERRER
+      // =================================
+
+      const level1UserSnap =
+        await transaction.get(level1Ref);
+
+      if (!level1UserSnap.exists()) {
+        throw new Error(
+          "Level-1 Referrer account পাওয়া যায়নি"
+        );
+      }
+
+      const level1UserData =
+        level1UserSnap.data();
+
+      const level2Code =
+        level1UserData.referredBy;
+
+      if (!level2Code) {
         throw new Error(
           "Level-2 Referrer পাওয়া যায়নি"
         );
       }
 
-      const level1UserSnap =
-    await transaction.get(level1Ref);
+      const level2CodeRef = doc(
+        db,
+        "referralCodes",
+        level2Code
+      );
+
+      const level2CodeSnap =
+        await transaction.get(level2CodeRef);
+
+      if (!level2CodeSnap.exists()) {
+        throw new Error(
+          "Level-2 Referral Code পাওয়া যায়নি"
+        );
+      }
+
+      const level2Data =
+        level2CodeSnap.data();
+
+      if (!level2Data.uid) {
+        throw new Error(
+          "Level-2 Referrer UID পাওয়া যায়নি"
+        );
+      }
+
+      const level2Ref = doc(
+        db,
+        "users",
+        level2Data.uid
+      );
+
+      // =================================
+      // LEVEL 2 USER READ
+      // =================================
 
       const level2UserSnap =
         await transaction.get(level2Ref);
@@ -616,9 +623,9 @@ async function approveRequest(id) {
         );
       }
 
-      // --------------------------------
-      // CURRENT BALANCE
-      // --------------------------------
+      // =================================
+      // CURRENT BALANCES
+      // =================================
 
       const level1Balance =
         Number(
@@ -630,21 +637,21 @@ async function approveRequest(id) {
           level2UserSnap.data().balance || 0
         );
 
-      // --------------------------------
+      // =================================
       // COMPANY WALLET -40
-      // --------------------------------
+      // =================================
 
       transaction.update(
         walletRef,
         {
           balance:
-            companyBalance - totalAmount
+            companyBalance - totalCommission
         }
       );
 
-      // --------------------------------
+      // =================================
       // LEVEL 1 +30
-      // --------------------------------
+      // =================================
 
       transaction.update(
         level1Ref,
@@ -654,9 +661,9 @@ async function approveRequest(id) {
         }
       );
 
-      // --------------------------------
+      // =================================
       // LEVEL 2 +10
-      // --------------------------------
+      // =================================
 
       transaction.update(
         level2Ref,
@@ -666,9 +673,9 @@ async function approveRequest(id) {
         }
       );
 
-      // --------------------------------
+      // =================================
       // VERIFY USER
-      // --------------------------------
+      // =================================
 
       transaction.set(
         userRef,
@@ -682,33 +689,45 @@ async function approveRequest(id) {
         }
       );
 
-      // --------------------------------
-      // UPDATE VERIFICATION REQUEST
-      // --------------------------------
+      // =================================
+      // UPDATE REQUEST
+      // =================================
 
       transaction.update(
         requestRef,
         {
           verificationStatus: "approved",
           verified: true,
-          verifiedAt: serverTimestamp(),
 
           commissionPaid: true,
-          commissionAmount: totalAmount,
+          commissionAmount: totalCommission,
 
           level1Commission: level1Amount,
           level2Commission: level2Amount,
 
-          commissionPaidAt:
-            serverTimestamp()
+          verifiedAt: serverTimestamp(),
+          commissionPaidAt: serverTimestamp()
         }
       );
 
     });
 
+    // =================================
+    // WALLET UI REFRESH
+    // =================================
 
-    // আবার request list load থাকলে
-    // আপনার existing function থাকলে এখানে রাখতে পারেন.
+    await loadCompanyWallet();
+
+    console.log(
+      "Company Wallet Commission = -40"
+    );
+
+    alert(
+      "✅ Verification Approved!\n\n" +
+      "Level 1: +৳30\n" +
+      "Level 2: +৳10\n\n" +
+      "Company Wallet: -৳40"
+    );
 
   } catch (error) {
 
@@ -718,13 +737,13 @@ async function approveRequest(id) {
     );
 
     alert(
-      "❌ Approve করা যায়নি\n\n" +
+      "❌ Approve করা যায়নি:\n\n" +
       error.message
     );
+
   }
+
 }
-
-
 // =====================================
 // REJECT REQUEST
 // =====================================
