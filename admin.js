@@ -376,10 +376,6 @@ console.log("Wallet data:", walletSnap.data());
   }
 }
 
-// =====================================
-// APPROVE REQUEST
-// =====================================
-
 // ========================================
 // APPROVE REQUEST
 // ========================================
@@ -711,12 +707,6 @@ alert("Company Balance = " + companyBalance);
 
     });
 
-    alert(
-      "✅ Verification Approved!\n\n" +
-      "Level-1 Referrer: ৳30\n" +
-      "Level-2 Referrer: ৳10\n\n" +
-      "Company Wallet থেকে মোট ৳40 দেওয়া হয়েছে।"
-    );
 
     // আবার request list load থাকলে
     // আপনার existing function থাকলে এখানে রাখতে পারেন.
