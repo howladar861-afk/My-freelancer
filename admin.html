@@ -187,7 +187,9 @@ button{
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
+import {
+  processReferralCommission
+} from "./referral-commission.js";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -543,106 +545,58 @@ async function loadCompanyWallet() {
    APPROVE
 ========================= */
 
+/* =========================
+   APPROVE + REFERRAL COMMISSION
+========================= */
+
 async function approveRequest(id) {
 
   if (
     !confirm(
-      "এই Verification Approve করবেন?"
+      "এই Verification Approve করবেন?\n\nLevel 1 = ৳30\nLevel 2 = ৳10"
     )
   ) {
     return;
   }
 
-
   try {
 
-    const requestRef =
-      doc(
+    // =================================
+    // PROCESS VERIFICATION + COMMISSION
+    // =================================
+
+    const result =
+      await processReferralCommission(
         db,
-        "verificationRequests",
         id
       );
 
 
-    const requestSnap =
-      await getDoc(requestRef);
+    // =================================
+    // REFRESH COMPANY WALLET
+    // =================================
+
+    await loadCompanyWallet();
 
 
-    if (!requestSnap.exists()) {
-
-      alert(
-        "❌ Request পাওয়া যায়নি।"
-      );
-
-      return;
-    }
-
-
-    const requestData =
-      requestSnap.data();
-
-
-    const userId =
-      requestData.userId;
-
-
-    if (!userId) {
-
-      alert(
-        "❌ User ID পাওয়া যায়নি।"
-      );
-
-      return;
-    }
-
-
-    await updateDoc(
-      requestRef,
-      {
-
-        verificationStatus:
-          "approved",
-
-        verified:
-          true,
-
-        verifiedAt:
-          serverTimestamp()
-
-      }
-    );
-
-
-    const userRef =
-      doc(
-        db,
-        "users",
-        userId
-      );
-
-
-    await setDoc(
-      userRef,
-      {
-
-        verified:
-          true,
-
-        verificationStatus:
-          "approved",
-
-        verifiedAt:
-          serverTimestamp()
-
-      },
-      {
-        merge: true
-      }
-    );
-
+    // =================================
+    // SUCCESS
+    // =================================
 
     alert(
-      "✅ Verification Approved!\n\nAccount Verified হয়েছে।"
+      "✅ Verification Approved!\n\n" +
+      "Level 1 Commission: ৳" +
+      result.level1 +
+      "\n" +
+      "Level 2 Commission: ৳" +
+      result.level2 +
+      "\n\n" +
+      "Company Wallet থেকে মোট ৳" +
+      (
+        Number(result.level1 || 0) +
+        Number(result.level2 || 0)
+      ) +
+      " কাটা হয়েছে।"
     );
 
   }
@@ -650,20 +604,19 @@ async function approveRequest(id) {
   catch (error) {
 
     console.error(
-      "Approve Error:",
+      "Approve + Commission Error:",
       error
     );
 
+
     alert(
-      "❌ Approve করা যায়নি:\n\n" +
+      "❌ Verification/Commission করা যায়নি:\n\n" +
       error.message
     );
 
   }
 
 }
-
-
 /* =========================
    REJECT
 ========================= */
