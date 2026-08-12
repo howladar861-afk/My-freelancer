@@ -35,7 +35,7 @@ export async function processReferralCommission(db, requestId) {
   // TRANSACTION
   // =====================================
 
-  await runTransaction(db, async (transaction) => {
+  const result = await runTransaction(db, async (transaction) => {
 
     // ===================================
     // ALL READS FIRST
@@ -484,21 +484,18 @@ export async function processReferralCommission(db, requestId) {
           serverTimestamp()
       }
     );
-
+return {
+  success: true,
+  level1: level1Amount,
+  level2: level2Amount,
+  companyWallet: -totalCommission
+};
   });
+  return result;
 
 
-  // =====================================
+    // =====================================
   // SUCCESS
   // =====================================
 
-  return {
-  success: true,
-
-  level1: level1Amount,
-
-  level2: level2Amount,
-
-  companyWallet: -totalCommission
-};
 }
