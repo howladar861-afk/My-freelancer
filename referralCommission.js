@@ -298,7 +298,7 @@ export async function processReferralCommission(db, requestId) {
             level2Uid &&
             level2Uid !== userId &&
             level2Uid !==
-              level1User?.uid
+  level1Uid
           ) {
 
             const level2UsersQuery =
