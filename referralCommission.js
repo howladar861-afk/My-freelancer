@@ -66,21 +66,6 @@ export async function processReferralCommission(db, requestId) {
 
 
     // ===================================
-    // ONLY APPROVED
-    // ===================================
-
-    if (
-      requestData.verificationStatus !== "approved"
-    ) {
-
-      throw new Error(
-        "Verification এখনো approved হয়নি"
-      );
-
-    }
-
-
-    // ===================================
     // USER ID
     // ===================================
 
@@ -508,15 +493,11 @@ export async function processReferralCommission(db, requestId) {
   // =====================================
 
   return {
-    success: true,
+  success: true,
 
-    level1: 30,
+  level1: level1Amount,
 
-    level2:
-      10,
+  level2: level2Amount,
 
-    companyWallet:
-      -40
-  };
-
-    }
+  companyWallet: -totalCommission
+};
