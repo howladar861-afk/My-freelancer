@@ -21,7 +21,9 @@ import {
   serverTimestamp,
   runTransaction
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
+import {
+  processReferralCommission
+} from "./referralCommission.js";
 
 // =====================================
 // FIREBASE CONFIG
