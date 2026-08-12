@@ -199,53 +199,56 @@ export async function processReferralCommission(db, requestId) {
     }
 
 
-    // ===================================
-    // LEVEL 1 USER
-    // ===================================
+    // ========================================
+// LEVEL 1 USER
+// ========================================
 
-    const level1Ref =
-      doc(
-        db,
-        "users",
-        level1Uid
-      );
+const level1UsersQuery = query(
+  collection(db, "users"),
+  where("uid", "==", level1Uid)
+);
 
-    const level1Snap =
-      await transaction.get(level1Ref);
+const level1QuerySnap =
+  await transaction.get(level1UsersQuery);
 
+if (level1QuerySnap.empty) {
+  throw new Error("Level-1 User পাওয়া যায়নি");
+}
 
-    if (!level1Snap.exists()) {
+// আসল users document reference
+const level1Ref = level1QuerySnap.docs[0].ref;
 
-      throw new Error(
-        "Level-1 Referrer account পাওয়া যায়নি"
-      );
-
-    }
-
-
-    const level1User =
-      level1Snap.data();
+// User data
+const level1User =
+  level1QuerySnap.docs[0].data();
 
 
-    // ===================================
-    // LEVEL 1 COMMISSION
-    // ===================================
+// ========================================
+// LEVEL 1 COMMISSION
+// ========================================
 
-    const level1Amount = 30;
+const level1Amount = 30;
 
+const level1Balance =
+  Number(level1User.balance || 0);
 
-    const level1Balance =
-      Number(
-        level1User.balance || 0
-      );
-
-
-    const level1ReferralCount =
-      Number(
-        level1User.referralCount || 0
-      );
+const level1ReferralCount =
+  Number(level1User.referralCount || 0);
 
 
+// ========================================
+// UPDATE LEVEL 1 USER
+// ========================================
+
+transaction.update(
+  level1Ref,
+  {
+    balance: level1Balance + level1Amount,
+
+    referralCount:
+      level1ReferralCount + 1
+  }
+);
     // ===================================
     // LEVEL 2
     // OPTIONAL
