@@ -6,6 +6,9 @@
 // =====================================
 
 import {
+  collection,
+  query,
+  where,
   doc,
   runTransaction,
   serverTimestamp
