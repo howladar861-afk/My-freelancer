@@ -1,16 +1,14 @@
 // =====================================
+// Rakib Freelancer
 // REFERRAL COMMISSION SYSTEM
 // Level 1 = ৳30
 // Level 2 = ৳10
-// Company Wallet = -৳40
-// Referral Count = +1
 // =====================================
 
 import {
   doc,
   runTransaction,
-  serverTimestamp,
-  getDoc
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -18,62 +16,13 @@ import {
 // PROCESS REFERRAL COMMISSION
 // =====================================
 
-export async function processReferralCommission(
-  db,
-  requestId
-) {
+export async function processReferralCommission(db, requestId) {
 
   const requestRef = doc(
     db,
     "verificationRequests",
     requestId
   );
-
-
-  // =====================================
-  // GET REQUEST
-  // =====================================
-
-  const requestSnap =
-    await getDoc(requestRef);
-
-
-  if (!requestSnap.exists()) {
-    throw new Error(
-      "Verification request পাওয়া যায়নি"
-    );
-  }
-
-
-  const requestData =
-    requestSnap.data();
-
-
-  const userId =
-    requestData.userId;
-
-
-  if (!userId) {
-    throw new Error(
-      "Verification request-এ User ID নেই"
-    );
-  }
-
-
-  // =====================================
-  // USER
-  // =====================================
-
-  const userRef = doc(
-    db,
-    "users",
-    userId
-  );
-
-
-  // =====================================
-  // COMPANY WALLET
-  // =====================================
 
   const walletRef = doc(
     db,
@@ -86,238 +35,250 @@ export async function processReferralCommission(
   // TRANSACTION
   // =====================================
 
-  await runTransaction(
-    db,
-    async (transaction) => {
+  await runTransaction(db, async (transaction) => {
 
-      // ---------------------------------
-      // ALL INITIAL READS
-      // ---------------------------------
+    // ===================================
+    // ALL READS FIRST
+    // ===================================
 
-      const latestRequestSnap =
-        await transaction.get(requestRef);
+    const requestSnap =
+      await transaction.get(requestRef);
 
-      const userSnap =
-        await transaction.get(userRef);
+    if (!requestSnap.exists()) {
+      throw new Error(
+        "Verification request পাওয়া যায়নি"
+      );
+    }
 
-      const walletSnap =
-        await transaction.get(walletRef);
+    const requestData =
+      requestSnap.data();
 
 
-      if (!latestRequestSnap.exists()) {
-        throw new Error(
-          "Verification request পাওয়া যায়নি"
-        );
-      }
+    // ===================================
+    // ALREADY PAID
+    // ===================================
 
+    if (requestData.commissionPaid === true) {
 
-      if (!userSnap.exists()) {
-        throw new Error(
-          "User account পাওয়া যায়নি"
-        );
-      }
+      return;
 
+    }
 
-      if (!walletSnap.exists()) {
-        throw new Error(
-          "Company Wallet document পাওয়া যায়নি"
-        );
-      }
 
+    // ===================================
+    // ONLY APPROVED
+    // ===================================
 
-      const latestRequest =
-        latestRequestSnap.data();
+    if (
+      requestData.verificationStatus !== "approved"
+    ) {
 
-      const userData =
-        userSnap.data();
+      throw new Error(
+        "Verification এখনো approved হয়নি"
+      );
 
-      const walletData =
-        walletSnap.data();
+    }
 
 
-      // =================================
-      // ALREADY PAID CHECK
-      // =================================
+    // ===================================
+    // USER ID
+    // ===================================
 
-      if (
-        latestRequest.commissionPaid === true
-      ) {
+    const userId =
+      requestData.userId;
 
-        throw new Error(
-          "এই Verification-এর commission ইতিমধ্যে দেওয়া হয়েছে"
-        );
+    if (!userId) {
 
-      }
+      throw new Error(
+        "Verification request-এ userId নেই"
+      );
 
+    }
 
-      // =================================
-      // ONLY APPROVED REQUEST
-      // =================================
 
-      if (
-        latestRequest.verificationStatus !==
-        "approved"
-      ) {
+    // ===================================
+    // USER
+    // ===================================
 
-        throw new Error(
-          "Verification approved হয়নি"
-        );
+    const userRef = doc(
+      db,
+      "users",
+      userId
+    );
 
-      }
+    const userSnap =
+      await transaction.get(userRef);
 
 
-      // =================================
-      // COMMISSION AMOUNT
-      // =================================
+    if (!userSnap.exists()) {
 
-      const level1Amount = 30;
+      throw new Error(
+        "User account পাওয়া যায়নি"
+      );
 
-      const level2Amount = 10;
+    }
 
-      const totalCommission =
-        level1Amount +
-        level2Amount;
+    const userData =
+      userSnap.data();
 
 
-      // =================================
-      // COMPANY BALANCE
-      // =================================
+    // ===================================
+    // COMPANY WALLET
+    // ===================================
 
-      const companyBalance =
-        Number(
-          walletData.balance || 0
-        );
+    const walletSnap =
+      await transaction.get(walletRef);
 
 
-      if (
-        companyBalance <
-        totalCommission
-      ) {
+    if (!walletSnap.exists()) {
 
-        throw new Error(
-          "Company Wallet-এ পর্যাপ্ত টাকা নেই"
-        );
+      throw new Error(
+        "Company Wallet document পাওয়া যায়নি"
+      );
 
-      }
+    }
 
+    const walletData =
+      walletSnap.data();
 
-      // =================================
-      // USER referredBy
-      // =================================
 
-      const level1Code =
-        userData.referredBy;
+    // ===================================
+    // LEVEL 1 REFERRAL CODE
+    // ===================================
 
+    const level1Code =
+      userData.referredBy;
 
-      if (!level1Code) {
 
-        throw new Error(
-          "User-এর referredBy পাওয়া যায়নি"
-        );
+    if (!level1Code) {
 
-      }
+      throw new Error(
+        "এই User-এর referredBy নেই"
+      );
 
+    }
 
-      // =================================
-      // LEVEL 1 REFERRAL CODE
-      // =================================
 
-      const level1CodeRef =
-        doc(
-          db,
-          "referralCodes",
-          level1Code
-        );
+    // ===================================
+    // LEVEL 1 REFERRAL CODE DOCUMENT
+    // ===================================
 
+    const level1CodeRef =
+      doc(
+        db,
+        "referralCodes",
+        level1Code
+      );
 
-      const level1CodeSnap =
-        await transaction.get(
-          level1CodeRef
-        );
+    const level1CodeSnap =
+      await transaction.get(level1CodeRef);
 
 
-      if (
-        !level1CodeSnap.exists()
-      ) {
+    if (!level1CodeSnap.exists()) {
 
-        throw new Error(
-          "Level-1 Referral Code পাওয়া যায়নি: " +
-          level1Code
-        );
+      throw new Error(
+        "Level-1 Referral Code পাওয়া যায়নি: " +
+        level1Code
+      );
 
-      }
+    }
 
 
-      const level1Data =
-        level1CodeSnap.data();
+    const level1Data =
+      level1CodeSnap.data();
 
 
-      const level1Uid =
-        level1Data.uid;
+    const level1Uid =
+      level1Data.uid;
 
 
-      if (!level1Uid) {
+    if (!level1Uid) {
 
-        throw new Error(
-          "Level-1 Referral Code-এ UID নেই"
-        );
+      throw new Error(
+        "Level-1 Referral Code-এ UID নেই"
+      );
 
-      }
+    }
 
 
-      const level1Ref =
-        doc(
-          db,
-          "users",
-          level1Uid
-        );
+    // ===================================
+    // SELF REFERRAL CHECK
+    // ===================================
 
+    if (level1Uid === userId) {
 
-      // =================================
-      // LEVEL 1 USER
-      // =================================
+      throw new Error(
+        "নিজের Referral Code ব্যবহার করা যাবে না"
+      );
 
-      const level1UserSnap =
-        await transaction.get(
-          level1Ref
-        );
+    }
 
 
-      if (
-        !level1UserSnap.exists()
-      ) {
+    // ===================================
+    // LEVEL 1 USER
+    // ===================================
 
-        throw new Error(
-          "Level-1 Referrer account পাওয়া যায়নি"
-        );
+    const level1Ref =
+      doc(
+        db,
+        "users",
+        level1Uid
+      );
 
-      }
+    const level1Snap =
+      await transaction.get(level1Ref);
 
 
-      const level1UserData =
-        level1UserSnap.data();
+    if (!level1Snap.exists()) {
 
+      throw new Error(
+        "Level-1 Referrer account পাওয়া যায়নি"
+      );
 
-      // =================================
-      // LEVEL 2 CODE
-      // =================================
+    }
 
-      const level2Code =
-        level1UserData.referredBy;
 
+    const level1User =
+      level1Snap.data();
 
-      if (!level2Code) {
 
-        throw new Error(
-          "Level-2 Referrer পাওয়া যায়নি"
-        );
+    // ===================================
+    // LEVEL 1 COMMISSION
+    // ===================================
 
-      }
+    const level1Amount = 30;
 
 
-      // =================================
-      // LEVEL 2 REFERRAL CODE
-      // =================================
+    const level1Balance =
+      Number(
+        level1User.balance || 0
+      );
+
+
+    const level1ReferralCount =
+      Number(
+        level1User.referralCount || 0
+      );
+
+
+    // ===================================
+    // LEVEL 2
+    // OPTIONAL
+    // ===================================
+
+    let level2Ref = null;
+    let level2User = null;
+    let level2Amount = 0;
+
+    const level2Code =
+      level1User.referredBy;
+
+
+    // ===================================
+    // LEVEL 2 EXISTS
+    // ===================================
+
+    if (level2Code) {
 
       const level2CodeRef =
         doc(
@@ -333,132 +294,142 @@ export async function processReferralCommission(
         );
 
 
-      if (
-        !level2CodeSnap.exists()
-      ) {
+      if (level2CodeSnap.exists()) {
 
-        throw new Error(
-          "Level-2 Referral Code পাওয়া যায়নি: " +
-          level2Code
-        );
-
-      }
+        const level2Data =
+          level2CodeSnap.data();
 
 
-      const level2Data =
-        level2CodeSnap.data();
+        const level2Uid =
+          level2Data.uid;
 
 
-      const level2Uid =
-        level2Data.uid;
+        if (
+          level2Uid &&
+          level2Uid !== userId &&
+          level2Uid !== level1Uid
+        ) {
+
+          const tempLevel2Ref =
+            doc(
+              db,
+              "users",
+              level2Uid
+            );
 
 
-      if (!level2Uid) {
-
-        throw new Error(
-          "Level-2 Referral Code-এ UID নেই"
-        );
-
-      }
+          const level2Snap =
+            await transaction.get(
+              tempLevel2Ref
+            );
 
 
-      const level2Ref =
-        doc(
-          db,
-          "users",
-          level2Uid
-        );
+          if (level2Snap.exists()) {
 
+            level2Ref =
+              tempLevel2Ref;
 
-      // =================================
-      // LEVEL 2 USER
-      // =================================
+            level2User =
+              level2Snap.data();
 
-      const level2UserSnap =
-        await transaction.get(
-          level2Ref
-        );
+            level2Amount = 10;
 
+          }
 
-      if (
-        !level2UserSnap.exists()
-      ) {
-
-        throw new Error(
-          "Level-2 Referrer account পাওয়া যায়নি"
-        );
+        }
 
       }
 
+    }
 
-      // =================================
-      // CURRENT BALANCES
-      // =================================
 
-      const level1Balance =
-        Number(
-          level1UserData.balance || 0
-        );
+    // ===================================
+    // TOTAL COMMISSION
+    // ===================================
 
+    const totalCommission =
+      level1Amount +
+      level2Amount;
+
+
+    // ===================================
+    // COMPANY BALANCE
+    // ===================================
+
+    const companyBalance =
+      Number(
+        walletData.balance || 0
+      );
+
+
+    if (
+      companyBalance <
+      totalCommission
+    ) {
+
+      throw new Error(
+        "Company Wallet-এ পর্যাপ্ত টাকা নেই। প্রয়োজন: ৳" +
+        totalCommission
+      );
+
+    }
+
+
+    // ===================================
+    // UPDATE COMPANY WALLET
+    // ===================================
+
+    transaction.update(
+      walletRef,
+      {
+        balance:
+          companyBalance -
+          totalCommission
+      }
+    );
+
+
+    // ===================================
+    // UPDATE LEVEL 1 USER
+    // +30
+    // REFERRAL COUNT +1
+    // ===================================
+
+    transaction.update(
+      level1Ref,
+      {
+        balance:
+          level1Balance +
+          level1Amount,
+
+        referralCount:
+          level1ReferralCount + 1
+      }
+    );
+
+
+    // ===================================
+    // UPDATE LEVEL 2 USER
+    // +10
+    // REFERRAL COUNT +1
+    // ===================================
+
+    if (
+      level2Ref &&
+      level2User
+    ) {
 
       const level2Balance =
         Number(
-          level2UserSnap.data().balance || 0
-        );
-
-
-      // =================================
-      // CURRENT REFERRAL COUNTS
-      // =================================
-
-      const level1ReferralCount =
-        Number(
-          level1UserData.referralCount || 0
+          level2User.balance || 0
         );
 
 
       const level2ReferralCount =
         Number(
-          level2UserSnap.data().referralCount || 0
+          level2User.referralCount || 0
         );
 
-
-      // =================================
-      // COMPANY WALLET -40
-      // =================================
-
-      transaction.update(
-        walletRef,
-        {
-          balance:
-            companyBalance -
-            totalCommission
-        }
-      );
-
-
-      // =================================
-      // LEVEL 1 +30
-      // REFERRAL COUNT +1
-      // =================================
-
-      transaction.update(
-        level1Ref,
-        {
-          balance:
-            level1Balance +
-            level1Amount,
-
-          referralCount:
-            level1ReferralCount + 1
-        }
-      );
-
-
-      // =================================
-      // LEVEL 2 +10
-      // REFERRAL COUNT +1
-      // =================================
 
       transaction.update(
         level2Ref,
@@ -472,69 +443,80 @@ export async function processReferralCommission(
         }
       );
 
-
-      // =================================
-      // VERIFY USER
-      // =================================
-
-      transaction.set(
-        userRef,
-        {
-          verified: true,
-
-          verificationStatus:
-            "approved",
-
-          verifiedAt:
-            serverTimestamp()
-        },
-        {
-          merge: true
-        }
-      );
-
-
-      // =================================
-      // MARK COMMISSION PAID
-      // =================================
-
-      transaction.update(
-        requestRef,
-        {
-          verificationStatus:
-            "approved",
-
-          verified: true,
-
-          commissionPaid:
-            true,
-
-          commissionAmount:
-            totalCommission,
-
-          level1Commission:
-            level1Amount,
-
-          level2Commission:
-            level2Amount,
-
-          commissionPaidAt:
-            serverTimestamp(),
-
-          verifiedAt:
-            serverTimestamp()
-        }
-      );
-
     }
-  );
 
+
+    // ===================================
+    // VERIFY USER
+    // ===================================
+
+    transaction.set(
+      userRef,
+      {
+        verified: true,
+
+        verificationStatus:
+          "approved",
+
+        verifiedAt:
+          serverTimestamp()
+      },
+      {
+        merge: true
+      }
+    );
+
+
+    // ===================================
+    // MARK COMMISSION PAID
+    // ===================================
+
+    transaction.update(
+      requestRef,
+      {
+        verificationStatus:
+          "approved",
+
+        verified:
+          true,
+
+        commissionPaid:
+          true,
+
+        commissionAmount:
+          totalCommission,
+
+        level1Commission:
+          level1Amount,
+
+        level2Commission:
+          level2Amount,
+
+        commissionPaidAt:
+          serverTimestamp(),
+
+        verifiedAt:
+          serverTimestamp()
+      }
+    );
+
+  });
+
+
+  // =====================================
+  // SUCCESS
+  // =====================================
 
   return {
     success: true,
+
     level1: 30,
-    level2: 10,
-    companyWallet: -40
+
+    level2:
+      10,
+
+    companyWallet:
+      -40
   };
 
-        }
+    }
