@@ -385,14 +385,6 @@ console.log("Wallet data:", walletSnap.data());
   }
 }
 
-// ========================================
-// APPROVE REQUEST
-// ========================================
-
-// =====================================
-// APPROVE REQUEST + REFERRAL COMMISSION
-// =====================================
-
 async function approveRequest(id) {
 
   if (!confirm("এই Verification Approve করবেন?")) {
@@ -401,133 +393,47 @@ async function approveRequest(id) {
 
   try {
 
-    const requestRef = doc(
-      db,
-      "verificationRequests",
-      id
-    );
-
-    const walletRef = doc(
-      db,
-      "company",
-      "wallet"
-    );
-
-    // ---------------------------------
-    // প্রথমে Request থেকে User ID নেওয়া
-    // ---------------------------------
-
-    const requestSnap = await getDoc(requestRef);
-
-    if (!requestSnap.exists()) {
-      throw new Error("Verification request পাওয়া যায়নি");
-    }
-
-    const requestData = requestSnap.data();
-
-    const userId = requestData.userId;
-
-    if (!userId) {
-      throw new Error("এই request-এর User ID নেই");
-    }
-
-    const userRef = doc(
-      db,
-      "users",
-      userId
-    );
-
-    // =================================
-    // FIRESTORE TRANSACTION
-    // =================================
-
-    await runTransaction(db, async (transaction) => {
-
-      // ---------------------------------
-      // ALL READS FIRST
-      // ---------------------------------
-
-      const latestRequestSnap =
-        await transaction.get(requestRef);
-
-      const userSnap =
-        await transaction.get(userRef);
-
-      const walletSnap =
-        await transaction.get(walletRef);
-
-      if (!latestRequestSnap.exists()) {
-        throw new Error(
-          "Verification request পাওয়া যায়নি"
-        );
-      }
-
-      if (!userSnap.exists()) {
-        throw new Error(
-          "User account পাওয়া যায়নি"
-        );
-      }
-
-      if (!walletSnap.exists()) {
-        throw new Error(
-          "Company Wallet document পাওয়া যায়নি"
-        );
-      }
-
-      const latestRequest =
-        latestRequestSnap.data();
-
-      const userData =
-        userSnap.data();
-
-      const walletData =
-        walletSnap.data();
-
-      // =================================
-      // VERIFY USER
-      // =================================
-
-      transaction.set(
-        userRef,
-        {
-          verified: true,
-          verificationStatus: "approved",
-          verifiedAt: serverTimestamp()
-        },
-        {
-          merge: true
-        }
+    const result =
+      await processReferralCommission(
+        db,
+        id
       );
 
-      // =================================
-      // UPDATE REQUEST
-      // =================================
 
-      transaction.update(
-        requestRef,
-        {
-          verificationStatus: "approved",
-          verified: true,
+    await loadCompanyWallet();
 
-        }
+
+    if (result.alreadyPaid) {
+
+      alert(
+        "⚠️ এই Verification-এর Referral Commission আগেই দেওয়া হয়েছে।"
       );
 
-    });
-
-    // =================================
-    // WALLET UI REFRESH
-    // =================================
-
-    await processReferralCommission(db, id);
-await loadCompanyWallet();
+      return;
+    }
 
 
-  } catch (error) {
+    alert(
+      "✅ Verification Approved!\n\n" +
+      "Level 1: ৳" +
+      result.level1 +
+      "\n" +
+      "Level 2: ৳" +
+      result.level2 +
+      "\n" +
+      "মোট কমিশন: ৳" +
+      result.total
+    );
+
+  }
+
+  catch (error) {
 
     console.error(
       "Approve Error:",
       error
     );
+
 
     alert(
       "❌ Approve করা যায়নি:\n\n" +
