@@ -351,14 +351,15 @@ export async function processReferralCommission(db, requestId) {
             level1User.balance || 0
           );
 
-        transaction.update(
-          level1Ref,
-          {
-            balance:
-              level1Balance +
-              level1Amount
-          }
-        );
+        transaction.set(
+  level1Ref,
+  {
+    balance: level1Balance + level1Amount
+  },
+  {
+    merge: true
+  }
+);
       }
 
       // =================================
@@ -377,14 +378,15 @@ export async function processReferralCommission(db, requestId) {
             level2User.balance || 0
           );
 
-        transaction.update(
-          level2Ref,
-          {
-            balance:
-              level2Balance +
-              level2Amount
-          }
-        );
+        transaction.set(
+  level2Ref,
+  {
+    balance: level2Balance + level2Amount
+  },
+  {
+    merge: true
+  }
+);
       }
 
       // =================================
