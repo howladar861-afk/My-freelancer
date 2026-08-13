@@ -187,13 +187,12 @@ button{
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 import {
-  import { processReferralCommission } from "./referralCommission.js";
   getAuth,
   signInWithEmailAndPassword,
   signOut
-}
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
   getFirestore,
@@ -207,8 +206,9 @@ import {
   updateDoc,
   deleteDoc,
   serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+import { processReferralCommission } from "./referralCommission.js";
 
 
 const firebaseConfig = {
