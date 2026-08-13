@@ -211,41 +211,23 @@ export async function processReferralCommission(db, requestId) {
         // Find Level 1 User
         // ---------------------------------
 
-        const level1UsersQuery =
-          query(
-            collection(db, "users"),
-            where(
-              "uid",
-              "==",
-              level1Uid
-            )
-          );
+        level1Ref = doc(
+  db,
+  "users",
+  level1Uid
+);
 
+const level1Snap =
+  await transaction.get(level1Ref);
 
-        const level1QuerySnap =
-          await transaction.get(
-            level1UsersQuery
-          );
+if (!level1Snap.exists()) {
+  throw new Error("Level-1 User পাওয়া যায়নি");
+}
 
+level1User =
+  level1Snap.data();
 
-        if (level1QuerySnap.empty) {
-
-          throw new Error(
-            "Level-1 User পাওয়া যায়নি"
-          );
-
-        }
-
-
-        level1Ref =
-          level1QuerySnap.docs[0].ref;
-
-
-        level1User =
-          level1QuerySnap.docs[0].data();
-
-
-        level1Amount = 30;
+level1Amount = 30;
 
       }
 
@@ -301,38 +283,22 @@ export async function processReferralCommission(db, requestId) {
   level1Uid
           ) {
 
-            const level2UsersQuery =
-              query(
-                collection(db, "users"),
-                where(
-                  "uid",
-                  "==",
-                  level2Uid
-                )
-              );
+            level2Ref = doc(
+  db,
+  "users",
+  level2Uid
+);
 
+const level2Snap =
+  await transaction.get(level2Ref);
 
-            const level2QuerySnap =
-              await transaction.get(
-                level2UsersQuery
-              );
+if (level2Snap.exists()) {
+  level2User =
+    level2Snap.data();
 
+  level2Amount = 10;
+}
 
-            if (
-              !level2QuerySnap.empty
-            ) {
-
-              level2Ref =
-                level2QuerySnap.docs[0].ref;
-
-
-              level2User =
-                level2QuerySnap.docs[0].data();
-
-
-              level2Amount = 10;
-
-            }
 
           }
 
