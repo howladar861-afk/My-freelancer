@@ -1,91 +1,69 @@
 // =====================================
 // Rakib Freelancer
 // REFERRAL COUNT SYSTEM
-// Level 1 +1
-// Level 2 +1
+// =====================================
+// Level 1 referral count +1
+// Level 2 referral count +1
+//
+// NOTE:
+// Commission payment (৳30 / ৳10)
+// is handled by referralCommission.js
 // =====================================
 
-import {
-  doc,
-  increment,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-
-// =====================================
-// ADD REFERRAL COUNT
-// =====================================
-// এই function শুধু referral count বাড়াবে
-// টাকা/commission এখানে দেওয়া হবে না.
-// =====================================
 
 export function addReferralCounts(
   transaction,
-  db,
-  level1Uid,
-  level2Uid = null
+  level1Ref,
+  level1User,
+  level2Ref,
+  level2User
 ) {
 
-  // ===================================
-  // LEVEL 1 COUNT
-  // ===================================
+  // =====================================
+  // LEVEL 1 REFERRAL COUNT
+  // =====================================
 
-  if (level1Uid) {
+  if (
+    level1Ref &&
+    level1User
+  ) {
 
-    const level1CountRef = doc(
-      db,
-      "referralCounts",
-      level1Uid
-    );
+    const currentCount =
+      Number(
+        level1User.referralCount || 0
+      );
 
-    transaction.set(
-      level1CountRef,
+    transaction.update(
+      level1Ref,
       {
-        uid: level1Uid,
-
-        count: increment(1),
-
-        updatedAt:
-          serverTimestamp()
-      },
-      {
-        merge: true
+        referralCount:
+          currentCount + 1
       }
     );
-
   }
 
 
-  // ===================================
-  // LEVEL 2 COUNT
-  // ===================================
+  // =====================================
+  // LEVEL 2 REFERRAL COUNT
+  // =====================================
 
   if (
-    level2Uid &&
-    level2Uid !== level1Uid
+    level2Ref &&
+    level2User
   ) {
 
-    const level2CountRef = doc(
-      db,
-      "referralCounts",
-      level2Uid
-    );
+    const currentCount =
+      Number(
+        level2User.referralCount || 0
+      );
 
-    transaction.set(
-      level2CountRef,
+    transaction.update(
+      level2Ref,
       {
-        uid: level2Uid,
-
-        count: increment(1),
-
-        updatedAt:
-          serverTimestamp()
-      },
-      {
-        merge: true
+        referralCount:
+          currentCount + 1
       }
     );
-
   }
 
 }
