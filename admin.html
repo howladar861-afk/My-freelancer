@@ -562,11 +562,15 @@ async function approveRequest(id) {
     // PROCESS VERIFICATION + COMMISSION
     // =================================
 
-    const result =
-      await processReferralCommission(
-        db,
-        id
-      );
+    const {
+  processReferralCommission
+} = await import("./referralCommission.js");
+
+const result =
+  await processReferralCommission(
+    db,
+    id
+  );
 
 
     // =================================
