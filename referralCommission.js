@@ -6,13 +6,11 @@
 // =====================================
 
 import {
-  collection,
-  query,
-  where,
   doc,
   runTransaction,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
 import {
   addReferralCounts
 } from "./referralCount.js";
@@ -35,7 +33,6 @@ export async function processReferralCommission(db, requestId) {
     "wallet"
   );
 
-
   // =====================================
   // ONE ATOMIC TRANSACTION
   // =====================================
@@ -48,10 +45,7 @@ export async function processReferralCommission(db, requestId) {
       // ALL READS FIRST
       // =================================
 
-      // -------------------------------
       // 1. Verification Request
-      // -------------------------------
-
       const requestSnap =
         await transaction.get(requestRef);
 
@@ -64,12 +58,10 @@ export async function processReferralCommission(db, requestId) {
       const requestData =
         requestSnap.data();
 
-
       // Already processed
       if (
         requestData.commissionPaid === true
       ) {
-
         return {
           success: true,
           alreadyPaid: true,
@@ -77,14 +69,9 @@ export async function processReferralCommission(db, requestId) {
           level2: 0,
           total: 0
         };
-
       }
 
-
-      // -------------------------------
       // 2. User ID
-      // -------------------------------
-
       const userId =
         requestData.userId;
 
@@ -94,11 +81,7 @@ export async function processReferralCommission(db, requestId) {
         );
       }
 
-
-      // -------------------------------
       // 3. User
-      // -------------------------------
-
       const userRef =
         doc(
           db,
@@ -118,11 +101,7 @@ export async function processReferralCommission(db, requestId) {
       const userData =
         userSnap.data();
 
-
-      // -------------------------------
       // 4. Company Wallet
-      // -------------------------------
-
       const walletSnap =
         await transaction.get(walletRef);
 
@@ -135,23 +114,17 @@ export async function processReferralCommission(db, requestId) {
       const walletData =
         walletSnap.data();
 
-
       // =================================
       // LEVEL 1
       // =================================
 
-let level1Ref = null;
-let level1User = null;
-let level1Amount = 0;
-let level1Uid = null;
+      let level1Ref = null;
+      let level1User = null;
+      let level1Amount = 0;
+      let level1Uid = null;
 
       const level1Code =
         userData.referredBy;
-
-
-      // ---------------------------------
-      // Level 1 Referral Code
-      // ---------------------------------
 
       if (level1Code) {
 
@@ -162,75 +135,61 @@ let level1Uid = null;
             level1Code
           );
 
-
         const level1CodeSnap =
           await transaction.get(
             level1CodeRef
           );
 
-
         if (!level1CodeSnap.exists()) {
-
           throw new Error(
             "Level-1 Referral Code পাওয়া যায়নি: " +
             level1Code
           );
-
         }
-
 
         const level1Data =
           level1CodeSnap.data();
 
-level1Uid = level1Data.uid;
-
+        level1Uid =
+          level1Data.uid;
 
         if (!level1Uid) {
-
           throw new Error(
             "Level-1 Referral Code-এ UID নেই"
           );
-
         }
 
-
-        // ---------------------------------
         // Self Referral Check
-        // ---------------------------------
-
         if (level1Uid === userId) {
-
           throw new Error(
             "নিজের Referral Code ব্যবহার করা যাবে না"
           );
-
         }
 
-
-        // ---------------------------------
         // Find Level 1 User
-        // ---------------------------------
+        level1Ref =
+          doc(
+            db,
+            "users",
+            level1Uid
+          );
 
-        level1Ref = doc(
-  db,
-  "users",
-  level1Uid
-);
+        const level1Snap =
+          await transaction.get(
+            level1Ref
+          );
 
-const level1Snap =
-  await transaction.get(level1Ref);
+        if (!level1Snap.exists()) {
+          throw new Error(
+            "Level-1 User পাওয়া যায়নি"
+          );
+        }
 
-if (!level1Snap.exists()) {
-  throw new Error("Level-1 User পাওয়া যায়নি");
-}
+        level1User =
+          level1Snap.data();
 
-level1User =
-  level1Snap.data();
-
-level1Amount = 30;
-
+        level1Amount = 30;
       }
-
 
       // =================================
       // LEVEL 2
@@ -240,11 +199,9 @@ level1Amount = 30;
       let level2User = null;
       let level2Amount = 0;
 
-
       // Level 2 code comes from Level 1 user
       const level2Code =
         level1User?.referredBy;
-
 
       if (level2Code) {
 
@@ -255,57 +212,48 @@ level1Amount = 30;
             level2Code
           );
 
-
         const level2CodeSnap =
           await transaction.get(
             level2CodeRef
           );
-
 
         if (level2CodeSnap.exists()) {
 
           const level2Data =
             level2CodeSnap.data();
 
-
           const level2Uid =
             level2Data.uid;
 
-
-          // --------------------------------
           // Prevent self / same referrer
-          // --------------------------------
-
           if (
             level2Uid &&
             level2Uid !== userId &&
-            level2Uid !==
-  level1Uid
+            level2Uid !== level1Uid
           ) {
 
-            level2Ref = doc(
-  db,
-  "users",
-  level2Uid
-);
+            level2Ref =
+              doc(
+                db,
+                "users",
+                level2Uid
+              );
 
-const level2Snap =
-  await transaction.get(level2Ref);
+            const level2Snap =
+              await transaction.get(
+                level2Ref
+              );
 
-if (level2Snap.exists()) {
-  level2User =
-    level2Snap.data();
+            if (level2Snap.exists()) {
 
-  level2Amount = 10;
-}
+              level2User =
+                level2Snap.data();
 
-
+              level2Amount = 10;
+            }
           }
-
         }
-
       }
-
 
       // =================================
       // TOTAL COMMISSION
@@ -314,7 +262,6 @@ if (level2Snap.exists()) {
       const totalCommission =
         level1Amount +
         level2Amount;
-
 
       // =================================
       // COMPANY WALLET BALANCE
@@ -325,7 +272,6 @@ if (level2Snap.exists()) {
           walletData.balance || 0
         );
 
-
       // =================================
       // CHECK COMPANY BALANCE
       // =================================
@@ -334,29 +280,27 @@ if (level2Snap.exists()) {
         companyBalance <
         totalCommission
       ) {
-
         throw new Error(
           "Company Wallet-এ পর্যাপ্ত টাকা নেই। প্রয়োজন: ৳" +
           totalCommission
         );
-
       }
-// UPDATE REFERRAL COUNTS
 
-addReferralCounts(
-  transaction,
-  level1Ref,
-  level1User,
-  level2Ref,
-  level2User
-);
+      // =================================
+      // UPDATE REFERRAL COUNTS
+      // =================================
+
+      addReferralCounts(
+        transaction,
+        level1Ref,
+        level1User,
+        level2Ref,
+        level2User
+      );
 
       // =================================
       // NOW ALL READS ARE FINISHED
       // =================================
-      // এরপর থেকে শুধুই WRITE হবে
-      // =================================
-
 
       // =================================
       // UPDATE VERIFICATION USER
@@ -378,7 +322,6 @@ addReferralCounts(
         }
       );
 
-
       // =================================
       // UPDATE COMPANY WALLET
       // =================================
@@ -391,7 +334,6 @@ addReferralCounts(
             totalCommission
         }
       );
-
 
       // =================================
       // UPDATE LEVEL 1 USER
@@ -409,18 +351,15 @@ addReferralCounts(
             level1User.balance || 0
           );
 
-
-
         transaction.update(
           level1Ref,
           {
             balance:
               level1Balance +
-              level1Amount,
-
+              level1Amount
           }
         );
-
+      }
 
       // =================================
       // UPDATE LEVEL 2 USER
@@ -438,25 +377,26 @@ addReferralCounts(
             level2User.balance || 0
           );
 
-
-
-
         transaction.update(
           level2Ref,
           {
             balance:
               level2Balance +
-              level2Amount,
-
-);
+              level2Amount
+          }
+        );
+      }
 
       // =================================
       // MARK REQUEST AS APPROVED + PAID
       // =================================
-if (!requestRef) {
-  throw new Error("requestRef পাওয়া যায়নি");
-}
-      
+
+      if (!requestRef) {
+        throw new Error(
+          "requestRef পাওয়া যায়নি"
+        );
+      }
+
       transaction.update(
         requestRef,
         {
@@ -485,7 +425,6 @@ if (!requestRef) {
         }
       );
 
-
       // =================================
       // RESULT
       // =================================
@@ -507,10 +446,8 @@ if (!requestRef) {
         companyWallet:
           -totalCommission
       };
-
     }
   );
 
-
   return result;
-          }
+            }
