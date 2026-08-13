@@ -4,14 +4,6 @@ import {
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-import {
-  getFirestore,
-  collection,
-  doc,
-  getDoc,
-  query,
-  where,
-  getDocs
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
@@ -27,27 +19,81 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    document.getElementById("userEmail").textContent = user.email;
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-if (userDoc.exists()) {
-  document.getElementById("userEmail").textContent = user.email;
-  document.getElementById("referralCode").textContent =
-    "Referral Code: " + userDoc.data().referralCode;
-  const q = query(
-  collection(db, "users"),
-  where("referredBy", "==", userDoc.data().referralCode)
-);
 
-const querySnapshot = await getDocs(q);
+  const userRef = doc(
+    db,
+    "users",
+    user.uid
+  );
 
-document.getElementById("referralCount").textContent =
-  "Referral Count: " + querySnapshot.size;
-} else {
-  
-  document.getElementById("referralCode").textContent =
-    "Referral Code: Not Found";
-}
+  const userDoc =
+    await getDoc(userRef);
+
+  if (userDoc.exists()) {
+
+    const userData =
+      userDoc.data();
+
+    // =========================
+    // EMAIL
+    // =========================
+
+    document.getElementById("userEmail").textContent =
+      user.email || "";
+
+
+    // =========================
+    // BALANCE
+    // =========================
+
+    const balance =
+      Number(userData.balance || 0);
+
+    document.getElementById("userBalance").textContent =
+      balance.toFixed(2) + "৳";
+
+
+    // =========================
+    // REFERRAL CODE
+    // =========================
+
+    document.getElementById("referralCode").textContent =
+      "Referral Code: " +
+      (userData.referralCode || "Not Found");
+
+
+    // =========================
+    // REFERRAL COUNT
+    // =========================
+
+    const referralCount =
+      Number(userData.referralCount || 0);
+
+    document.getElementById("referralCount").textContent =
+      "Referral Count: " +
+      referralCount;
+
+
+    console.log("User Data:", userData);
+    console.log("Balance:", balance);
+    console.log("Referral Count:", referralCount);
+
   } else {
+
+    document.getElementById("userEmail").textContent =
+      user.email || "";
+
+    document.getElementById("userBalance").textContent =
+      "0.00৳";
+
+    document.getElementById("referralCode").textContent =
+      "Referral Code: Not Found";
+
+    document.getElementById("referralCount").textContent =
+      "Referral Count: 0";
+  }
+
+  }
     window.location.href = "index.html";
   }
 });
