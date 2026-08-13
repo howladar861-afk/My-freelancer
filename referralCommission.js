@@ -138,10 +138,10 @@ export async function processReferralCommission(db, requestId) {
       // LEVEL 1
       // =================================
 
-      let level1Ref = null;
-      let level1User = null;
-      let level1Amount = 0;
-
+let level1Ref = null;
+let level1User = null;
+let level1Amount = 0;
+let level1Uid = null;
 
       const level1Code =
         userData.referredBy;
@@ -180,9 +180,7 @@ export async function processReferralCommission(db, requestId) {
         const level1Data =
           level1CodeSnap.data();
 
-
-        const level1Uid =
-          level1Data.uid;
+level1Uid = level1Data.uid;
 
 
         if (!level1Uid) {
