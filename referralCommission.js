@@ -341,7 +341,15 @@ if (level2Snap.exists()) {
         );
 
       }
+// UPDATE REFERRAL COUNTS
 
+addReferralCounts(
+  transaction,
+  level1Ref,
+  level1User,
+  level2Ref,
+  level2User
+);
 
       // =================================
       // NOW ALL READS ARE FINISHED
