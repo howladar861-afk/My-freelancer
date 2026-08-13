@@ -13,7 +13,9 @@ import {
   runTransaction,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
+import {
+  addReferralCounts
+} from "./referralCount.js";
 
 // =====================================
 // PROCESS VERIFICATION + REFERRAL COMMISSION
@@ -400,11 +402,6 @@ if (level2Snap.exists()) {
           );
 
 
-        const level1ReferralCount =
-          Number(
-            level1User.referralCount || 0
-          );
-
 
         transaction.update(
           level1Ref,
@@ -413,12 +410,8 @@ if (level2Snap.exists()) {
               level1Balance +
               level1Amount,
 
-            referralCount:
-              level1ReferralCount + 1
           }
         );
-
-      }
 
 
       // =================================
@@ -438,10 +431,6 @@ if (level2Snap.exists()) {
           );
 
 
-        const level2ReferralCount =
-          Number(
-            level2User.referralCount || 0
-          );
 
 
         transaction.update(
@@ -451,12 +440,6 @@ if (level2Snap.exists()) {
               level2Balance +
               level2Amount,
 
-            referralCount:
-              level2ReferralCount + 1
-          }
-        );
-
-      }
 
 
       // =================================
