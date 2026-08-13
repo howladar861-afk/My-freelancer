@@ -498,7 +498,10 @@ export async function processReferralCommission(db, requestId) {
       // =================================
       // MARK REQUEST AS APPROVED + PAID
       // =================================
-
+if (!requestRef) {
+  throw new Error("requestRef পাওয়া যায়নি");
+}
+      
       transaction.update(
         requestRef,
         {
