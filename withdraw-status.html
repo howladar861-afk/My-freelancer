@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdraw Status</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #222;
+    }
+
+    .header {
+      background: #f5b800;
+      color: white;
+      padding: 20px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .box {
+      width: 92%;
+      max-width: 500px;
+      margin: 25px auto;
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .request {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 15px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .request p {
+      margin: 9px 0;
+      font-size: 16px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .approved {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .rejected {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .message {
+      margin-top: 12px;
+      padding: 12px;
+      background: #eef2ff;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .back-btn {
+      width: 100%;
+      margin-top: 10px;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      background: #ddd;
+      font-size: 16px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px 10px;
+      color: #64748b;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    Withdraw Status
+  </div>
+
+  <div class="box">
+
+    <h2>💸 Withdraw History</h2>
+
+    <div id="withdrawList">
+      <div class="empty">লোড হচ্ছে...</div>
+    </div>
+
+    <button class="back-btn" onclick="history.back()">
+      ← Back
+    </button>
+
+  </div>
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+      authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+      projectId: "rakib-freelancer-9c66b",
+      storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+      messagingSenderId: "541209844482",
+      appId: "1:541209844482:web:510568d5226c9bf47ac01b"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+
+    onAuthStateChanged(auth, async (user) => {
+
+      if (!user) {
+        alert("প্রথমে Login করুন।");
+        window.location.href = "index.html";
+        return;
+      }
+
+      await loadWithdrawHistory(user.uid);
+
+    });
+
+
+    async function loadWithdrawHistory(uid) {
+
+      const list = document.getElementById("withdrawList");
+
+      try {
+
+        const q = query(
+          collection(db, "withdrawRequests"),
+          where("userId", "==", uid)
+        );
+
+        const snapshot = await getDocs(q);
+
+        list.innerHTML = "";
+
+        if (snapshot.empty) {
+
+          list.innerHTML = `
+            <div class="empty">
+              এখনো কোনো Withdraw Request নেই।
+            </div>
+          `;
+
+          return;
+        }
+
+
+        snapshot.forEach((docSnap) => {
+
+          const data = docSnap.data();
+
+          const status =
+            String(data.status || "pending").toLowerCase();
+
+          let statusText = "অপেক্ষমাণ";
+
+          if (status === "approved") {
+            statusText = "অনুমোদিত";
+          }
+
+          if (status === "rejected") {
+            statusText = "বাতিল";
+          }
+
+
+          let message = "";
+
+          if (data.message) {
+
+            message = `
+              <div class="message">
+                📝 ${escapeHtml(data.message)}
+              </div>
+            `;
+
+          } else if (status === "approved") {
+
+            message = `
+              <div class="message">
+                ✅ আপনার Withdraw Request অনুমোদন করা হয়েছে।
+              </div>
+            `;
+
+          } else if (status === "rejected") {
+
+            message = `
+              <div class="message">
+                ❌ আপনার Withdraw Request বাতিল করা হয়েছে।
+              </div>
+            `;
+
+          } else {
+
+            message = `
+              <div class="message">
+                ⏳ আপনার Request Admin-এর সিদ্ধান্তের অপেক্ষায় আছে।
+              </div>
+            `;
+
+          }
+
+
+          const date = data.createdAt
+            ? new Date(data.createdAt).toLocaleString("bn-BD")
+            : "তারিখ নেই";
+
+
+          list.innerHTML += `
+
+            <div class="request">
+
+              <p>
+                <strong>💰 Amount:</strong>
+                ৳${Number(data.amount || 0).toFixed(2)}
+              </p>
+
+              <p>
+                <strong>💳 Method:</strong>
+                ${escapeHtml(data.method || "")}
+              </p>
+
+              <p>
+                <strong>📱 Number:</strong>
+                ${escapeHtml(data.number || "")}
+              </p>
+
+              <p>
+                <strong>📅 Date:</strong>
+                ${date}
+              </p>
+
+              <p>
+                <strong>Status:</strong>
+                <span class="status ${status}">
+                  ${statusText}
+                </span>
+              </p>
+
+              ${message}
+
+            </div>
+
+          `;
+
+        });
+
+      } catch (error) {
+
+        console.error("WITHDRAW HISTORY ERROR:", error);
+
+        list.innerHTML = `
+          <div class="empty">
+            Withdraw History লোড করা যায়নি।
+            <br><br>
+            ${escapeHtml(error.message || "")}
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    function escapeHtml(text) {
+
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+  </script>
+
+</body>
+</html>
