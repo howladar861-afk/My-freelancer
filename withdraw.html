@@ -254,11 +254,13 @@ if (userData.verified !== true) {
 
   if (!method || !number || !amount) {
     alert("সব তথ্য পূরণ করুন।");
+    withdrawProcessing = false;
     return;
   }
 
   if (Number(amount) <= 0) {
     alert("সঠিক টাকার পরিমাণ দিন।");
+    withdrawProcessing = false;
     return;
   }
 
