@@ -276,13 +276,20 @@ if (userData.verified !== true) {
     }
 
     const freshData = freshSnap.data();
-    const currentBalance = Number(freshData.balance || 0);
 
-    if (withdrawAmount > currentBalance) {
-      throw new Error("INSUFFICIENT_BALANCE");
-    }
+const currentBalance = Number(freshData.balance || 0);
 
-    const newBalance = currentBalance - withdrawAmount;
+// Minimum balance check
+if (currentBalance < 100) {
+  throw new Error("MINIMUM_BALANCE");
+}
+
+// Withdraw amount balance-এর চেয়ে বেশি কিনা
+if (withdrawAmount > currentBalance) {
+  throw new Error("INSUFFICIENT_BALANCE");
+}
+
+const newBalance = currentBalance - withdrawAmount;
 
     // User balance থেকে টাকা কাটা
     transaction.update(userRef, {
@@ -309,14 +316,26 @@ if (userData.verified !== true) {
 
 } catch (error) {
 
-  if (error.message === "INSUFFICIENT_BALANCE") {
-    alert("আপনার ব্যালেন্সের চেয়ে বেশি টাকা Withdraw করা যাবে না।");
-  } else {
-    console.error(error);
-    alert("Withdraw Request পাঠানো যায়নি। আবার চেষ্টা করুন।");
-  }
+  if (error.message === "MINIMUM_BALANCE") {
+
+  alert("আপনার একাউন্টে 100 টাকার কম আছে। Withdraw Request যাবে না।");
+
+} else if (error.message === "INSUFFICIENT_BALANCE") {
+
+  alert("আপনার ব্যালেন্সের চেয়ে বেশি টাকা Withdraw করা যাবে না।");
+
+} else {
+
+  console.error(error);
+  alert("Withdraw Request পাঠানো যায়নি। আবার চেষ্টা করুন!");
 
   }
+
+  }finally {
+
+  withdrawProcessing = false;
+
+    }
 
 };
 
