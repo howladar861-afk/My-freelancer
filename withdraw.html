@@ -150,7 +150,9 @@ import {
 import {
   getFirestore,
   doc,
-  getDoc
+  getDoc,
+  collection,
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -168,7 +170,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-
+let withdrawProcessing = false;
 // Account Verification Check
 onAuthStateChanged(auth, async (user) => {
 
@@ -208,7 +210,15 @@ if (balanceElement) {
 
 // Withdraw Button
 window.submitWithdraw = async function () {
-const user = auth.currentUser;
+
+  if (withdrawProcessing) {
+    alert("Withdraw request already processing.");
+    return;
+  }
+
+  withdrawProcessing = true;
+
+  const user = auth.currentUser;
 
 if (!user) {
   alert("আগে Login করুন");
@@ -252,7 +262,61 @@ if (userData.verified !== true) {
     return;
   }
 
-  alert("Withdraw request submitted.");
+  try {
+  const withdrawAmount = Number(amount);
+
+  const requestRef = doc(collection(db, "withdrawRequests"));
+
+  await runTransaction(db, async (transaction) => {
+
+    const freshSnap = await transaction.get(userRef);
+
+    if (!freshSnap.exists()) {
+      throw new Error("USER_NOT_FOUND");
+    }
+
+    const freshData = freshSnap.data();
+    const currentBalance = Number(freshData.balance || 0);
+
+    if (withdrawAmount > currentBalance) {
+      throw new Error("INSUFFICIENT_BALANCE");
+    }
+
+    const newBalance = currentBalance - withdrawAmount;
+
+    // User balance থেকে টাকা কাটা
+    transaction.update(userRef, {
+      balance: newBalance
+    });
+
+    // Admin Panel-এর জন্য Withdraw Request তৈরি
+    transaction.set(requestRef, {
+      userId: user.uid,
+      email: user.email,
+      method: method,
+      number: number,
+      amount: withdrawAmount,
+      status: "pending",
+      createdAt: new Date().toISOString()
+    });
+  });
+
+  // সফল হলে
+  document.getElementById("withdrawBalance").textContent =
+    (Number(amount) > 0 ? "৳" + (Number(userData.balance || 0) - Number(amount)).toFixed(2) : "৳0.00");
+
+  alert("Withdraw Request সফলভাবে পাঠানো হয়েছে।");
+
+} catch (error) {
+
+  if (error.message === "INSUFFICIENT_BALANCE") {
+    alert("আপনার ব্যালেন্সের চেয়ে বেশি টাকা Withdraw করা যাবে না।");
+  } else {
+    console.error(error);
+    alert("Withdraw Request পাঠানো যায়নি। আবার চেষ্টা করুন।");
+  }
+
+  }
 
 };
 
