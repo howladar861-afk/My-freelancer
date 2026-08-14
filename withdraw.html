@@ -120,10 +120,11 @@
     <label>Withdraw Amount</label>
 
     <input
-      type="number"
-      id="withdrawAmount"
-      placeholder="টাকার পরিমাণ"
-      min="1"
+  type="number"
+  id="withdrawAmount"
+  placeholder="ন্যূনতম 100 টাকা"
+  min="100"
+>
     >
 
     <button class="submit-btn" onclick="submitWithdraw()">
@@ -263,10 +264,15 @@ if (userData.verified !== true) {
     withdrawProcessing = false;
     return;
   }
-
+if (Number(amount) < 100) {
+  alert("ন্যূনতম 100 টাকা Withdraw করতে পারবেন।");
+  withdrawProcessing = false;
+  return;
+}
   try {
   const withdrawAmount = Number(amount);
-
+const withdrawFee = withdrawAmount * 0.02;
+const receiveAmount = withdrawAmount - withdrawFee;
   const requestRef = doc(collection(db, "withdrawRequests"));
 
   await runTransaction(db, async (transaction) => {
@@ -305,7 +311,9 @@ const newBalance = currentBalance - withdrawAmount;
       method: method,
       number: number,
       amount: withdrawAmount,
-      status: "pending",
+fee: withdrawFee,
+receiveAmount: receiveAmount,
+status: "pending",
       createdAt: new Date().toISOString()
     });
   });
