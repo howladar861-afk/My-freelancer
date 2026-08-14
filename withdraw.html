@@ -328,8 +328,13 @@ const newBalance = currentBalance - withdrawAmount;
 
 } else {
 
-  console.error(error);
-  alert("Withdraw Request পাঠানো যায়নি। আবার চেষ্টা করুন!");
+  console.error("WITHDRAW ERROR:", error);
+
+alert(
+  "Withdraw Request পাঠানো যায়নি!\n\n" +
+  "Code: " + (error.code || "unknown") +
+  "\n\nMessage: " + (error.message || error)
+);
 
   }
 
