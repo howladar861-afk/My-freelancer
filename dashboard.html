@@ -267,7 +267,9 @@
       <div onclick="openWithdraw()">Withdraw</div>
       <div onclick="openDeposit()">Deposit</div>
       <div onclick="openVerification()">Account Verification</div>
-      <div onclick="openWithdrawHistory()">Withdraw History</div>
+      <div onclick="window.location.href='withdraw-status.html'">
+  Withdraw History
+      </div>
     </div>
   </div>
   </header>
@@ -476,9 +478,6 @@ function openDeposit() {
 function openVerification() {
   alert("Account Verification");
 }
-  window.openWithdrawHistory = function () {
-  window.location.href = "withdraw-status.html";
-};
   // =====================================
 // VERIFICATION STATUS
 // =====================================
