@@ -98,7 +98,7 @@
     <h2>💸 টাকা Withdraw</h2>
 
     <div class="balance">
-      বর্তমান ব্যালেন্স: ৳0.00
+  বর্তমান ব্যালেন্স: ৳<span id="withdrawBalance">0.00</span>
     </div>
 
     <label>Payment Method</label>
@@ -188,7 +188,15 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   const userData = userSnap.data();
+const balance = Number(userData.balance || 0);
 
+const balanceElement =
+  document.getElementById("withdrawBalance");
+
+if (balanceElement) {
+  balanceElement.textContent =
+    balance.toFixed(2);
+}
   if (userData.verified !== true) {
     alert("Withdraw করতে আগে Account Verification সম্পন্ন করুন।");
     window.location.href = "verification.html";
