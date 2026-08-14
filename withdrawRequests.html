@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Withdraw Requests - Admin</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0d1628;
+  color:white;
+}
+
+.container{
+  max-width:650px;
+  margin:20px auto;
+  padding:15px;
+}
+
+.card{
+  background:#222;
+  padding:20px;
+  border-radius:18px;
+  margin-bottom:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,.4);
+}
+
+h1{
+  text-align:center;
+  color:#ffc107;
+}
+
+.request{
+  background:#f5f5f5;
+  color:#222;
+  padding:18px;
+  border-radius:14px;
+  margin-top:15px;
+}
+
+.request h3{
+  margin-top:0;
+  color:#2563eb;
+}
+
+.status{
+  font-weight:bold;
+  margin:10px 0;
+}
+
+button{
+  width:100%;
+  padding:13px;
+  margin-top:10px;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.approve{
+  background:#16a34a;
+  color:white;
+}
+
+.reject{
+  background:#dc2626;
+  color:white;
+}
+
+.back{
+  background:#555;
+  color:white;
+}
+
+.empty{
+  text-align:center;
+  color:#aaa;
+  padding:25px;
+}
+
+#adminContent{
+  display:none;
+}
+
+#message{
+  text-align:center;
+  margin-top:15px;
+  color:#ffc107;
+}
+
+input{
+  width:100%;
+  box-sizing:border-box;
+  padding:14px;
+  margin:10px 0;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- ADMIN LOGIN -->
+
+  <div class="card" id="loginBox">
+
+    <h1>🔐 Admin Login</h1>
+
+    <input
+      type="email"
+      id="adminEmail"
+      placeholder="Admin Email"
+    >
+
+    <input
+      type="password"
+      id="adminPassword"
+      placeholder="Password"
+    >
+
+    <button
+      class="approve"
+      id="loginBtn">
+      Login
+    </button>
+
+    <p id="message"></p>
+
+  </div>
+
+
+  <!-- WITHDRAW ADMIN PANEL -->
+
+  <div class="card" id="adminContent">
+
+    <h1>💰 Withdraw Requests</h1>
+
+    <div id="requestList">
+
+      <p class="empty">
+        Withdraw Request Loading...
+      </p>
+
+    </div>
+
+    <button
+      class="back"
+      onclick="history.back()">
+      ← Back
+    </button>
+
+  </div>
+
+</div>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  runTransaction,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+
+/* =========================
+   FIREBASE CONFIG
+========================= */
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+
+  authDomain:
+    "rakib-freelancer-9c66b.firebaseapp.com",
+
+  projectId:
+    "rakib-freelancer-9c66b",
+
+  storageBucket:
+    "rakib-freelancer-9c66b.firebasestorage.app",
+
+  messagingSenderId:
+    "541209844482",
+
+  appId:
+    "1:541209844482:web:510568d5226c9bf47ac01b"
+
+};
+
+
+/* =========================
+   ADMIN UID
+========================= */
+
+const ADMIN_UID =
+  "MwiyoLqCJeYERHAwUKAa17sLwop1";
+
+
+/* =========================
+   FIREBASE START
+========================= */
+
+const app =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(app);
+
+const db =
+  getFirestore(app);
+
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const loginBox =
+  document.getElementById("loginBox");
+
+const adminContent =
+  document.getElementById("adminContent");
+
+const loginBtn =
+  document.getElementById("loginBtn");
+
+const message =
+  document.getElementById("message");
+
+const requestList =
+  document.getElementById("requestList");
+
+
+
+/* =========================
+   ADMIN LOGIN
+========================= */
+
+loginBtn.onclick = async function(){
+
+  const email =
+    document
+      .getElementById("adminEmail")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("adminPassword")
+      .value;
+
+
+  if(!email || !password){
+
+    message.textContent =
+      "Email ও Password দিন।";
+
+    return;
+  }
+
+
+  try{
+
+    const result =
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+
+    /* ADMIN CHECK */
+
+    if(result.user.uid !== ADMIN_UID){
+
+      await signOut(auth);
+
+      message.textContent =
+        "❌ আপনি Admin নন।";
+
+      return;
+    }
+
+
+    loginBox.style.display =
+      "none";
+
+    adminContent.style.display =
+      "block";
+
+    message.textContent = "";
+
+
+    loadWithdrawRequests();
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    message.textContent =
+      "❌ Login করা যায়নি।";
+
+  }
+
+};
+
+
+
+/* =========================
+   LOAD PENDING WITHDRAW
+========================= */
+
+function loadWithdrawRequests(){
+
+  const requestsRef =
+    collection(
+      db,
+      "withdrawRequests"
+    );
+
+
+  const requestsQuery =
+    query(
+      requestsRef,
+      where(
+        "status",
+        "==",
+        "pending"
+      )
+    );
+
+
+  onSnapshot(
+
+    requestsQuery,
+
+    function(snapshot){
+
+      requestList.innerHTML = "";
+
+
+      if(snapshot.empty){
+
+        requestList.innerHTML =
+          '<p class="empty">' +
+          'কোনো Pending Withdraw Request নেই।' +
+          '</p>';
+
+        return;
+      }
+
+
+      snapshot.forEach(function(requestDoc){
+
+        const data =
+          requestDoc.data();
+
+        const id =
+          requestDoc.id;
+
+
+        const request =
+          document.createElement("div");
+
+        request.className =
+          "request";
+
+
+        request.innerHTML = `
+
+          <h3>
+            💰 Withdraw Request
+          </h3>
+
+          <p>
+            <b>Email:</b>
+            ${data.email || "নেই"}
+          </p>
+
+          <p>
+            <b>User ID:</b>
+            ${data.userId || "নেই"}
+          </p>
+
+          <p>
+            <b>Payment Method:</b>
+            ${data.method || "নেই"}
+          </p>
+
+          <p>
+            <b>Number:</b>
+            ${data.number || "নেই"}
+          </p>
+
+          <p>
+            <b>Amount:</b>
+            ৳${Number(
+              data.amount || 0
+            ).toFixed(2)}
+          </p>
+
+          <p class="status">
+            Status:
+            ${data.status || "pending"}
+          </p>
+
+          <button
+            class="approve">
+            ✅ Approve
+          </button>
+
+          <button
+            class="reject">
+            ❌ Reject
+          </button>
+
+        `;
+
+
+        requestList.appendChild(request);
+
+
+
+        /* APPROVE */
+
+        request
+          .querySelector(".approve")
+          .onclick = function(){
+
+            approveWithdraw(id);
+
+          };
+
+
+        /* REJECT */
+
+        request
+          .querySelector(".reject")
+          .onclick = function(){
+
+            rejectWithdraw(id);
+
+          };
+
+      });
+
+    },
+
+    function(error){
+
+      console.error(
+        "Withdraw Request Error:",
+        error
+      );
+
+
+      requestList.innerHTML =
+        `<p class="empty">
+          ❌ Request Load করা যায়নি।
+        </p>`;
+
+    }
+
+  );
+
+}
+
+
+
+/* =========================
+   APPROVE WITHDRAW
+========================= */
+
+async function approveWithdraw(id){
+
+  if(!confirm(
+    "এই Withdraw Request Approve করবেন?"
+  )){
+
+    return;
+  }
+
+
+  try{
+
+    const requestRef =
+      doc(
+        db,
+        "withdrawRequests",
+        id
+      );
+
+
+    await runTransaction(
+      db,
+      async function(transaction){
+
+        const requestSnap =
+          await transaction.get(
+            requestRef
+          );
+
+
+        if(!requestSnap.exists()){
+
+          throw new Error(
+            "REQUEST_NOT_FOUND"
+          );
+
+        }
+
+
+        const data =
+          requestSnap.data();
+
+
+        /* Already processed */
+
+        if(data.status !== "pending"){
+
+          throw new Error(
+            "REQUEST_ALREADY_PROCESSED"
+          );
+
+        }
+
+
+        transaction.update(
+          requestRef,
+          {
+
+            status:
+              "approved",
+
+            approvedAt:
+              serverTimestamp()
+
+          }
+        );
+
+      }
+    );
+
+
+    alert(
+      "✅ Withdraw Request Approved!"
+    );
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+
+    if(
+      error.message ===
+      "REQUEST_ALREADY_PROCESSED"
+    ){
+
+      alert(
+        "এই Request ইতিমধ্যে Process করা হয়েছে।"
+      );
+
+    }
+
+    else{
+
+      alert(
+        "❌ Withdraw Approve করা যায়নি।"
+      );
+
+    }
+
+  }
+
+}
+
+
+
+/* =========================
+   REJECT WITHDRAW
+   + REFUND BALANCE
+========================= */
+
+async function rejectWithdraw(id){
+
+  if(!confirm(
+    "এই Withdraw Reject করবেন?\n\n" +
+    "Reject করলে User-এর টাকা আবার Balance-এ ফেরত যাবে।"
+  )){
+
+    return;
+  }
+
+
+  try{
+
+    const requestRef =
+      doc(
+        db,
+        "withdrawRequests",
+        id
+      );
+
+
+    await runTransaction(
+      db,
+      async function(transaction){
+
+        const requestSnap =
+          await transaction.get(
+            requestRef
+          );
+
+
+        if(!requestSnap.exists()){
+
+          throw new Error(
+            "REQUEST_NOT_FOUND"
+          );
+
+        }
+
+
+        const requestData =
+          requestSnap.data();
+
+
+        /* Prevent double processing */
+
+        if(
+          requestData.status !==
+          "pending"
+        ){
+
+          throw new Error(
+            "REQUEST_ALREADY_PROCESSED"
+          );
+
+        }
+
+
+        const userId =
+          requestData.userId;
+
+        const amount =
+          Number(
+            requestData.amount || 0
+          );
+
+
+        if(!userId){
+
+          throw new Error(
+            "USER_ID_NOT_FOUND"
+          );
+
+        }
+
+
+        const userRef =
+          doc(
+            db,
+            "users",
+            userId
+          );
+
+
+        const userSnap =
+          await transaction.get(
+            userRef
+          );
+
+
+        if(!userSnap.exists()){
+
+          throw new Error(
+            "USER_NOT_FOUND"
+          );
+
+        }
+
+
+        const userData =
+          userSnap.data();
+
+
+        const currentBalance =
+          Number(
+            userData.balance || 0
+          );
+
+
+        const newBalance =
+          currentBalance + amount;
+
+
+        /* Refund user balance */
+
+        transaction.update(
+          userRef,
+          {
+
+            balance:
+              newBalance
+
+          }
+        );
+
+
+        /* Mark request rejected */
+
+        transaction.update(
+          requestRef,
+          {
+
+            status:
+              "rejected",
+
+            rejectedAt:
+              serverTimestamp(),
+
+            refunded:
+              true
+
+          }
+        );
+
+      }
+    );
+
+
+    alert(
+      "❌ Withdraw Rejected!\n\n" +
+      "User-এর টাকা Balance-এ ফেরত দেওয়া হয়েছে।"
+    );
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+
+    if(
+      error.message ===
+      "REQUEST_ALREADY_PROCESSED"
+    ){
+
+      alert(
+        "এই Request ইতিমধ্যে Process করা হয়েছে।"
+      );
+
+    }
+
+    else{
+
+      alert(
+        "❌ Reject করা যায়নি।"
+      );
+
+    }
+
+  }
+
+}
+
+</script>
+
+</body>
+  </html>
