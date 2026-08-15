@@ -392,12 +392,42 @@ async function approveRequest(id) {
   }
 
   try {
+    const requestRef = doc(
+  db,
+  "verificationRequests",
+  id
+);
 
-    const result =
-      await processReferralCommission(
-        db,
-        id
-      );
+const requestSnap = await getDoc(requestRef);
+
+if (!requestSnap.exists()) {
+  alert("❌ Verification Request পাওয়া যায়নি।");
+  return;
+}
+
+const userId = requestSnap.data().userId;
+
+if (!userId) {
+  alert("❌ User ID পাওয়া যায়নি।");
+  return;
+}
+
+const result =
+  await processReferralCommission(
+    db,
+    id
+  );
+
+await setDoc(
+  doc(db, "users", userId),
+  {
+    verified: true,
+    verifiedAt: serverTimestamp()
+  },
+  {
+    merge: true
+  }
+);
 
 
     await loadCompanyWallet();
