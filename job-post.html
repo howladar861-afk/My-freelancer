@@ -238,7 +238,31 @@
 
 </div>
   </div>
+<!-- =====================================
+     JOB SUBMISSION
+===================================== -->
 
+<div class="box" id="submissionBox" style="display:none;">
+
+  <h2>📸 কাজের Screenshot জমা দিন</h2>
+
+  <p id="selectedJobText" style="text-align:center;">
+    কাজ নির্বাচন করা হয়নি
+  </p>
+
+  <label>Screenshot নির্বাচন করুন</label>
+
+  <input
+    type="file"
+    id="screenshotFile"
+    accept="image/*"
+  >
+
+  <button id="submitScreenshotBtn">
+    📤 Screenshot জমা দিন
+  </button>
+
+</div>
 
 <script type="module">
 
@@ -912,19 +936,111 @@ async function loadAvailableJobs() {
 
 }
 
-
 /* =====================================
    START JOB
 ===================================== */
 
-window.startJob = function(jobId) {
+window.startJob = async function(jobId) {
 
-  alert(
-    "✅ কাজটি শুরু করুন।\n\n" +
-    "কাজ শেষ করার পর পরবর্তী ধাপে Screenshot জমা দিতে পারবেন।"
-  );
+  try {
+
+    const jobRef = doc(db, "jobs", jobId);
+    const jobSnap = await getDoc(jobRef);
+
+    if (!jobSnap.exists()) {
+
+      alert("❌ কাজটি পাওয়া যায়নি।");
+      return;
+
+    }
+
+    const job = jobSnap.data();
+
+
+    // নিজের পোস্ট করা কাজ নিজে করা যাবে না
+    if (job.ownerId === currentUser.uid) {
+
+      alert("❌ নিজের পোস্ট করা কাজ নিজে করতে পারবেন না।");
+      return;
+
+    }
+
+
+    // Job active কিনা
+    if (job.status !== "active") {
+
+      alert("❌ এই কাজটি এখন আর active নেই।");
+      return;
+
+    }
+
+
+    // Slot আছে কিনা
+    if (Number(job.remainingSlots || 0) <= 0) {
+
+      alert("❌ এই কাজের সব slot শেষ হয়ে গেছে।");
+      return;
+
+    }
+
+
+    // কাজটি মনে রাখা
+    localStorage.setItem("activeJobId", jobId);
+
+
+    // Submission box দেখানো
+    const submissionBox =
+      document.getElementById("submissionBox");
+
+    const selectedJobText =
+      document.getElementById("selectedJobText");
+
+
+    submissionBox.style.display = "block";
+
+    selectedJobText.innerHTML =
+      "📋 <b>" +
+      escapeHtml(job.title || "") +
+      "</b><br>" +
+      "💰 কাজের পারিশ্রমিক: ৳" +
+      Number(job.payPerTask || 0);
+
+
+    // কাজের লিংক নতুন Tab-এ খোলা
+    window.open(job.link, "_blank");
+
+
+    alert(
+      "✅ কাজ শুরু হয়েছে!\n\n" +
+      "১. নতুন Tab-এ গিয়ে কাজটি সম্পন্ন করুন।\n" +
+      "২. কাজ শেষ হলে Screenshot নিন।\n" +
+      "৩. এই পেজে ফিরে এসে Screenshot জমা দিন।"
+    );
+
+    // Screenshot box-এ নিয়ে যাবে
+    submissionBox.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Start Job Error:",
+      error
+    );
+
+    alert(
+      "❌ কাজ শুরু করা যায়নি\n\n" +
+      error.message
+    );
+
+  }
 
 };
+
   /* =====================================
      SECURITY DISPLAY HELPER
   ===================================== */
