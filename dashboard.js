@@ -319,3 +319,42 @@ window.openVerification = function () {
     "verification.html";
 
 };
+// =====================================
+// CLOUDINARY IMAGE UPLOAD
+// =====================================
+
+const CLOUD_NAME = "kjkqazv1";
+const UPLOAD_PRESET = "screenshot_upload";
+
+window.uploadToCloudinary = async function (file) {
+
+  if (!file) {
+    throw new Error("কোনো ফাইল নির্বাচন করা হয়নি");
+  }
+
+  const formData = new FormData();
+
+  formData.append("file", file);
+  formData.append("upload_preset", UPLOAD_PRESET);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: formData
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error("Cloudinary Error:", data);
+    throw new Error(
+      data.error?.message || "Cloudinary upload failed"
+    );
+  }
+
+  console.log("Cloudinary Upload Success:", data);
+
+  return data.secure_url;
+};
