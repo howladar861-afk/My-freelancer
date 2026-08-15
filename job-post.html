@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Job Post - My Freelancer</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #2563eb;
+      color: white;
+      padding: 18px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .container {
+      width: 94%;
+      max-width: 600px;
+      margin: 20px auto 80px;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .balance {
+      background: #eef5ff;
+      padding: 14px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .warning {
+      background: #fff3cd;
+      color: #856404;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #999;
+    }
+
+    .back {
+      background: #555;
+    }
+
+    .job-card {
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+    }
+
+    .job-card h3 {
+      margin-top: 0;
+      color: #2563eb;
+    }
+
+    .job-info {
+      margin: 7px 0;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 6px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 13px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    📋 Job Post
+  </div>
+
+  <div class="container">
+
+    <!-- CREATE JOB -->
+    <div class="box">
+
+      <h2>➕ নতুন কাজ পোস্ট করুন</h2>
+
+      <div class="balance">
+        আপনার ব্যালেন্স:
+        ৳<span id="userBalance">0</span>
+      </div>
+
+      <label>কাজের নাম</label>
+      <input
+        type="text"
+        id="jobTitle"
+        placeholder="যেমন: Facebook Page Follow করুন"
+      >
+
+      <label>কাজের বিস্তারিত</label>
+      <textarea
+        id="jobDescription"
+        placeholder="কীভাবে কাজটি করতে হবে বিস্তারিত লিখুন..."
+      ></textarea>
+
+      <label>কাজের লিংক</label>
+      <input
+        type="url"
+        id="jobLink"
+        placeholder="https://..."
+      >
+
+      <label>প্রতি কাজের পারিশ্রমিক</label>
+      <input
+        type="number"
+        id="payPerTask"
+        placeholder="যেমন: 5"
+        min="1"
+      >
+
+      <label>কতজন ইউজার কাজ করবে?</label>
+      <input
+        type="number"
+        id="taskQuantity"
+        placeholder="যেমন: 100"
+        min="1"
+      >
+
+      <div class="warning">
+        ⚠️ সতর্কতা: কাজ পোস্ট করার সময় মোট বাজেট আপনার ব্যালেন্স
+        থেকে কেটে নেওয়া হবে।
+        <br><br>
+        কাজ সম্পন্ন হয়ে Admin অনুমোদন করলে নির্ধারিত টাকা
+        কাজ করা ইউজারের ব্যালেন্সে যাবে।
+      </div>
+
+      <div style="margin-top:15px;font-weight:bold;text-align:center;">
+        মোট বাজেট:
+        ৳<span id="totalBudget">0</span>
+      </div>
+
+      <button id="postJobBtn">
+        🚀 কাজ পোস্ট করুন
+      </button>
+
+      <button
+        class="back"
+        onclick="history.back()"
+      >
+        ⬅️ Back
+      </button>
+
+    </div>
+
+
+    <!-- MY JOBS -->
+    <div class="box">
+
+      <h2>📋 আমার পোস্ট করা কাজ</h2>
+
+      <div id="myJobs">
+        কাজ লোড হচ্ছে...
+      </div>
+
+    </div>
+
+  </div>
+
+
+<script type="module">
+
+  import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+  import {
+    getAuth,
+    onAuthStateChanged
+  }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    collection,
+    addDoc,
+    query,
+    where,
+    getDocs,
+    serverTimestamp,
+    runTransaction
+  }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+  /* =====================================
+     FIREBASE CONFIG
+  ===================================== */
+
+  const firebaseConfig = {
+
+    /* এখানে verification.html
+       থেকে আপনার একই firebaseConfig বসাবেন */
+
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+
+  const auth = getAuth(app);
+
+  const db = getFirestore(app);
+
+
+  let currentUser = null;
+
+
+  /* =====================================
+     LOAD USER
+  ===================================== */
+
+  onAuthStateChanged(auth, async (user) => {
+
+    if (!user) {
+
+      alert("⚠️ আগে Login করুন");
+
+      window.location.href = "index.html";
+
+      return;
+    }
+
+    currentUser = user;
+
+    await loadUserBalance();
+
+    await loadMyJobs();
+
+  });
+
+
+  /* =====================================
+     LOAD BALANCE
+  ===================================== */
+
+  async function loadUserBalance() {
+
+    try {
+
+      const userRef = doc(
+        db,
+        "users",
+        currentUser.uid
+      );
+
+      const userSnap = await getDoc(userRef);
+
+
+      if (!userSnap.exists()) {
+
+        document.getElementById("userBalance")
+          .textContent = "0";
+
+        return;
+      }
+
+
+      const data = userSnap.data();
+
+
+      document.getElementById("userBalance")
+        .textContent =
+        Number(data.balance || 0).toLocaleString("en-BD");
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Balance Error:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =====================================
+     CALCULATE TOTAL
+  ===================================== */
+
+  function calculateTotal() {
+
+    const pay =
+      Number(
+        document.getElementById("payPerTask").value
+      ) || 0;
+
+    const quantity =
+      Number(
+        document.getElementById("taskQuantity").value
+      ) || 0;
+
+
+    const total = pay * quantity;
+
+
+    document.getElementById("totalBudget")
+      .textContent =
+      total.toLocaleString("en-BD");
+
+  }
+
+
+  document
+    .getElementById("payPerTask")
+    .addEventListener(
+      "input",
+      calculateTotal
+    );
+
+
+  document
+    .getElementById("taskQuantity")
+    .addEventListener(
+      "input",
+      calculateTotal
+    );
+
+
+  /* =====================================
+     POST JOB
+  ===================================== */
+
+  document
+    .getElementById("postJobBtn")
+    .addEventListener(
+      "click",
+      async () => {
+
+        if (!currentUser) {
+
+          alert("⚠️ Login করুন");
+
+          return;
+        }
+
+
+        const title =
+          document
+            .getElementById("jobTitle")
+            .value
+            .trim();
+
+
+        const description =
+          document
+            .getElementById("jobDescription")
+            .value
+            .trim();
+
+
+        const link =
+          document
+            .getElementById("jobLink")
+            .value
+            .trim();
+
+
+        const pay =
+          Number(
+            document
+              .getElementById("payPerTask")
+              .value
+          );
+
+
+        const quantity =
+          Number(
+            document
+              .getElementById("taskQuantity")
+              .value
+          );
+
+
+        /* VALIDATION */
+
+        if (
+          !title ||
+          !description ||
+          !link ||
+          !pay ||
+          !quantity
+        ) {
+
+          alert(
+            "⚠️ সব তথ্য পূরণ করুন"
+          );
+
+          return;
+        }
+
+
+        if (pay <= 0 || quantity <= 0) {
+
+          alert(
+            "⚠️ টাকার পরিমাণ এবং ইউজারের সংখ্যা সঠিক দিন"
+          );
+
+          return;
+        }
+
+
+        const totalBudget =
+          pay * quantity;
+
+
+        const confirmPost =
+          confirm(
+            "আপনি কি এই কাজটি পোস্ট করতে চান?\n\n" +
+            "প্রতি কাজ: ৳" + pay + "\n" +
+            "কাজের সংখ্যা: " + quantity + "\n" +
+            "মোট বাজেট: ৳" + totalBudget +
+            "\n\nএই টাকা আপনার ব্যালেন্স থেকে কেটে নেওয়া হবে।"
+          );
+
+
+        if (!confirmPost) {
+
+          return;
+        }
+
+
+        const button =
+          document.getElementById("postJobBtn");
+
+
+        button.disabled = true;
+
+        button.textContent =
+          "⏳ কাজ পোস্ট হচ্ছে...";
+
+
+        try {
+
+          const userRef =
+            doc(
+              db,
+              "users",
+              currentUser.uid
+            );
+
+
+          const jobRef =
+            doc(
+              collection(db, "jobs")
+            );
+
+
+          await runTransaction(
+            db,
+            async (transaction) => {
+
+              const userSnap =
+                await transaction.get(
+                  userRef
+                );
+
+
+              if (!userSnap.exists()) {
+
+                throw new Error(
+                  "User account পাওয়া যায়নি"
+                );
+
+              }
+
+
+              const userData =
+                userSnap.data();
+
+
+              const balance =
+                Number(
+                  userData.balance || 0
+                );
+
+
+              if (balance < totalBudget) {
+
+                throw new Error(
+                  "আপনার ব্যালেন্স যথেষ্ট নয়।"
+                );
+
+              }
+
+
+              /* BALANCE CUT */
+
+              transaction.update(
+                userRef,
+                {
+                  balance:
+                    balance - totalBudget
+                }
+              );
+
+
+              /* CREATE JOB */
+
+              transaction.set(
+                jobRef,
+                {
+
+                  title: title,
+
+                  description:
+                    description,
+
+                  link: link,
+
+                  payPerTask:
+                    pay,
+
+                  quantity:
+                    quantity,
+
+                  remainingSlots:
+                    quantity,
+
+                  totalBudget:
+                    totalBudget,
+
+                  remainingBudget:
+                    totalBudget,
+
+                  ownerId:
+                    currentUser.uid,
+
+                  ownerEmail:
+                    currentUser.email || "",
+
+                  status:
+                    "active",
+
+                  createdAt:
+                    serverTimestamp()
+
+                }
+              );
+
+            }
+          );
+
+
+          alert(
+            "✅ কাজ সফলভাবে পোস্ট হয়েছে!\n\n" +
+            "মোট ৳" +
+            totalBudget +
+            " আপনার ব্যালেন্স থেকে কেটে Job Budget-এ রাখা হয়েছে।"
+          );
+
+
+          /* RESET */
+
+          document
+            .getElementById("jobTitle")
+            .value = "";
+
+
+          document
+            .getElementById("jobDescription")
+            .value = "";
+
+
+          document
+            .getElementById("jobLink")
+            .value = "";
+
+
+          document
+            .getElementById("payPerTask")
+            .value = "";
+
+
+          document
+            .getElementById("taskQuantity")
+            .value = "";
+
+
+          calculateTotal();
+
+
+          await loadUserBalance();
+
+          await loadMyJobs();
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "Job Post Error:",
+            error
+          );
+
+
+          alert(
+            "❌ কাজ পোস্ট করা যায়নি\n\n" +
+            error.message
+          );
+
+        }
+
+        finally {
+
+          button.disabled = false;
+
+          button.textContent =
+            "🚀 কাজ পোস্ট করুন";
+
+        }
+
+      }
+    );
+
+
+  /* =====================================
+     LOAD MY JOBS
+  ===================================== */
+
+  async function loadMyJobs() {
+
+    const box =
+      document.getElementById("myJobs");
+
+
+    try {
+
+      const q =
+        query(
+          collection(db, "jobs"),
+          where(
+            "ownerId",
+            "==",
+            currentUser.uid
+          )
+        );
+
+
+      const snap =
+        await getDocs(q);
+
+
+      box.innerHTML = "";
+
+
+      if (snap.empty) {
+
+        box.innerHTML =
+          "<p style='text-align:center;'>আপনি এখনো কোনো কাজ পোস্ট করেননি।</p>";
+
+        return;
+      }
+
+
+      snap.forEach(
+        (jobDoc) => {
+
+          const job =
+            jobDoc.data();
+
+
+          const div =
+            document.createElement("div");
+
+
+          div.className =
+            "job-card";
+
+
+          div.innerHTML = `
+
+            <h3>${escapeHtml(job.title || "")}</h3>
+
+            <div class="job-info">
+              💰 প্রতি কাজ:
+              ৳${Number(job.payPerTask || 0)}
+            </div>
+
+            <div class="job-info">
+              👥 মোট কাজ:
+              ${Number(job.quantity || 0)}
+            </div>
+
+            <div class="job-info">
+              ⏳ বাকি:
+              ${Number(job.remainingSlots || 0)}
+            </div>
+
+            <div class="job-info">
+              💵 মোট বাজেট:
+              ৳${Number(job.totalBudget || 0)}
+            </div>
+
+            <div class="job-info">
+              📌 Status:
+              <span class="status">
+                ${escapeHtml(job.status || "active")}
+              </span>
+            </div>
+
+          `;
+
+
+          box.appendChild(div);
+
+        }
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Load Jobs Error:",
+        error
+      );
+
+
+      box.innerHTML =
+        "❌ কাজ লোড করা যায়নি।";
+
+    }
+
+  }
+
+
+  /* =====================================
+     SECURITY DISPLAY HELPER
+  ===================================== */
+
+  function escapeHtml(text) {
+
+    return String(text)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  }
+
+</script>
+
+</body>
+  </html>
