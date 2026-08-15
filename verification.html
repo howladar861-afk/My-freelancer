@@ -146,7 +146,12 @@
       id="transactionId"
       placeholder="Transaction ID লিখুন"
     >
-
+<label>Payment Screenshot</label>
+<input
+  type="file"
+  id="paymentScreenshot"
+  accept="image/*"
+>
     <button class="submit-btn" onclick="submitVerification()">
       Verification Submit
     </button>
@@ -186,6 +191,45 @@ import {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
     const db = getFirestore(app);
+    // =====================================
+// CLOUDINARY
+// =====================================
+
+const CLOUD_NAME = "kjkqazv1";
+const UPLOAD_PRESET = "screenshot_upload";
+
+async function uploadScreenshot(file) {
+
+  if (!file) {
+    throw new Error("Screenshot নির্বাচন করুন");
+  }
+
+  const formData = new FormData();
+
+  formData.append("file", file);
+  formData.append("upload_preset", UPLOAD_PRESET);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: formData
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error("Cloudinary Error:", data);
+    throw new Error(
+      data.error?.message || "Screenshot upload failed"
+    );
+  }
+
+  console.log("Screenshot uploaded:", data);
+
+  return data.secure_url;
+}
     // =====================================
 // CHECK ACCOUNT VERIFICATION
 // =====================================
@@ -269,7 +313,13 @@ onAuthStateChanged(auth, async (user) => {
   const number = document.getElementById("paymentNumber").value.trim();
   const transactionId =
     document.getElementById("transactionId").value.trim();
+const screenshotFile =
+  document.getElementById("paymentScreenshot").files[0];
 
+if (!screenshotFile) {
+  alert("⚠️ Payment Screenshot দিন");
+  return;
+}
   if (!name || !number || !transactionId) {
     alert("⚠️ সব তথ্য পূরণ করুন");
     return;
@@ -277,7 +327,10 @@ onAuthStateChanged(auth, async (user) => {
 
   try {
 
-    const user = auth.currentUser;
+  const screenshotUrl =
+    await uploadScreenshot(screenshotFile);
+
+  const user = auth.currentUser;
 
     if (!user) {
       alert("⚠️ আগে Login করুন");
@@ -293,7 +346,8 @@ onAuthStateChanged(auth, async (user) => {
 
       verificationPaymentNumber: number,
       verificationTransactionId: transactionId,
-
+screenshotUrl: screenshotUrl,
+      
       verificationStatus: "pending",
       verified: false,
 
