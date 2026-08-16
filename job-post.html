@@ -288,13 +288,6 @@
     runTransaction
   }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
   /* =====================================
      FIREBASE CONFIG
   ===================================== */
@@ -314,7 +307,6 @@ import {
 
   const db = getFirestore(app);
 
-const storage = getStorage(app);
   let currentUser = null;
 
 
@@ -1219,139 +1211,334 @@ document
 
 
       /* =====================================
-         UPLOAD SCREENSHOT
-      ===================================== */
+SCREENSHOT SUBMIT - CLOUDINARY
+===================================== */
 
-      const fileName =
-        Date.now() +
-        "_" +
-        file.name.replace(
-          /[^a-zA-Z0-9._-]/g,
-          "_"
-        );
+document
+.getElementById("submitScreenshotBtn")
+.addEventListener("click", async () => {
 
+if (!currentUser) {  
+  alert("⚠️ আগে Login করুন");  
+  return;  
+}  
 
-      const storageRef =
-        ref(
-          storage,
-          "jobSubmissions/" +
-          currentUser.uid +
-          "/" +
-          jobId +
-          "/" +
-          fileName
-        );
+const jobId = localStorage.getItem("activeJobId");  
 
+if (!jobId) {  
+  alert("❌ কোনো কাজ নির্বাচন করা হয়নি।");  
+  return;  
+}  
 
-      await uploadBytes(
-        storageRef,
-        file
-      );
+const fileInput =  
+  document.getElementById("screenshotFile");  
 
+const file = fileInput.files[0];  
 
-      const screenshotURL =
-        await getDownloadURL(
-          storageRef
-        );
+if (!file) {  
+  alert("⚠️ আগে Screenshot নির্বাচন করুন।");  
+  return;  
+}  
 
+if (!file.type.startsWith("image/")) {  
+  alert("❌ শুধু Image Screenshot জমা দিতে পারবেন।");  
+  return;  
+}  
 
-      /* =====================================
-         CREATE FIRESTORE SUBMISSION
-      ===================================== */
+if (file.size > 5 * 1024 * 1024) {  
+  alert("❌ Screenshot সর্বোচ্চ 5MB হতে পারবে।");  
+  return;  
+}  
 
-      await addDoc(
-        collection(
-          db,
-          "jobSubmissions"
-        ),
-        {
+const button =  
+  document.getElementById("submitScreenshotBtn");  
 
-          jobId:
-            jobId,
+button.disabled = true;  
+button.textContent =  
+  "⏳ Screenshot Upload হচ্ছে...";  
 
-          jobTitle:
-            job.title || "",
+try {  
 
-          userId:
-            currentUser.uid,
+  /* =====================================  
+     CHECK JOB  
+  ===================================== */  
 
-          userEmail:
-            currentUser.email || "",
+  const jobRef = doc(  
+    db,  
+    "jobs",  
+    jobId  
+  );  
 
-          ownerId:
-            job.ownerId || "",
+  const jobSnap =  
+    await getDoc(jobRef);  
 
-          payPerTask:
-            Number(
-              job.payPerTask || 0
-            ),
+  if (!jobSnap.exists()) {  
+    throw new Error(  
+      "কাজটি আর পাওয়া যাচ্ছে না।"  
+    );  
+  }  
 
-          screenshotURL:
-            screenshotURL,
-
-          status:
-            "pending",
-
-          submittedAt:
-            serverTimestamp()
-
-        }
-      );
+  const job =  
+    jobSnap.data();  
 
 
-      alert(
-        "✅ Screenshot সফলভাবে জমা হয়েছে!\n\n" +
-        "Admin আপনার কাজটি যাচাই করবে।\n\n" +
-        "Approve হলে ৳" +
-        Number(job.payPerTask || 0) +
-        " আপনার Balance-এ যোগ হবে।"
-      );
+  /* =====================================  
+     OWNER CHECK  
+  ===================================== */  
+
+  if (  
+    job.ownerId === currentUser.uid  
+  ) {  
+    throw new Error(  
+      "নিজের পোস্ট করা কাজ নিজে করতে পারবেন না।"  
+    );  
+  }  
 
 
-      /* =====================================
-         RESET
-      ===================================== */
+  /* =====================================  
+     JOB STATUS CHECK  
+  ===================================== */  
 
-      document
-        .getElementById("screenshotFile")
-        .value = "";
-
-
-      document
-        .getElementById("submissionBox")
-        .style.display = "none";
+  if (job.status !== "active") {  
+    throw new Error(  
+      "এই কাজটি এখন আর active নেই।"  
+    );  
+  }  
 
 
-      localStorage.removeItem(
-        "activeJobId"
-      );
+  /* =====================================  
+     SLOT CHECK  
+  ===================================== */  
 
-    }
+  if (  
+    Number(job.remainingSlots || 0) <= 0  
+  ) {  
+    throw new Error(  
+      "এই কাজের সব slot শেষ হয়ে গেছে।"  
+    );  
+  }  
 
-    catch (error) {
 
-      console.error(
-        "Screenshot Submit Error:",
-        error
-      );
+  /* =====================================  
+     CHECK PREVIOUS SUBMISSION  
+  ===================================== */  
 
-      alert(
-        "❌ Screenshot জমা দেওয়া যায়নি\n\n" +
-        error.message
-      );
+  const submissionQuery =  
+    query(  
+      collection(  
+        db,  
+        "jobSubmissions"  
+      ),  
+      where(  
+        "jobId",  
+        "==",  
+        jobId  
+      ),  
+      where(  
+        "userId",  
+        "==",  
+        currentUser.uid  
+      )  
+    );  
 
-    }
+  const submissionSnap =  
+    await getDocs(  
+      submissionQuery  
+    );  
 
-    finally {
+  let alreadySubmitted = false;  
 
-      button.disabled = false;
+  submissionSnap.forEach(  
+    (submissionDoc) => {  
 
-      button.textContent =
-        "📤 Screenshot জমা দিন";
+      const data =  
+        submissionDoc.data();  
 
-    }
+      if (  
+        data.status === "pending" ||  
+        data.status === "approved"  
+      ) {  
+        alreadySubmitted = true;  
+      }  
 
-  });
+    }  
+  );  
+
+
+  if (alreadySubmitted) {  
+    throw new Error(  
+      "আপনি এই কাজের Screenshot ইতিমধ্যে জমা দিয়েছেন।"  
+    );  
+  }  
+
+
+  /* =====================================  
+     CLOUDINARY UPLOAD  
+  ===================================== */  
+
+  const cloudinaryUrl =  
+    "https://api.cloudinary.com/v1_1/kjkqazv1/image/upload";  
+
+  const formData =  
+    new FormData();  
+
+  formData.append(  
+    "file",  
+    file  
+  );  
+
+  formData.append(  
+    "upload_preset",  
+    "screenshot_upload"  
+  );  
+
+
+  const uploadResponse =  
+    await fetch(  
+      cloudinaryUrl,  
+      {  
+        method: "POST",  
+        body: formData  
+      }  
+    );  
+
+
+  if (!uploadResponse.ok) {  
+
+    const errorText =  
+      await uploadResponse.text();  
+
+    console.error(  
+      "Cloudinary Error:",  
+      errorText  
+    );  
+
+    throw new Error(  
+      "Screenshot Cloudinary-তে Upload করা যায়নি।"  
+    );  
+  }  
+
+
+  const uploadData =  
+    await uploadResponse.json();  
+
+
+  const screenshotURL =  
+    uploadData.secure_url;  
+
+
+  if (!screenshotURL) {  
+    throw new Error(  
+      "Cloudinary থেকে Screenshot URL পাওয়া যায়নি।"  
+    );  
+  }  
+
+
+  /* =====================================  
+     CREATE FIRESTORE SUBMISSION  
+  ===================================== */  
+
+  await addDoc(  
+    collection(  
+      db,  
+      "jobSubmissions"  
+    ),  
+    {  
+
+      jobId:  
+        jobId,  
+
+      jobTitle:  
+        job.title || "",  
+
+      userId:  
+        currentUser.uid,  
+
+      userEmail:  
+        currentUser.email || "",  
+
+      ownerId:  
+        job.ownerId || "",  
+
+      payPerTask:  
+        Number(  
+          job.payPerTask || 0  
+        ),  
+
+      screenshotURL:  
+        screenshotURL,  
+
+      status:  
+        "pending",  
+
+      submittedAt:  
+        serverTimestamp()  
+
+    }  
+  );  
+
+
+  /* =====================================  
+     SUCCESS MESSAGE  
+  ===================================== */  
+
+  alert(  
+    "✅ Screenshot সফলভাবে জমা হয়েছে!\n\n" +  
+    "Admin আপনার কাজটি যাচাই করবে।\n\n" +  
+    "Approve হলে ৳" +  
+    Number(job.payPerTask || 0) +  
+    " আপনার Balance-এ যোগ হবে।"  
+  );  
+
+
+  /* =====================================  
+     RESET  
+  ===================================== */  
+
+  fileInput.value = "";  
+
+  document  
+    .getElementById("submissionBox")  
+    .style.display = "none";  
+
+  localStorage.removeItem(  
+    "activeJobId"  
+  );  
+
+
+  /* =====================================  
+     RELOAD JOBS  
+  ===================================== */  
+
+  await loadAvailableJobs();  
+
+}  
+
+catch (error) {  
+
+  console.error(  
+    "Screenshot Submit Error:",  
+    error  
+  );  
+
+  alert(  
+    "❌ Screenshot জমা দেওয়া যায়নি\n\n" +  
+    error.message  
+  );  
+
+}  
+
+finally {  
+
+  button.disabled = false;  
+
+  button.textContent =  
+    "📤 Screenshot জমা দিন";  
+
+}
+
+});
+এটা বাসাবো
   /* =====================================
      SECURITY DISPLAY HELPER
   ===================================== */
