@@ -184,7 +184,9 @@ import {
   getFirestore,
   collection,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  doc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -264,12 +266,58 @@ onAuthStateChanged(auth, (user) => {
 const urlParams =
   new URLSearchParams(window.location.search);
 
-const taskFromUrl =
-  urlParams.get("task");
+const taskIdFromUrl =
+  urlParams.get("taskId");
+let realTaskName = "";
+let realReward = 0;
 
-const rewardFromUrl =
-  urlParams.get("reward");
+async function loadTask() {
 
+  if (!taskIdFromUrl) {
+    alert("❌ Task ID পাওয়া যায়নি");
+    return;
+  }
+
+  try {
+
+    const taskRef = doc(
+      db,
+      "tasks",
+      taskIdFromUrl
+    );
+
+    const taskSnap = await getDoc(taskRef);
+
+    if (!taskSnap.exists()) {
+      alert("❌ Task পাওয়া যায়নি");
+      return;
+    }
+
+    const taskData = taskSnap.data();
+
+    realTaskName = taskData.taskName || "";
+    realReward = Number(taskData.reward || 0);
+
+    document.getElementById("taskName").textContent =
+      realTaskName;
+
+    document.getElementById("taskReward").textContent =
+      realReward;
+
+    document.getElementById("taskInput").value =
+      realTaskName;
+
+  } catch (error) {
+
+    console.error("Task Load Error:", error);
+
+    alert("❌ Task Load করা যায়নি");
+
+  }
+
+}
+
+loadTask();
 
 const taskNameElement =
   document.getElementById("taskName");
@@ -281,28 +329,6 @@ const taskInput =
   document.getElementById("taskInput");
 
 
-if (taskFromUrl) {
-
-  taskNameElement.textContent =
-    taskFromUrl;
-
-  taskInput.value =
-    taskFromUrl;
-
-} else {
-
-  taskNameElement.textContent =
-    "Task";
-
-}
-
-
-if (rewardFromUrl) {
-
-  taskRewardElement.textContent =
-    rewardFromUrl;
-
-}
 
 
 // =====================================
@@ -501,8 +527,7 @@ window.submitTask =
       // SAVE FIRESTORE
       // ==============================
 
-      const reward =
-        Number(rewardFromUrl || 0);
+      const reward = realReward;
 
 
       await addDoc(
@@ -518,6 +543,9 @@ window.submitTask =
           email:
             currentUser.email || "",
 
+          taskId:
+  taskIdFromUrl,
+          
           taskName:
             taskName,
 
