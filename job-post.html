@@ -878,10 +878,9 @@ async function loadAvailableJobs() {
           </a>
         </div>
 
-        <button
-          onclick="startJob('${jobDoc.id}')">
-          🚀 কাজ করুন
-        </button>
+        <button onclick="openSubmitJob('${jobDoc.id}')">
+    🚀 কাজ জমা দিন
+</button>
 
       `;
 
@@ -907,105 +906,263 @@ async function loadAvailableJobs() {
    START JOB
 ===================================== */
 
-window.startJob = async function(jobId) {
+// ================================
+// কাজ জমা দেওয়ার ব্যবস্থা
+// ================================
 
-  try {
+window.openSubmitJob = async function(jobId) {
+    try {
+        const jobRef = doc(db, "jobs", jobId);
+        const jobSnap = await getDoc(jobRef);
 
-    const jobRef = doc(db, "jobs", jobId);
-    const jobSnap = await getDoc(jobRef);
+        if (!jobSnap.exists()) {
+            alert("❌ কাজটি পাওয়া যায়নি");
+            return;
+        }
 
-    if (!jobSnap.exists()) {
+        const job = jobSnap.data();
 
-      alert("❌ কাজটি পাওয়া যায়নি।");
-      return;
+        if (!currentUser) {
+            alert("❌ আগে Login করুন");
+            return;
+        }
 
+        if (job.ownerId === currentUser.uid) {
+            alert("❌ নিজের পোস্ট করা কাজ জমা দিতে পারবেন না");
+            return;
+        }
+
+        if (job.status !== "active") {
+            alert("❌ এই কাজটি এখন Active নেই");
+            return;
+        }
+
+        if (Number(job.remainingSlots || 0) <= 0) {
+            alert("❌ এই কাজের সব Slot শেষ হয়ে গেছে");
+            return;
+        }
+
+        // আগের popup থাকলে সরিয়ে দেওয়া
+        const oldModal = document.getElementById("rakibSubmitModal");
+        if (oldModal) oldModal.remove();
+
+        // নতুন popup
+        const modal = document.createElement("div");
+        modal.id = "rakibSubmitModal";
+
+        modal.innerHTML = `
+            <div style="
+                position:fixed;
+                inset:0;
+                background:rgba(0,0,0,.65);
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                z-index:99999;
+                padding:20px;
+            ">
+
+                <div style="
+                    width:100%;
+                    max-width:420px;
+                    background:white;
+                    border-radius:20px;
+                    padding:22px;
+                    box-sizing:border-box;
+                ">
+
+                    <h2 style="
+                        margin:0 0 8px;
+                        text-align:center;
+                        color:#1565c0;
+                    ">
+                        🟢 রাকিব ফ্রিল্যান্সার
+                    </h2>
+
+                    <h3 style="
+                        margin:10px 0 18px;
+                        text-align:center;
+                    ">
+                        📤 কাজ জমা দিন
+                    </h3>
+
+                    <div style="
+                        background:#f3f6fa;
+                        padding:12px;
+                        border-radius:10px;
+                        margin-bottom:15px;
+                    ">
+                        📋 <b>${escapeHtml(job.title || "")}</b><br>
+                        💰 পারিশ্রমিক: ৳${Number(job.payPerTask || 0)}
+                    </div>
+
+                    <label style="font-weight:bold;">
+                        👤 যে ID / নাম ফলো করেছেন
+                    </label>
+
+                    <input
+                        id="followedIdInput"
+                        type="text"
+                        placeholder="যেমন: Rakib Freelancer"
+                        style="
+                            width:100%;
+                            box-sizing:border-box;
+                            padding:13px;
+                            margin:8px 0 15px;
+                            border:1px solid #ccc;
+                            border-radius:10px;
+                            font-size:16px;
+                        "
+                    >
+
+                    <label style="font-weight:bold;">
+                        💬 কী কমেন্ট করেছেন?
+                    </label>
+
+                    <textarea
+                        id="commentTextInput"
+                        placeholder="আপনি যে কমেন্ট করেছেন সেটা লিখুন"
+                        style="
+                            width:100%;
+                            height:100px;
+                            box-sizing:border-box;
+                            padding:13px;
+                            margin:8px 0 18px;
+                            border:1px solid #ccc;
+                            border-radius:10px;
+                            font-size:16px;
+                            resize:none;
+                        "
+                    ></textarea>
+
+                    <button
+                        id="finalSubmitJobBtn"
+                        style="
+                            width:100%;
+                            padding:14px;
+                            border:0;
+                            border-radius:12px;
+                            background:#1565c0;
+                            color:white;
+                            font-size:17px;
+                            font-weight:bold;
+                            margin-bottom:10px;
+                        "
+                    >
+                        ✅ কাজ জমা দিন
+                    </button>
+
+                    <button
+                        id="cancelSubmitJobBtn"
+                        style="
+                            width:100%;
+                            padding:12px;
+                            border:0;
+                            border-radius:12px;
+                            background:#eee;
+                            color:#333;
+                            font-size:16px;
+                        "
+                    >
+                        ❌ বাতিল
+                    </button>
+
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // বাতিল
+        document
+            .getElementById("cancelSubmitJobBtn")
+            .onclick = function() {
+                modal.remove();
+            };
+
+        // Final Submit
+        document
+            .getElementById("finalSubmitJobBtn")
+            .onclick = async function() {
+
+                const followedId =
+                    document.getElementById("followedIdInput")
+                    .value.trim();
+
+                const commentText =
+                    document.getElementById("commentTextInput")
+                    .value.trim();
+
+                if (!followedId) {
+                    alert("❌ যে ID / নাম ফলো করেছেন সেটা লিখুন");
+                    return;
+                }
+
+                if (!commentText) {
+                    alert("❌ কী কমেন্ট করেছেন সেটা লিখুন");
+                    return;
+                }
+
+                try {
+
+                    this.disabled = true;
+                    this.innerText = "⏳ জমা হচ্ছে...";
+
+                    await addDoc(
+                        collection(db, "jobSubmissions"),
+                        {
+                            jobId: jobId,
+                            userId: currentUser.uid,
+                            userEmail: currentUser.email || "",
+
+                            followedId: followedId,
+                            commentText: commentText,
+
+                            jobTitle: job.title || "",
+                            payPerTask: Number(job.payPerTask || 0),
+
+                            status: "pending",
+
+                            createdAt: serverTimestamp()
+                        }
+                    );
+
+                    modal.remove();
+
+                    alert(
+                        "✅ কাজ সফলভাবে জমা হয়েছে!\n\n" +
+                        "Admin যাচাই করার পর আপনার টাকা Balance-এ যোগ হবে।"
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "Job Submission Error:",
+                        error
+                    );
+
+                    this.disabled = false;
+                    this.innerText = "✅ কাজ জমা দিন";
+
+                    alert(
+                        "❌ কাজ জমা দেওয়া যায়নি\n\n" +
+                        error.message
+                    );
+                }
+            };
+
+    } catch (error) {
+
+        console.error(
+            "Open Submit Job Error:",
+            error
+        );
+
+        alert(
+            "❌ কাজ জমা দেওয়ার ফর্ম খোলা যায়নি\n\n" +
+            error.message
+        );
     }
-
-    const job = jobSnap.data();
-
-
-    // নিজের পোস্ট করা কাজ নিজে করা যাবে না
-    if (job.ownerId === currentUser.uid) {
-
-      alert("❌ নিজের পোস্ট করা কাজ নিজে করতে পারবেন না।");
-      return;
-
-    }
-
-
-    // Job active কিনা
-    if (job.status !== "active") {
-
-      alert("❌ এই কাজটি এখন আর active নেই।");
-      return;
-
-    }
-
-
-    // Slot আছে কিনা
-    if (Number(job.remainingSlots || 0) <= 0) {
-
-      alert("❌ এই কাজের সব slot শেষ হয়ে গেছে।");
-      return;
-
-    }
-
-
-    // কাজটি মনে রাখা
-    localStorage.setItem("activeJobId", jobId);
-
-
-    // Submission box দেখানো
-    const submissionBox =
-      document.getElementById("submissionBox");
-
-    const selectedJobText =
-      document.getElementById("selectedJobText");
-
-
-    submissionBox.style.display = "block";
-
-    selectedJobText.innerHTML =
-      "📋 <b>" +
-      escapeHtml(job.title || "") +
-      "</b><br>" +
-      "💰 কাজের পারিশ্রমিক: ৳" +
-      Number(job.payPerTask || 0);
-
-
-    // কাজের লিংক নতুন Tab-এ খোলা
-    window.open(job.link, "_blank");
-
-
-    alert(
-      "✅ কাজ শুরু হয়েছে!\n\n" +
-      "১. নতুন Tab-এ গিয়ে কাজটি সম্পন্ন করুন।\n" +
-      "২. কাজ শেষ হলে Screenshot নিন।\n" +
-      "৩. এই পেজে ফিরে এসে Screenshot জমা দিন।"
-    );
-
-    // Screenshot box-এ নিয়ে যাবে
-    submissionBox.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "Start Job Error:",
-      error
-    );
-
-    alert(
-      "❌ কাজ শুরু করা যায়নি\n\n" +
-      error.message
-    );
-
-  }
-
 };
 
 
