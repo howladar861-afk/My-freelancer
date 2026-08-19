@@ -269,10 +269,31 @@ function loadJobSubmissions() {
 
     (error) => {
 
-      console.error(
-        "Job Submission Load Error:",
-        error
-      );
+  console.error(
+    "Job Submission Load Error:",
+    error
+  );
+
+  const jobSubmissionList =
+    document.getElementById("jobSubmissions");
+
+  if (jobSubmissionList) {
+
+    jobSubmissionList.innerHTML = `
+      <div class="message" style="
+        background:#fee2e2;
+        color:#991b1b;
+        padding:15px;
+        border-radius:10px;
+      ">
+        ❌ Job Submission Load করা যায়নি।
+        <br><br>
+        <b>Error:</b>
+        ${escapeHtml(error.message)}
+      </div>
+    `;
+
+  }
 
     }
   );
