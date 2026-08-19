@@ -114,6 +114,9 @@ onAuthStateChanged(auth, (user) => {
   loadVerificationRequests();
 loadCompanyWallet();
   loadJobSubmissions();
+  
+  });
+
 // =====================================
 // LOAD PENDING JOB SUBMISSIONS
 // =====================================
