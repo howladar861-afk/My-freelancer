@@ -121,9 +121,529 @@ onAuthStateChanged(auth, (user) => {
   // Admin হলে Pending request load
   loadVerificationRequests();
 loadCompanyWallet();
+  loadJobSubmissions();
+  // =====================================
+// LOAD PENDING JOB SUBMISSIONS
+// =====================================
+
+function loadJobSubmissions() {
+
+  const submissionsRef = collection(
+    db,
+    "jobSubmissions"
+  );
+
+  const q = query(
+    submissionsRef,
+    where("status", "==", "pending")
+  );
+
+  onSnapshot(
+    q,
+    (snapshot) => {
+
+      const jobSubmissionList =
+        document.getElementById("jobSubmissions");
+
+      if (!jobSubmissionList) {
+        console.error(
+          "jobSubmissions element পাওয়া যায়নি"
+        );
+        return;
+      }
+
+      jobSubmissionList.innerHTML = "";
+
+      if (snapshot.empty) {
+
+        jobSubmissionList.innerHTML = `
+          <div class="message">
+            ✅ কোনো Pending Job Submission নেই।
+          </div>
+        `;
+
+        return;
+      }
+
+      snapshot.forEach((docSnap) => {
+
+        const data = docSnap.data();
+        const id = docSnap.id;
+
+        const card =
+          document.createElement("div");
+
+        card.className = "request-card";
+
+        card.innerHTML = `
+
+          <h3>
+            📋 ${escapeHtml(
+              data.jobTitle || "Job"
+            )}
+          </h3>
+
+          <div class="info">
+            👤 User:
+            ${escapeHtml(
+              data.userEmail || "Email নেই"
+            )}
+          </div>
+
+          <div class="info">
+            🆔 User ID:
+            ${escapeHtml(
+              data.userId || "নেই"
+            )}
+          </div>
+
+          <div class="info">
+            👤 Follow করা ID / নাম:
+            ${escapeHtml(
+              data.followedId || "নেই"
+            )}
+          </div>
+
+          <div class="info">
+            💬 Comment:
+            ${escapeHtml(
+              data.commentText || "নেই"
+            )}
+          </div>
+
+          <div class="info">
+            💰 Payment:
+            ৳${Number(
+              data.payPerTask || 0
+            )}
+          </div>
+
+          <div class="status">
+            ⏳ Pending
+          </div>
+
+          <div class="buttons">
+
+            <button
+              class="job-approve"
+              data-id="${id}">
+              ✅ Approve
+            </button>
+
+            <button
+              class="job-reject"
+              data-id="${id}">
+              ❌ Reject
+            </button>
+
+          </div>
+        `;
+
+        jobSubmissionList.appendChild(card);
+
+      });
+
+      // Approve
+      document
+        .querySelectorAll(".job-approve")
+        .forEach((button) => {
+
+          button.onclick = () => {
+
+            approveJobSubmission(
+              button.dataset.id
+            );
+
+          };
+
+        });
+
+      // Reject
+      document
+        .querySelectorAll(".job-reject")
+        .forEach((button) => {
+
+          button.onclick = () => {
+
+            rejectJobSubmission(
+              button.dataset.id
+            );
+
+          };
+
+        });
+
+    },
+
+    (error) => {
+
+      console.error(
+        "Job Submission Load Error:",
+        error
+      );
+
+    }
+  );
+}
 });
 
+// =====================================
+// APPROVE JOB SUBMISSION
+// =====================================
 
+async function approveJobSubmission(id) {
+
+if (
+!confirm(
+"এই কাজটি Approve করবেন?\n\n" +
+"Approve করলে Company Wallet থেকে User-এর Balance-এ টাকা যাবে।"
+)
+) {
+return;
+}
+
+try {
+
+const submissionRef =  
+  doc(db, "jobSubmissions", id);  
+
+await runTransaction(  
+  db,  
+  async (transaction) => {  
+
+    // Submission  
+    const submissionSnap =  
+      await transaction.get(  
+        submissionRef  
+      );  
+
+    if (!submissionSnap.exists()) {  
+
+      throw new Error(  
+        "Job Submission পাওয়া যায়নি।"  
+      );  
+
+    }  
+
+    const submission =  
+      submissionSnap.data();  
+
+    // Double payment বন্ধ  
+    if (  
+      submission.status !== "pending"  
+    ) {  
+
+      throw new Error(  
+        "এই Submission ইতিমধ্যে Process করা হয়েছে।"  
+      );  
+
+    }  
+
+    const userId =  
+      submission.userId;  
+
+    const jobId =  
+      submission.jobId;  
+
+    const amount =  
+      Number(  
+        submission.payPerTask || 0  
+      );  
+
+    if (!userId) {  
+      throw new Error(  
+        "User ID পাওয়া যায়নি।"  
+      );  
+    }  
+
+    if (!jobId) {  
+      throw new Error(  
+        "Job ID পাওয়া যায়নি।"  
+      );  
+    }  
+
+    if (amount <= 0) {  
+      throw new Error(  
+        "Payment amount সঠিক নয়।"  
+      );  
+    }  
+
+    // User  
+    const userRef =  
+      doc(db, "users", userId);  
+
+    const userSnap =  
+      await transaction.get(  
+        userRef  
+      );  
+
+    if (!userSnap.exists()) {  
+
+      throw new Error(  
+        "User পাওয়া যায়নি।"  
+      );  
+
+    }  
+
+    const userData =  
+      userSnap.data();  
+
+    const currentBalance =  
+      Number(  
+        userData.balance || 0  
+      );  
+
+    // Company Wallet  
+    const walletRef =  
+      doc(db, "company", "wallet");  
+
+    const walletSnap =  
+      await transaction.get(  
+        walletRef  
+      );  
+
+    if (!walletSnap.exists()) {  
+
+      throw new Error(  
+        "Company Wallet পাওয়া যায়নি।"  
+      );  
+
+    }  
+
+    const walletData =  
+      walletSnap.data();  
+
+    const companyBalance =  
+      Number(  
+        walletData.balance || 0  
+      );  
+
+    // Company Wallet-এ পর্যাপ্ত টাকা আছে?  
+    if (  
+      companyBalance < amount  
+    ) {  
+
+      throw new Error(  
+        "Company Wallet-এ পর্যাপ্ত টাকা নেই।"  
+      );  
+
+    }  
+
+    // Job  
+    const jobRef =  
+      doc(db, "jobs", jobId);  
+
+    const jobSnap =  
+      await transaction.get(  
+        jobRef  
+      );  
+
+    if (!jobSnap.exists()) {  
+
+      throw new Error(  
+        "Job পাওয়া যায়নি।"  
+      );  
+
+    }  
+
+    const job =  
+      jobSnap.data();  
+
+    const remainingSlots =  
+      Number(  
+        job.remainingSlots || 0  
+      );  
+
+    const remainingBudget =  
+      Number(  
+        job.remainingBudget || 0  
+      );  
+
+    if (  
+      remainingSlots <= 0  
+    ) {  
+
+      throw new Error(  
+        "এই Job-এর সব Slot শেষ।"  
+      );  
+
+    }  
+
+    if (  
+      remainingBudget < amount  
+    ) {  
+
+      throw new Error(  
+        "Job Budget-এ পর্যাপ্ত টাকা নেই।"  
+      );  
+
+    }  
+
+    // =================================  
+    // COMPANY WALLET থেকে টাকা কাটা  
+    // =================================  
+
+    transaction.update(  
+      walletRef,  
+      {  
+        balance:  
+          companyBalance - amount  
+      }  
+    );  
+
+    // =================================  
+    // USER BALANCE-এ টাকা যোগ  
+    // =================================  
+
+    transaction.update(  
+      userRef,  
+      {  
+        balance:  
+          currentBalance + amount  
+      }  
+    );  
+
+    // =================================  
+    // JOB SLOT / BUDGET UPDATE  
+    // =================================  
+
+    transaction.update(  
+      jobRef,  
+      {  
+        remainingSlots:  
+          remainingSlots - 1,  
+
+        remainingBudget:  
+          remainingBudget - amount  
+      }  
+    );  
+
+    // =================================  
+    // SUBMISSION APPROVED  
+    // =================================  
+
+    transaction.update(  
+      submissionRef,  
+      {  
+        status: "approved",  
+
+        approvedAt:  
+          serverTimestamp(),  
+
+        approvedBy:  
+          auth.currentUser.uid,  
+
+        paidAmount:  
+          amount  
+      }  
+    );  
+
+  }  
+);  
+
+await loadCompanyWallet();  
+
+alert(
+  "✅ কাজ Approve হয়েছে!\n\n" +
+  "User Balance-এ ৳" +
+  amount +
+  " টাকা যোগ হয়েছে।"
+);
+
+} catch (error) {
+
+console.error(  
+  "Job Approve Error:",  
+  error  
+);  
+
+alert(  
+  "❌ Approve করা যায়নি:\n\n" +  
+  error.message  
+);
+
+}
+}
+// =====================================
+// REJECT JOB SUBMISSION
+// =====================================
+
+async function rejectJobSubmission(id) {
+
+if (
+!confirm(
+"এই কাজটি Reject করবেন?\n\n" +
+"Reject করলে User কোনো টাকা পাবে না।"
+)
+) {
+return;
+}
+
+try {
+
+const submissionRef =  
+  doc(db, "jobSubmissions", id);  
+
+const submissionSnap =  
+  await getDoc(submissionRef);  
+
+if (!submissionSnap.exists()) {  
+
+  alert(  
+    "❌ Submission পাওয়া যায়নি।"  
+  );  
+
+  return;  
+}  
+
+const submission =  
+  submissionSnap.data();  
+
+if (  
+  submission.status !== "pending"  
+) {  
+
+  alert(  
+    "⚠️ এই Submission ইতিমধ্যে Process করা হয়েছে।"  
+  );  
+
+  return;  
+}  
+
+await updateDoc(  
+  submissionRef,  
+  {  
+
+    status: "rejected",  
+
+    rejectedAt:  
+      serverTimestamp(),  
+
+    rejectedBy:  
+      auth.currentUser.uid  
+
+  }  
+);  
+
+alert(  
+  "❌ কাজ Reject করা হয়েছে।\n\n" +  
+  "User কোনো টাকা পাবে না।"  
+);
+
+} catch (error) {
+
+console.error(  
+  "Job Reject Error:",  
+  error  
+);  
+
+alert(  
+  "❌ Reject করা যায়নি:\n\n" +  
+  error.message  
+);
+
+}
+}
 // =====================================
 // LOAD PENDING VERIFICATION
 // =====================================
