@@ -114,35 +114,55 @@ onAuthStateChanged(auth, (user) => {
   loadVerificationRequests();
 loadCompanyWallet();
   loadJobSubmissions();
-  // =====================================
+// =====================================
 // LOAD PENDING JOB SUBMISSIONS
 // =====================================
 
 function loadJobSubmissions() {
 
-  const submissionsRef = collection(
-    db,
-    "jobSubmissions"
-  );
+  console.log("🚀 loadJobSubmissions() শুরু হয়েছে");
 
-  const q = query(
-    submissionsRef,
-    where("status", "==", "pending")
+  const jobSubmissionList =
+    document.getElementById("jobSubmissions");
+
+  if (!jobSubmissionList) {
+
+    console.error(
+      "❌ jobSubmissions element পাওয়া যায়নি"
+    );
+
+    return;
+  }
+
+  jobSubmissionList.innerHTML = `
+    <div class="message">
+      ⏳ Job Submission Loading...
+    </div>
+  `;
+
+  const submissionsRef =
+    collection(db, "jobSubmissions");
+
+  const q =
+    query(
+      submissionsRef,
+      where("status", "==", "pending")
+    );
+
+  console.log(
+    "🔥 Firebase jobSubmissions query তৈরি হয়েছে"
   );
 
   onSnapshot(
+
     q,
+
     (snapshot) => {
 
-      const jobSubmissionList =
-        document.getElementById("jobSubmissions");
-
-      if (!jobSubmissionList) {
-        console.error(
-          "jobSubmissions element পাওয়া যায়নি"
-        );
-        return;
-      }
+      console.log(
+        "✅ Job Submission Snapshot এসেছে:",
+        snapshot.size
+      );
 
       jobSubmissionList.innerHTML = "";
 
@@ -165,7 +185,8 @@ function loadJobSubmissions() {
         const card =
           document.createElement("div");
 
-        card.className = "request-card";
+        card.className =
+          "request-card";
 
         card.innerHTML = `
 
@@ -218,24 +239,28 @@ function loadJobSubmissions() {
 
             <button
               class="job-approve"
-              data-id="${id}">
+              data-id="${escapeHtml(id)}">
               ✅ Approve
             </button>
 
             <button
               class="job-reject"
-              data-id="${id}">
+              data-id="${escapeHtml(id)}">
               ❌ Reject
             </button>
 
           </div>
+
         `;
 
         jobSubmissionList.appendChild(card);
 
       });
 
-      // Approve
+      // =====================================
+      // APPROVE BUTTON
+      // =====================================
+
       document
         .querySelectorAll(".job-approve")
         .forEach((button) => {
@@ -250,7 +275,11 @@ function loadJobSubmissions() {
 
         });
 
-      // Reject
+
+      // =====================================
+      // REJECT BUTTON
+      // =====================================
+
       document
         .querySelectorAll(".job-reject")
         .forEach((button) => {
@@ -267,39 +296,40 @@ function loadJobSubmissions() {
 
     },
 
+
+    // =====================================
+    // FIREBASE ERROR
+    // =====================================
+
     (error) => {
 
-  console.error(
-    "Job Submission Load Error:",
-    error
-  );
+      console.error(
+        "❌ Job Submission Load Error:",
+        error
+      );
 
-  const jobSubmissionList =
-    document.getElementById("jobSubmissions");
+      jobSubmissionList.innerHTML = `
+        <div class="message" style="
+          background:#fee2e2;
+          color:#991b1b;
+          padding:15px;
+          border-radius:10px;
+        ">
 
-  if (jobSubmissionList) {
+          ❌ Job Submission Load করা যায়নি।
 
-    jobSubmissionList.innerHTML = `
-      <div class="message" style="
-        background:#fee2e2;
-        color:#991b1b;
-        padding:15px;
-        border-radius:10px;
-      ">
-        ❌ Job Submission Load করা যায়নি।
-        <br><br>
-        <b>Error:</b>
-        ${escapeHtml(error.message)}
-      </div>
-    `;
+          <br><br>
 
-  }
+          <b>Error:</b>
+          ${escapeHtml(error.message)}
+
+        </div>
+      `;
 
     }
+
   );
 }
-});
-
 // =====================================
 // APPROVE JOB SUBMISSION
 // =====================================
