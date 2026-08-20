@@ -148,7 +148,7 @@ function loadJobSubmissions() {
   onSnapshot(
     submissionsRef,
 
-    (snapshot) => {
+    async (snapshot) => {
 
       console.log(
         "✅ Job Submission update:",
@@ -159,22 +159,88 @@ function loadJobSubmissions() {
 
       let pendingCount = 0;
 
-      snapshot.forEach((docSnap) => {
+      // =====================================
+      // প্রতিটি submission
+      // =====================================
+
+      for (const docSnap of snapshot.docs) {
 
         const data = docSnap.data();
         const id = docSnap.id;
 
-        // শুধু pending submission দেখাবে
+        // শুধু pending দেখাবে
         if (data.status !== "pending") {
-          return;
+          continue;
         }
 
         pendingCount++;
 
+        // =====================================
+        // USER DATA LOAD
+        // =====================================
+
+        let userName =
+          data.userName ||
+          data.name ||
+          "";
+
+        let userEmail =
+          data.userEmail ||
+          data.email ||
+          "";
+
+        // যদি submission-এ নাম/email না থাকে,
+        // তাহলে users/{userId} থেকে আনবে
+        if (data.userId) {
+
+          try {
+
+            const userRef =
+              doc(db, "users", data.userId);
+
+            const userSnap =
+              await getDoc(userRef);
+
+            if (userSnap.exists()) {
+
+              const userData =
+                userSnap.data();
+
+              userName =
+                userData.name ||
+                userData.displayName ||
+                userData.userName ||
+                userData.fullName ||
+                userName ||
+                "নাম নেই";
+
+              userEmail =
+                userData.email ||
+                userEmail ||
+                "Email নেই";
+
+            }
+
+          } catch (userError) {
+
+            console.error(
+              "❌ User data load error:",
+              userError
+            );
+
+          }
+
+        }
+
+        // =====================================
+        // CARD CREATE
+        // =====================================
+
         const card =
           document.createElement("div");
 
-        card.className = "request-card";
+        card.className =
+          "request-card";
 
         card.innerHTML = `
 
@@ -187,16 +253,14 @@ function loadJobSubmissions() {
           <div class="info">
             📧 User Email:
             ${escapeHtml(
-              data.userEmail || "Email নেই"
+              userEmail || "Email নেই"
             )}
           </div>
 
           <div class="info">
             👤 Member Name:
             ${escapeHtml(
-              data.userName ||
-              data.name ||
-              "নাম নেই"
+              userName || "নাম নেই"
             )}
           </div>
 
@@ -263,7 +327,7 @@ function loadJobSubmissions() {
 
         jobSubmissionList.appendChild(card);
 
-      });
+      }
 
       // =====================================
       // NO PENDING SUBMISSION
@@ -284,7 +348,7 @@ function loadJobSubmissions() {
       // APPROVE BUTTON
       // =====================================
 
-      document
+      jobSubmissionList
         .querySelectorAll(".job-approve")
         .forEach((button) => {
 
@@ -302,7 +366,7 @@ function loadJobSubmissions() {
       // REJECT BUTTON
       // =====================================
 
-      document
+      jobSubmissionList
         .querySelectorAll(".job-reject")
         .forEach((button) => {
 
@@ -356,7 +420,9 @@ function loadJobSubmissions() {
       `;
 
     }
+
   );
+
 }
 // =====================================
 // APPROVE JOB SUBMISSION
