@@ -300,30 +300,35 @@ function loadJobSubmissions() {
     // ================================
     (error) => {
 
-      console.error(
-        "❌ Job Submission Firebase Error:",
-        error
-      );
+  console.error(
+    "❌ JOB SUBMISSION ERROR:",
+    error.code,
+    error.message
+  );
 
-      jobSubmissionList.innerHTML = `
-        <div class="message"
-          style="
-            background:#fee2e2;
-            color:#991b1b;
-            padding:15px;
-            border-radius:10px;
-          ">
+  jobSubmissionList.innerHTML = `
+    <div class="message"
+      style="
+        background:#fee2e2;
+        color:#991b1b;
+        padding:15px;
+        border-radius:10px;
+      ">
 
-          ❌ Job Submission Load করা যায়নি।
+      ❌ Job Submission Load করা যায়নি।
 
-          <br><br>
+      <br><br>
 
-          <b>Error:</b>
-          ${escapeHtml(error.message)}
+      <b>Error Code:</b>
+      ${escapeHtml(error.code)}
 
-        </div>
-      `;
+      <br><br>
 
+      <b>Error:</b>
+      ${escapeHtml(error.message)}
+
+    </div>
+  `;
     }
   );
 }
