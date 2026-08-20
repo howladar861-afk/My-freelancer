@@ -150,24 +150,14 @@ function loadJobSubmissions() {
   const q = submissionsRef;
 
   console.log("🔥 Firebase query তৈরি হয়েছে");
-
+alert("🔥 loadJobSubmissions চলছে");
   onSnapshot(
     q,
-setTimeout(() => {
-    jobSubmissionList.innerHTML = `
-        <div class="message">
-            ❌ Firebase থেকে 5 সেকেন্ডেও response আসেনি
-        </div>
-    `;
-}, 5000);
-    // ================================
-    // SUCCESS
-    // ================================
+
     (snapshot) => {
-console.log("🔥 SNAPSHOT CALLBACK RUN হচ্ছে");
-      console.log(
-        "✅ Snapshot এসেছে:",
-        snapshot.size
+        console.log("✅ SNAPSHOT CALLBACK RUN করেছে");
+        console.log("✅ Snapshot এসেছে:", snapshot.size);
+
       );
 
       jobSubmissionList.innerHTML = "";
