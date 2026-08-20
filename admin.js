@@ -150,7 +150,7 @@ function loadJobSubmissions() {
   const q = submissionsRef;
 
   console.log("🔥 Firebase query তৈরি হয়েছে");
-alert("🔥 loadJobSubmissions চলছে");
+
   onSnapshot(
     q,
 
@@ -158,7 +158,6 @@ alert("🔥 loadJobSubmissions চলছে");
         console.log("✅ SNAPSHOT CALLBACK RUN করেছে");
         console.log("✅ Snapshot এসেছে:", snapshot.size);
 
-      );
 
       jobSubmissionList.innerHTML = "";
 
