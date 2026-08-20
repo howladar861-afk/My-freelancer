@@ -211,11 +211,14 @@ function loadJobSubmissions() {
             </div>
 
             <div class="info">
-              👤 Follow করা ID / নাম:
-              ${escapeHtml(
-                data.followedId || "নেই"
-              )}
-            </div>
+  👤 Follow করা ID:
+  ${escapeHtml(data.followedId || "নেই")}
+</div>
+
+<div class="info">
+  👤 Follow করা ব্যক্তির নাম:
+  ${escapeHtml(data.followedName || "নেই")}
+</div>
 
             <div class="info">
               💬 Comment:
