@@ -217,10 +217,12 @@ import {
   onSnapshot,
   doc,
   getDoc,
+  getDocs,
   setDoc,
   updateDoc,
   deleteDoc,
   serverTimestamp
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -319,6 +321,7 @@ loginBtn.onclick = async function () {
 
     loadVerificationRequests();
 loadCompanyWallet();
+    loadJobSubmissions();
   }
 
   catch (error) {
