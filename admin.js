@@ -147,10 +147,7 @@ function loadJobSubmissions() {
   const submissionsRef =
     collection(db, "jobSubmissions");
 
-  const q = query(
-    submissionsRef,
-    where("status", "==", "pending")
-  );
+  const q = submissionsRef;
 
   console.log("🔥 Firebase query তৈরি হয়েছে");
 
