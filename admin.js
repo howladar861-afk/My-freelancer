@@ -153,7 +153,13 @@ function loadJobSubmissions() {
 
   onSnapshot(
     q,
-
+setTimeout(() => {
+    jobSubmissionList.innerHTML = `
+        <div class="message">
+            ❌ Firebase থেকে 5 সেকেন্ডেও response আসেনি
+        </div>
+    `;
+}, 5000);
     // ================================
     // SUCCESS
     // ================================
