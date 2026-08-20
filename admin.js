@@ -115,13 +115,10 @@ onAuthStateChanged(auth, (user) => {
   loadVerificationRequests();
 loadCompanyWallet();
   loadJobSubmissions();
-  
   });
-
 // =====================================
 // LOAD PENDING JOB SUBMISSIONS
 // =====================================
-
 function loadJobSubmissions() {
 
   console.log("🚀 loadJobSubmissions() শুরু হয়েছে");
@@ -130,11 +127,7 @@ function loadJobSubmissions() {
     document.getElementById("jobSubmissions");
 
   if (!jobSubmissionList) {
-
-    console.error(
-      "❌ jobSubmissions element পাওয়া যায়নি"
-    );
-
+    console.error("❌ jobSubmissions element পাওয়া যায়নি");
     return;
   }
 
@@ -144,185 +137,207 @@ function loadJobSubmissions() {
     </div>
   `;
 
-  const submissionsRef =
-    collection(db, "jobSubmissions");
+  try {
 
-  const q = submissionsRef;
+    const submissionsRef =
+      collection(db, "jobSubmissions");
 
-  console.log("🔥 Firebase query তৈরি হয়েছে");
+    console.log("🔥 Firebase থেকে Job Submission আনা হচ্ছে...");
 
-  onSnapshot(
-    q,
+    getDocs(submissionsRef)
+      .then((snapshot) => {
 
-    (snapshot) => {
-        console.log("✅ SNAPSHOT CALLBACK RUN করেছে");
-        console.log("✅ Snapshot এসেছে:", snapshot.size);
+        console.log(
+          "✅ Firebase response এসেছে:",
+          snapshot.size
+        );
 
+        jobSubmissionList.innerHTML = "";
 
-      jobSubmissionList.innerHTML = "";
+        if (snapshot.empty) {
 
-      if (snapshot.empty) {
+          jobSubmissionList.innerHTML = `
+            <div class="message">
+              ✅ কোনো Job Submission নেই।
+            </div>
+          `;
+
+          return;
+        }
+
+        let pendingCount = 0;
+
+        snapshot.forEach((docSnap) => {
+
+          const data = docSnap.data();
+          const id = docSnap.id;
+
+          // শুধু pending দেখাবে
+          if (data.status && data.status !== "pending") {
+            return;
+          }
+
+          pendingCount++;
+
+          const card =
+            document.createElement("div");
+
+          card.className = "request-card";
+
+          card.innerHTML = `
+            <h3>
+              📋 ${escapeHtml(
+                data.jobTitle || "Job"
+              )}
+            </h3>
+
+            <div class="info">
+              👤 User:
+              ${escapeHtml(
+                data.userEmail || "Email নেই"
+              )}
+            </div>
+
+            <div class="info">
+              🆔 User ID:
+              ${escapeHtml(
+                data.userId || "নেই"
+              )}
+            </div>
+
+            <div class="info">
+              👤 Follow করা ID / নাম:
+              ${escapeHtml(
+                data.followedId || "নেই"
+              )}
+            </div>
+
+            <div class="info">
+              💬 Comment:
+              ${escapeHtml(
+                data.commentText || "নেই"
+              )}
+            </div>
+
+            <div class="info">
+              💰 Payment:
+              ৳${Number(
+                data.payPerTask || 0
+              )}
+            </div>
+
+            <div class="status">
+              ⏳ Pending
+            </div>
+
+            <div class="buttons">
+
+              <button
+                class="job-approve"
+                data-id="${escapeHtml(id)}">
+                ✅ Approve
+              </button>
+
+              <button
+                class="job-reject"
+                data-id="${escapeHtml(id)}">
+                ❌ Reject
+              </button>
+
+            </div>
+          `;
+
+          jobSubmissionList.appendChild(card);
+
+        });
+
+        if (pendingCount === 0) {
+
+          jobSubmissionList.innerHTML = `
+            <div class="message">
+              ✅ কোনো Pending Job Submission নেই।
+            </div>
+          `;
+
+          return;
+        }
+
+        // APPROVE BUTTON
+
+        document
+          .querySelectorAll(".job-approve")
+          .forEach((button) => {
+
+            button.onclick = () => {
+
+              approveJobSubmission(
+                button.dataset.id
+              );
+
+            };
+
+          });
+
+        // REJECT BUTTON
+
+        document
+          .querySelectorAll(".job-reject")
+          .forEach((button) => {
+
+            button.onclick = () => {
+
+              rejectJobSubmission(
+                button.dataset.id
+              );
+
+            };
+
+          });
+
+      })
+
+      .catch((error) => {
+
+        console.error(
+          "❌ JOB SUBMISSION ERROR:",
+          error
+        );
 
         jobSubmissionList.innerHTML = `
-          <div class="message">
-            ✅ কোনো Pending Job Submission নেই।
-          </div>
-        `;
+          <div class="message"
+            style="
+              background:#fee2e2;
+              color:#991b1b;
+              padding:15px;
+              border-radius:10px;
+            ">
 
-        return;
-      }
+            ❌ Job Submission Load করা যায়নি।
 
-      snapshot.forEach((docSnap) => {
+            <br><br>
 
-        const data = docSnap.data();
-        const id = docSnap.id;
+            <b>Error Code:</b>
+            ${escapeHtml(error.code || "unknown")}
 
-        const card =
-          document.createElement("div");
+            <br><br>
 
-        card.className = "request-card";
-
-        card.innerHTML = `
-          <h3>
-            📋 ${escapeHtml(
-              data.jobTitle || "Job"
-            )}
-          </h3>
-
-          <div class="info">
-            👤 User:
-            ${escapeHtml(
-              data.userEmail || "Email নেই"
-            )}
-          </div>
-
-          <div class="info">
-            🆔 User ID:
-            ${escapeHtml(
-              data.userId || "নেই"
-            )}
-          </div>
-
-          <div class="info">
-            👤 Follow করা ID / নাম:
-            ${escapeHtml(
-              data.followedId || "নেই"
-            )}
-          </div>
-
-          <div class="info">
-            💬 Comment:
-            ${escapeHtml(
-              data.commentText || "নেই"
-            )}
-          </div>
-
-          <div class="info">
-            💰 Payment:
-            ৳${Number(
-              data.payPerTask || 0
-            )}
-          </div>
-
-          <div class="status">
-            ⏳ Pending
-          </div>
-
-          <div class="buttons">
-
-            <button
-              class="job-approve"
-              data-id="${escapeHtml(id)}">
-              ✅ Approve
-            </button>
-
-            <button
-              class="job-reject"
-              data-id="${escapeHtml(id)}">
-              ❌ Reject
-            </button>
+            <b>Error:</b>
+            ${escapeHtml(error.message || "Unknown error")}
 
           </div>
         `;
-
-        jobSubmissionList.appendChild(card);
 
       });
 
-      // ================================
-      // APPROVE BUTTON
-      // ================================
+  } catch (error) {
 
-      document
-        .querySelectorAll(".job-approve")
-        .forEach((button) => {
+    console.error(
+      "❌ loadJobSubmissions error:",
+      error
+    );
 
-          button.onclick = () => {
+  }
 
-            approveJobSubmission(
-              button.dataset.id
-            );
-
-          };
-
-        });
-
-      // ================================
-      // REJECT BUTTON
-      // ================================
-
-      document
-        .querySelectorAll(".job-reject")
-        .forEach((button) => {
-
-          button.onclick = () => {
-
-            rejectJobSubmission(
-              button.dataset.id
-            );
-
-          };
-
-        });
-
-    },
-
-    // ================================
-    // FIREBASE ERROR
-    // ================================
-    (error) => {
-
-  console.error(
-    "❌ JOB SUBMISSION ERROR:",
-    error.code,
-    error.message
-  );
-
-  jobSubmissionList.innerHTML = `
-    <div class="message"
-      style="
-        background:#fee2e2;
-        color:#991b1b;
-        padding:15px;
-        border-radius:10px;
-      ">
-
-      ❌ Job Submission Load করা যায়নি।
-
-      <br><br>
-
-      <b>Error Code:</b>
-      ${escapeHtml(error.code)}
-
-      <br><br>
-
-      <b>Error:</b>
-      ${escapeHtml(error.message)}
-
-    </div>
-  `;
-    }
-  );
 }
 // =====================================
 // APPROVE JOB SUBMISSION
