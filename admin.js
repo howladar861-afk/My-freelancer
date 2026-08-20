@@ -197,7 +197,12 @@ function loadJobSubmissions() {
                 data.userEmail || "Email নেই"
               )}
             </div>
-
+<div class="info">
+  👤 Member Name:
+  ${escapeHtml(
+    data.userName || data.name || "নাম নেই"
+  )}
+</div>
             <div class="info">
               🆔 User ID:
               ${escapeHtml(
