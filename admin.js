@@ -158,7 +158,7 @@ function loadJobSubmissions() {
     // SUCCESS
     // ================================
     (snapshot) => {
-
+console.log("🔥 SNAPSHOT CALLBACK RUN হচ্ছে");
       console.log(
         "✅ Snapshot এসেছে:",
         snapshot.size
