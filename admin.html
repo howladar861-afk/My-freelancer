@@ -221,7 +221,7 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  serverTimestamp
+  serverTimestamp,
   runTransaction
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
@@ -342,7 +342,6 @@ loadCompanyWallet();
 ========================= */
 
 function loadVerificationRequests() {
-
   const requestsRef =
     collection(
       db,
@@ -504,7 +503,247 @@ function loadVerificationRequests() {
   );
 
 }
+/* =========================
+   LOAD PENDING JOB SUBMISSIONS
+========================= */
 
+function loadJobSubmissions() {
+
+  const submissionsRef =
+    collection(
+      db,
+      "jobSubmissions"
+    );
+
+  const submissionsQuery =
+    query(
+      submissionsRef,
+      where(
+        "status",
+        "==",
+        "pending"
+      )
+    );
+
+  onSnapshot(
+    submissionsQuery,
+
+    function (snapshot) {
+
+      const jobList =
+        document.getElementById("jobSubmissions");
+
+      jobList.innerHTML = "";
+
+      if (snapshot.empty) {
+
+        jobList.innerHTML =
+          '<p class="empty">কোনো Pending Job Submission নেই।</p>';
+
+        return;
+      }
+
+      snapshot.forEach(function (submissionDoc) {
+
+        const data =
+          submissionDoc.data();
+
+        const id =
+          submissionDoc.id;
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "request";
+
+        item.innerHTML = `
+
+          <h3>📋 Job Submission</h3>
+
+          <p>
+            <b>User ID:</b>
+            ${data.userId || "নেই"}
+          </p>
+
+          <p>
+            <b>Job ID:</b>
+            ${data.jobId || "নেই"}
+          </p>
+
+          <p>
+            <b>Submission:</b><br>
+            ${data.submission || data.description || "নেই"}
+          </p>
+
+          <p class="status">
+            Status:
+            ${data.status || "pending"}
+          </p>
+
+          <button
+            class="approve">
+            ✅ Approve
+          </button>
+
+          <button
+            class="reject">
+            ❌ Reject
+          </button>
+
+        `;
+
+        jobList.appendChild(item);
+
+
+        /* APPROVE */
+
+        item
+          .querySelector(".approve")
+          .onclick = function () {
+
+            approveJobSubmission(id);
+
+          };
+
+
+        /* REJECT */
+
+        item
+          .querySelector(".reject")
+          .onclick = function () {
+
+            rejectJobSubmission(id);
+
+          };
+
+      });
+
+    },
+
+    function (error) {
+
+      console.error(
+        "Job Submission Load Error:",
+        error
+      );
+
+      document.getElementById(
+        "jobSubmissions"
+      ).innerHTML =
+
+        `<p class="empty">
+          ❌ Job Submission Load করা যায়নি:<br><br>
+          ${error.message}
+        </p>`;
+
+    }
+
+  );
+
+}
+
+
+/* =========================
+   APPROVE JOB SUBMISSION
+========================= */
+
+async function approveJobSubmission(id) {
+
+  if (
+    !confirm(
+      "এই Job Submission Approve করবেন?"
+    )
+  ) {
+    return;
+  }
+
+  try {
+
+    await updateDoc(
+      doc(
+        db,
+        "jobSubmissions",
+        id
+      ),
+      {
+        status: "approved",
+        approvedAt: serverTimestamp()
+      }
+    );
+
+    alert(
+      "✅ Job Submission Approved!"
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Job Approve Error:",
+      error
+    );
+
+    alert(
+      "❌ Approve করা যায়নি:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   REJECT JOB SUBMISSION
+========================= */
+
+async function rejectJobSubmission(id) {
+
+  if (
+    !confirm(
+      "এই Job Submission Reject করবেন?"
+    )
+  ) {
+    return;
+  }
+
+  try {
+
+    await updateDoc(
+      doc(
+        db,
+        "jobSubmissions",
+        id
+      ),
+      {
+        status: "rejected",
+        rejectedAt: serverTimestamp()
+      }
+    );
+
+    alert(
+      "❌ Job Submission Rejected!"
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Job Reject Error:",
+      error
+    );
+
+    alert(
+      "❌ Reject করা যায়নি:\n\n" +
+      error.message
+    );
+
+  }
+
+}
 /* =========================
    LOAD COMPANY WALLET
 ========================= */
