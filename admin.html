@@ -559,39 +559,44 @@ function loadJobSubmissions() {
 
         item.innerHTML = `
 
-          <h3>📋 Job Submission</h3>
+  <h3>📋 Job Submission</h3>
 
-          <p>
-            <b>User ID:</b>
-            ${data.userId || "নেই"}
-          </p>
+  <p>
+    <b>Member ID:</b><br>
+    ${data.userId || "নেই"}
+  </p>
 
-          <p>
-            <b>Job ID:</b>
-            ${data.jobId || "নেই"}
-          </p>
+  <p>
+    <b>Member Name:</b><br>
+    ${data.userName || data.name || "নেই"}
+  </p>
 
-          <p>
-            <b>Submission:</b><br>
-            ${data.submission || data.description || "নেই"}
-          </p>
+  <p>
+    <b>Job ID:</b><br>
+    ${data.jobId || "নেই"}
+  </p>
 
-          <p class="status">
-            Status:
-            ${data.status || "pending"}
-          </p>
+  <p>
+    <b>Member-এর Comment / Submission:</b><br>
+    ${data.comment || data.submission || data.description || "নেই"}
+  </p>
 
-          <button
-            class="approve">
-            ✅ Approve
-          </button>
+  <p class="status">
+    <b>Status:</b>
+    ${data.status || "pending"}
+  </p>
 
-          <button
-            class="reject">
-            ❌ Reject
-          </button>
+  <button
+    class="approve">
+    ✅ Approve
+  </button>
 
-        `;
+  <button
+    class="reject">
+    ❌ Reject
+  </button>
+
+`;
 
         jobList.appendChild(item);
 
