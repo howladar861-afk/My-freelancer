@@ -1092,7 +1092,20 @@ window.openSubmitJob = async function(jobId) {
                 const commentText =
                     document.getElementById("commentTextInput")
                     .value.trim();
+const followedUserSnap = await getDoc(doc(db, "users", followedId));
 
+let followedName = "নাম নেই";
+
+if (followedUserSnap.exists()) {
+    const followedUserData = followedUserSnap.data();
+
+    followedName =
+        followedUserData.displayName ||
+        followedUserData.name ||
+        followedUserData.userName ||
+        followedUserData.email ||
+        "নাম নেই";
+}
                 if (!followedId) {
                     alert("❌ যে ID / নাম ফলো করেছেন সেটা লিখুন");
                     return;
@@ -1116,6 +1129,7 @@ window.openSubmitJob = async function(jobId) {
                             userEmail: currentUser.email || "",
 userName: currentUser.displayName || currentUser.email || "নাম নেই",
                             followedId: followedId,
+                          followedName: followedName,
 commentText: commentText,
 
                             jobTitle: job.title || "",
