@@ -188,7 +188,53 @@ function loadJobSubmissions() {
           data.userEmail ||
           data.email ||
           "";
+let followedName =
+  data.followedName ||
+  "";
+        // =====================================
+// FOLLOWED USER NAME LOAD
+// =====================================
 
+if (data.followedId) {
+
+  try {
+
+    const followedRef =
+      doc(db, "users", data.followedId);
+
+    const followedSnap =
+      await getDoc(followedRef);
+
+    if (followedSnap.exists()) {
+
+      const followedData =
+        followedSnap.data();
+
+      followedName =
+        followedData.name ||
+        followedData.displayName ||
+        followedData.userName ||
+        followedData.fullName ||
+        "নাম নেই";
+
+    } else {
+
+      followedName = "User পাওয়া যায়নি";
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "❌ Followed user data load error:",
+      error
+    );
+
+    followedName = "নাম লোড হয়নি";
+
+  }
+
+}
         // যদি submission-এ নাম/email না থাকে,
         // তাহলে users/{userId} থেকে আনবে
         if (data.userId) {
@@ -281,8 +327,8 @@ function loadJobSubmissions() {
           <div class="info">
             👤 Follow করা ব্যক্তির নাম:
             ${escapeHtml(
-              data.followedName || "নেই"
-            )}
+  followedName || "নাম নেই"
+)}
           </div>
 
           <div class="info">
