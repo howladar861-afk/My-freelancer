@@ -1085,7 +1085,7 @@ window.openSubmitJob = async function(jobId) {
             .getElementById("finalSubmitJobBtn")
             .onclick = async function() {
 
-                const followedInput =
+                const followedId =
   document.getElementById("followedIdInput")
     .value.trim();
 
@@ -1093,18 +1093,20 @@ const commentText =
   document.getElementById("commentTextInput")
     .value.trim();
 
-if (!followedInput) {
-  alert("❌ যে ID / নাম খুঁজছেন সেটা লিখুন");
-  return;
-}
+const followedUserSnap = await getDoc(doc(db, "users", followedId));
 
-let followedId = "";
 let followedName = "নাম নেই";
 
-// users collection থেকে নাম খুঁজবে
-const usersSnap = await getDocs(
-  collection(db, "users")
-);
+if (followedUserSnap.exists()) {
+  const followedUserData = followedUserSnap.data();
+
+  followedName =
+    followedUserData.displayName ||
+    followedUserData.name ||
+    followedUserData.userName ||
+    followedUserData.email ||
+    "নাম নেই";
+}
 
 usersSnap.forEach((userDoc) => {
 
