@@ -1080,122 +1080,204 @@ window.openSubmitJob = async function(jobId) {
                 modal.remove();
             };
 
-        // Final Submit
-        document
-            .getElementById("finalSubmitJobBtn")
-            .onclick = async function() {
+        // =====================================
+// FINAL SUBMIT
+// =====================================
 
-                const followedInput =
-  document.getElementById("followedIdInput")
-  .value.trim();
+document
+  .getElementById("finalSubmitJobBtn")
+  .onclick = async function () {
 
-const commentText =
-  document.getElementById("commentTextInput")
-    .value.trim();
+    const submitBtn = this;
 
-let followedId = "";
-let followedName = "নাম নেই";
+    const followedInput =
+      document
+        .getElementById("followedIdInput")
+        .value
+        .trim();
 
-const usersSnap = await getDocs(
-  collection(db, "users")
-);
+    const commentText =
+      document
+        .getElementById("commentTextInput")
+        .value
+        .trim();
 
-usersSnap.forEach((userDoc) => {
 
-  const userData = userDoc.data();
+    // ID / নাম দেওয়া হয়েছে কি না
+    if (!followedInput) {
 
-  const name =
-    userData.displayName ||
-    userData.name ||
-    userData.userName ||
-    userData.fullName ||
-    userData.email ||
-    "";
+      alert("❌ যে ID / নাম ফলো করেছেন সেটা লিখুন");
 
-  if (
-    name.toLowerCase() ===
-    followedInput.toLowerCase()
-  ) {
-    followedId = userDoc.id;
-    followedName = name;
-  }
+      return;
+    }
 
-});
 
-if (!followedId) {
-  alert(
-    "❌ এই নামে কোনো User পাওয়া যায়নি।\n\n" +
-    "সঠিক নাম লিখুন।"
-  );
-  return;
+    // Comment দেওয়া হয়েছে কি না
+    if (!commentText) {
 
-                if (!commentText) {
-                    alert("❌ কী কমেন্ট করেছেন সেটা লিখুন");
-                    return;
-                }
+      alert("❌ কী কমেন্ট করেছেন সেটা লিখুন");
 
-                try {
+      return;
+    }
 
-                    this.disabled = true;
-                    this.innerText = "⏳ জমা হচ্ছে...";
 
-                    await addDoc(
-                        collection(db, "jobSubmissions"),
-                        {
-                            jobId: jobId,
-                            userId: currentUser.uid,
-                            userEmail: currentUser.email || "",
-userName: currentUser.displayName || currentUser.email || "নাম নেই",
-                            followedId: followedId,
-                          followedName: followedName,
-commentText: commentText,
+    // =====================================
+    // USER খোঁজা
+    // =====================================
 
-                            jobTitle: job.title || "",
-                            payPerTask: Number(job.payPerTask || 0),
+    let followedId = "";
+    let followedName = "নাম নেই";
 
-                            status: "pending",
 
-                            createdAt: serverTimestamp()
-                        }
-                    );
+    try {
 
-                    modal.remove();
+      const usersSnap =
+        await getDocs(
+          collection(db, "users")
+        );
 
-                    alert(
-                        "✅ কাজ সফলভাবে জমা হয়েছে!\n\n" +
-                        "Admin যাচাই করার পর আপনার টাকা Balance-এ যোগ হবে।"
-                    );
 
-                } catch (error) {
+      usersSnap.forEach((userDoc) => {
 
-                    console.error(
-                        "Job Submission Error:",
-                        error
-                    );
+        const userData =
+          userDoc.data();
 
-                    this.disabled = false;
-                    this.innerText = "✅ কাজ জমা দিন";
 
-                    alert(
-                        "❌ কাজ জমা দেওয়া যায়নি\n\n" +
-                        error.message
-                    );
-                }
-            };
+        const name =
+          userData.displayName ||
+          userData.name ||
+          userData.userName ||
+          userData.fullName ||
+          userData.email ||
+          "";
+
+
+        // ID অথবা নাম—দুইভাবেই খুঁজবে
+        if (
+          userDoc.id === followedInput ||
+          (
+            name &&
+            name.toLowerCase() ===
+            followedInput.toLowerCase()
+          )
+        ) {
+
+          followedId =
+            userDoc.id;
+
+          followedName =
+            name;
+
+        }
+
+      });
+
+
+      // User পাওয়া যায়নি
+      if (!followedId) {
+
+        alert(
+          "❌ এই নামে কোনো User পাওয়া যায়নি।\n\n" +
+          "সঠিক নাম বা User ID লিখুন।"
+        );
+
+        return;
+      }
+
+
+      // =====================================
+      // SUBMIT BUTTON LOCK
+      // =====================================
+
+      submitBtn.disabled = true;
+
+      submitBtn.innerText =
+        "⏳ জমা হচ্ছে...";
+
+
+      // =====================================
+      // FIRESTORE SUBMISSION
+      // =====================================
+
+      await addDoc(
+        collection(db, "jobSubmissions"),
+        {
+
+          jobId:
+            jobId,
+
+          userId:
+            currentUser.uid,
+
+          userEmail:
+            currentUser.email || "",
+
+          userName:
+            currentUser.displayName ||
+            currentUser.email ||
+            "নাম নেই",
+
+          followedId:
+            followedId,
+
+          followedName:
+            followedName,
+
+          commentText:
+            commentText,
+
+          jobTitle:
+            job.title || "",
+
+          payPerTask:
+            Number(job.payPerTask || 0),
+
+          status:
+            "pending",
+
+          createdAt:
+            serverTimestamp()
+
+        }
+      );
+
+
+      // =====================================
+      // SUCCESS
+      // =====================================
+
+      modal.remove();
+
+
+      alert(
+        "✅ কাজ সফলভাবে জমা হয়েছে!\n\n" +
+        "Admin যাচাই করার পর আপনার কাজের টাকা Balance-এ যোগ হবে।"
+      );
+
 
     } catch (error) {
 
-        console.error(
-            "Open Submit Job Error:",
-            error
-        );
+      console.error(
+        "Job Submission Error:",
+        error
+      );
 
-        alert(
-            "❌ কাজ জমা দেওয়ার ফর্ম খোলা যায়নি\n\n" +
-            error.message
-        );
+
+      alert(
+        "❌ কাজ জমা দেওয়া যায়নি।\n\n" +
+        error.message
+      );
+
+
+      // Error হলে আবার Submit করা যাবে
+      submitBtn.disabled = false;
+
+      submitBtn.innerText =
+        "✅ কাজ জমা দিন";
+
     }
-};
+
+  };
 
 
   /* =====================================
