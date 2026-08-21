@@ -265,51 +265,46 @@ onAuthStateChanged(auth, async (user) => {
     }
     window.submitVerification = async function () {
 
-  const name = document.getElementById("userName").value.trim();
-  const number = document.getElementById("paymentNumber").value.trim();
+  const name =
+    document.getElementById("userName").value.trim();
+
+  const number =
+    document.getElementById("paymentNumber").value.trim();
+
   const transactionId =
     document.getElementById("transactionId").value.trim();
-const screenshotFile =
-  document.getElementById("paymentScreenshot").files[0];
 
-if (!screenshotFile) {
-  alert("⚠️ Payment Screenshot দিন");
-  return;
-}
   if (!name || !number || !transactionId) {
     alert("⚠️ সব তথ্য পূরণ করুন");
     return;
   }
 
-  try {
-
-  const screenshotUrl =
-    await uploadScreenshot(screenshotFile);
-
   const user = auth.currentUser;
 
-    if (!user) {
-      alert("⚠️ আগে Login করুন");
-      window.location.href = "index.html";
-      return;
-    }
+  if (!user) {
+    alert("⚠️ আগে Login করুন");
+    window.location.href = "index.html";
+    return;
+  }
 
-    await addDoc(collection(db, "verificationRequests"), {
+  try {
 
-      userId: user.uid,
-      email: user.email,
-      name: name,
+    await addDoc(
+      collection(db, "verificationRequests"),
+      {
+        userId: user.uid,
+        email: user.email || "",
+        name: name,
 
-      verificationPaymentNumber: number,
-      verificationTransactionId: transactionId,
-screenshotUrl: screenshotUrl,
-      
-      verificationStatus: "pending",
-      verified: false,
+        verificationPaymentNumber: number,
+        verificationTransactionId: transactionId,
 
-      submittedAt: serverTimestamp()
+        verificationStatus: "pending",
+        verified: false,
 
-    });
+        submittedAt: serverTimestamp()
+      }
+    );
 
     alert(
       "✅ Verification request সফলভাবে পাঠানো হয়েছে। Admin Approve করলে Account Verified হবে।"
@@ -322,12 +317,11 @@ screenshotUrl: screenshotUrl,
     console.error("Verification Error:", error);
 
     alert(
-      "❌ Verification Submit করা যায়নি: " +
+      "❌ Verification Submit করা যায়নি:\n" +
       error.message
     );
-
   }
-
+};
 };
   </script>
 
