@@ -210,7 +210,7 @@ searchBtn.onclick = async function () {
     // =====================================
 
     const referrerQuery = query(
-      collection(db, "networkProfiles")
+      collection(db, "networkProfiles"),
       where("referralCode", "==", referralCode)
     );
 
