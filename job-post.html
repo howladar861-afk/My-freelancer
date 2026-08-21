@@ -1084,7 +1084,7 @@ window.openSubmitJob = async function(jobId) {
         document
             .getElementById("finalSubmitJobBtn")
             .onclick = async function() {
-alert("✅ Submit button কাজ করছে");
+
                 const followedInput =
   document.getElementById("followedIdInput")
   .value.trim();
@@ -1093,20 +1093,12 @@ const commentText =
   document.getElementById("commentTextInput")
     .value.trim();
 
-const followedUserSnap = await getDoc(doc(db, "users", followedId));
-
+let followedId = "";
 let followedName = "নাম নেই";
 
-if (followedUserSnap.exists()) {
-  const followedUserData = followedUserSnap.data();
-
-  followedName =
-    followedUserData.displayName ||
-    followedUserData.name ||
-    followedUserData.userName ||
-    followedUserData.email ||
-    "নাম নেই";
-}
+const usersSnap = await getDocs(
+  collection(db, "users")
+);
 
 usersSnap.forEach((userDoc) => {
 
@@ -1117,6 +1109,7 @@ usersSnap.forEach((userDoc) => {
     userData.name ||
     userData.userName ||
     userData.fullName ||
+    userData.email ||
     "";
 
   if (
