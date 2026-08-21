@@ -1085,31 +1085,56 @@ window.openSubmitJob = async function(jobId) {
             .getElementById("finalSubmitJobBtn")
             .onclick = async function() {
 
-                const followedId =
-                    document.getElementById("followedIdInput")
-                    .value.trim();
+                const followedInput =
+  document.getElementById("followedIdInput")
+    .value.trim();
 
-                const commentText =
-                    document.getElementById("commentTextInput")
-                    .value.trim();
-const followedUserSnap = await getDoc(doc(db, "users", followedId));
+const commentText =
+  document.getElementById("commentTextInput")
+    .value.trim();
 
+if (!followedInput) {
+  alert("❌ যে ID / নাম খুঁজছেন সেটা লিখুন");
+  return;
+}
+
+let followedId = "";
 let followedName = "নাম নেই";
 
-if (followedUserSnap.exists()) {
-    const followedUserData = followedUserSnap.data();
+// users collection থেকে নাম খুঁজবে
+const usersSnap = await getDocs(
+  collection(db, "users")
+);
 
-    followedName =
-        followedUserData.displayName ||
-        followedUserData.name ||
-        followedUserData.userName ||
-        followedUserData.email ||
-        "নাম নেই";
+usersSnap.forEach((userDoc) => {
+
+  const userData = userDoc.data();
+
+  const name =
+    userData.displayName ||
+    userData.name ||
+    userData.userName ||
+    userData.fullName ||
+    "";
+
+  if (
+    name.toLowerCase() ===
+    followedInput.toLowerCase()
+  ) {
+    followedId = userDoc.id;
+    followedName = name;
+  }
+
+});
+
+if (!followedId) {
+  alert(
+    "❌ এই নামে কোনো User পাওয়া যায়নি।\n\n" +
+    "সঠিক নাম লিখুন।"
+  );
+  return;
 }
-                if (!followedId) {
-                    alert("❌ যে ID / নাম ফলো করেছেন সেটা লিখুন");
-                    return;
-                }
+}
 
                 if (!commentText) {
                     alert("❌ কী কমেন্ট করেছেন সেটা লিখুন");
