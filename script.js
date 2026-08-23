@@ -10,6 +10,7 @@ import {
   where,
   getDocs,
   writeBatch,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import {
   getAuth,
@@ -154,10 +155,16 @@ name:
           myReferral,
 
         referredBy:
-          referral,
+  referral,
 
-        balance:
-          0
+verified:
+  false,
+
+createdAt:
+  serverTimestamp(),
+
+balance:
+  0
       }
     );
 // =================================
