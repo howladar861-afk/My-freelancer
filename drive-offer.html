@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rakib Freelancer - Drive Offer</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0f172a;
+  color:#fff;
+}
+
+.header{
+  background:#f5b800;
+  padding:20px 15px;
+  text-align:center;
+  box-shadow:0 3px 12px rgba(0,0,0,.25);
+}
+
+.header h1{
+  margin:0;
+  font-size:27px;
+  font-weight:800;
+}
+
+.header p{
+  margin:7px 0 0;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.container{
+  width:92%;
+  max-width:600px;
+  margin:25px auto 40px;
+}
+
+.title{
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.title h2{
+  margin:0;
+  font-size:25px;
+}
+
+.title p{
+  margin:8px 0 0;
+  color:#cbd5e1;
+  font-size:15px;
+}
+
+.operator-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+
+.operator-card{
+  background:#f8f9ff;
+  color:#222;
+  border-radius:20px;
+  padding:20px 12px;
+  text-align:center;
+  box-shadow:0 5px 16px rgba(0,0,0,.18);
+}
+
+.operator-icon{
+  font-size:48px;
+  margin-bottom:10px;
+}
+
+.operator-card h3{
+  margin:5px 0 15px;
+  font-size:20px;
+}
+
+.operator-btn{
+  width:100%;
+  padding:12px 8px;
+  border:0;
+  border-radius:12px;
+  background:#2563eb;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.operator-btn:active{
+  transform:scale(.97);
+}
+
+.footer{
+  text-align:center;
+  color:#94a3b8;
+  font-size:13px;
+  margin-top:25px;
+}
+
+@media(max-width:380px){
+  .operator-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+
+  <h1>💼 Rakib Freelancer</h1>
+
+  <p>📶 Drive Offer</p>
+
+</header>
+
+
+<div class="container">
+
+  <!-- TITLE -->
+  <div class="title">
+
+    <h2>📱 অপারেটর নির্বাচন করুন</h2>
+
+    <p>
+      আপনার পছন্দের সিম অপারেটর নির্বাচন করুন
+    </p>
+
+  </div>
+
+
+  <!-- OPERATOR LIST -->
+  <div class="operator-grid">
+
+
+    <!-- BANGLALINK -->
+    <div class="operator-card">
+
+      <div class="operator-icon">
+        🟠
+      </div>
+
+      <h3>
+        বাংলালিংক
+      </h3>
+
+      <button
+        class="operator-btn"
+        onclick="openOffer('বাংলালিংক')">
+
+        অফার দেখুন
+
+      </button>
+
+    </div>
+
+
+    <!-- ROBI -->
+    <div class="operator-card">
+
+      <div class="operator-icon">
+        🔴
+      </div>
+
+      <h3>
+        রবি
+      </h3>
+
+      <button
+        class="operator-btn"
+        onclick="openOffer('রবি')">
+
+        অফার দেখুন
+
+      </button>
+
+    </div>
+
+
+    <!-- GRAMEEN -->
+    <div class="operator-card">
+
+      <div class="operator-icon">
+        🟢
+      </div>
+
+      <h3>
+        গ্রামীণ
+      </h3>
+
+      <button
+        class="operator-btn"
+        onclick="openOffer('গ্রামীণ')">
+
+        অফার দেখুন
+
+      </button>
+
+    </div>
+
+
+    <!-- AIRTEL -->
+    <div class="operator-card">
+
+      <div class="operator-icon">
+        🔵
+      </div>
+
+      <h3>
+        এয়ারটেল
+      </h3>
+
+      <button
+        class="operator-btn"
+        onclick="openOffer('এয়ারটেল')">
+
+        অফার দেখুন
+
+      </button>
+
+    </div>
+
+
+    <!-- TELETALK -->
+    <div class="operator-card">
+
+      <div class="operator-icon">
+        🟦
+      </div>
+
+      <h3>
+        টেলিটক
+      </h3>
+
+      <button
+        class="operator-btn"
+        onclick="openOffer('টেলিটক')">
+
+        অফার দেখুন
+
+      </button>
+
+    </div>
+
+
+    <!-- SKITTO -->
+    <div class="operator-card">
+
+      <div class="operator-icon">
+        🟣
+      </div>
+
+      <h3>
+        স্কিটো
+      </h3>
+
+      <button
+        class="operator-btn"
+        onclick="openOffer('স্কিটো')">
+
+        অফার দেখুন
+
+      </button>
+
+    </div>
+
+
+  </div>
+
+
+  <div class="footer">
+
+    Rakib Freelancer © 2026
+
+  </div>
+
+</div>
+
+
+<script>
+
+function openOffer(operator){
+
+  alert(
+    operator +
+    " এর অফার শীঘ্রই যোগ করা হবে।"
+  );
+
+}
+
+</script>
+
+</body>
+  </html>
