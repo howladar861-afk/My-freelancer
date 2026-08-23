@@ -265,8 +265,8 @@ body{
         <div class="price-row">
             <div class="price">price: 199</div>
 
-            <button class="buy-btn">
-                buy ৳ 195
+            <button class="buy-btn" onclick="openPayment('190 টাকায় বাংলালিংকে ১৫ জিবি ইন্টারনেট', '195')">
+    buy ৳ 195
             </button>
         </div>
 
@@ -362,6 +362,90 @@ body{
     </div>
 
 </div>
+<div id="paymentModal" class="payment-modal">
+    <div class="payment-box">
 
+        <span class="close-payment" onclick="closePayment()">×</span>
+
+        <h2>অফার নিতে পেমেন্ট করুন</h2>
+
+        <p id="selectedOffer"></p>
+
+        <div class="warning">
+            ⚠️ <b>পেমেন্ট করার আগে ভালোভাবে যাচাই করুন</b><br><br>
+            এই নাম্বারে <b>Send Money</b> করবেন।<br>
+            ভুল করে <b>Flexiload বা Cash Out</b> করলে
+            টাকা ফেরত দেওয়া হবে না।
+        </div>
+
+        <div class="payment-number">
+            <b>বিকাশ:</b> 01837976455
+        </div>
+
+        <div class="payment-number">
+            <b>নগদ:</b> 01404534868
+        </div>
+
+        <label>যে বাংলালিংক নাম্বারে অফার নেবেন</label>
+        <input
+            type="tel"
+            id="customerNumber"
+            placeholder="01XXXXXXXXX"
+            maxlength="11"
+        >
+
+        <label>পেমেন্টের Screenshot দিন</label>
+        <input
+            type="file"
+            id="paymentScreenshot"
+            accept="image/*"
+        >
+
+        <button class="send-whatsapp" onclick="sendOrder()">
+            WhatsApp-এ পাঠান
+        </button>
+
+    </div>
+</div>
+
+<script>
+let selectedOfferName = "";
+let selectedOfferPrice = "";
+
+function openPayment(offerName, price) {
+    selectedOfferName = offerName;
+    selectedOfferPrice = price;
+
+    document.getElementById("selectedOffer").innerHTML =
+        "<b>অফার:</b> " + offerName +
+        "<br><b>পেমেন্ট:</b> ৳ " + price;
+
+    document.getElementById("paymentModal").style.display = "flex";
+}
+
+function closePayment() {
+    document.getElementById("paymentModal").style.display = "none";
+}
+    function sendOrder() {
+    const customerNumber = document.getElementById("customerNumber").value.trim();
+
+    if (customerNumber.length !== 11) {
+        alert("সঠিক ১১ সংখ্যার বাংলালিংক নম্বর দিন।");
+        return;
+    }
+
+    const message =
+        "নতুন অফার অর্ডার%0A%0A" +
+        "অফার: " + selectedOfferName + "%0A" +
+        "পেমেন্ট: ৳" + selectedOfferPrice + "%0A" +
+        "অফার নেওয়ার নম্বর: " + customerNumber + "%0A%0A" +
+        "পেমেন্টের Screenshot সংযুক্ত করা হয়েছে।";
+
+    window.open(
+        "https://wa.me/8801837976455?text=" + message,
+        "_blank"
+    );
+    }
+</script>
 </body>
 </html>
