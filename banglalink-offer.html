@@ -235,6 +235,11 @@ body{
     box-sizing: border-box;
 }
 
+.payment-modal.show {
+    display: flex;
+}
+}
+
 .payment-box {
     width: 100%;
     max-width: 430px;
@@ -506,11 +511,11 @@ function openPayment(offerName, price) {
         "<b>অফার:</b> " + offerName +
         "<br><b>পেমেন্ট:</b> ৳ " + price;
 
-    document.getElementById("paymentModal").style.display = "flex";
+    document.getElementById("paymentModal").classList.add("show");
 }
 
 function closePayment() {
-    document.getElementById("paymentModal").style.display = "none";
+    document.getElementById("paymentModal").classList.remove("show");
 }
     function sendOrder() {
     const customerNumber = document.getElementById("customerNumber").value.trim();
