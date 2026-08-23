@@ -449,51 +449,6 @@ onclick="openPayment('195 টাকায় বাংলালিংকে ১৫ 
     </div>
 
 </div>
-<div id="paymentModal" class="payment-modal">
-    <div class="payment-box">
-
-        <span class="close-payment" onclick="closePayment()">×</span>
-
-        <h2>অফার নিতে পেমেন্ট করুন</h2>
-
-        <p id="selectedOffer"></p>
-
-        <div class="warning">
-            ⚠️ <b>পেমেন্ট করার আগে ভালোভাবে যাচাই করুন</b><br><br>
-            এই নাম্বারে <b>Send Money</b> করবেন।<br>
-            ভুল করে <b>Flexiload বা Cash Out</b> করলে
-            টাকা ফেরত দেওয়া হবে না।
-        </div>
-
-        <div class="payment-number">
-            <b>বিকাশ:</b> 01837976455
-        </div>
-
-        <div class="payment-number">
-            <b>নগদ:</b> 01404534868
-        </div>
-
-        <label>যে বাংলালিংক নাম্বারে অফার নেবেন</label>
-        <input
-            type="tel"
-            id="customerNumber"
-            placeholder="01XXXXXXXXX"
-            maxlength="11"
-        >
-
-        <label>পেমেন্টের Screenshot দিন</label>
-        <input
-            type="file"
-            id="paymentScreenshot"
-            accept="image/*"
-        >
-
-        <button class="send-whatsapp" onclick="sendOrder()">
-            WhatsApp-এ পাঠান
-        </button>
-
-    </div>
-</div>
 
 <script>
 let selectedOfferName = "";
