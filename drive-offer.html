@@ -112,10 +112,69 @@ body{
     grid-template-columns:1fr;
   }
 }
+  .custom-popup{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.65);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.popup-box{
+    width:100%;
+    max-width:380px;
+    background:#fff;
+    color:#222;
+    border-radius:22px;
+    padding:28px 20px;
+    text-align:center;
+    box-shadow:0 10px 40px rgba(0,0,0,.35);
+}
+
+.popup-icon{
+    font-size:50px;
+}
+
+.popup-box h2{
+    color:#18599a;
+    margin:10px 0;
+}
+
+.popup-box p{
+    font-size:18px;
+    line-height:1.6;
+}
+
+.popup-box button{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:12px;
+    background:#2563eb;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+}
 </style>
 </head>
-
 <body>
+
+<div id="customPopup" class="custom-popup">
+    <div class="popup-box">
+
+        <div class="popup-icon">📱</div>
+
+        <h2 id="popupTitle">রাকিব ফ্রিল্যান্সার</h2>
+
+        <p id="popupMessage"></p>
+
+        <button onclick="closePopup()">ঠিক আছে</button>
+
+    </div>
+</div>
 
 <!-- HEADER -->
 <header class="header">
@@ -291,15 +350,21 @@ body{
 
 <script>
 
-function openOffer(operator){
-
-  alert(
-    operator +
-    " এর অফার শীঘ্রই যোগ করা হবে।"
-  );
-
+function openOffer(operator) {
+    showPopup(
+        "রাকিব ফ্রিল্যান্সার",
+        operator + " এর অফার শীঘ্রই যোগ করা হবে।"
+    );
+}
+function showPopup(title, message) {
+    document.getElementById("popupTitle").textContent = title;
+    document.getElementById("popupMessage").textContent = message;
+    document.getElementById("customPopup").style.display = "flex";
 }
 
+function closePopup() {
+    document.getElementById("customPopup").style.display = "none";
+}
 </script>
 
 </body>
