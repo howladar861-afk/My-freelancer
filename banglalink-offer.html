@@ -126,6 +126,101 @@ body{
         font-size:20px;
     }
 }
+    /* OFFER CARD DESIGN */
+
+.offer-area {
+    padding: 15px;
+    background: #f8f8f8;
+}
+
+.offer-card {
+    background: white;
+    border-radius: 18px;
+    margin-bottom: 18px;
+    padding: 18px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+.offer-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background: #d4148e;
+}
+
+.discount {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #7d86e8;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 0 0 0 14px;
+    font-size: 15px;
+}
+
+.offer-title {
+    padding-right: 95px;
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.price {
+    color: #ed5a2a;
+    font-size: 18px;
+}
+
+.buy-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #399548;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.offer-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.category {
+    background: #7d86e8;
+    color: white;
+    padding: 7px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.star {
+    color: #f0a500;
+    font-size: 27px;
+}
+
+.days {
+    background: #eeeeee;
+    color: #d4148e;
+    padding: 9px 12px;
+    border-radius: 22px;
+    font-size: 14px;
+    }
 </style>
 </head>
 
@@ -156,19 +251,115 @@ body{
 <!-- OFFER AREA -->
 <div class="offer-area">
 
-    <div class="empty-icon">🎁</div>
+    <!-- OFFER 1 -->
+    <div class="offer-card">
 
-    <h2>
-        বাংলালিংক এর অফারগুলো শীঘ্রই যোগ করা হবে
-    </h2>
+        <div class="discount">discount: ৳9</div>
 
-    <p>
-        আমরা আপনার জন্য সেরা অফার নিয়ে আসছি।
-    </p>
+        <div class="offer-title">
+            190 টাকায় বাংলালিংকে ১৫ জিবি
+            ইন্টারনেট। মেয়াদ ৭ দিন।
+            (নিজের হিট) ★
+        </div>
 
-    <p>
-        অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন।
-    </p>
+        <div class="price-row">
+            <div class="price">price: 199</div>
+
+            <button class="buy-btn">
+                buy ৳ 195
+            </button>
+        </div>
+
+        <div class="offer-info">
+            <div class="category">Bundles</div>
+            <div class="star">★</div>
+            <div class="days">🕐 0 days</div>
+        </div>
+
+    </div>
+
+
+    <!-- OFFER 2 -->
+    <div class="offer-card">
+
+        <div class="discount">discount: ৳90</div>
+
+        <div class="offer-title">
+            608 টাকায় বাংলালিংকে 70 জিবি।
+            মেয়াদ ৩০ দিন ➡️ সারা বাংলাদেশ
+            পাবে ★ নিজের হিট
+        </div>
+
+        <div class="price-row">
+            <div class="price">price: 698</div>
+
+            <button class="buy-btn">
+                buy ৳ 615
+            </button>
+        </div>
+
+        <div class="offer-info">
+            <div class="category">Internet</div>
+            <div class="star">★</div>
+            <div class="days">🕐 0 days</div>
+        </div>
+
+    </div>
+
+
+    <!-- OFFER 3 -->
+    <div class="offer-card">
+
+        <div class="discount">discount: ৳51</div>
+
+        <div class="offer-title">
+            547 টাকায় বাংলালিংকে 40 জিবি।
+            মেয়াদ ৩০ দিন ➡️ সারা বাংলাদেশ
+            পাবে ★ নিজের হিট
+        </div>
+
+        <div class="price-row">
+            <div class="price">price: 598</div>
+
+            <button class="buy-btn">
+                buy ৳ 555
+            </button>
+        </div>
+
+        <div class="offer-info">
+            <div class="category">Internet</div>
+            <div class="star">★</div>
+            <div class="days">🕐 0 days</div>
+        </div>
+
+    </div>
+
+
+    <!-- OFFER 4 -->
+    <div class="offer-card">
+
+        <div class="discount">discount: ৳128</div>
+
+        <div class="offer-title">
+            670 টাকায় বাংলালিংকে 100 জিবি।
+            মেয়াদ ৩০ দিন ➡️ সারা বাংলাদেশ পাবে
+        </div>
+
+        <div class="price-row">
+            <div class="price">price: 805</div>
+
+            <button class="buy-btn">
+                buy ৳ 670
+            </button>
+        </div>
+
+        <div class="offer-info">
+            <div class="category">Internet</div>
+            <div class="star">★</div>
+            <div class="days">🕐 0 days</div>
+        </div>
+
+    </div>
 
 </div>
 
