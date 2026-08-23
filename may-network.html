@@ -512,33 +512,57 @@
             owner.referralCode || referralCode;
 
 
-          ownerHTML = `
+          const ownerJoinDate =
+  formatDate(
+    owner.createdAt ||
+    owner.joinedAt ||
+    owner.registrationDate ||
+    owner.created_at
+  );
 
-            <div class="card owner-card">
+const ownerVerified =
+  owner.verified === true;
 
-              <h2 class="owner-title">
-                👑 Referral Owner
-              </h2>
+ownerHTML = `
 
-              <div class="info">
-                👤 <b>নাম:</b>
-                ${escapeHtml(ownerName)}
-              </div>
+  <div class="card owner-card">
 
-              <div class="info">
-                📧 <b>Gmail:</b>
-                ${escapeHtml(ownerEmail)}
-              </div>
+    <h2 class="owner-title">
+      👑 Referral Owner
+    </h2>
 
-              <div class="info">
-                🔑 <b>Referral Code:</b>
-                ${escapeHtml(ownerCode)}
-              </div>
+    <div class="info">
+      👤 <b>নাম:</b>
+      ${escapeHtml(ownerName)}
+    </div>
 
-            </div>
+    <div class="info">
+      📧 <b>Gmail:</b>
+      ${escapeHtml(ownerEmail)}
+    </div>
 
-          `;
+    <div class="info">
+      🔑 <b>Referral Code:</b>
+      ${escapeHtml(ownerCode)}
+    </div>
 
+    <div class="info">
+      📅 <b>Registration Date:</b>
+      ${escapeHtml(ownerJoinDate)}
+    </div>
+
+    <div class="info">
+      🔐 <b>Verification Status:</b>
+      ${
+        ownerVerified
+        ? "✅ Verified"
+        : "❌ Not Verified"
+      }
+    </div>
+
+  </div>
+
+`;
         }
 
         else {
