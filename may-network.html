@@ -342,7 +342,7 @@ searchBtn.onclick = async function () {
 
     const referrerQuery =
       query(
-        collection(db, "networkProfiles"),
+       collection(db, "users")
         where(
           "referralCode",
           "==",
