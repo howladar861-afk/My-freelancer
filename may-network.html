@@ -713,7 +713,8 @@ ownerHTML = `
                 member.created_at
               );
 
-
+const verificationDate =
+  formatDate(member.verifiedAt);
             membersHTML += `
 
               <div class="card member-card">
@@ -780,7 +781,13 @@ ownerHTML = `
                   ${escapeHtml(joinDate)}
 
                 </div>
+<div class="info">
 
+  🕐 <b>Verification Date:</b>
+
+  ${escapeHtml(verificationDate)}
+
+</div>
 
                 <div class="info">
 
