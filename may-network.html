@@ -7,6 +7,10 @@
   <title>May Network</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -17,78 +21,88 @@
     .header {
       background: #2563eb;
       color: white;
-      padding: 18px;
+      padding: 18px 12px;
       text-align: center;
-      font-size: 24px;
+      font-size: 25px;
       font-weight: bold;
     }
 
     .container {
       width: 92%;
-      max-width: 600px;
-      margin: 20px auto 100px;
+      max-width: 650px;
+      margin: 20px auto 80px;
     }
 
     .search-box {
       background: white;
-      padding: 20px;
-      border-radius: 18px;
-      box-shadow: 0 4px 15px rgba(0,0,0,.10);
+      padding: 22px;
+      border-radius: 20px;
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
     }
 
     .search-box h2 {
-      margin-top: 0;
       text-align: center;
+      margin: 0 0 20px;
       line-height: 1.4;
+      font-size: 24px;
     }
 
-    input {
+    .search-box input {
       width: 100%;
-      box-sizing: border-box;
-      padding: 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
+      padding: 15px;
+      border: 2px solid #d1d5db;
+      border-radius: 12px;
       font-size: 17px;
-      margin-bottom: 12px;
       outline: none;
+      margin-bottom: 12px;
     }
 
-    input:focus {
+    .search-box input:focus {
       border-color: #2563eb;
     }
 
     button {
       width: 100%;
-      padding: 14px;
-      border: 0;
-      border-radius: 10px;
-      background: #2563eb;
-      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
+      color: white;
     }
 
-    button:active {
-      transform: scale(.98);
+    .search-btn {
+      background: #2563eb;
     }
 
-    button:disabled {
-      opacity: .6;
+    .search-btn:active {
+      transform: scale(0.98);
+    }
+
+    .search-btn:disabled {
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
-    .referrer-card,
-    .member-card,
-    .login-card {
-      background: white;
-      margin-top: 15px;
-      padding: 18px;
-      border-radius: 16px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+    .back-btn {
+      margin-top: 20px;
+      background: #4b5563;
     }
 
-    .referrer-card {
+    #result {
+      margin-top: 18px;
+    }
+
+    .card {
+      background: white;
+      padding: 18px;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .owner-card {
       border-left: 6px solid #f59e0b;
     }
 
@@ -100,32 +114,61 @@
       border-left: 6px solid #dc2626;
     }
 
-    .member-card h3,
-    .referrer-card h3,
-    .login-card h3 {
-      margin-top: 0;
+    .info {
+      margin: 9px 0;
+      line-height: 1.5;
+      word-break: break-word;
     }
 
-    .info {
-      margin: 8px 0;
-      word-break: break-word;
+    .owner-title {
+      margin-top: 0;
+      color: #92400e;
+    }
+
+    .member-title {
+      margin-top: 0;
+      color: #166534;
     }
 
     .verified {
       display: inline-block;
       background: #dcfce7;
       color: #15803d;
-      padding: 5px 10px;
+      padding: 6px 12px;
       border-radius: 20px;
       font-size: 13px;
       font-weight: bold;
       margin-bottom: 8px;
     }
 
-    .message {
+    .not-verified {
+      display: inline-block;
+      background: #fee2e2;
+      color: #dc2626;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .count {
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 12px;
+      border-radius: 12px;
       text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .message {
+      background: white;
       padding: 20px;
-      color: #6b7280;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.07);
     }
 
     .error {
@@ -136,14 +179,18 @@
       color: #15803d;
     }
 
-    .back {
-      margin-top: 20px;
-      background: #4b5563;
+    .loading {
+      color: #2563eb;
     }
 
-    .count-title {
-      margin-top: 25px;
-      margin-bottom: 10px;
+    .section-title {
+      font-size: 22px;
+      margin: 20px 0 12px;
+    }
+
+    .small {
+      color: #6b7280;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -155,6 +202,10 @@
   </div>
 
   <div class="container">
+
+    <!-- =====================================
+         SEARCH BOX
+    ====================================== -->
 
     <div class="search-box">
 
@@ -169,398 +220,319 @@
         autocomplete="off"
       >
 
-      <button id="searchBtn">
-  🔍 Search
+      <button
+        type="button"
+        id="searchBtn"
+        class="search-btn">
+        🔍 Search
       </button>
 
     </div>
 
-    <div id="result"></div>
+
+    <!-- =====================================
+         RESULT
+    ====================================== -->
+
+    <div id="result">
+
+      <div class="message">
+        🔐 Referral Network দেখতে Referral Code লিখে Search করুন।
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
+         BACK BUTTON
+    ====================================== -->
 
     <button
-      class="back"
+      type="button"
+      class="back-btn"
       onclick="window.location.href='dashboard.html'">
+
       ⬅️ Back
+
     </button>
 
   </div>
 
 
-<script type="module">
+  <!-- =======================================
+       FIREBASE
+  ======================================== -->
 
-/* =========================================
-   FIREBASE APP
-========================================= */
+  <script type="module">
 
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-import {
-  getAuth
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 
-/* =========================================
-   FIREBASE CONFIG
-========================================= */
-
-const firebaseConfig = {
-
-  apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
-
-  authDomain:
-    "rakib-freelancer-9c66b.firebaseapp.com",
-
-  projectId:
-    "rakib-freelancer-9c66b",
-
-  storageBucket:
-    "rakib-freelancer-9c66b.firebasestorage.app",
-
-  messagingSenderId:
-    "541209844482",
-
-  appId:
-    "1:541209844482:web:510568d5226c9bf47ac01b"
-
-};
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-/* =========================================
-   INITIALIZE FIREBASE
-========================================= */
-
-const app =
-  initializeApp(firebaseConfig);
-
-const db =
-  getFirestore(app);
-
-const auth =
-  getAuth(app);
-
-
-/* =========================================
-   HTML ELEMENTS
-========================================= */
-
-const searchInput =
-  document.getElementById("referralSearch");
-
-const searchBtn =
-  document.getElementById("searchBtn");
-
-const result =
-  document.getElementById("result");
-
-
-/* =========================================
-   SEARCH FUNCTION
-========================================= */
-
-searchBtn.onclick = async function () {
-
-  const referralCode =
-    searchInput.value.trim().toUpperCase();
-
-
-  /* -----------------------------
-     CHECK CODE
-  ----------------------------- */
-
-  if (!referralCode) {
-
-    result.innerHTML = `
-      <div class="message error">
-        ❌ Referral Code লিখুন।
-      </div>
-    `;
-
-    return;
-  }
-
-
-  /* -----------------------------
-     CHECK LOGIN
-  ----------------------------- */
-
-  const currentUser =
-    auth.currentUser;
-
-
-  if (!currentUser) {
-
-    result.innerHTML = `
-      <div class="login-card">
-
-        <h3>🔐 Login প্রয়োজন</h3>
-
-        <div class="info">
-          Referral Network দেখতে হলে
-          আগে আপনার Account-এ Login করতে হবে।
-        </div>
-
-      </div>
-    `;
-
-    return;
-  }
-
-
-  /* -----------------------------
-     LOADING
-  ----------------------------- */
-
-  searchBtn.disabled = true;
-
-  searchBtn.innerText =
-    "🔄 Searching...";
-
-
-  result.innerHTML = `
-    <div class="message">
-      🔄 Network খোঁজা হচ্ছে...
-    </div>
-  `;
-
-
-  try {
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 
     /* =====================================
-       1. REFERRAL OWNER SEARCH
-    ===================================== */
+       FIREBASE CONFIG
+    ====================================== */
 
-    const referrerQuery =
-      query(
-       collection(db, "users")
-        where(
-          "referralCode",
-          "==",
-          referralCode
-        ),
-      );
+    const firebaseConfig = {
 
+      apiKey:
+        "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
 
-    const referrerSnap =
-      await getDocs(referrerQuery);
+      authDomain:
+        "rakib-freelancer-9c66b.firebaseapp.com",
 
+      projectId:
+        "rakib-freelancer-9c66b",
 
-    let referrerHTML = "";
+      storageBucket:
+        "rakib-freelancer-9c66b.firebasestorage.app",
 
-    let referrerName =
-      "পাওয়া যায়নি";
+      messagingSenderId:
+        "541209844482",
 
-
-    /* -----------------------------
-       OWNER FOUND
-    ----------------------------- */
-
-    if (!referrerSnap.empty) {
-
-      const referrer =
-        referrerSnap.docs[0].data();
+      appId:
+        "1:541209844482:web:510568d5226c9bf47ac01b"
+    };
 
 
-      referrerName =
-        referrer.name || "নাম নেই";
+    /* =====================================
+       INITIALIZE
+    ====================================== */
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const db =
+      getFirestore(app);
+
+    const auth =
+      getAuth(app);
 
 
-      referrerHTML = `
+    /* =====================================
+       ELEMENTS
+    ====================================== */
 
-        <div class="referrer-card">
+    const searchInput =
+      document.getElementById("referralSearch");
 
-          <h3>
-            👑 Referral Owner
-          </h3>
+    const searchBtn =
+      document.getElementById("searchBtn");
 
-          <div class="info">
-            👤 <b>নাম:</b>
-            ${escapeHtml(
-              referrer.name || "নাম নেই"
-            )}
+    const result =
+      document.getElementById("result");
+
+
+    /* =====================================
+       CURRENT USER
+    ====================================== */
+
+    let currentUser = null;
+
+
+    /*
+      Firebase Auth ready হওয়া পর্যন্ত
+      অপেক্ষা করবে।
+    */
+
+    onAuthStateChanged(auth, (user) => {
+
+      currentUser = user;
+
+    });
+
+
+    /* =====================================
+       SEARCH BUTTON
+    ====================================== */
+
+    searchBtn.addEventListener(
+      "click",
+      searchNetwork
+    );
+
+
+    /* =====================================
+       ENTER KEY
+    ====================================== */
+
+    searchInput.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (event.key === "Enter") {
+
+          event.preventDefault();
+
+          searchNetwork();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================
+       MAIN SEARCH FUNCTION
+    ====================================== */
+
+    async function searchNetwork() {
+
+      const referralCode =
+        searchInput.value
+          .trim()
+          .toUpperCase();
+
+
+      /* =================================
+         EMPTY CODE
+      ================================= */
+
+      if (!referralCode) {
+
+        result.innerHTML = `
+          <div class="message error">
+            ❌ Referral Code লিখুন।
           </div>
+        `;
 
-          <div class="info">
-            📧 <b>Gmail:</b>
-            ${escapeHtml(
-              referrer.email || "Email নেই"
-            )}
+        searchInput.focus();
+
+        return;
+      }
+
+
+      /* =================================
+         LOGIN CHECK
+      ================================= */
+
+      if (!currentUser) {
+
+        result.innerHTML = `
+          <div class="card login-card">
+
+            <h3>🔐 Login প্রয়োজন</h3>
+
+            <div class="info">
+              Referral Network দেখতে হলে
+              আগে আপনার Account-এ Login করতে হবে।
+            </div>
+
           </div>
+        `;
 
-          <div class="info">
-            🔑 <b>Referral Code:</b>
-            ${escapeHtml(
-              referrer.referralCode ||
+        return;
+      }
+
+
+      /* =================================
+         LOADING
+      ================================= */
+
+      searchBtn.disabled = true;
+
+      searchBtn.innerText =
+        "🔄 Searching...";
+
+
+      result.innerHTML = `
+        <div class="message loading">
+          🔄 Referral Network খোঁজা হচ্ছে...
+        </div>
+      `;
+
+
+      try {
+
+        /* =================================
+           1. FIND REFERRAL OWNER
+        ================================= */
+
+        const ownerQuery =
+          query(
+            collection(db, "users"),
+            where(
+              "referralCode",
+              "==",
               referralCode
-            )}
-          </div>
-
-        </div>
-
-      `;
-
-    }
-
-    /* -----------------------------
-       OWNER NOT FOUND
-    ----------------------------- */
-
-    else {
-
-      referrerHTML = `
-
-        <div class="message error">
-
-          ⚠️ এই Referral Code-এর
-          Owner পাওয়া যায়নি।
-
-        </div>
-
-      `;
-    }
+            )
+          );
 
 
-    /* =====================================
-       2. VERIFIED MEMBERS SEARCH
-    ===================================== */
-
-    const memberQuery =
-      query(
-        collection(db, "users"),
-
-        where(
-          "referredBy",
-          "==",
-          referralCode
-        ),
-
-        where(
-          "verified",
-          "==",
-          true
-        )
-      );
+        const ownerSnapshot =
+          await getDocs(ownerQuery);
 
 
-    const memberSnap =
-      await getDocs(memberQuery);
+        let ownerName =
+          "নাম পাওয়া যায়নি";
 
 
-    let membersHTML = "";
+        let ownerEmail =
+          "Email পাওয়া যায়নি";
 
 
-    /* -----------------------------
-       NO MEMBERS
-    ----------------------------- */
-
-    if (memberSnap.empty) {
-
-      membersHTML = `
-
-        <div class="message">
-
-          ℹ️ এই Referral Code-এর
-          কোনো Verified Member পাওয়া যায়নি।
-
-        </div>
-
-      `;
-
-    }
-
-    /* -----------------------------
-       MEMBERS FOUND
-    ----------------------------- */
-
-    else {
-
-      membersHTML = `
-
-        <h2 class="count-title">
-
-          👥 Verified Members
-          (${memberSnap.size})
-
-        </h2>
-
-      `;
+        let ownerCode =
+          referralCode;
 
 
-      memberSnap.forEach(
-        (memberDoc) => {
-
-          const member =
-            memberDoc.data();
+        let ownerHTML = "";
 
 
-          membersHTML += `
+        if (!ownerSnapshot.empty) {
 
-            <div class="member-card">
-
-              <h3>
-                👤
-                ${escapeHtml(
-                  member.name ||
-                  "নাম নেই"
-                )}
-              </h3>
+          const owner =
+            ownerSnapshot.docs[0].data();
 
 
-              <div class="verified">
-                ✅ Verified Member
+          ownerName =
+            owner.name || "নাম নেই";
+
+
+          ownerEmail =
+            owner.email || "Email নেই";
+
+
+          ownerCode =
+            owner.referralCode || referralCode;
+
+
+          ownerHTML = `
+
+            <div class="card owner-card">
+
+              <h2 class="owner-title">
+                👑 Referral Owner
+              </h2>
+
+              <div class="info">
+                👤 <b>নাম:</b>
+                ${escapeHtml(ownerName)}
               </div>
-
 
               <div class="info">
                 📧 <b>Gmail:</b>
-                ${escapeHtml(
-                  member.email ||
-                  "Email নেই"
-                )}
+                ${escapeHtml(ownerEmail)}
               </div>
-
 
               <div class="info">
                 🔑 <b>Referral Code:</b>
-                ${escapeHtml(
-                  member.referralCode ||
-                  "নেই"
-                )}
-              </div>
-
-
-              <div class="info">
-                👥 <b>Joined By Referral:</b>
-                ${escapeHtml(
-                  member.referredBy ||
-                  "নেই"
-                )}
-              </div>
-
-
-              <div class="info">
-                👑 <b>Referrer:</b>
-                ${escapeHtml(
-                  referrerName
-                )}
-              </div>
-
-
-              <div class="info">
-                🔑 <b>Referrer Code:</b>
-                ${escapeHtml(
-                  referralCode
-                )}
+                ${escapeHtml(ownerCode)}
               </div>
 
             </div>
@@ -568,130 +540,478 @@ searchBtn.onclick = async function () {
           `;
 
         }
-      );
+
+        else {
+
+          ownerHTML = `
+
+            <div class="message error">
+
+              ⚠️ এই Referral Code-এর
+              কোনো Owner পাওয়া যায়নি।
+
+            </div>
+
+          `;
+
+        }
+
+
+        /* =================================
+           2. FIND ALL REGISTERED MEMBERS
+        ================================= */
+
+        /*
+          এখানে শুধু referredBy দিয়ে search করছি।
+
+          তাই Firestore Composite Index
+          সাধারণত প্রয়োজন হবে না।
+
+          Verified status JavaScript দিয়ে
+          আলাদা করে দেখানো হবে।
+        */
+
+        const memberQuery =
+          query(
+            collection(db, "users"),
+            where(
+              "referredBy",
+              "==",
+              referralCode
+            )
+          );
+
+
+        const memberSnapshot =
+          await getDocs(memberQuery);
+
+
+        /* =================================
+           3. MEMBER COUNT
+        ================================= */
+
+        const totalMembers =
+          memberSnapshot.size;
+
+
+        let verifiedCount = 0;
+
+        let unverifiedCount = 0;
+
+
+        memberSnapshot.forEach((doc) => {
+
+          const member =
+            doc.data();
+
+
+          if (member.verified === true) {
+
+            verifiedCount++;
+
+          } else {
+
+            unverifiedCount++;
+
+          }
+
+        });
+
+
+        /* =================================
+           4. MEMBER HTML
+        ================================= */
+
+        let membersHTML = "";
+
+
+        if (memberSnapshot.empty) {
+
+          membersHTML = `
+
+            <div class="message">
+
+              ℹ️ এই Referral Code দিয়ে
+              কোনো Member পাওয়া যায়নি।
+
+            </div>
+
+          `;
+
+        }
+
+        else {
+
+          membersHTML = `
+
+            <h2 class="section-title">
+              👥 Registered Members
+            </h2>
+
+            <div class="count">
+
+              মোট Member:
+              ${totalMembers}
+              &nbsp; | &nbsp;
+
+              ✅ Verified:
+              ${verifiedCount}
+              &nbsp; | &nbsp;
+
+              ❌ Not Verified:
+              ${unverifiedCount}
+
+            </div>
+
+          `;
+
+
+          memberSnapshot.forEach((doc) => {
+
+            const member =
+              doc.data();
+
+
+            const isVerified =
+              member.verified === true;
+
+
+            /*
+              Join date বিভিন্ন field থেকে
+              নেওয়ার চেষ্টা করবে।
+            */
+
+            const joinDate =
+              formatDate(
+                member.joinedAt ||
+                member.createdAt ||
+                member.registrationDate ||
+                member.created_at
+              );
+
+
+            membersHTML += `
+
+              <div class="card member-card">
+
+                <h3 class="member-title">
+
+                  👤
+                  ${escapeHtml(
+                    member.name || "নাম নেই"
+                  )}
+
+                </h3>
+
+
+                ${
+                  isVerified
+
+                  ?
+
+                  `
+                  <div class="verified">
+                    ✅ Verified Member
+                  </div>
+                  `
+
+                  :
+
+                  `
+                  <div class="not-verified">
+                    ❌ Not Verified
+                  </div>
+                  `
+                }
+
+
+                <div class="info">
+
+                  📧 <b>Gmail:</b>
+
+                  ${escapeHtml(
+                    member.email ||
+                    "Email নেই"
+                  )}
+
+                </div>
+
+
+                <div class="info">
+
+                  👤 <b>নাম:</b>
+
+                  ${escapeHtml(
+                    member.name ||
+                    "নাম নেই"
+                  )}
+
+                </div>
+
+
+                <div class="info">
+
+                  📅 <b>Join Date:</b>
+
+                  ${escapeHtml(joinDate)}
+
+                </div>
+
+
+                <div class="info">
+
+                  🔑 <b>যে Referral Code দিয়ে
+                  Account করেছে:</b>
+
+                  ${escapeHtml(
+                    member.referredBy ||
+                    "Referral Code নেই"
+                  )}
+
+                </div>
+
+
+                <div class="info">
+
+                  🆔 <b>Member-এর নিজের
+                  Referral Code:</b>
+
+                  ${escapeHtml(
+                    member.referralCode ||
+                    "Referral Code নেই"
+                  )}
+
+                </div>
+
+
+                <div class="info">
+
+                  🔐 <b>Verification Status:</b>
+
+                  ${
+                    isVerified
+                    ? "Verified"
+                    : "Not Verified"
+                  }
+
+                </div>
+
+
+                <div class="info">
+
+                  👑 <b>Referrer:</b>
+
+                  ${escapeHtml(
+                    ownerName
+                  )}
+
+                </div>
+
+              </div>
+
+            `;
+
+          });
+
+        }
+
+
+        /* =================================
+           5. SHOW EVERYTHING
+        ================================= */
+
+        result.innerHTML =
+          ownerHTML +
+          membersHTML;
+
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "May Network Error:",
+          error
+        );
+
+
+        result.innerHTML = `
+
+          <div class="message error">
+
+            ❌ Network লোড করা যায়নি।
+
+            <br><br>
+
+            <b>Error:</b>
+
+            ${escapeHtml(
+              error.message ||
+              "Unknown error"
+            )}
+
+          </div>
+
+        `;
+
+      }
+
+
+      finally {
+
+        searchBtn.disabled = false;
+
+        searchBtn.innerText =
+          "🔍 Search";
+
+      }
 
     }
 
 
     /* =====================================
-       SHOW RESULT
-    ===================================== */
+       DATE FORMAT
+    ====================================== */
 
-    result.innerHTML =
-      referrerHTML +
-      membersHTML;
+    function formatDate(value) {
 
+      if (!value) {
 
-  }
+        return "তারিখ পাওয়া যায়নি";
 
-
-  /* =====================================
-     ERROR
-  ===================================== */
-
-  catch (error) {
-
-    console.error(
-      "May Network Error:",
-      error
-    );
+      }
 
 
-    let errorMessage =
-      error.message || "Unknown error";
+      try {
+
+        /*
+          Firestore Timestamp
+        */
+
+        if (
+          typeof value === "object" &&
+          typeof value.toDate === "function"
+        ) {
+
+          return value
+            .toDate()
+            .toLocaleString(
+              "bn-BD",
+              {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+              }
+            );
+
+        }
 
 
-    result.innerHTML = `
+        /*
+          Firebase Timestamp object
+          { seconds: ... }
+        */
 
-      <div class="message error">
+        if (
+          typeof value === "object" &&
+          value.seconds
+        ) {
 
-        ❌ Network লোড করা যায়নি।
+          return new Date(
+            value.seconds * 1000
+          ).toLocaleString(
+            "bn-BD",
+            {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit"
+            }
+          );
 
-        <br><br>
-
-        ${escapeHtml(
-          errorMessage
-        )}
-
-      </div>
-
-    `;
-
-  }
-
-
-  /* =====================================
-     RESET BUTTON
-  ===================================== */
-
-  finally {
-
-    searchBtn.disabled = false;
-
-    searchBtn.innerText =
-      "🔍 Search";
-
-  }
-
-};
+        }
 
 
-/* =========================================
-   ENTER KEY SEARCH
-========================================= */
+        /*
+          Normal Date/String
+        */
 
-searchInput.addEventListener(
-  "keydown",
-  function (event) {
+        const date =
+          new Date(value);
 
-    if (event.key === "Enter") {
 
-      event.preventDefault();
+        if (
+          !isNaN(
+            date.getTime()
+          )
+        ) {
 
-      searchBtn.click();
+          return date.toLocaleString(
+            "bn-BD",
+            {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit"
+            }
+          );
+
+        }
+
+
+        return String(value);
+
+      }
+
+      catch (error) {
+
+        return String(value);
+
+      }
 
     }
 
-  }
-);
 
+    /* =====================================
+       HTML SECURITY
+    ====================================== */
 
-/* =========================================
-   HTML SECURITY
-========================================= */
+    function escapeHtml(value) {
 
-function escapeHtml(value) {
+      return String(value)
 
-  return String(value)
+        .replaceAll(
+          "&",
+          "&amp;"
+        )
 
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
+        .replaceAll(
+          "<",
+          "&lt;"
+        )
 
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
+        .replaceAll(
+          ">",
+          "&gt;"
+        )
 
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
+        .replaceAll(
+          '"',
+          "&quot;"
+        )
 
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
+        .replaceAll(
+          "'",
+          "&#039;"
+        );
 
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
+    }
 
-}
-
-</script>
+  </script>
 
 </body>
-</html>
+  </html>
