@@ -14,15 +14,14 @@
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#fff;
+    background:#f5f5f5;
     color:#222;
 }
 
-/* HEADER */
 .header{
     background:#d21b91;
     color:white;
-    padding:18px 15px 12px;
+    padding:18px 15px;
     text-align:center;
 }
 
@@ -32,415 +31,288 @@ body{
 }
 
 .header p{
-    margin:8px 0 0;
+    margin:7px 0 0;
     font-size:16px;
 }
 
-/* SEARCH */
-.search-box{
-    margin:15px 20px;
-    height:62px;
+.container{
+    width:92%;
+    max-width:600px;
+    margin:25px auto 40px;
+}
+
+.offer-card{
     background:white;
     border-radius:18px;
-    display:flex;
-    align-items:center;
-    padding:0 15px;
-    box-shadow:0 2px 8px rgba(0,0,0,.15);
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
 }
 
-.logo{
-    font-size:40px;
-    margin-right:15px;
-}
-
-.search-text{
-    flex:1;
-    font-size:28px;
-    color:#777;
-}
-
-.search-icon{
-    font-size:38px;
-    color:#d21b91;
-}
-
-/* CATEGORY */
-.categories{
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    overflow:hidden;
-    padding:8px 5px 12px;
-    background:#d21b91;
+.discount{
+    display:inline-block;
+    background:#7d86e8;
     color:white;
+    padding:8px 12px;
+    border-radius:0 0 12px 0;
+    font-size:15px;
 }
 
-.categories div{
+.offer-title{
+    margin-top:15px;
+    font-size:19px;
+    font-weight:bold;
+    line-height:1.5;
+}
+
+.price-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-top:15px;
+}
+
+.price{
+    color:#ed5a2a;
+    font-size:18px;
+}
+
+.buy-btn{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:12px 18px;
+    color:#399548;
     font-size:17px;
-    white-space:nowrap;
-    padding:8px 7px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-.categories .active{
-    color:#ffe900;
-    border-bottom:4px solid #ffe900;
+.buy-btn:active{
+    transform:scale(.97);
 }
 
-/* EMPTY OFFER AREA */
-.offer-area{
-    min-height:650px;
+.offer-info{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:16px;
+}
+
+.category{
+    background:#7d86e8;
+    color:white;
+    padding:8px 12px;
+    border-radius:10px;
+}
+
+.star{
+    color:#f0a500;
+    font-size:25px;
+}
+
+.days{
+    background:#eee;
+    padding:9px 12px;
+    border-radius:20px;
+    color:#d4148e;
+}
+
+/* PAYMENT POPUP */
+.payment-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.65);
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+}
+
+.payment-modal.show{
+    display:flex;
+}
+
+.payment-box{
+    width:100%;
+    max-width:430px;
+    max-height:90vh;
+    overflow-y:auto;
+    background:white;
+    border-radius:20px;
+    padding:22px;
+    position:relative;
+    box-shadow:0 10px 40px rgba(0,0,0,.3);
+}
+
+.close-payment{
+    position:absolute;
+    right:15px;
+    top:8px;
+    font-size:32px;
+    cursor:pointer;
+    color:#333;
+}
+
+.payment-box h2{
     text-align:center;
-    padding:100px 25px 40px;
+    margin:10px 0 15px;
 }
 
-.empty-icon{
-    font-size:90px;
-    opacity:.25;
-    margin-bottom:25px;
-}
-
-.offer-area h2{
-    color:#d21b91;
-    font-size:22px;
-    margin:15px 0;
-}
-
-.offer-area p{
-    color:#777;
+#selectedOffer{
     font-size:17px;
-    line-height:1.7;
-    margin:5px 0;
+    line-height:1.6;
+    margin-bottom:15px;
 }
 
-/* MOBILE */
-@media(max-width:380px){
-    .header h1{
-        font-size:24px;
-    }
-
-    .categories div{
-        font-size:14px;
-    }
-
-    .offer-area h2{
-        font-size:20px;
-    }
-}
-    /* OFFER CARD DESIGN */
-
-.offer-area {
-    padding: 15px;
-    background: #f8f8f8;
+.warning{
+    background:#fff3cd;
+    padding:15px;
+    border-radius:12px;
+    line-height:1.6;
+    margin-bottom:15px;
 }
 
-.offer-card {
-    background: white;
-    border-radius: 18px;
-    margin-bottom: 18px;
-    padding: 18px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
-    position: relative;
-    overflow: hidden;
+.payment-number{
+    background:#f1f1f1;
+    padding:12px;
+    border-radius:10px;
+    margin:8px 0;
+    font-size:17px;
 }
 
-.offer-card::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 5px;
-    height: 100%;
-    background: #d4148e;
+.payment-box label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:6px;
+    font-weight:bold;
 }
 
-.discount {
-    position: absolute;
-    right: 0;
-    top: 0;
-    background: #7d86e8;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 0 0 0 14px;
-    font-size: 15px;
+.payment-box input[type="tel"],
+.payment-box input[type="file"]{
+    width:100%;
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:10px;
 }
 
-.offer-title {
-    padding-right: 95px;
-    font-size: 19px;
-    font-weight: bold;
-    line-height: 1.5;
-    margin-bottom: 15px;
+.send-whatsapp{
+    width:100%;
+    margin-top:18px;
+    padding:13px;
+    border:0;
+    border-radius:12px;
+    background:#25d366;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
 }
-
-.price-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-.price {
-    color: #ed5a2a;
-    font-size: 18px;
-}
-
-.buy-btn {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 10px 14px;
-    color: #399548;
-    font-size: 17px;
-    font-weight: bold;
-}
-
-.offer-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 16px;
-}
-
-.category {
-    background: #7d86e8;
-    color: white;
-    padding: 7px 12px;
-    border-radius: 10px;
-    font-size: 14px;
-}
-
-.star {
-    color: #f0a500;
-    font-size: 27px;
-}
-
-.days {
-    background: #eeeeee;
-    color: #d4148e;
-    padding: 9px 12px;
-    border-radius: 22px;
-    font-size: 14px;
-    /* PAYMENT POPUP */
-.payment-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.65);
-    z-index: 99999;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-    box-sizing: border-box;
-}
-
-.payment-modal.show {
-    display: flex;
-}
-}
-
-.payment-box {
-    width: 100%;
-    max-width: 430px;
-    max-height: 90vh;
-    overflow-y: auto;
-    background: white;
-    border-radius: 20px;
-    padding: 22px;
-    box-sizing: border-box;
-    position: relative;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-}
-
-.close-payment {
-    position: absolute;
-    right: 15px;
-    top: 8px;
-    font-size: 32px;
-    cursor: pointer;
-    color: #333;
-}
-
-.payment-box h2 {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.warning {
-    background: #fff3cd;
-    padding: 15px;
-    border-radius: 12px;
-    margin: 15px 0;
-    line-height: 1.6;
-}
-
-.payment-number {
-    background: #f1f1f1;
-    padding: 12px;
-    border-radius: 10px;
-    margin: 8px 0;
-    font-size: 17px;
-}
-
-.payment-box label {
-    display: block;
-    margin-top: 15px;
-    margin-bottom: 6px;
-    font-weight: bold;
-}
-
-.payment-box input {
-    width: 100%;
-    padding: 12px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 16px;
-}
-
-.send-whatsapp {
-    width: 100%;
-    margin-top: 18px;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    background: #25D366;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-}
-    }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <header class="header">
     <h1>বাংলালিংক অফার</h1>
     <p>রাকিব ফ্রিল্যান্সার</p>
 </header>
 
-<!-- SEARCH -->
-<div class="search-box">
-    <div class="logo">🅱️</div>
-    <div class="search-text">Search</div>
-    <div class="search-icon">⌕</div>
-</div>
-
-<!-- CATEGORY -->
-<div class="categories">
-    <div class="active">All</div>
-    <div>Minutes</div>
-    <div>Internet</div>
-    <div>Bundles</div>
-    <div>Call Rate</div>
-</div>
-
-<!-- OFFER AREA -->
-<div class="offer-area">
+<div class="container">
 
     <!-- OFFER 1 -->
     <div class="offer-card">
-
         <div class="discount">discount: ৳9</div>
 
         <div class="offer-title">
-            195 টাকায় বাংলালিংকে ১৫ জিবি ইন্টারনেট। মেয়াদ ৭ দিন
-            ইন্টারনেট। মেয়াদ ৭ দিন।
-            (নিজের হিট) ★
+            195 টাকায় বাংলালিংক ১৫ জিবি ইন্টারনেট। মেয়াদ ৭ দিন
         </div>
 
         <div class="price-row">
             <div class="price">price: 199</div>
 
-<button type="button" class="buy-btn"
-onclick="openPayment('195 টাকায় বাংলালিংক ১৫ জিবি ইন্টারনেট। মেয়াদ ৭ দিন', '195')">
-    buy ৳ 195
-</button>
+            <button
+                class="buy-btn"
+                onclick="openPayment('195 টাকার বাংলালিংক ১৫ জিবি ইন্টারনেট', '195')">
+                buy ৳ 195
+            </button>
         </div>
 
         <div class="offer-info">
             <div class="category">Bundles</div>
             <div class="star">★</div>
-            <div class="days">🕐 0 days</div>
+            <div class="days">⏱ 7 days</div>
         </div>
-
     </div>
-
 
     <!-- OFFER 2 -->
     <div class="offer-card">
-
         <div class="discount">discount: ৳90</div>
 
         <div class="offer-title">
-            608 টাকায় বাংলালিংকে 70 জিবি।
-            মেয়াদ ৩০ দিন ➡️ সারা বাংলাদেশ
-            পাবে ★ নিজের হিট
+            608 টাকায় বাংলালিংক ৭০ জিবি মেয়াদ ৩০ দিন ➡️ সারা বাংলাদেশ
         </div>
 
         <div class="price-row">
             <div class="price">price: 698</div>
 
-            <button class="buy-btn">
-                buy ৳ 615
+            <button
+                class="buy-btn"
+                onclick="openPayment('608 টাকার বাংলালিংক ৭০ জিবি অফার', '608')">
+                buy ৳ 608
             </button>
         </div>
 
         <div class="offer-info">
             <div class="category">Internet</div>
             <div class="star">★</div>
-            <div class="days">🕐 0 days</div>
+            <div class="days">⏱ 30 days</div>
         </div>
-
     </div>
-
 
     <!-- OFFER 3 -->
     <div class="offer-card">
-
         <div class="discount">discount: ৳51</div>
 
         <div class="offer-title">
-            547 টাকায় বাংলালিংকে 40 জিবি।
-            মেয়াদ ৩০ দিন ➡️ সারা বাংলাদেশ
-            পাবে ★ নিজের হিট
+            547 টাকায় বাংলালিংক ৪০ জিবি মেয়াদ ৩০ দিন ➡️ সারা বাংলাদেশ
         </div>
 
         <div class="price-row">
             <div class="price">price: 598</div>
 
-            <button class="buy-btn">
-                buy ৳ 555
+            <button
+                class="buy-btn"
+                onclick="openPayment('547 টাকার বাংলালিংক ৪০ জিবি অফার', '547')">
+                buy ৳ 547
             </button>
         </div>
 
         <div class="offer-info">
             <div class="category">Internet</div>
             <div class="star">★</div>
-            <div class="days">🕐 0 days</div>
+            <div class="days">⏱ 30 days</div>
         </div>
-
     </div>
-
 
     <!-- OFFER 4 -->
     <div class="offer-card">
-
         <div class="discount">discount: ৳128</div>
 
         <div class="offer-title">
-            670 টাকায় বাংলালিংকে 100 জিবি।
-            মেয়াদ ৩০ দিন ➡️ সারা বাংলাদেশ পাবে
+            670 টাকায় বাংলালিংক ১০০ জিবি মেয়াদ ৩০ দিন ➡️ সারা বাংলাদেশ
         </div>
 
         <div class="price-row">
             <div class="price">price: 805</div>
 
-            <button class="buy-btn">
+            <button
+                class="buy-btn"
+                onclick="openPayment('670 টাকার বাংলালিংক ১০০ জিবি অফার', '670')">
                 buy ৳ 670
             </button>
         </div>
@@ -448,14 +320,16 @@ onclick="openPayment('195 টাকায় বাংলালিংক ১৫ 
         <div class="offer-info">
             <div class="category">Internet</div>
             <div class="star">★</div>
-            <div class="days">🕐 0 days</div>
+            <div class="days">⏱ 30 days</div>
         </div>
-
     </div>
 
 </div>
+
+
 <!-- PAYMENT MODAL -->
 <div id="paymentModal" class="payment-modal">
+
     <div class="payment-box">
 
         <span class="close-payment" onclick="closePayment()">×</span>
@@ -465,7 +339,7 @@ onclick="openPayment('195 টাকায় বাংলালিংক ১৫ 
         <p id="selectedOffer"></p>
 
         <div class="warning">
-            ⚠️ পেমেন্ট করার আগে ভালোভাবে যাচাই করুন<br><br>
+            ⚠️ পেমেন্ট করার আগে ভালোভাবে যাচাই করুন।<br><br>
             এই নাম্বারে <b>Send Money</b> করবেন।<br>
             ভুল করে <b>Flexiload</b> বা <b>Cash Out</b> করলে টাকা ফেরত দেওয়া হবে না।
         </div>
@@ -479,31 +353,39 @@ onclick="openPayment('195 টাকায় বাংলালিংক ১৫ 
         </div>
 
         <label>যে বাংলালিংক নাম্বারে অফার নেবেন</label>
+
         <input
             type="tel"
             id="customerNumber"
             placeholder="01XXXXXXXXX"
-            maxlength="11"
-        >
+            maxlength="11">
 
         <label>পেমেন্টের Screenshot দিন</label>
+
         <input
             type="file"
             id="paymentScreenshot"
-            accept="image/*"
-        >
+            accept="image/*">
 
-        <button class="send-whatsapp" onclick="sendOrder()">
+        <button
+            class="send-whatsapp"
+            onclick="sendOrder()">
             WhatsApp-এ পাঠান
         </button>
 
     </div>
+
 </div>
+
+
 <script>
+
 let selectedOfferName = "";
 let selectedOfferPrice = "";
 
-function openPayment(offerName, price) {
+
+function openPayment(offerName, price){
+
     selectedOfferName = offerName;
     selectedOfferPrice = price;
 
@@ -511,24 +393,34 @@ function openPayment(offerName, price) {
         "<b>অফার:</b> " + offerName +
         "<br><b>পেমেন্ট:</b> ৳ " + price;
 
-    document.getElementById("paymentModal").classList.add("show");
+    document.getElementById("paymentModal")
+        .classList.add("show");
 }
 
-function closePayment() {
-    document.getElementById("paymentModal").classList.remove("show");
-}
-    function sendOrder() {
-    const customerNumber = document.getElementById("customerNumber").value.trim();
 
-    if (customerNumber.length !== 11) {
-        alert("সঠিক ১১ সংখ্যার বাংলালিংক নম্বর দিন।");
+function closePayment(){
+
+    document.getElementById("paymentModal")
+        .classList.remove("show");
+}
+
+
+function sendOrder(){
+
+    const customerNumber =
+        document.getElementById("customerNumber").value.trim();
+
+    if(customerNumber.length !== 11){
+
+        alert("সঠিক ১১ সংখ্যার বাংলালিংক নম্বর দিন");
+
         return;
     }
 
     const message =
         "নতুন অফার অর্ডার%0A%0A" +
         "অফার: " + selectedOfferName + "%0A" +
-        "পেমেন্ট: ৳" + selectedOfferPrice + "%0A" +
+        "পেমেন্ট: ৳ " + selectedOfferPrice + "%0A" +
         "অফার নেওয়ার নম্বর: " + customerNumber + "%0A%0A" +
         "পেমেন্টের Screenshot সংযুক্ত করা হয়েছে।";
 
@@ -536,7 +428,9 @@ function closePayment() {
         "https://wa.me/8801837976455?text=" + message,
         "_blank"
     );
-    }
+}
+
 </script>
+
 </body>
 </html>
