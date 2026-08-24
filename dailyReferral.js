@@ -42,16 +42,16 @@ export async function resetDailyReferralIfExpired(db, userRef) {
     userData.dailyReferralStartedAt;
 
   // আগে কোনো সময় শুরু না হলে
-  if (!startedAt) {
+if (!startedAt) {
 
-    await updateDoc(userRef, {
-      dailyReferralCount: 0,
-      dailyReferralStartedAt: serverTimestamp(),
-      dailyBonusClaimed: false
-    });
+  await updateDoc(userRef, {
+    dailyReferralCount: 0,
+    dailyReferralStartedAt: serverTimestamp(),
+    dailyBonusClaimed: false
+  });
 
-    return 0;
-  }
+  return 0;
+}
 
 
   // Firebase Timestamp থেকে milliseconds
@@ -129,24 +129,24 @@ export async function addDailyReferral(
 
 
   const newCount =
-    currentCount + 1;
+  currentCount + 1;
 
+const updateData = {
+  dailyReferralCount: newCount,
+  dailyReferralLastAt: serverTimestamp()
+};
 
-  await updateDoc(
-    userRef,
-    {
+if (currentCount === 0) {
+  updateData.dailyReferralStartedAt = serverTimestamp();
+  updateData.dailyBonusClaimed = false;
+}
 
-      dailyReferralCount:
-        newCount,
+await updateDoc(
+  userRef,
+  updateData
+);
 
-      dailyReferralLastAt:
-        serverTimestamp()
-
-    }
-  );
-
-
-  return true;
+return true;
 }
 
 
