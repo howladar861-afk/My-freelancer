@@ -1122,7 +1122,15 @@ const result =
     db,
     id
   );
-
+if (
+  !result.alreadyPaid &&
+  result.level1Uid
+) {
+  await addDailyReferral(
+    db,
+    result.level1Uid
+  );
+}
 await setDoc(
   doc(db, "users", userId),
   {
