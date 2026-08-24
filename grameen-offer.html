@@ -117,88 +117,168 @@
     margin-top: 12px;
     color: #555;
 }
-        /* BUY NOW POPUP */
+        /* =========================
+   BUY NOW POPUP CSS
+========================= */
 
 .popup-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.55);
-    z-index: 9999;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 99999;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
 .popup-box {
     width: 100%;
     max-width: 520px;
-    background: white;
+    max-height: 92vh;
+    overflow-y: auto;
+    background: #ffffff;
     border-radius: 25px;
-    padding: 25px;
+    padding: 25px 20px;
     box-sizing: border-box;
     position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.35);
+    font-family: Arial, sans-serif;
 }
 
 .popup-box h2 {
     text-align: center;
-    font-size: 28px;
-    margin: 10px 25px 30px;
+    font-size: 27px;
+    margin: 5px 35px 25px;
+    color: #222;
 }
 
 .popup-close {
     position: absolute;
-    right: 15px;
-    top: 10px;
+    right: 12px;
+    top: 8px;
+    width: 45px;
+    height: 45px;
     border: none;
     background: transparent;
     font-size: 38px;
     font-weight: bold;
+    color: #333;
     cursor: pointer;
 }
 
 .popup-offer {
-    font-size: 20px;
-    line-height: 1.6;
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 19px;
     margin-bottom: 10px;
 }
 
 .popup-price {
-    font-size: 21px;
-    margin-bottom: 20px;
-}
-
-.popup-warning {
-    background: #fff3c4;
-    padding: 20px;
-    border-radius: 18px;
-    font-size: 18px;
-    line-height: 1.7;
-    margin-bottom: 20px;
-}
-
-.whatsapp-number {
-    background: #f1f1f1;
-    padding: 17px;
+    background: #f5f5f5;
+    padding: 15px;
     border-radius: 15px;
     font-size: 20px;
     margin-bottom: 15px;
 }
 
-.whatsapp-btn {
-    width: 100%;
-    background: #25D366;
-    color: white;
-    border: none;
+.payment-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 16px;
-    border-radius: 25px;
-    font-size: 20px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+}
+
+.payment-card b {
+    display: block;
+    font-size: 19px;
+    margin-bottom: 5px;
+}
+
+.payment-card strong {
+    font-size: 21px;
+}
+
+.payment-card button {
+    border: none;
+    color: white;
+    padding: 9px 15px;
+    border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
 }
-    </style>
+
+.bkash {
+    background: #ffe8f1;
+}
+
+.bkash button {
+    background: #d81b60;
+}
+
+.nagad {
+    background: #e8f7e8;
+}
+
+.nagad button {
+    background: #159447;
+}
+
+.popup-warning {
+    background: #fff1c7;
+    padding: 18px;
+    border-radius: 17px;
+    font-size: 17px;
+    line-height: 1.65;
+    margin: 18px 0;
+    color: #333;
+}
+
+.popup-warning p {
+    margin: 10px 0;
+}
+
+.popup-box label {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.popup-box input {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    border: 2px solid #ddd;
+    border-radius: 15px;
+    font-size: 18px;
+    outline: none;
+    margin-bottom: 15px;
+}
+
+.popup-box input:focus {
+    border-color: #25D366;
+}
+
+.whatsapp-btn {
+    width: 100%;
+    border: none;
+    background: #25D366;
+    color: white;
+    padding: 16px;
+    border-radius: 18px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.whatsapp-btn:active {
+    transform: scale(0.98);
+}
 </head>
 
 <body>
@@ -583,83 +663,95 @@
 
 <script>
 
-/* =========================
-   BUY NOW POPUP
-========================= */
+<!-- BUY NOW POPUP -->
+<div id="buyPopup" class="popup-overlay">
 
-let selectedOfferName = "";
-let selectedOfferPrice = "";
+    <div class="popup-box">
 
+        <button class="popup-close" onclick="closeBuyPopup()">×</button>
 
-/* Popup Open */
+        <h2>অফারটি নিতে পেমেন্ট করুন</h2>
 
-function openBuyPopup(name, price) {
+        <div class="popup-offer">
+            <b>অফার:</b>
+            <span id="popupOfferName">অফারের নাম</span>
+        </div>
 
-    selectedOfferName = name;
-    selectedOfferPrice = price;
+        <div class="popup-price">
+            <b>মূল্য:</b>
+            ৳<span id="popupOfferPrice">0</span>
+        </div>
 
-    document.getElementById("popupOfferName").textContent = name;
-    document.getElementById("popupOfferPrice").textContent = price;
+        <div class="payment-card bkash">
+            <div>
+                <b>বিকাশ</b>
+                <strong>01837976455</strong>
+            </div>
+            <button onclick="copyNumber('01837976455')">Copy</button>
+        </div>
 
-    document.getElementById("buyPopup").style.display = "flex";
-}
+        <div class="payment-card nagad">
+            <div>
+                <b>নগদ</b>
+                <strong>01404534868</strong>
+            </div>
+            <button onclick="copyNumber('01404534868')">Copy</button>
+        </div>
 
+        <div class="popup-warning">
 
-/* Popup Close */
+            ⚠️ <b>গুরুত্বপূর্ণ নির্দেশনা</b>
 
-function closeBuyPopup() {
+            <p>
+                যে নাম্বারে অফারটি নিতে চান,
+                সেই নাম্বারটি নিচে দিন।
+            </p>
 
-    document.getElementById("buyPopup").style.display = "none";
+            <p>
+                ওই নাম্বারে টাকা
+                <b>Send Money</b> করবেন।
+            </p>
 
-}
+            <p>
+                টাকা <b>Send Money</b> করার পর
+                পেমেন্টের Screenshot WhatsApp-এ পাঠাবেন।
+            </p>
 
+            <p>
+                ❌ টাকা Send Money না করে
+                Admin-কে মেসেজ করবেন না।
+            </p>
 
-/* WhatsApp */
+            <p>
+                ⚠️ ভুল করে <b>Flexiload</b> বা
+                <b>Cash Out</b> করলে টাকা ফেরত দেওয়া হবে না।
+            </p>
 
-function buyViaWhatsApp() {
+            <strong>অবশ্যই Send Money করতে হবে।</strong>
 
-    const customerNumber =
-        document.getElementById("customerNumber").value.trim();
+        </div>
 
+        <label for="customerNumber">
+            যে নাম্বারে অফারটি নিতে চান
+        </label>
 
-    if (customerNumber === "") {
+        <input
+            type="tel"
+            id="customerNumber"
+            placeholder="01XXXXXXXXX"
+            maxlength="11"
+            inputmode="numeric"
+        >
 
-        alert("অফার নিতে চান এমন নাম্বারটি দিন।");
+        <button
+            class="whatsapp-btn"
+            onclick="buyViaWhatsApp()"
+        >
+            💬 WhatsApp-এ Screenshot পাঠান
+        </button>
 
-        return;
-    }
-
-
-    if (!/^01[0-9]{9}$/.test(customerNumber)) {
-
-        alert("সঠিক ১১ সংখ্যার মোবাইল নাম্বার দিন।");
-
-        return;
-    }
-
-
-    const message =
-        "আমি একটি অফার নিতে চাই।\n\n" +
-
-        "অফার: " + selectedOfferName + "\n" +
-
-        "মূল্য: ৳" + selectedOfferPrice + "\n\n" +
-
-        "যে নাম্বারে অফার নিতে চাই: " +
-        customerNumber + "\n\n" +
-
-        "আমি Send Money করেছি। " +
-        "পেমেন্টের Screenshot পাঠাচ্ছি।";
-
-
-    const whatsappURL =
-        "https://wa.me/8801837976455?text=" +
-        encodeURIComponent(message);
-
-
-    window.open(whatsappURL, "_blank");
-
-}
+    </div>
+</div>
 
 
 /* =========================
