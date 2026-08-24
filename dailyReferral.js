@@ -187,16 +187,28 @@ export async function getDailyReferralStatus(
     Number(count || 0);
 
 
-  return {
+  const userSnap =
+  await getDoc(userRef);
 
-    count:
-      safeCount,
+const userData =
+  userSnap.exists()
+    ? userSnap.data()
+    : {};
 
-    limit:
-      DAILY_REFERRAL_LIMIT,
+const startedAt =
+  userData.dailyReferralStartedAt || null;
 
-    completed:
-      safeCount >= DAILY_REFERRAL_LIMIT
+return {
+  count:
+    safeCount,
 
-  };
+  limit:
+    DAILY_REFERRAL_LIMIT,
+
+  completed:
+    safeCount >= DAILY_REFERRAL_LIMIT,
+
+  startedAt:
+    startedAt
+};
     }
