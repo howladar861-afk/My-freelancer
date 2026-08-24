@@ -663,126 +663,122 @@
 
 <script>
 
-<!-- BUY NOW POPUP -->
-<div id="buyPopup" class="popup-overlay">
+let selectedOfferName = "";
+let selectedOfferPrice = "";
 
-    <div class="popup-box">
+/* =========================
+   OPEN BUY POPUP
+========================= */
+function openBuyPopup(name, price) {
 
-        <button class="popup-close" onclick="closeBuyPopup()">×</button>
+    selectedOfferName = name;
+    selectedOfferPrice = price;
 
-        <h2>অফারটি নিতে পেমেন্ট করুন</h2>
+    document.getElementById("popupOfferName").textContent = name;
+    document.getElementById("popupOfferPrice").textContent = price;
 
-        <div class="popup-offer">
-            <b>অফার:</b>
-            <span id="popupOfferName">অফারের নাম</span>
-        </div>
-
-        <div class="popup-price">
-            <b>মূল্য:</b>
-            ৳<span id="popupOfferPrice">0</span>
-        </div>
-
-        <div class="payment-card bkash">
-            <div>
-                <b>বিকাশ</b>
-                <strong>01837976455</strong>
-            </div>
-            <button onclick="copyNumber('01837976455')">Copy</button>
-        </div>
-
-        <div class="payment-card nagad">
-            <div>
-                <b>নগদ</b>
-                <strong>01404534868</strong>
-            </div>
-            <button onclick="copyNumber('01404534868')">Copy</button>
-        </div>
-
-        <div class="popup-warning">
-
-            ⚠️ <b>গুরুত্বপূর্ণ নির্দেশনা</b>
-
-            <p>
-                যে নাম্বারে অফারটি নিতে চান,
-                সেই নাম্বারটি নিচে দিন।
-            </p>
-
-            <p>
-                ওই নাম্বারে টাকা
-                <b>Send Money</b> করবেন।
-            </p>
-
-            <p>
-                টাকা <b>Send Money</b> করার পর
-                পেমেন্টের Screenshot WhatsApp-এ পাঠাবেন।
-            </p>
-
-            <p>
-                ❌ টাকা Send Money না করে
-                Admin-কে মেসেজ করবেন না।
-            </p>
-
-            <p>
-                ⚠️ ভুল করে <b>Flexiload</b> বা
-                <b>Cash Out</b> করলে টাকা ফেরত দেওয়া হবে না।
-            </p>
-
-            <strong>অবশ্যই Send Money করতে হবে।</strong>
-
-        </div>
-
-        <label for="customerNumber">
-            যে নাম্বারে অফারটি নিতে চান
-        </label>
-
-        <input
-            type="tel"
-            id="customerNumber"
-            placeholder="01XXXXXXXXX"
-            maxlength="11"
-            inputmode="numeric"
-        >
-
-        <button
-            class="whatsapp-btn"
-            onclick="buyViaWhatsApp()"
-        >
-            💬 WhatsApp-এ Screenshot পাঠান
-        </button>
-
-    </div>
-</div>
+    document.getElementById("buyPopup").style.display = "flex";
+}
 
 
 /* =========================
-   সব Buy Now Button কাজ করবে
+   CLOSE BUY POPUP
 ========================= */
+function closeBuyPopup() {
 
-document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("buyPopup").style.display = "none";
+
+}
+
+
+/* =========================
+   WHATSAPP
+========================= */
+function buyViaWhatsApp() {
+
+    const customerNumber =
+        document.getElementById("customerNumber").value.trim();
+
+    if (customerNumber === "") {
+
+        alert("যে নাম্বারে অফারটি নিতে চান সেই নাম্বারটি দিন।");
+
+        return;
+    }
+
+    if (!/^01[0-9]{9}$/.test(customerNumber)) {
+
+        alert("সঠিক ১১ সংখ্যার মোবাইল নাম্বার দিন।");
+
+        return;
+    }
+
+    const message =
+        "আসসালামু আলাইকুম।%0A%0A" +
+        "আমি একটি অফার নিতে চাই।%0A%0A" +
+        "অফার: " +
+        encodeURIComponent(selectedOfferName) +
+        "%0A" +
+        "মূল্য: ৳" +
+        encodeURIComponent(selectedOfferPrice) +
+        "%0A" +
+        "যে নাম্বারে অফার নিতে চাই: " +
+        encodeURIComponent(customerNumber) +
+        "%0A%0A" +
+        "আমি Send Money করেছি।%0A" +
+        "পেমেন্টের Screenshot সংযুক্ত করছি।";
+
+    const whatsappURL =
+        "https://wa.me/8801837976455?text=" + message;
+
+    window.open(whatsappURL, "_blank");
+}
+
+
+/* =========================
+   CLOSE WHEN OUTSIDE CLICK
+========================= */
+document.addEventListener("click", function(event) {
+
+    const popup =
+        document.getElementById("buyPopup");
+
+    if (event.target === popup) {
+
+        closeBuyPopup();
+
+    }
+
+});
+
+
+/* =========================
+   ALL BUY NOW BUTTONS
+========================= */
+document.addEventListener("DOMContentLoaded", function() {
 
     const buttons =
         document.querySelectorAll(".offer button");
 
+    buttons.forEach(function(button) {
 
-    buttons.forEach(function (button) {
-
-        button.addEventListener("click", function () {
+        button.addEventListener("click", function() {
 
             const offer =
                 button.closest(".offer");
 
             if (!offer) return;
 
-
             const name =
-                offer.querySelector("b").textContent.trim();
-
-
-            const price =
-                offer.querySelector("strong").textContent
-                .replace("৳", "")
+                offer.querySelector("b")
+                .textContent
                 .trim();
 
+            const price =
+                offer.querySelector("strong")
+                .textContent
+                .replace("৳", "")
+                .trim();
 
             openBuyPopup(name, price);
 
@@ -793,5 +789,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
+
 </body>
 </html>
