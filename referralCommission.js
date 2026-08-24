@@ -432,22 +432,25 @@ export async function processReferralCommission(db, requestId) {
       // =================================
 
       return {
-        success: true,
+  success: true,
 
-        alreadyPaid: false,
+  alreadyPaid: false,
 
-        level1:
-          level1Amount,
+  level1:
+    level1Amount,
 
-        level2:
-          level2Amount,
+  level2:
+    level2Amount,
 
-        total:
-          totalCommission,
+  total:
+    totalCommission,
 
-        companyWallet:
-          -totalCommission
-      };
+  level1Uid:
+    level1Uid,
+
+  companyWallet:
+    -totalCommission
+};
     }
   );
 
