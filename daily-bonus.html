@@ -195,7 +195,61 @@ const auth = getAuth(app);
 
 const db = getFirestore(app);
 
+function startReferralCountdown(startedAt) {
 
+  const timerElement =
+    document.getElementById("countdownTimer");
+
+  if (!timerElement) return;
+
+  if (!startedAt) {
+    timerElement.textContent =
+      "⏳ সময়ের তথ্য পাওয়া যায়নি";
+    return;
+  }
+
+  const startedTime =
+    startedAt.toMillis();
+
+  const endTime =
+    startedTime + (24 * 60 * 60 * 1000);
+
+  function updateCountdown() {
+
+    const remaining =
+      endTime - Date.now();
+
+    if (remaining <= 0) {
+      timerElement.textContent =
+        "🔄 সময় শেষ — নতুন দিন শুরু হয়েছে";
+
+      location.reload();
+      return;
+    }
+
+    const hours =
+      Math.floor(remaining / (1000 * 60 * 60));
+
+    const minutes =
+      Math.floor(
+        (remaining % (1000 * 60 * 60)) /
+        (1000 * 60)
+      );
+
+    const seconds =
+      Math.floor(
+        (remaining % (1000 * 60)) /
+        1000
+      );
+
+    timerElement.textContent =
+      `⏳ সময় বাকি: ${hours} ঘণ্টা ${minutes} মিনিট ${seconds} সেকেন্ড`;
+  }
+
+  updateCountdown();
+
+  setInterval(updateCountdown, 1000);
+}
 // =====================================
 // DAILY REFERRAL COUNT LOAD
 // =====================================
@@ -217,7 +271,7 @@ onAuthStateChanged(auth, async (user) => {
         db,
         user.uid
       );
-
+startReferralCountdown(status.startedAt);
 
     // COUNT UPDATE
 
