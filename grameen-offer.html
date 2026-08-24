@@ -1,125 +1,457 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>টেলিটক অফার - রাকিব ফ্রিল্যান্সার</title>
+<title>গ্রামীণ অফার - রাকিব ফ্রিল্যান্সার</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #ffffff;
-            color: #111;
-        }
+html,body{
+    width:100%;
+    min-height:100%;
+}
 
-        .header {
-            background: #d91b8f;
-            color: white;
-            text-align: center;
-            padding: 20px 10px;
-        }
+body{
+    font-family:Arial,"Noto Sans Bengali",sans-serif;
+    background:#f7f7f7;
+    color:#222;
+}
 
-        .header h1 {
-            margin: 0;
-            font-size: 30px;
-        }
+/* ================= HEADER ================= */
 
-        .header p {
-            margin: 10px 0 0;
-            font-size: 20px;
-        }
+.header{
+    background:#009b4d;
+    color:#fff;
+    text-align:center;
+    padding:55px 20px 28px;
+}
 
-        .search-box {
-            margin: 25px 20px;
-            padding: 20px;
-            border-radius: 25px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.15);
-            font-size: 25px;
-            color: #777;
-        }
+.header h1{
+    font-size:38px;
+    font-weight:800;
+    margin-bottom:14px;
+}
 
-        .categories {
-            display: flex;
-            overflow-x: auto;
-            background: #d91b8f;
-            color: white;
-            padding: 15px 10px;
-            gap: 30px;
-            font-size: 18px;
-        }
+.header p{
+    font-size:25px;
+    font-weight:600;
+}
 
-        .categories div {
-            white-space: nowrap;
-        }
+/* ================= SEARCH ================= */
 
-        .empty {
-            text-align: center;
-            padding: 100px 25px;
-        }
+.search-area{
+    background:#009b4d;
+    padding:22px 30px 30px;
+}
 
-        .empty-icon {
-            font-size: 90px;
-            opacity: 0.5;
-        }
+.search-box{
+    max-width:900px;
+    height:76px;
+    margin:auto;
 
-        .empty h2 {
-            color: #d91b8f;
-            font-size: 28px;
-            line-height: 1.5;
-        }
+    background:#fff;
+    border-radius:28px;
 
-        .empty p {
-            color: #777;
-            font-size: 20px;
-            line-height: 1.8;
-        }
-    </style>
+    display:flex;
+    align-items:center;
+
+    padding:0 25px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.10);
+}
+
+.search-icon{
+    font-size:43px;
+    color:#008f4b;
+    margin-right:20px;
+}
+
+.search-box input{
+    width:100%;
+    height:100%;
+
+    border:none;
+    outline:none;
+
+    font-size:25px;
+    color:#333;
+
+    background:transparent;
+}
+
+.search-box input::placeholder{
+    color:#666;
+}
+
+/* ================= CATEGORY ================= */
+
+.categories{
+    width:100%;
+    background:#009b4d;
+
+    display:flex;
+    align-items:center;
+
+    overflow-x:auto;
+
+    padding:0 18px;
+}
+
+.categories::-webkit-scrollbar{
+    display:none;
+}
+
+.category{
+    flex:0 0 auto;
+
+    color:#fff;
+
+    font-size:23px;
+    font-weight:700;
+
+    padding:25px 25px 20px;
+
+    cursor:pointer;
+
+    position:relative;
+
+    white-space:nowrap;
+}
+
+.category.active{
+    color:#ffff00;
+}
+
+.category.active::after{
+    content:"";
+
+    position:absolute;
+
+    left:18px;
+    right:18px;
+    bottom:0;
+
+    height:5px;
+
+    background:#ffff00;
+
+    border-radius:5px;
+}
+
+/* ================= OFFER AREA ================= */
+
+#offerList{
+    width:100%;
+    min-height:500px;
+
+    background:#f7f7f7;
+}
+
+/* অফার না থাকলে নিচে কিছু দেখাবে না */
+.no-result{
+    display:none;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+
+    .header{
+        padding:38px 15px 22px;
+    }
+
+    .header h1{
+        font-size:32px;
+    }
+
+    .header p{
+        font-size:22px;
+    }
+
+    .search-area{
+        padding:20px 20px 25px;
+    }
+
+    .search-box{
+        height:72px;
+        border-radius:25px;
+        padding:0 20px;
+    }
+
+    .search-icon{
+        font-size:38px;
+        margin-right:12px;
+    }
+
+    .search-box input{
+        font-size:21px;
+    }
+
+    .categories{
+        padding:0 8px;
+    }
+
+    .category{
+        font-size:20px;
+        padding:23px 18px 18px;
+    }
+
+    .category.active::after{
+        left:12px;
+        right:12px;
+    }
+
+    #offerList{
+        min-height:600px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <div class="header">
-        <h1>টেলিটক অফার</h1>
-        <p>রাকিব ফ্রিল্যান্সার</p>
-    </div>
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <h1>গ্রামীণ অফার</h1>
+
+    <p>রাকিব ফ্রিল্যান্সার</p>
+
+</header>
+
+
+<!-- ================= SEARCH ================= -->
+
+<section class="search-area">
 
     <div class="search-box">
-        🔷 &nbsp; Search
-    </div>
 
-    <div class="categories">
-        <div>All</div>
-        <div>Minutes</div>
-        <div>Internet</div>
-        <div>Bundles</div>
-        <div>Call Rate</div>
-    </div>
+        <span class="search-icon">⌕</span>
 
-    <!-- OFFER LIST -->
-    <div class="empty">
-
-        <div class="empty-icon">
-            🎁
-        </div>
-
-        <h2>
-            টেলিটক এর অফারগুলো শীঘ্রই<br>
-            যোগ করা হবে
-        </h2>
-
-        <p>
-            আমরা আপনার জন্য সেরা অফার নিয়ে আসছি।
-            <br>
-            অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন।
-        </p>
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search Offer..."
+            autocomplete="off"
+        >
 
     </div>
+
+</section>
+
+
+<!-- ================= CATEGORY ================= -->
+
+<nav class="categories">
+
+    <div
+        class="category active"
+        data-category="all"
+    >
+        All
+    </div>
+
+    <div
+        class="category"
+        data-category="minutes"
+    >
+        Minutes
+    </div>
+
+    <div
+        class="category"
+        data-category="internet"
+    >
+        Internet
+    </div>
+
+    <div
+        class="category"
+        data-category="bundles"
+    >
+        Bundles
+    </div>
+
+    <div
+        class="category"
+        data-category="call"
+    >
+        Call Rate
+    </div>
+
+</nav>
+
+
+<!-- ================= OFFER AREA ================= -->
+
+<div id="offerList"></div>
+
+
+<script>
+
+/*
+==================================================
+এখানে পরে আপনার গ্রামীণ অফারগুলো বসাবেন।
+এখন খালি রাখা হয়েছে।
+==================================================
+*/
+
+const offers = [
+
+    /*
+    উদাহরণ:
+
+    {
+        title: "10 জিবি + 600 মিনিট",
+        description: "গ্রামীণ সিমে 10 জিবি ইন্টারনেট এবং 600 মিনিট।",
+        validity: "30 দিন",
+        category: "bundles",
+        oldPrice: 550,
+        buyPrice: 524,
+        discount: 26
+    }
+
+    */
+
+];
+
+
+/* ================= ELEMENT ================= */
+
+const offerList = document.getElementById("offerList");
+
+const searchInput = document.getElementById("searchInput");
+
+const categories =
+    document.querySelectorAll(".category");
+
+
+let selectedCategory = "all";
+
+
+/* ================= SHOW OFFERS ================= */
+
+function showOffers(){
+
+    const searchText =
+        searchInput.value
+        .trim()
+        .toLowerCase();
+
+
+    const filteredOffers = offers.filter(offer => {
+
+        const matchCategory =
+            selectedCategory === "all" ||
+            offer.category === selectedCategory;
+
+
+        const matchSearch =
+            offer.title.toLowerCase()
+            .includes(searchText) ||
+
+            offer.description.toLowerCase()
+            .includes(searchText);
+
+
+        return matchCategory && matchSearch;
+
+    });
+
+
+    offerList.innerHTML = "";
+
+
+    /*
+    এখন অফার না থাকলে কিছু দেখাবে না।
+    */
+
+    if(filteredOffers.length === 0){
+
+        return;
+
+    }
+
+
+    filteredOffers.forEach(offer => {
+
+        const card = document.createElement("div");
+
+        card.className = "offer-card";
+
+        card.innerHTML = `
+
+            <h2>${offer.title}</h2>
+
+            <p>${offer.description}</p>
+
+            <p>
+                <strong>মেয়াদ:</strong>
+                ${offer.validity}
+            </p>
+
+            <p>
+                <strong>মূল্য:</strong>
+                ৳${offer.buyPrice}
+            </p>
+
+        `;
+
+        offerList.appendChild(card);
+
+    });
+
+}
+
+
+/* ================= CATEGORY CLICK ================= */
+
+categories.forEach(category => {
+
+    category.addEventListener("click", function(){
+
+        categories.forEach(item => {
+
+            item.classList.remove("active");
+
+        });
+
+
+        this.classList.add("active");
+
+
+        selectedCategory =
+            this.dataset.category;
+
+
+        showOffers();
+
+    });
+
+});
+
+
+/* ================= SEARCH ================= */
+
+searchInput.addEventListener(
+    "input",
+    showOffers
+);
+
+
+/* ================= START ================= */
+
+showOffers();
+
+</script>
 
 </body>
 </html>
