@@ -202,7 +202,8 @@ body{
     display:none;
 }
 
-/* POPUP */
+/* ================= POPUP ================= */
+
 .popup-overlay{
     position:fixed;
     inset:0;
@@ -259,9 +260,27 @@ body{
     color:#00a651;
 }
 
+/* MOBILE NUMBER INPUT */
+
+.offer-number{
+    width:100%;
+    border:1px solid #d5d5d5;
+    border-radius:12px;
+    padding:14px;
+    font-size:18px;
+    outline:none;
+    margin-bottom:15px;
+}
+
+.offer-number:focus{
+    border-color:#00a651;
+}
+
+/* MESSAGE */
+
 .popup-message{
     width:100%;
-    min-height:120px;
+    min-height:150px;
     resize:none;
     border:1px solid #ddd;
     border-radius:12px;
@@ -270,6 +289,8 @@ body{
     outline:none;
     margin-bottom:15px;
 }
+
+/* WHATSAPP */
 
 .whatsapp-btn{
     display:block;
@@ -287,6 +308,12 @@ body{
     margin-bottom:10px;
 }
 
+.whatsapp-btn.disabled{
+    opacity:0.6;
+}
+
+/* CLOSE */
+
 .close-btn{
     width:100%;
     background:#eeeeee;
@@ -299,6 +326,7 @@ body{
 }
 
 /* FOOTER */
+
 .footer{
     text-align:center;
     padding:20px;
@@ -309,6 +337,7 @@ body{
 }
 
 /* MOBILE */
+
 @media(max-width:500px){
 
     .header h1{
@@ -342,6 +371,7 @@ body{
 <body>
 
 <!-- HEADER -->
+
 <div class="header">
     <h1>গ্রামীণফোন অফার</h1>
     <p>রাকিব ফ্রিল্যান্সার</p>
@@ -349,16 +379,20 @@ body{
 
 
 <!-- SEARCH -->
+
 <div class="search-box">
+
     <input
         type="text"
         id="searchInput"
         placeholder="🔍 Search Offer..."
         oninput="searchOffers()">
+
 </div>
 
 
 <!-- CATEGORIES -->
+
 <div class="categories">
 
     <div
@@ -391,6 +425,7 @@ body{
 
 
 <!-- OFFER AREA -->
+
 <div class="offer-area">
 
     <div id="offerList"></div>
@@ -402,19 +437,27 @@ body{
 </div>
 
 
-<!-- POPUP -->
+<!-- ================= POPUP ================= -->
+
 <div
     class="popup-overlay"
     id="popupOverlay"
     onclick="closePopupOutside(event)">
 
-    <div class="popup">
+    <div
+        class="popup"
+        onclick="event.stopPropagation()">
 
         <div class="popup-header">
+
             <h2>অফার অর্ডার করুন</h2>
+
         </div>
 
+
         <div class="popup-body">
+
+            <!-- SELECTED OFFER -->
 
             <div class="selected-offer">
 
@@ -435,23 +478,49 @@ body{
 
             </div>
 
+
+            <!-- OFFER NUMBER -->
+
+            <input
+                type="tel"
+                id="offerNumber"
+                class="offer-number"
+                placeholder="অফার নেওয়ার মোবাইল নাম্বার লিখুন"
+                maxlength="11"
+                inputmode="numeric"
+                oninput="updateWhatsAppLink()">
+
+
+            <!-- MESSAGE -->
+
             <textarea
                 class="popup-message"
-                id="popupMessage">
+                id="popupMessage"
+                placeholder="WhatsApp মেসেজ">
             </textarea>
+
+
+            <!-- WHATSAPP BUTTON -->
 
             <a
                 href="#"
                 id="whatsappButton"
                 class="whatsapp-btn"
                 target="_blank">
+
                 💬 WhatsApp এ অর্ডার করুন
+
             </a>
+
+
+            <!-- CLOSE -->
 
             <button
                 class="close-btn"
                 onclick="closePopup()">
+
                 বন্ধ করুন
+
             </button>
 
         </div>
@@ -462,6 +531,7 @@ body{
 
 
 <!-- FOOTER -->
+
 <div class="footer">
     Rakib Freelancer © 2026
 </div>
@@ -471,7 +541,7 @@ body{
 
 /* ==================================================
    আপনার WhatsApp নম্বর
-   01837976455 → 8801837976455
+   01837976455
    ================================================== */
 
 const WHATSAPP_NUMBER = "8801837976455";
@@ -697,6 +767,7 @@ const offers = [
 /* ================= VARIABLES ================= */
 
 let currentCategory = "All";
+let selectedOffer = null;
 
 
 /* ================= DISPLAY ================= */
@@ -717,6 +788,7 @@ function displayOffers(){
         .trim();
 
     offerList.innerHTML = "";
+
 
     const filteredOffers = offers.filter(function(offer){
 
@@ -794,7 +866,9 @@ function displayOffers(){
                 <button
                     class="buy-btn"
                     onclick="openPopup(${originalIndex})">
+
                     Buy Now
+
                 </button>
 
             </div>
@@ -857,29 +931,38 @@ function searchOffers(){
 
 function openPopup(index){
 
-    const offer = offers[index];
+    selectedOffer = offers[index];
 
 
     document.getElementById("popupOffer")
-        .textContent = offer.title;
+        .textContent = selectedOffer.title;
 
 
     document.getElementById("popupPrice")
-        .textContent = "৳" + offer.buyPrice;
+        .textContent = "৳" + selectedOffer.buyPrice;
 
 
     document.getElementById("popupValidity")
-        .textContent = offer.validity;
+        .textContent = selectedOffer.validity;
 
+
+    /* নাম্বার ইনপুট খালি করা */
+
+    document.getElementById("offerNumber")
+        .value = "";
+
+
+    /* মেসেজ তৈরি */
 
     const message =
 `আসসালামু আলাইকুম,
 
 আমি এই অফারটি নিতে চাই।
 
-অফার: ${offer.title}
-মূল্য: ৳${offer.buyPrice}
-মেয়াদ: ${offer.validity}
+অফার: ${selectedOffer.title}
+মূল্য: ৳${selectedOffer.buyPrice}
+মেয়াদ: ${selectedOffer.validity}
+অফার নেওয়ার নাম্বার: [এখানে নাম্বার দিন]
 
 দয়া করে অফারটি অ্যাক্টিভ করে দিন।
 
@@ -891,23 +974,88 @@ Rakib Freelancer`;
         .value = message;
 
 
-    const encodedMessage =
-        encodeURIComponent(message);
-
-
-    const whatsappURL =
-    "https://wa.me/8801837976455" +
-    "?text=" +
-    encodedMessage;
-
+    /* WhatsApp link reset */
 
     document.getElementById("whatsappButton")
-        .href = whatsappURL;
+        .href = "#";
 
 
     document
         .getElementById("popupOverlay")
         .classList.add("show");
+
+}
+
+
+/* ================= UPDATE WHATSAPP ================= */
+
+function updateWhatsAppLink(){
+
+    if(!selectedOffer){
+        return;
+    }
+
+
+    let offerNumber =
+        document
+        .getElementById("offerNumber")
+        .value
+        .replace(/\D/g,"");
+
+
+    /* 11 digit না হলে WhatsApp link তৈরি হবে না */
+
+    if(offerNumber.length !== 11){
+
+        document.getElementById("whatsappButton")
+            .href = "#";
+
+        return;
+
+    }
+
+
+    const message =
+`আসসালামু আলাইকুম,
+
+আমি এই অফারটি নিতে চাই।
+
+অফার: ${selectedOffer.title}
+মূল্য: ৳${selectedOffer.buyPrice}
+মেয়াদ: ${selectedOffer.validity}
+অফার নেওয়ার নাম্বার: ${offerNumber}
+
+দয়া করে অফারটি অ্যাক্টিভ করে দিন।
+
+ধন্যবাদ।
+Rakib Freelancer`;
+
+
+    /* Popup-এর মেসেজেও নাম্বার দেখাবে */
+
+    document.getElementById("popupMessage")
+        .value = message;
+
+
+    /* Message encode */
+
+    const encodedMessage =
+        encodeURIComponent(message);
+
+
+    /* আপনার WhatsApp নম্বর */
+
+    const whatsappURL =
+        "https://wa.me/" +
+        WHATSAPP_NUMBER +
+        "?text=" +
+        encodedMessage;
+
+
+    /* WhatsApp button-এর link */
+
+    document.getElementById("whatsappButton")
+        .href = whatsappURL;
 
 }
 
@@ -959,4 +1107,4 @@ displayOffers();
 </script>
 
 </body>
-</html>
+        </html>
