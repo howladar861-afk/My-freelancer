@@ -129,7 +129,7 @@ body{
     width:100%;
     max-width:1000px;
     margin:auto;
-    padding:18px 14px 80px;
+    padding:18px 14px 90px;
 }
 
 .offer-card{
@@ -146,6 +146,7 @@ body{
 .offer-top{
     display:flex;
     justify-content:space-between;
+    align-items:flex-start;
     gap:15px;
 }
 
@@ -157,7 +158,8 @@ body{
     font-size:23px;
     line-height:1.45;
     font-weight:800;
-    margin-bottom:8px;
+    margin-bottom:7px;
+    padding-right:55px;
 }
 
 .offer-details{
@@ -175,13 +177,14 @@ body{
 }
 
 .old-price{
-    color:#f15b35;
+    color:#e05232;
     font-size:17px;
+    text-decoration:line-through;
 }
 
 .buy-price{
     color:#159447;
-    font-size:21px;
+    font-size:22px;
     font-weight:800;
 }
 
@@ -198,6 +201,10 @@ body{
     transition:.2s;
 }
 
+.buy-btn:active{
+    transform:scale(.96);
+}
+
 .buy-btn:hover{
     background:#009b4d;
     color:white;
@@ -206,16 +213,17 @@ body{
 .offer-bottom{
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:12px;
     margin-top:14px;
+    flex-wrap:wrap;
 }
 
 .category-tag{
     background:#8589ee;
     color:white;
-    border-radius:18px 18px 0 0;
+    border-radius:18px;
     padding:8px 18px;
-    font-size:17px;
+    font-size:16px;
     font-weight:700;
 }
 
@@ -237,6 +245,7 @@ body{
     padding:8px 15px;
     border-radius:0 0 0 22px;
     font-size:16px;
+    font-weight:bold;
 }
 
 /* ================= NO RESULT ================= */
@@ -256,7 +265,7 @@ body{
     z-index:9999;
     inset:0;
     background:rgba(0,0,0,.65);
-    padding:20px;
+    padding:15px;
     overflow-y:auto;
 }
 
@@ -280,8 +289,8 @@ body{
 
 .close-btn{
     position:absolute;
-    right:18px;
-    top:12px;
+    right:16px;
+    top:8px;
     border:0;
     background:transparent;
     font-size:40px;
@@ -306,6 +315,7 @@ body{
 .selected-price{
     font-size:21px;
     font-weight:800;
+    color:#009b4d;
     margin-bottom:18px;
 }
 
@@ -326,6 +336,10 @@ body{
     font-weight:700;
     margin-bottom:12px;
     cursor:pointer;
+}
+
+.payment-number:active{
+    transform:scale(.98);
 }
 
 .form-label{
@@ -377,13 +391,13 @@ body{
     right:18px;
     bottom:18px;
     z-index:5000;
-    width:58px;
-    height:58px;
+    width:60px;
+    height:60px;
     border-radius:50%;
     border:0;
     background:#009b4d;
     color:white;
-    font-size:27px;
+    font-size:28px;
     box-shadow:0 5px 20px rgba(0,0,0,.3);
     cursor:pointer;
 }
@@ -412,7 +426,7 @@ body{
     padding:14px;
     border-radius:14px;
     margin-bottom:18px;
-    line-height:1.5;
+    line-height:1.6;
 }
 
 .admin-item{
@@ -420,6 +434,11 @@ body{
     border-radius:16px;
     padding:15px;
     margin-bottom:14px;
+}
+
+.admin-item h3{
+    margin-bottom:12px;
+    color:#009b4d;
 }
 
 .admin-grid{
@@ -436,12 +455,19 @@ body{
     border-radius:10px;
     padding:0 10px;
     font-size:16px;
+    outline:none;
+}
+
+.admin-grid input:focus,
+.admin-grid select:focus{
+    border-color:#009b4d;
 }
 
 .admin-actions{
     display:flex;
     gap:8px;
     margin-top:10px;
+    flex-wrap:wrap;
 }
 
 .save-btn,
@@ -531,6 +557,10 @@ body{
         border-radius:17px;
     }
 
+    .offer-top{
+        gap:8px;
+    }
+
     .offer-title{
         font-size:19px;
     }
@@ -540,13 +570,17 @@ body{
     }
 
     .buy-btn{
-        min-width:108px;
+        min-width:105px;
         height:51px;
         font-size:17px;
     }
 
+    .buy-price{
+        font-size:20px;
+    }
+
     .discount{
-        font-size:14px;
+        font-size:13px;
         padding:7px 11px;
     }
 
@@ -639,7 +673,11 @@ body{
 
 <!-- ================= ADMIN BUTTON ================= -->
 
-<button class="admin-button" onclick="openAdmin()" title="অফার ম্যানেজ">
+<button
+    class="admin-button"
+    onclick="openAdmin()"
+    title="অফার ম্যানেজ"
+>
     ⚙
 </button>
 
@@ -658,9 +696,15 @@ body{
             অফারটি নিতে পেমেন্ট করুন
         </h2>
 
-        <div class="selected-offer" id="selectedOfferText"></div>
+        <div
+            class="selected-offer"
+            id="selectedOfferText"
+        ></div>
 
-        <div class="selected-price" id="selectedPriceText"></div>
+        <div
+            class="selected-price"
+            id="selectedPriceText"
+        ></div>
 
         <div class="warning">
 
@@ -672,16 +716,22 @@ body{
 
             <br>
 
-            ভুল করে <b>Flexiload</b> বা <b>Cash Out</b> করলে
-            টাকা ফেরত দেওয়া হবে না।
+            ভুল করে <b>Flexiload</b> বা
+            <b>Cash Out</b> করলে টাকা ফেরত দেওয়া হবে না।
 
         </div>
 
-        <div class="payment-number" onclick="copyNumber('01837976455')">
+        <div
+            class="payment-number"
+            onclick="copyNumber('01837976455')"
+        >
             বিকাশ: 01837976455
         </div>
 
-        <div class="payment-number" onclick="copyNumber('01404534868')">
+        <div
+            class="payment-number"
+            onclick="copyNumber('01404534868')"
+        >
             নগদ: 01404534868
         </div>
 
@@ -738,18 +788,28 @@ body{
 
             এখান থেকে অফারের নাম, বিবরণ, মেয়াদ,
             মূল দাম, Buy Now দাম এবং ক্যাটাগরি পরিবর্তন করতে পারবেন।
+
             <br><br>
-            পরিবর্তন এই ব্রাউজারে Save থাকবে।
+
+            <b>নোট:</b> এখানে Save করলে এই ব্রাউজারে পরিবর্তনটি থাকবে।
+            GitHub-এর কোডের ডিফল্ট অফার পরিবর্তন করতে
+            নিচের <b>defaultOffers</b> অংশটি এডিট করবেন।
 
         </div>
 
         <div class="admin-top-buttons">
 
-            <button class="add-btn" onclick="addNewOffer()">
+            <button
+                class="add-btn"
+                onclick="addNewOffer()"
+            >
                 ＋ নতুন অফার
             </button>
 
-            <button class="reset-btn" onclick="resetOffers()">
+            <button
+                class="reset-btn"
+                onclick="resetOffers()"
+            >
                 ডিফল্ট অফার ফিরিয়ে আনুন
             </button>
 
@@ -765,8 +825,17 @@ body{
 <script>
 
 /* =========================================================
-   DEFAULT OFFERS
-   Buy Now দাম = স্ক্রিনশটের Buy দাম + ১০ টাকা
+   ⭐⭐ এখানেই অফারের তথ্য পরিবর্তন করবেন ⭐⭐
+
+   title      = অফারের নাম
+   description= অফারের বিস্তারিত
+   validity   = মেয়াদ
+   category   = minutes / internet / bundles / call
+   oldPrice   = আগের/মূল দাম
+   buyPrice   = আপনার Buy Now দাম
+   discount   = কত টাকা কম
+
+   পরবর্তীতে শুধু এই অংশ পরিবর্তন করলেই হবে।
 ========================================================= */
 
 const defaultOffers = [
@@ -774,7 +843,7 @@ const defaultOffers = [
     {
         id:1,
         title:"8 জিবি ইন্টারনেট",
-        description:"জিপিতে 8 জিবি ইন্টারনেট",
+        description:"গ্রামীণফোনে 8 জিবি ইন্টারনেট",
         validity:"7 দিন",
         category:"internet",
         oldPrice:179,
@@ -785,7 +854,7 @@ const defaultOffers = [
     {
         id:2,
         title:"20 জিবি ইন্টারনেট",
-        description:"জিপিতে 20 জিবি ইন্টারনেট",
+        description:"গ্রামীণফোনে 20 জিবি ইন্টারনেট",
         validity:"30 দিন",
         category:"internet",
         oldPrice:499,
@@ -796,7 +865,7 @@ const defaultOffers = [
     {
         id:3,
         title:"75 জিবি ইন্টারনেট",
-        description:"জিপিতে 75 জিবি ইন্টারনেট",
+        description:"গ্রামীণফোনে 75 জিবি ইন্টারনেট",
         validity:"30 দিন",
         category:"internet",
         oldPrice:757,
@@ -807,7 +876,7 @@ const defaultOffers = [
     {
         id:4,
         title:"30 জিবি + 500 মিনিট",
-        description:"জিপিতে 30 জিবি ইন্টারনেট + 500 মিনিট",
+        description:"30 জিবি ইন্টারনেট + 500 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:675,
@@ -818,7 +887,7 @@ const defaultOffers = [
     {
         id:5,
         title:"75 জিবি + 500 মিনিট",
-        description:"জিপিতে 75 জিবি ইন্টারনেট + 500 মিনিট",
+        description:"75 জিবি ইন্টারনেট + 500 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:826,
@@ -829,7 +898,7 @@ const defaultOffers = [
     {
         id:6,
         title:"100 জিবি + 200 মিনিট",
-        description:"জিপিতে 100 জিবি ইন্টারনেট + 200 মিনিট",
+        description:"100 জিবি ইন্টারনেট + 200 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:809,
@@ -840,7 +909,7 @@ const defaultOffers = [
     {
         id:7,
         title:"100 জিবি + 350 মিনিট",
-        description:"জিপিতে 100 জিবি ইন্টারনেট + 350 মিনিট",
+        description:"100 জিবি ইন্টারনেট + 350 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:839,
@@ -851,7 +920,7 @@ const defaultOffers = [
     {
         id:8,
         title:"100 জিবি + 500 মিনিট",
-        description:"জিপিতে 100 জিবি ইন্টারনেট + 500 মিনিট",
+        description:"100 জিবি ইন্টারনেট + 500 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:863,
@@ -862,7 +931,7 @@ const defaultOffers = [
     {
         id:9,
         title:"40 জিবি + 500 মিনিট",
-        description:"জিপিতে 40 জিবি ইন্টারনেট + 500 মিনিট",
+        description:"40 জিবি ইন্টারনেট + 500 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:745,
@@ -873,7 +942,7 @@ const defaultOffers = [
     {
         id:10,
         title:"50 জিবি + 200 মিনিট",
-        description:"জিপিতে 50 জিবি ইন্টারনেট + 200 মিনিট",
+        description:"50 জিবি ইন্টারনেট + 200 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:700,
@@ -884,7 +953,7 @@ const defaultOffers = [
     {
         id:11,
         title:"50 জিবি + 350 মিনিট",
-        description:"জিপিতে 50 জিবি ইন্টারনেট + 350 মিনিট",
+        description:"50 জিবি ইন্টারনেট + 350 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:742,
@@ -895,7 +964,7 @@ const defaultOffers = [
     {
         id:12,
         title:"75 জিবি + 300 মিনিট",
-        description:"জিপিতে 75 জিবি ইন্টারনেট + 300 মিনিট",
+        description:"75 জিবি ইন্টারনেট + 300 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:793,
@@ -906,7 +975,7 @@ const defaultOffers = [
     {
         id:13,
         title:"20 জিবি + 500 মিনিট",
-        description:"জিপিতে 20 জিবি ইন্টারনেট + 500 মিনিট",
+        description:"20 জিবি ইন্টারনেট + 500 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:666,
@@ -917,7 +986,7 @@ const defaultOffers = [
     {
         id:14,
         title:"40 জিবি + 100 মিনিট",
-        description:"জিপিতে 40 জিবি ইন্টারনেট + 100 মিনিট",
+        description:"40 জিবি ইন্টারনেট + 100 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:621,
@@ -928,7 +997,7 @@ const defaultOffers = [
     {
         id:15,
         title:"40 জিবি + 200 মিনিট",
-        description:"জিপিতে 40 জিবি ইন্টারনেট + 200 মিনিট",
+        description:"40 জিবি ইন্টারনেট + 200 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:666,
@@ -939,7 +1008,7 @@ const defaultOffers = [
     {
         id:16,
         title:"40 জিবি + 350 মিনিট",
-        description:"জিপিতে 40 জিবি ইন্টারনেট + 350 মিনিট",
+        description:"40 জিবি ইন্টারনেট + 350 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:712,
@@ -950,7 +1019,7 @@ const defaultOffers = [
     {
         id:17,
         title:"15 জিবি + 350 মিনিট",
-        description:"জিপিতে 15 জিবি ইন্টারনেট + 350 মিনিট",
+        description:"15 জিবি ইন্টারনেট + 350 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:590,
@@ -961,7 +1030,7 @@ const defaultOffers = [
     {
         id:18,
         title:"15 জিবি + 500 মিনিট",
-        description:"জিপিতে 15 জিবি ইন্টারনেট + 500 মিনিট",
+        description:"15 জিবি ইন্টারনেট + 500 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:652,
@@ -972,7 +1041,7 @@ const defaultOffers = [
     {
         id:19,
         title:"5 জিবি + 500 মিনিট",
-        description:"জিপিতে 5 জিবি ইন্টারনেট + 500 মিনিট",
+        description:"5 জিবি ইন্টারনেট + 500 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:545,
@@ -983,7 +1052,7 @@ const defaultOffers = [
     {
         id:20,
         title:"10 জিবি + 300 মিনিট",
-        description:"জিপিতে 10 জিবি ইন্টারনেট + 300 মিনিট",
+        description:"10 জিবি ইন্টারনেট + 300 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:557,
@@ -994,7 +1063,7 @@ const defaultOffers = [
     {
         id:21,
         title:"10 জিবি + 500 মিনিট",
-        description:"জিপিতে 10 জিবি ইন্টারনেট + 500 মিনিট",
+        description:"10 জিবি ইন্টারনেট + 500 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:604,
@@ -1005,7 +1074,7 @@ const defaultOffers = [
     {
         id:22,
         title:"640 মিনিট",
-        description:"জিপিতে 640 মিনিট",
+        description:"640 মিনিট",
         validity:"30 দিন",
         category:"minutes",
         oldPrice:419,
@@ -1016,7 +1085,7 @@ const defaultOffers = [
     {
         id:23,
         title:"820 মিনিট",
-        description:"জিপিতে 820 মিনিট",
+        description:"820 মিনিট",
         validity:"30 দিন",
         category:"minutes",
         oldPrice:519,
@@ -1027,7 +1096,7 @@ const defaultOffers = [
     {
         id:24,
         title:"30 জিবি + 300 মিনিট",
-        description:"জিপিতে 30 জিবি ইন্টারনেট + 300 মিনিট",
+        description:"30 জিবি ইন্টারনেট + 300 মিনিট",
         validity:"30 দিন",
         category:"bundles",
         oldPrice:662,
@@ -1038,7 +1107,7 @@ const defaultOffers = [
     {
         id:25,
         title:"50 জিবি ইন্টারনেট",
-        description:"জিপিতে 50 জিবি ইন্টারনেট",
+        description:"50 জিবি ইন্টারনেট",
         validity:"30 দিন",
         category:"internet",
         oldPrice:679,
@@ -1050,62 +1119,11 @@ const defaultOffers = [
 
 
 /* =========================================================
-   LOAD OFFERS
+   OFFER DATA LOAD
 ========================================================= */
 
-let offers;
+let offers = [];
 
 try{
 
-    const saved =
-        localStorage.getItem("rakib_grameen_offers");
-
-    offers =
-        saved ? JSON.parse(saved) : defaultOffers;
-
-}catch(error){
-
-    offers = defaultOffers;
-
-}
-
-
-let selectedCategory = "all";
-let selectedOffer = null;
-
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const offerList =
-    document.getElementById("offerList");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const categories =
-    document.querySelectorAll(".category");
-
-
-/* =========================================================
-   SAVE
-========================================================= */
-
-function saveOffers(){
-
-    localStorage.setItem(
-        "rakib_grameen_offers",
-        JSON.stringify(offers)
-    );
-
-}
-
-
-/* =========================================================
-   SHOW OFFERS
-========================================================= */
-
-function showOffers(){
-
-    const sea
+    co
