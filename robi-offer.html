@@ -7,15 +7,14 @@
 <title>রবি অফার - রাকিব ফ্রিল্যান্সার</title>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
 
 body{
     margin:0;
-    font-family:Arial,sans-serif;
-    background:#ffffff;
+    font-family:Arial,"Noto Sans Bengali",sans-serif;
+    background:#f7f7f7;
     color:#222;
 }
 
@@ -34,47 +33,55 @@ body{
 }
 
 .header p{
-    margin:10px 0 0;
-    font-size:22px;
+    margin:8px 0 0;
+    font-size:20px;
     font-weight:bold;
 }
 
 /* SEARCH */
 .search-box{
-    margin:25px auto;
-    width:90%;
-    max-width:620px;
-    height:90px;
+    margin:20px auto;
+    width:92%;
+    max-width:650px;
+    height:70px;
     background:white;
-    border-radius:28px;
-    box-shadow:0 4px 18px rgba(0,0,0,0.15);
+    border-radius:20px;
+    box-shadow:0 4px 18px rgba(0,0,0,.15);
     display:flex;
     align-items:center;
-    padding:10px 20px;
+    padding:8px 15px;
 }
 
 .logo{
-    width:65px;
-    height:65px;
-    border-radius:12px;
+    width:50px;
+    height:50px;
+    border-radius:10px;
     background:#e52b35;
     color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:45px;
+    font-size:32px;
     font-weight:bold;
 }
 
 .search-text{
     flex:1;
-    font-size:48px;
+    font-size:24px;
     color:#777;
-    padding-left:20px;
+    padding-left:15px;
+}
+
+.search-input{
+    flex:1;
+    border:0;
+    outline:none;
+    font-size:20px;
+    padding:10px;
 }
 
 .search-icon{
-    font-size:48px;
+    font-size:32px;
     color:#d4148e;
 }
 
@@ -84,162 +91,791 @@ body{
     display:flex;
     justify-content:space-around;
     align-items:center;
-    padding:16px 5px;
+    padding:10px 3px;
     color:white;
-    font-size:18px;
+    font-size:17px;
     font-weight:bold;
-    overflow:hidden;
+    overflow-x:auto;
 }
 
 .category div{
-    padding:10px 8px;
+    padding:10px 12px;
     white-space:nowrap;
+    cursor:pointer;
 }
 
 .category .active{
     color:#fff200;
-    border-bottom:7px solid #fff200;
+    border-bottom:5px solid #fff200;
 }
 
-/* EMPTY OFFER AREA */
-.empty-area{
-    min-height:650px;
-    text-align:center;
-    padding:120px 25px 50px;
+/* OFFER AREA */
+.offers{
+    width:94%;
+    max-width:700px;
+    margin:18px auto 40px;
 }
 
-.gift{
-    font-size:110px;
-    opacity:.35;
+/* OFFER CARD */
+.offer-card{
+    background:white;
+    border-radius:18px;
+    margin-bottom:15px;
+    padding:18px;
+    box-shadow:0 2px 10px rgba(0,0,0,.12);
+    position:relative;
+    border:1px solid #eee;
 }
 
-.empty-title{
-    margin-top:40px;
-    color:#d4148e;
-    font-size:30px;
+.discount{
+    position:absolute;
+    right:0;
+    top:0;
+    background:#8585ee;
+    color:white;
+    padding:8px 15px;
+    border-radius:0 18px 0 18px;
+    font-size:16px;
+}
+
+.offer-title{
+    font-size:20px;
     font-weight:800;
     line-height:1.5;
+    padding-right:100px;
 }
 
-.empty-text{
-    margin-top:35px;
+.offer-description{
+    color:#555;
+    font-size:16px;
+    line-height:1.6;
+    margin-top:8px;
+}
+
+.offer-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:15px;
+    gap:10px;
+}
+
+.offer-price{
+    color:#f05a28;
+    font-size:18px;
+}
+
+.offer-price del{
+    color:#999;
+    font-size:15px;
+    margin-right:6px;
+}
+
+.buy-btn{
+    border:0;
+    background:#4cae4c;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.buy-btn:hover{
+    background:#398c39;
+}
+
+.tag{
+    display:inline-block;
+    margin-top:12px;
+    background:#8585ee;
+    color:white;
+    padding:7px 14px;
+    border-radius:20px;
+    font-size:14px;
+}
+
+.star{
+    color:#ffb400;
+    font-size:25px;
+    margin-left:5px;
+}
+
+/* EMPTY */
+.no-offer{
+    text-align:center;
+    padding:50px 20px;
     color:#777;
-    font-size:22px;
-    line-height:1.8;
+    font-size:20px;
+}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    z-index:9999;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.65);
+    padding:20px;
+    overflow:auto;
+}
+
+.modal-box{
+    width:100%;
+    max-width:500px;
+    background:white;
+    margin:60px auto;
+    border-radius:22px;
+    padding:25px;
+    position:relative;
+    animation:popup .2s ease;
+}
+
+@keyframes popup{
+    from{
+        transform:scale(.8);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+.close{
+    position:absolute;
+    right:18px;
+    top:10px;
+    font-size:32px;
+    color:#777;
+    cursor:pointer;
+}
+
+.modal-title{
+    color:#d4148e;
+    font-size:25px;
+    font-weight:800;
+    margin:10px 35px 20px 0;
+}
+
+.selected-offer{
+    background:#f8e8f3;
+    border-left:5px solid #d4148e;
+    padding:15px;
+    border-radius:10px;
+    font-size:17px;
+    line-height:1.7;
+}
+
+.whatsapp-btn{
+    width:100%;
+    border:0;
+    background:#25D366;
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    font-size:19px;
+    font-weight:bold;
+    margin-top:20px;
+    cursor:pointer;
+}
+
+.whatsapp-btn:hover{
+    background:#1ebe5d;
+}
+
+.cancel-btn{
+    width:100%;
+    border:0;
+    background:#eee;
+    color:#333;
+    padding:13px;
+    border-radius:12px;
+    font-size:17px;
+    margin-top:10px;
+    cursor:pointer;
 }
 
 /* MOBILE */
 @media(max-width:500px){
 
     .header h1{
-        font-size:29px;
-    }
-
-    .header p{
-        font-size:21px;
-    }
-
-    .search-box{
-        height:88px;
-    }
-
-    .logo{
-        width:60px;
-        height:60px;
-        font-size:42px;
-    }
-
-    .search-text{
-        font-size:42px;
-    }
-
-    .search-icon{
-        font-size:40px;
-    }
-
-    .category{
-        font-size:17px;
-    }
-
-    .empty-title{
         font-size:27px;
     }
 
-    .empty-text{
-        font-size:21px;
+    .header p{
+        font-size:18px;
     }
 
-}
+    .search-box{
+        height:65px;
+    }
 
+    .logo{
+        width:45px;
+        height:45px;
+        font-size:28px;
+    }
+
+    .search-input{
+        font-size:17px;
+    }
+
+    .search-icon{
+        font-size:28px;
+    }
+
+    .category{
+        font-size:15px;
+    }
+
+    .category div{
+        padding:9px 10px;
+    }
+
+    .offer-card{
+        padding:15px;
+    }
+
+    .offer-title{
+        font-size:18px;
+    }
+
+    .offer-description{
+        font-size:15px;
+    }
+
+    .buy-btn{
+        font-size:16px;
+        padding:10px 14px;
+    }
+
+    .modal-box{
+        margin:30px auto;
+        padding:20px;
+    }
+}
 </style>
 </head>
 
 <body>
 
 <!-- HEADER -->
-
 <div class="header">
-
     <h1>রবি অফার</h1>
-
     <p>রাকিব ফ্রিল্যান্সার</p>
-
 </div>
 
 
 <!-- SEARCH -->
-
 <div class="search-box">
 
     <div class="logo">R</div>
 
-    <div class="search-text">
-        Search
-    </div>
+    <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="Search"
+        oninput="searchOffers()"
+    >
 
-    <div class="search-icon">
-        🔍
-    </div>
+    <div class="search-icon">🔍</div>
 
 </div>
 
 
 <!-- CATEGORY -->
-
 <div class="category">
 
-    <div class="active">All</div>
+    <div class="active" onclick="filterOffers('All',this)">
+        All
+    </div>
 
-    <div>Minutes</div>
+    <div onclick="filterOffers('Minutes',this)">
+        Minutes
+    </div>
 
-    <div>Internet</div>
+    <div onclick="filterOffers('Internet',this)">
+        Internet
+    </div>
 
-    <div>Bundles</div>
+    <div onclick="filterOffers('Bundles',this)">
+        Bundles
+    </div>
 
-    <div>Call Rate</div>
+    <div onclick="filterOffers('Call Rate',this)">
+        Call Rate
+    </div>
+
+</div>
+
+
+<!-- OFFERS -->
+<div class="offers" id="offersContainer"></div>
+
+
+<!-- BUY NOW POPUP -->
+<div id="buyModal" class="modal">
+
+    <div class="modal-box">
+
+        <span class="close" onclick="closeModal()">×</span>
+
+        <div class="modal-title">
+            অফারটি নিতে চান?
+        </div>
+
+        <div id="selectedOffer" class="selected-offer">
+        </div>
+
+        <button class="whatsapp-btn" onclick="sendWhatsApp()">
+            💬 WhatsApp-এ মেসেজ পাঠান
+        </button>
+
+        <button class="cancel-btn" onclick="closeModal()">
+            বাতিল
+        </button>
+
+    </div>
 
 </div>
 
 
-<!-- EMPTY OFFER -->
+<script>
 
-<div class="empty-area">
+/* =====================================================
+   রবি অফার লিস্ট
+   =====================================================
 
-    <div class="gift">
-        🎁
-    </div>
+   এখান থেকে আপনি খুব সহজে অফার পরিবর্তন করতে পারবেন।
 
-    <div class="empty-title">
-        রবির অফারগুলো শীঘ্রই<br>
-        যোগ করা হবে
-    </div>
+   id          = অফারের আলাদা নম্বর
+   title       = অফারের নাম
+   description = অতিরিক্ত তথ্য
+   price       = আপনার বিক্রয় মূল্য
+   oldPrice    = আগের মূল্য
+   type        = Minutes / Internet / Bundles / Call Rate
+   validity    = মেয়াদ
+   discount    = Discount
+===================================================== */
 
-    <div class="empty-text">
-        আমরা আপনার জন্য সেরা অফার নিয়ে আসছি।<br>
-        অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন।
-    </div>
+const offers = [
 
-</div>
+    {
+        id: 1,
+        title: "10 জিবি + 600 মিনিট",
+        description: "রবি সিমে 10 জিবি ইন্টারনেট এবং 600 মিনিট। সাথে টান হবে।",
+        price: 524,
+        oldPrice: 550,
+        type: "Bundles",
+        validity: "30 দিন",
+        discount: 26
+    },
+
+    {
+        id: 2,
+        title: "20 জিবি + 500 মিনিট",
+        description: "রবি সিমে 20 জিবি ইন্টারনেট এবং 500 মিনিট। সাথে টান হবে।",
+        price: 587,
+        oldPrice: 625,
+        type: "Bundles",
+        validity: "30 দিন",
+        discount: 38
+    },
+
+    {
+        id: 3,
+        title: "20 জিবি + 750 মিনিট",
+        description: "রবি সিমে 20 জিবি ইন্টারনেট এবং 750 মিনিট। সাথে টান হবে।",
+        price: 639,
+        oldPrice: 675,
+        type: "Bundles",
+        validity: "30 দিন",
+        discount: 36
+    },
+
+    {
+        id: 4,
+        title: "20 জিবি + 1000 মিনিট",
+        description: "রবি সিমে 20 জিবি ইন্টারনেট এবং 1000 মিনিট।",
+        price: 727,
+        oldPrice: 820,
+        type: "Bundles",
+        validity: "30 দিন",
+        discount: 93
+    },
+
+    {
+        id: 5,
+        title: "20 জিবি Internet",
+        description: "শুধুমাত্র YouTube, TikTok, Likee চলবে। মেইন ব্যালেন্স 0 করে রাখবেন।",
+        price: 180,
+        oldPrice: 187,
+        type: "Internet",
+        validity: "30 দিন",
+        discount: 7
+    },
+
+    {
+        id: 6,
+        title: "75 জিবি + 500 মিনিট",
+        description: "সারা বাংলাদেশ পাবে। পেমেন্ট করে নিতে পারবেন।",
+        price: 752,
+        oldPrice: 845,
+        type: "Bundles",
+        validity: "30 দিন",
+        discount: 93
+    },
+
+    {
+        id: 7,
+        title: "10 জিবি + 500 মিনিট",
+        description: "রবি সিমে 10 জিবি ইন্টারনেট এবং 500 মিনিট। সাথে টান হবে।",
+        price: 490,
+        oldPrice: 510,
+        type: "Bundles",
+        validity: "30 দিন",
+        discount: 20
+    },
+
+    {
+        id: 8,
+        title: "620 মিনিট",
+        description: "সারা বাংলাদেশ পাবে।",
+        price: 369,
+        oldPrice: 409,
+        type: "Minutes",
+        validity: "30 দিন",
+        discount: 40
+    },
+
+    {
+        id: 9,
+        title: "800 মিনিট",
+        description: "সারা বাংলাদেশ পাবে।",
+        price: 455,
+        oldPrice: 509,
+        type: "Minutes",
+        validity: "30 দিন",
+        discount: 54
+    },
+
+    {
+        id: 10,
+        title: "1000 মিনিট",
+        description: "সারা বাংলাদেশ পাবে।",
+        price: 567,
+        oldPrice: 639,
+        type: "Minutes",
+        validity: "30 দিন",
+        discount: 72
+    },
+
+    {
+        id: 11,
+        title: "300/310 মিনিট",
+        description: "এই অফার সকল রবি সিমের গ্রাহক পাবে।",
+        price: 224,
+        oldPrice: 259,
+        type: "Minutes",
+        validity: "30 দিন",
+        discount: 35
+    },
+
+    {
+        id: 12,
+        title: "400 মিনিট + 2 জিবি",
+        description: "সারা বাংলাদেশ পাবে।",
+        price: 276,
+        oldPrice: 289,
+        type: "Bundles",
+        validity: "30 দিন",
+        discount: 13
+    },
+
+    {
+        id: 13,
+        title: "525 মিনিট",
+        description: "সারা বাংলাদেশ পাবে।",
+        price: 330,
+        oldPrice: 359,
+        type: "Minutes",
+        validity: "30 দিন",
+        discount: 29
+    }
+
+];
+
+
+/* WhatsApp নম্বর
+   01837976455
+   আন্তর্জাতিক ফরম্যাটে 8801837976455
+*/
+const whatsappNumber = "8801837976455";
+
+
+let currentCategory = "All";
+let selectedOffer = null;
+
+
+/* OFFER দেখানো */
+function renderOffers(list = offers){
+
+    const container = document.getElementById("offersContainer");
+
+    container.innerHTML = "";
+
+    if(list.length === 0){
+
+        container.innerHTML = `
+            <div class="no-offer">
+                😔 এই ক্যাটাগরিতে কোনো অফার পাওয়া যায়নি।
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.forEach(offer => {
+
+        const card = document.createElement("div");
+
+        card.className = "offer-card";
+
+
+        card.innerHTML = `
+
+            <div class="discount">
+                discount: ৳${offer.discount}
+            </div>
+
+            <div class="offer-title">
+                ${offer.title}
+            </div>
+
+            <div class="offer-description">
+                ${offer.description}
+                <br>
+                <b>মেয়াদ: ${offer.validity}</b>
+            </div>
+
+            <div>
+
+                <span class="tag">
+                    ${offer.type}
+                </span>
+
+                <span class="star">
+                    ★
+                </span>
+
+            </div>
+
+
+            <div class="offer-bottom">
+
+                <div class="offer-price">
+
+                    <del>৳${offer.oldPrice}</del>
+
+                    <strong>
+                        ৳${offer.price}
+                    </strong>
+
+                </div>
+
+
+                <button
+                    class="buy-btn"
+                    onclick="openBuyModal(${offer.id})"
+                >
+                    Buy Now
+                </button>
+
+            </div>
+        `;
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* CATEGORY FILTER */
+function filterOffers(category, element){
+
+    currentCategory = category;
+
+
+    document.querySelectorAll(".category div")
+        .forEach(item => {
+            item.classList.remove("active");
+        });
+
+
+    element.classList.add("active");
+
+
+    applyFilters();
+}
+
+
+/* SEARCH */
+function searchOffers(){
+
+    applyFilters();
+
+}
+
+
+/* SEARCH + CATEGORY একসাথে */
+function applyFilters(){
+
+    const search =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    let result = offers.filter(offer => {
+
+        const categoryMatch =
+            currentCategory === "All" ||
+            offer.type === currentCategory;
+
+
+        const searchMatch =
+            offer.title.toLowerCase().includes(search) ||
+            offer.description.toLowerCase().includes(search) ||
+            offer.type.toLowerCase().includes(search);
+
+
+        return categoryMatch && searchMatch;
+
+    });
+
+
+    renderOffers(result);
+
+}
+
+
+/* BUY NOW POPUP */
+function openBuyModal(id){
+
+    selectedOffer =
+        offers.find(offer => offer.id === id);
+
+
+    if(!selectedOffer){
+        return;
+    }
+
+
+    document.getElementById("selectedOffer").innerHTML = `
+
+        <b>📦 অফার:</b>
+        ${selectedOffer.title}
+
+        <br>
+
+        <b>💰 মূল্য:</b>
+        ৳${selectedOffer.price}
+
+        <br>
+
+        <b>📅 মেয়াদ:</b>
+        ${selectedOffer.validity}
+
+        <br>
+
+        <b>📱 ক্যাটাগরি:</b>
+        ${selectedOffer.type}
+
+        <br>
+
+        <b>🎁 বর্ণনা:</b>
+        ${selectedOffer.description}
+
+    `;
+
+
+    document.getElementById("buyModal").style.display = "block";
+
+}
+
+
+/* POPUP বন্ধ */
+function closeModal(){
+
+    document.getElementById("buyModal").style.display = "none";
+
+}
+
+
+/* WHATSAPP MESSAGE */
+function sendWhatsApp(){
+
+    if(!selectedOffer){
+        return;
+    }
+
+
+    const message =
+`আসসালামু আলাইকুম।
+
+আমি এই রবি অফারটি নিতে চাই।
+
+📦 অফার: ${selectedOffer.title}
+💰 মূল্য: ৳${selectedOffer.price}
+📅 মেয়াদ: ${selectedOffer.validity}
+📱 ক্যাটাগরি: ${selectedOffer.type}
+
+দয়া করে অফারটি দেওয়ার ব্যবস্থা করুন।`;
+
+
+    const url =
+        "https://wa.me/" +
+        whatsappNumber +
+        "?text=" +
+        encodeURIComponent(message);
+
+
+    window.open(url, "_blank");
+
+}
+
+
+/* বাইরে ক্লিক করলে POPUP বন্ধ */
+window.onclick = function(event){
+
+    const modal =
+        document.getElementById("buyModal");
+
+
+    if(event.target === modal){
+
+        closeModal();
+
+    }
+
+}
+
+
+/* প্রথমবার অফার দেখাবে */
+renderOffers();
+
+</script>
 
 </body>
-  </html>
+</html>
