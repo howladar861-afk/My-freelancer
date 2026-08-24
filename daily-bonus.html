@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,106 +8,127 @@
     <title>Rakib Freelancer - Daily Bonus</title>
 
     <style>
-        body{
-            margin:0;
-            font-family:Arial,sans-serif;
-            background:#f5f8ff;
-            color:#111;
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f8ff;
+            color: #111;
         }
 
-        .daily-bonus{
-            max-width:600px;
-            margin:auto;
-            padding:15px;
+        .daily-bonus {
+            max-width: 600px;
+            margin: auto;
+            padding: 15px;
         }
 
-        .title{
-            background:#1760d8;
-            color:white;
-            text-align:center;
-            padding:20px;
-            border-radius:18px;
-            font-size:30px;
-            font-weight:bold;
+        .title {
+            background: #1760d8;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 18px;
+            font-size: 30px;
+            font-weight: bold;
         }
 
-        .bonus-info{
-            background:white;
-            margin-top:15px;
-            padding:25px 15px;
-            border-radius:18px;
-            text-align:center;
-            box-shadow:0 4px 15px rgba(0,0,0,.10);
+        .bonus-info {
+            background: white;
+            margin-top: 15px;
+            padding: 25px 15px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .10);
         }
 
-        .bonus-info h2{
-            font-size:25px;
+        .bonus-info h2 {
+            font-size: 25px;
         }
 
-        .money{
-            background:#1760d8;
-            color:#ffd21c;
-            padding:12px;
-            border-radius:30px;
-            font-size:36px;
-            font-weight:bold;
+        .money {
+            background: #1760d8;
+            color: #ffd21c;
+            padding: 12px;
+            border-radius: 30px;
+            font-size: 36px;
+            font-weight: bold;
         }
 
-        .referral-box{
-            margin-top:15px;
-            background:#eef5ff;
-            padding:20px 10px;
-            border-radius:18px;
-            text-align:center;
+        .referral-box {
+            margin-top: 15px;
+            background: #eef5ff;
+            padding: 20px 10px;
+            border-radius: 18px;
+            text-align: center;
         }
 
-        .referral-box h3{
-            display:inline-block;
-            background:#1760d8;
-            color:white;
-            padding:10px 35px;
-            border-radius:12px;
-            font-size:24px;
+        .referral-box h3 {
+            display: inline-block;
+            background: #1760d8;
+            color: white;
+            padding: 10px 35px;
+            border-radius: 12px;
+            font-size: 24px;
         }
 
-        .count{
-            font-size:32px;
-            font-weight:bold;
-            color:#1760d8;
-            margin:15px;
+        .count {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1760d8;
+            margin: 15px;
         }
 
-        .status{
-            margin-top:15px;
-            padding:20px;
-            background:#effff3;
-            border:2px solid #91d6a5;
-            border-radius:18px;
-            color:#168b37;
-            font-size:20px;
-            font-weight:bold;
+        /* DAILY REFERRAL TIMER */
+        #dailyReferralTimer {
+            width: 90%;
+            max-width: 600px;
+            margin: 15px auto;
+            padding: 18px;
+            box-sizing: border-box;
+            background: #ffffff;
+            color: #1760d8;
+            border-radius: 18px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .12);
         }
 
-        .help{
-            margin-top:15px;
-            background:white;
-            padding:20px;
-            border-radius:18px;
-            text-align:center;
-            font-size:21px;
-            box-shadow:0 3px 12px rgba(0,0,0,.08);
+        .status {
+            margin-top: 15px;
+            padding: 20px;
+            background: #effff3;
+            border: 2px solid #91d6a5;
+            border-radius: 18px;
+            color: #168b37;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .help {
+            margin-top: 15px;
+            background: white;
+            padding: 20px;
+            border-radius: 18px;
+            text-align: center;
+            font-size: 21px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, .08);
         }
     </style>
 </head>
+
 
 <body>
 
 <div class="daily-bonus">
 
+    <!-- TITLE -->
     <div class="title">
         🎁 ডেইলি বোনাস 🎁
     </div>
 
+
+    <!-- BONUS INFO -->
     <div class="bonus-info">
 
         <h2>
@@ -123,6 +145,8 @@
 
     </div>
 
+
+    <!-- REFERRAL BOX -->
     <div class="referral-box">
 
         <h3>
@@ -132,19 +156,28 @@
         <div class="count">
             <span id="dailyReferralCount">0</span> / 4
         </div>
-<div id="countdownTimer">
-  ⏳ সময় বাকি: হিসাব করা হচ্ছে...
-</div>
+
+
+        <!-- TIMER -->
+        <div id="dailyReferralTimer">
+            ⏳ সময় হিসাব করা হচ্ছে...
+        </div>
+
+
         <p>
             আজকের রেফার কাউন্ট
         </p>
 
     </div>
 
+
+    <!-- BONUS STATUS -->
     <div class="status" id="bonusStatus">
         ⏳ ৪টি রেফার পূর্ণ করুন
     </div>
 
+
+    <!-- HELP -->
     <div class="help">
         📱 01837976455 (WhatsApp)
         <br>
@@ -152,187 +185,198 @@
     </div>
 
 </div>
+
+
+<!-- ===================================== -->
+<!-- FIREBASE + DAILY REFERRAL STATUS -->
+<!-- ===================================== -->
+
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
-import {
-  getFirestore
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-import {
-  getDailyReferralStatus
-} from "./dailyReferral.js";
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 
-// =====================================
-// FIREBASE CONFIG
-// =====================================
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
-  authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
-  projectId: "rakib-freelancer-9c66b",
-  storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
-  messagingSenderId: "541209844482",
-  appId: "1:541209844482:web:510568d5226c9bf47ac01b",
-  measurementId: "G-F6QNE0QN5K"
-};
+    import {
+        getFirestore
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-// =====================================
-// FIREBASE START
-// =====================================
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-const db = getFirestore(app);
-
-function startReferralCountdown(startedAt) {
-
-  const timerElement =
-    document.getElementById("countdownTimer");
-
-  if (!timerElement) return;
-
-  if (!startedAt) {
-    timerElement.textContent =
-      "⏳ সময়ের তথ্য পাওয়া যায়নি";
-    return;
-  }
-
-  const startedTime =
-    startedAt.toMillis();
-
-  const endTime =
-    startedTime + (24 * 60 * 60 * 1000);
-
-  function updateCountdown() {
-
-    const remaining =
-      endTime - Date.now();
-
-    if (remaining <= 0) {
-      timerElement.textContent =
-        "🔄 সময় শেষ — নতুন দিন শুরু হয়েছে";
-
-      location.reload();
-      return;
-    }
-
-    const hours =
-      Math.floor(remaining / (1000 * 60 * 60));
-
-    const minutes =
-      Math.floor(
-        (remaining % (1000 * 60 * 60)) /
-        (1000 * 60)
-      );
-
-    const seconds =
-      Math.floor(
-        (remaining % (1000 * 60)) /
-        1000
-      );
-
-    timerElement.textContent =
-      `⏳ সময় বাকি: ${hours} ঘণ্টা ${minutes} মিনিট ${seconds} সেকেন্ড`;
-  }
-
-  updateCountdown();
-
-  setInterval(updateCountdown, 1000);
-}
-// =====================================
-// DAILY REFERRAL COUNT LOAD
-// =====================================
-
-onAuthStateChanged(auth, async (user) => {
-
-  if (!user) {
-
-    console.log("User is not logged in.");
-
-    return;
-  }
+    import {
+        getAuth,
+        onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 
-  try {
-
-    const status =
-      await getDailyReferralStatus(
-        db,
-        user.uid
-      );
-startReferralCountdown(status.startedAt);
-
-    // COUNT UPDATE
-
-    const countElement =
-      document.getElementById(
-        "dailyReferralCount"
-      );
+    import {
+        getDailyReferralStatus
+    } from "./dailyReferral.js";
 
 
-    if (countElement) {
+    /* =====================================
+       FIREBASE CONFIG
+    ===================================== */
 
-      countElement.textContent =
-        status.count;
+    const firebaseConfig = {
 
-    }
+        apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
 
+        authDomain:
+            "rakib-freelancer-9c66b.firebaseapp.com",
 
-    // STATUS UPDATE
+        projectId:
+            "rakib-freelancer-9c66b",
 
-    const bonusStatus =
-      document.getElementById(
-        "bonusStatus"
-      );
+        storageBucket:
+            "rakib-freelancer-9c66b.firebasestorage.app",
 
+        messagingSenderId:
+            "541209844482",
 
-    if (bonusStatus) {
+        appId:
+            "1:541209844482:web:510568d5226c9bf47ac01b",
 
-      if (status.completed) {
-
-        bonusStatus.textContent =
-          "🎉 ৪টি রেফার সম্পূর্ণ হয়েছে!";
-
-      } else {
-
-        bonusStatus.textContent =
-          `⏳ আরও ${
-            status.limit - status.count
-          }টি রেফার পূরণ করুন`;
-
-      }
-
-    }
+        measurementId:
+            "G-F6QNE0QN5K"
+    };
 
 
-    console.log(
-      "Daily Referral Status:",
-      status
-    );
+    /* =====================================
+       FIREBASE START
+    ===================================== */
+
+    const app =
+        initializeApp(firebaseConfig);
+
+    const auth =
+        getAuth(app);
+
+    const db =
+        getFirestore(app);
 
 
-  } catch (error) {
+    /* =====================================
+       DAILY REFERRAL COUNT
+    ===================================== */
 
-    console.error(
-      "Daily Referral Load Error:",
-      error
-    );
+    onAuthStateChanged(auth, async (user) => {
 
-  }
+        if (!user) {
 
-});
+            console.log(
+                "User is not logged in."
+            );
 
-      </script>
+            return;
+        }
+
+
+        try {
+
+            const status =
+                await getDailyReferralStatus(
+                    db,
+                    user.uid
+                );
+
+
+            /* ===============================
+               REFERRAL COUNT
+            =============================== */
+
+            const countElement =
+                document.getElementById(
+                    "dailyReferralCount"
+                );
+
+
+            if (countElement) {
+
+                countElement.textContent =
+                    status.count ?? 0;
+
+            }
+
+
+            /* ===============================
+               BONUS STATUS
+            =============================== */
+
+            const bonusStatus =
+                document.getElementById(
+                    "bonusStatus"
+                );
+
+
+            if (bonusStatus) {
+
+                if (status.completed) {
+
+                    bonusStatus.textContent =
+                        "🎉 ৪টি রেফার সম্পূর্ণ হয়েছে!";
+
+                } else {
+
+                    const remaining =
+                        Math.max(
+                            0,
+                            (status.limit ?? 4) -
+                            (status.count ?? 0)
+                        );
+
+
+                    bonusStatus.textContent =
+                        `⏳ আরও ${remaining}টি রেফার পূরণ করুন`;
+
+                }
+
+            }
+
+
+            console.log(
+                "Daily Referral Status:",
+                status
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Daily Referral Load Error:",
+                error
+            );
+
+
+            const bonusStatus =
+                document.getElementById(
+                    "bonusStatus"
+                );
+
+
+            if (bonusStatus) {
+
+                bonusStatus.textContent =
+                    "❌ তথ্য লোড করা যায়নি";
+
+            }
+
+        }
+
+    });
+
+</script>
+
+
+<!-- ===================================== -->
+<!-- DAILY REFERRAL TIMER -->
+<!-- ===================================== -->
+
+<script
+    type="module"
+    src="./daily-referral-timer.js">
+</script>
+
+
 </body>
 </html>
