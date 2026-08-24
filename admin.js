@@ -25,7 +25,9 @@ import {
 import {
   processReferralCommission
 } from "./referralCommission.js";
-
+import {
+  addDailyReferral
+} from "./dailyReferral.js";
 // =====================================
 // FIREBASE CONFIG
 // =====================================
