@@ -19,8 +19,8 @@ html,body{
 }
 
 body{
-    font-family:Arial,"Noto Sans Bengali","SolaimanLipi",sans-serif;
-    background:#f5f5f5;
+    font-family:Arial,"Noto Sans Bengali",sans-serif;
+    background:#f7f7f7;
     color:#222;
 }
 
@@ -28,69 +28,80 @@ body{
 
 .header{
     background:#009b4d;
-    color:white;
+    color:#fff;
     text-align:center;
-    padding:38px 15px 22px;
+    padding:55px 20px 28px;
 }
 
 .header h1{
     font-size:38px;
     font-weight:800;
-    margin-bottom:12px;
+    margin-bottom:14px;
 }
 
 .header p{
-    font-size:24px;
-    font-weight:700;
+    font-size:25px;
+    font-weight:600;
 }
 
 /* ================= SEARCH ================= */
 
 .search-area{
     background:#009b4d;
-    padding:20px 28px 28px;
+    padding:22px 30px 30px;
 }
 
 .search-box{
     max-width:900px;
-    height:75px;
+    height:76px;
     margin:auto;
+
     background:#fff;
-    border-radius:30px;
+    border-radius:28px;
+
     display:flex;
     align-items:center;
-    padding:0 24px;
-    box-shadow:0 8px 25px rgba(0,0,0,.10);
+
+    padding:0 25px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.10);
 }
 
 .search-icon{
-    font-size:42px;
-    color:#009b4d;
-    margin-right:14px;
-    font-weight:bold;
+    font-size:43px;
+    color:#008f4b;
+    margin-right:20px;
 }
 
 .search-box input{
     width:100%;
     height:100%;
-    border:0;
-    outline:0;
-    font-size:24px;
+
+    border:none;
+    outline:none;
+
+    font-size:25px;
+    color:#333;
+
     background:transparent;
 }
 
 .search-box input::placeholder{
-    color:#777;
+    color:#666;
 }
 
 /* ================= CATEGORY ================= */
 
 .categories{
+    width:100%;
     background:#009b4d;
+
     display:flex;
+    align-items:center;
+
     overflow-x:auto;
-    padding:0 10px;
-    scrollbar-width:none;
+
+    padding:0 18px;
 }
 
 .categories::-webkit-scrollbar{
@@ -99,12 +110,18 @@ body{
 
 .category{
     flex:0 0 auto;
-    color:white;
-    font-size:22px;
+
+    color:#fff;
+
+    font-size:23px;
     font-weight:700;
-    padding:22px 25px 17px;
+
+    padding:25px 25px 20px;
+
     cursor:pointer;
+
     position:relative;
+
     white-space:nowrap;
 }
 
@@ -114,399 +131,32 @@ body{
 
 .category.active::after{
     content:"";
+
     position:absolute;
-    left:16px;
-    right:16px;
+
+    left:18px;
+    right:18px;
     bottom:0;
+
     height:5px;
+
     background:#ffff00;
+
     border-radius:5px;
 }
 
-/* ================= OFFER LIST ================= */
+/* ================= OFFER AREA ================= */
 
 #offerList{
     width:100%;
-    max-width:1000px;
-    margin:auto;
-    padding:18px 14px 90px;
+    min-height:500px;
+
+    background:#f7f7f7;
 }
 
-.offer-card{
-    background:#fff;
-    border:1px solid #ddd;
-    border-radius:20px;
-    margin-bottom:18px;
-    padding:20px 18px 16px;
-    box-shadow:0 3px 10px rgba(0,0,0,.06);
-    position:relative;
-    overflow:hidden;
-}
-
-.offer-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:15px;
-}
-
-.offer-content{
-    flex:1;
-}
-
-.offer-title{
-    font-size:23px;
-    line-height:1.45;
-    font-weight:800;
-    margin-bottom:7px;
-    padding-right:55px;
-}
-
-.offer-details{
-    font-size:18px;
-    line-height:1.55;
-    color:#333;
-    margin-bottom:10px;
-}
-
-.offer-price-line{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.old-price{
-    color:#e05232;
-    font-size:17px;
-    text-decoration:line-through;
-}
-
-.buy-price{
-    color:#159447;
-    font-size:22px;
-    font-weight:800;
-}
-
-.buy-btn{
-    min-width:135px;
-    height:58px;
-    border:1px solid #ddd;
-    background:#fff;
-    border-radius:14px;
-    color:#159447;
-    font-size:20px;
-    font-weight:800;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.buy-btn:active{
-    transform:scale(.96);
-}
-
-.buy-btn:hover{
-    background:#009b4d;
-    color:white;
-}
-
-.offer-bottom{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-top:14px;
-    flex-wrap:wrap;
-}
-
-.category-tag{
-    background:#8589ee;
-    color:white;
-    border-radius:18px;
-    padding:8px 18px;
-    font-size:16px;
-    font-weight:700;
-}
-
-.validity{
-    background:#eee;
-    border-radius:25px;
-    padding:9px 16px;
-    font-size:16px;
-    color:#c32a9d;
-    font-weight:700;
-}
-
-.discount{
-    position:absolute;
-    top:0;
-    right:0;
-    background:#8589ee;
-    color:white;
-    padding:8px 15px;
-    border-radius:0 0 0 22px;
-    font-size:16px;
-    font-weight:bold;
-}
-
-/* ================= NO RESULT ================= */
-
+/* অফার না থাকলে নিচে কিছু দেখাবে না */
 .no-result{
-    text-align:center;
-    padding:70px 20px;
-    color:#777;
-    font-size:22px;
-}
-
-/* ================= PAYMENT POPUP ================= */
-
-.modal-overlay{
     display:none;
-    position:fixed;
-    z-index:9999;
-    inset:0;
-    background:rgba(0,0,0,.65);
-    padding:15px;
-    overflow-y:auto;
-}
-
-.modal-overlay.show{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.payment-modal{
-    width:100%;
-    max-width:620px;
-    background:white;
-    border-radius:30px;
-    padding:25px;
-    position:relative;
-    box-shadow:0 20px 60px rgba(0,0,0,.35);
-    max-height:95vh;
-    overflow-y:auto;
-}
-
-.close-btn{
-    position:absolute;
-    right:16px;
-    top:8px;
-    border:0;
-    background:transparent;
-    font-size:40px;
-    font-weight:bold;
-    cursor:pointer;
-    color:#333;
-}
-
-.payment-title{
-    text-align:center;
-    font-size:30px;
-    font-weight:800;
-    margin:25px 40px 20px;
-}
-
-.selected-offer{
-    font-size:20px;
-    line-height:1.55;
-    margin-bottom:8px;
-}
-
-.selected-price{
-    font-size:21px;
-    font-weight:800;
-    color:#009b4d;
-    margin-bottom:18px;
-}
-
-.warning{
-    background:#fff3c7;
-    border-radius:20px;
-    padding:18px;
-    font-size:18px;
-    line-height:1.7;
-    margin-bottom:18px;
-}
-
-.payment-number{
-    background:#f1f1f1;
-    border-radius:16px;
-    padding:17px;
-    font-size:20px;
-    font-weight:700;
-    margin-bottom:12px;
-    cursor:pointer;
-}
-
-.payment-number:active{
-    transform:scale(.98);
-}
-
-.form-label{
-    display:block;
-    font-size:18px;
-    font-weight:700;
-    margin:18px 0 8px;
-}
-
-.form-input{
-    width:100%;
-    height:54px;
-    border:1px solid #ccc;
-    border-radius:14px;
-    padding:0 15px;
-    font-size:18px;
-    outline:none;
-}
-
-.form-input:focus{
-    border-color:#009b4d;
-}
-
-.file-input{
-    width:100%;
-    border:1px solid #ccc;
-    border-radius:14px;
-    padding:13px;
-    font-size:16px;
-}
-
-.submit-payment{
-    width:100%;
-    height:58px;
-    margin-top:20px;
-    border:0;
-    border-radius:15px;
-    background:#009b4d;
-    color:white;
-    font-size:20px;
-    font-weight:800;
-    cursor:pointer;
-}
-
-/* ================= ADMIN BUTTON ================= */
-
-.admin-button{
-    position:fixed;
-    right:18px;
-    bottom:18px;
-    z-index:5000;
-    width:60px;
-    height:60px;
-    border-radius:50%;
-    border:0;
-    background:#009b4d;
-    color:white;
-    font-size:28px;
-    box-shadow:0 5px 20px rgba(0,0,0,.3);
-    cursor:pointer;
-}
-
-/* ================= ADMIN MODAL ================= */
-
-.admin-modal{
-    width:100%;
-    max-width:900px;
-    background:#fff;
-    border-radius:25px;
-    padding:22px;
-    position:relative;
-    max-height:94vh;
-    overflow-y:auto;
-}
-
-.admin-title{
-    text-align:center;
-    font-size:28px;
-    margin-bottom:18px;
-}
-
-.admin-note{
-    background:#fff3c7;
-    padding:14px;
-    border-radius:14px;
-    margin-bottom:18px;
-    line-height:1.6;
-}
-
-.admin-item{
-    border:1px solid #ddd;
-    border-radius:16px;
-    padding:15px;
-    margin-bottom:14px;
-}
-
-.admin-item h3{
-    margin-bottom:12px;
-    color:#009b4d;
-}
-
-.admin-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-}
-
-.admin-grid input,
-.admin-grid select{
-    width:100%;
-    height:48px;
-    border:1px solid #ccc;
-    border-radius:10px;
-    padding:0 10px;
-    font-size:16px;
-    outline:none;
-}
-
-.admin-grid input:focus,
-.admin-grid select:focus{
-    border-color:#009b4d;
-}
-
-.admin-actions{
-    display:flex;
-    gap:8px;
-    margin-top:10px;
-    flex-wrap:wrap;
-}
-
-.save-btn,
-.delete-btn,
-.add-btn,
-.reset-btn{
-    border:0;
-    border-radius:10px;
-    padding:11px 15px;
-    cursor:pointer;
-    font-weight:700;
-    font-size:15px;
-}
-
-.save-btn{
-    background:#009b4d;
-    color:white;
-}
-
-.delete-btn{
-    background:#e53935;
-    color:white;
-}
-
-.add-btn{
-    background:#1976d2;
-    color:white;
-}
-
-.reset-btn{
-    background:#777;
-    color:white;
-}
-
-.admin-top-buttons{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-bottom:18px;
 }
 
 /* ================= MOBILE ================= */
@@ -514,7 +164,7 @@ body{
 @media(max-width:600px){
 
     .header{
-        padding:38px 15px 20px;
+        padding:38px 15px 22px;
     }
 
     .header h1{
@@ -522,88 +172,44 @@ body{
     }
 
     .header p{
-        font-size:21px;
+        font-size:22px;
     }
 
     .search-area{
-        padding:18px 18px 23px;
+        padding:20px 20px 25px;
     }
 
     .search-box{
-        height:70px;
+        height:72px;
         border-radius:25px;
-        padding:0 18px;
+        padding:0 20px;
     }
 
     .search-icon{
-        font-size:37px;
+        font-size:38px;
+        margin-right:12px;
     }
 
     .search-box input{
-        font-size:20px;
+        font-size:21px;
+    }
+
+    .categories{
+        padding:0 8px;
     }
 
     .category{
-        font-size:19px;
-        padding:21px 18px 16px;
+        font-size:20px;
+        padding:23px 18px 18px;
+    }
+
+    .category.active::after{
+        left:12px;
+        right:12px;
     }
 
     #offerList{
-        padding:13px 10px 90px;
-    }
-
-    .offer-card{
-        padding:18px 14px 14px;
-        border-radius:17px;
-    }
-
-    .offer-top{
-        gap:8px;
-    }
-
-    .offer-title{
-        font-size:19px;
-    }
-
-    .offer-details{
-        font-size:16px;
-    }
-
-    .buy-btn{
-        min-width:105px;
-        height:51px;
-        font-size:17px;
-    }
-
-    .buy-price{
-        font-size:20px;
-    }
-
-    .discount{
-        font-size:13px;
-        padding:7px 11px;
-    }
-
-    .offer-bottom{
-        flex-wrap:wrap;
-    }
-
-    .payment-modal{
-        padding:18px;
-        border-radius:24px;
-    }
-
-    .payment-title{
-        font-size:25px;
-        margin-top:25px;
-    }
-
-    .warning{
-        font-size:16px;
-    }
-
-    .admin-grid{
-        grid-template-columns:1fr;
+        min-height:600px;
     }
 }
 </style>
@@ -614,8 +220,11 @@ body{
 <!-- ================= HEADER ================= -->
 
 <header class="header">
+
     <h1>গ্রামীণ অফার</h1>
+
     <p>রাকিব ফ্রিল্যান্সার</p>
+
 </header>
 
 
@@ -643,487 +252,206 @@ body{
 
 <nav class="categories">
 
-    <div class="category active" data-category="all">
+    <div
+        class="category active"
+        data-category="all"
+    >
         All
     </div>
 
-    <div class="category" data-category="minutes">
+    <div
+        class="category"
+        data-category="minutes"
+    >
         Minutes
     </div>
 
-    <div class="category" data-category="internet">
+    <div
+        class="category"
+        data-category="internet"
+    >
         Internet
     </div>
 
-    <div class="category" data-category="bundles">
+    <div
+        class="category"
+        data-category="bundles"
+    >
         Bundles
     </div>
 
-    <div class="category" data-category="call">
+    <div
+        class="category"
+        data-category="call"
+    >
         Call Rate
     </div>
 
 </nav>
 
 
-<!-- ================= OFFER LIST ================= -->
+<!-- ================= OFFER AREA ================= -->
 
 <div id="offerList"></div>
 
 
-<!-- ================= ADMIN BUTTON ================= -->
-
-<button
-    class="admin-button"
-    onclick="openAdmin()"
-    title="অফার ম্যানেজ"
->
-    ⚙
-</button>
-
-
-<!-- ================= PAYMENT POPUP ================= -->
-
-<div class="modal-overlay" id="paymentOverlay">
-
-    <div class="payment-modal">
-
-        <button class="close-btn" onclick="closePayment()">
-            ×
-        </button>
-
-        <h2 class="payment-title">
-            অফারটি নিতে পেমেন্ট করুন
-        </h2>
-
-        <div
-            class="selected-offer"
-            id="selectedOfferText"
-        ></div>
-
-        <div
-            class="selected-price"
-            id="selectedPriceText"
-        ></div>
-
-        <div class="warning">
-
-            ⚠️ পেমেন্ট করার আগে ভালোভাবে যাচাই করুন।
-
-            <br><br>
-
-            এই নাম্বারে <b>Send Money</b> করবেন।
-
-            <br>
-
-            ভুল করে <b>Flexiload</b> বা
-            <b>Cash Out</b> করলে টাকা ফেরত দেওয়া হবে না।
-
-        </div>
-
-        <div
-            class="payment-number"
-            onclick="copyNumber('01837976455')"
-        >
-            বিকাশ: 01837976455
-        </div>
-
-        <div
-            class="payment-number"
-            onclick="copyNumber('01404534868')"
-        >
-            নগদ: 01404534868
-        </div>
-
-        <label class="form-label">
-            যে বাংলালিংক নাম্বারে অফার নেবেন
-        </label>
-
-        <input
-            type="tel"
-            id="customerNumber"
-            class="form-input"
-            placeholder="01XXXXXXXXX"
-            maxlength="11"
-        >
-
-        <label class="form-label">
-            পেমেন্টের Screenshot দিন
-        </label>
-
-        <input
-            type="file"
-            id="paymentScreenshot"
-            class="file-input"
-            accept="image/*"
-        >
-
-        <button
-            class="submit-payment"
-            onclick="submitPayment()"
-        >
-            পেমেন্ট সম্পন্ন করেছি
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- ================= ADMIN POPUP ================= -->
-
-<div class="modal-overlay" id="adminOverlay">
-
-    <div class="admin-modal">
-
-        <button class="close-btn" onclick="closeAdmin()">
-            ×
-        </button>
-
-        <h2 class="admin-title">
-            ⚙ অফার ম্যানেজমেন্ট
-        </h2>
-
-        <div class="admin-note">
-
-            এখান থেকে অফারের নাম, বিবরণ, মেয়াদ,
-            মূল দাম, Buy Now দাম এবং ক্যাটাগরি পরিবর্তন করতে পারবেন।
-
-            <br><br>
-
-            <b>নোট:</b> এখানে Save করলে এই ব্রাউজারে পরিবর্তনটি থাকবে।
-            GitHub-এর কোডের ডিফল্ট অফার পরিবর্তন করতে
-            নিচের <b>defaultOffers</b> অংশটি এডিট করবেন।
-
-        </div>
-
-        <div class="admin-top-buttons">
-
-            <button
-                class="add-btn"
-                onclick="addNewOffer()"
-            >
-                ＋ নতুন অফার
-            </button>
-
-            <button
-                class="reset-btn"
-                onclick="resetOffers()"
-            >
-                ডিফল্ট অফার ফিরিয়ে আনুন
-            </button>
-
-        </div>
-
-        <div id="adminList"></div>
-
-    </div>
-
-</div>
-
-
 <script>
 
-/* =========================================================
-   ⭐⭐ এখানেই অফারের তথ্য পরিবর্তন করবেন ⭐⭐
+/*
+==================================================
+এখানে পরে আপনার গ্রামীণ অফারগুলো বসাবেন।
+এখন খালি রাখা হয়েছে।
+==================================================
+*/
 
-   title      = অফারের নাম
-   description= অফারের বিস্তারিত
-   validity   = মেয়াদ
-   category   = minutes / internet / bundles / call
-   oldPrice   = আগের/মূল দাম
-   buyPrice   = আপনার Buy Now দাম
-   discount   = কত টাকা কম
+const offers = [
 
-   পরবর্তীতে শুধু এই অংশ পরিবর্তন করলেই হবে।
-========================================================= */
-
-const defaultOffers = [
+    /*
+    উদাহরণ:
 
     {
-        id:1,
-        title:"8 জিবি ইন্টারনেট",
-        description:"গ্রামীণফোনে 8 জিবি ইন্টারনেট",
-        validity:"7 দিন",
-        category:"internet",
-        oldPrice:179,
-        buyPrice:178,
-        discount:1
-    },
-
-    {
-        id:2,
-        title:"20 জিবি ইন্টারনেট",
-        description:"গ্রামীণফোনে 20 জিবি ইন্টারনেট",
-        validity:"30 দিন",
-        category:"internet",
-        oldPrice:499,
-        buyPrice:469,
-        discount:30
-    },
-
-    {
-        id:3,
-        title:"75 জিবি ইন্টারনেট",
-        description:"গ্রামীণফোনে 75 জিবি ইন্টারনেট",
-        validity:"30 দিন",
-        category:"internet",
-        oldPrice:757,
-        buyPrice:689,
-        discount:68
-    },
-
-    {
-        id:4,
-        title:"30 জিবি + 500 মিনিট",
-        description:"30 জিবি ইন্টারনেট + 500 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:675,
-        buyPrice:685,
-        discount:0
-    },
-
-    {
-        id:5,
-        title:"75 জিবি + 500 মিনিট",
-        description:"75 জিবি ইন্টারনেট + 500 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:826,
-        buyPrice:786,
-        discount:40
-    },
-
-    {
-        id:6,
-        title:"100 জিবি + 200 মিনিট",
-        description:"100 জিবি ইন্টারনেট + 200 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:809,
-        buyPrice:772,
-        discount:37
-    },
-
-    {
-        id:7,
-        title:"100 জিবি + 350 মিনিট",
-        description:"100 জিবি ইন্টারনেট + 350 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:839,
-        buyPrice:800,
-        discount:39
-    },
-
-    {
-        id:8,
-        title:"100 জিবি + 500 মিনিট",
-        description:"100 জিবি ইন্টারনেট + 500 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:863,
-        buyPrice:823,
-        discount:40
-    },
-
-    {
-        id:9,
-        title:"40 জিবি + 500 মিনিট",
-        description:"40 জিবি ইন্টারনেট + 500 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:745,
-        buyPrice:715,
-        discount:30
-    },
-
-    {
-        id:10,
-        title:"50 জিবি + 200 মিনিট",
-        description:"50 জিবি ইন্টারনেট + 200 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:700,
-        buyPrice:675,
-        discount:25
-    },
-
-    {
-        id:11,
-        title:"50 জিবি + 350 মিনিট",
-        description:"50 জিবি ইন্টারনেট + 350 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:742,
-        buyPrice:709,
-        discount:33
-    },
-
-    {
-        id:12,
-        title:"75 জিবি + 300 মিনিট",
-        description:"75 জিবি ইন্টারনেট + 300 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:793,
-        buyPrice:760,
-        discount:33
-    },
-
-    {
-        id:13,
-        title:"20 জিবি + 500 মিনিট",
-        description:"20 জিবি ইন্টারনেট + 500 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:666,
-        buyPrice:645,
-        discount:21
-    },
-
-    {
-        id:14,
-        title:"40 জিবি + 100 মিনিট",
-        description:"40 জিবি ইন্টারনেট + 100 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:621,
-        buyPrice:595,
-        discount:26
-    },
-
-    {
-        id:15,
-        title:"40 জিবি + 200 মিনিট",
-        description:"40 জিবি ইন্টারনেট + 200 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:666,
-        buyPrice:645,
-        discount:21
-    },
-
-    {
-        id:16,
-        title:"40 জিবি + 350 মিনিট",
-        description:"40 জিবি ইন্টারনেট + 350 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:712,
-        buyPrice:685,
-        discount:27
-    },
-
-    {
-        id:17,
-        title:"15 জিবি + 350 মিনিট",
-        description:"15 জিবি ইন্টারনেট + 350 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:590,
-        buyPrice:554,
-        discount:36
-    },
-
-    {
-        id:18,
-        title:"15 জিবি + 500 মিনিট",
-        description:"15 জিবি ইন্টারনেট + 500 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:652,
-        buyPrice:608,
-        discount:44
-    },
-
-    {
-        id:19,
-        title:"5 জিবি + 500 মিনিট",
-        description:"5 জিবি ইন্টারনেট + 500 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:545,
-        buyPrice:515,
-        discount:30
-    },
-
-    {
-        id:20,
-        title:"10 জিবি + 300 মিনিট",
-        description:"10 জিবি ইন্টারনেট + 300 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:557,
-        buyPrice:529,
-        discount:28
-    },
-
-    {
-        id:21,
-        title:"10 জিবি + 500 মিনিট",
-        description:"10 জিবি ইন্টারনেট + 500 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:604,
-        buyPrice:584,
-        discount:20
-    },
-
-    {
-        id:22,
-        title:"640 মিনিট",
-        description:"640 মিনিট",
-        validity:"30 দিন",
-        category:"minutes",
-        oldPrice:419,
-        buyPrice:397,
-        discount:22
-    },
-
-    {
-        id:23,
-        title:"820 মিনিট",
-        description:"820 মিনিট",
-        validity:"30 দিন",
-        category:"minutes",
-        oldPrice:519,
-        buyPrice:487,
-        discount:32
-    },
-
-    {
-        id:24,
-        title:"30 জিবি + 300 মিনিট",
-        description:"30 জিবি ইন্টারনেট + 300 মিনিট",
-        validity:"30 দিন",
-        category:"bundles",
-        oldPrice:662,
-        buyPrice:645,
-        discount:17
-    },
-
-    {
-        id:25,
-        title:"50 জিবি ইন্টারনেট",
-        description:"50 জিবি ইন্টারনেট",
-        validity:"30 দিন",
-        category:"internet",
-        oldPrice:679,
-        buyPrice:645,
-        discount:34
+        title: "10 জিবি + 600 মিনিট",
+        description: "গ্রামীণ সিমে 10 জিবি ইন্টারনেট এবং 600 মিনিট।",
+        validity: "30 দিন",
+        category: "bundles",
+        oldPrice: 550,
+        buyPrice: 524,
+        discount: 26
     }
+
+    */
 
 ];
 
 
-/* =========================================================
-   OFFER DATA LOAD
-========================================================= */
+/* ================= ELEMENT ================= */
 
-let offers = [];
+const offerList = document.getElementById("offerList");
 
-try{
+const searchInput = document.getElementById("searchInput");
 
-    co
+const categories =
+    document.querySelectorAll(".category");
+
+
+let selectedCategory = "all";
+
+
+/* ================= SHOW OFFERS ================= */
+
+function showOffers(){
+
+    const searchText =
+        searchInput.value
+        .trim()
+        .toLowerCase();
+
+
+    const filteredOffers = offers.filter(offer => {
+
+        const matchCategory =
+            selectedCategory === "all" ||
+            offer.category === selectedCategory;
+
+
+        const matchSearch =
+            offer.title.toLowerCase()
+            .includes(searchText) ||
+
+            offer.description.toLowerCase()
+            .includes(searchText);
+
+
+        return matchCategory && matchSearch;
+
+    });
+
+
+    offerList.innerHTML = "";
+
+
+    /*
+    এখন অফার না থাকলে কিছু দেখাবে না।
+    */
+
+    if(filteredOffers.length === 0){
+
+        return;
+
+    }
+
+
+    filteredOffers.forEach(offer => {
+
+        const card = document.createElement("div");
+
+        card.className = "offer-card";
+
+        card.innerHTML = `
+
+            <h2>${offer.title}</h2>
+
+            <p>${offer.description}</p>
+
+            <p>
+                <strong>মেয়াদ:</strong>
+                ${offer.validity}
+            </p>
+
+            <p>
+                <strong>মূল্য:</strong>
+                ৳${offer.buyPrice}
+            </p>
+
+        `;
+
+        offerList.appendChild(card);
+
+    });
+
+}
+
+
+/* ================= CATEGORY CLICK ================= */
+
+categories.forEach(category => {
+
+    category.addEventListener("click", function(){
+
+        categories.forEach(item => {
+
+            item.classList.remove("active");
+
+        });
+
+
+        this.classList.add("active");
+
+
+        selectedCategory =
+            this.dataset.category;
+
+
+        showOffers();
+
+    });
+
+});
+
+
+/* ================= SEARCH ================= */
+
+searchInput.addEventListener(
+    "input",
+    showOffers
+);
+
+
+/* ================= START ================= */
+
+showOffers();
+
+</script>
+
+</body>
+</html>
