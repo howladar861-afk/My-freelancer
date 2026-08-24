@@ -20,6 +20,10 @@ import {
   browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
+import {
+  addDailyReferral
+} from "./dailyReferral.js";
+
 // আপনার Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
@@ -192,7 +196,25 @@ batch.set(
     
     // সব একসাথে Save
     await batch.commit();
+// =====================================
+// DAILY REFERRAL COUNT
+// =====================================
 
+try {
+
+  await addDailyReferral(
+    db,
+    directReferrerUid
+  );
+
+} catch (dailyReferralError) {
+
+  console.error(
+    "Daily Referral Count Error:",
+    dailyReferralError
+  );
+
+}
 
     // =================================
     // SUCCESS
