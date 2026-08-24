@@ -150,6 +150,133 @@
     </div>
 
 </div>
+<script type="module">
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getFirestore
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+  getDailyReferralStatus
+} from "./dailyReferral.js";
+
+
+// =====================================
+// FIREBASE CONFIG
+// =====================================
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+  authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+  projectId: "rakib-freelancer-9c66b",
+  storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+  messagingSenderId: "541209844482",
+  appId: "1:541209844482:web:510568d5226c9bf47ac01b",
+  measurementId: "G-F6QNE0QN5K"
+};
+
+
+// =====================================
+// FIREBASE START
+// =====================================
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+
+// =====================================
+// DAILY REFERRAL COUNT LOAD
+// =====================================
+
+onAuthStateChanged(auth, async (user) => {
+
+  if (!user) {
+
+    console.log("User is not logged in.");
+
+    return;
+  }
+
+
+  try {
+
+    const status =
+      await getDailyReferralStatus(
+        db,
+        user.uid
+      );
+
+
+    // COUNT UPDATE
+
+    const countElement =
+      document.getElementById(
+        "dailyReferralCount"
+      );
+
+
+    if (countElement) {
+
+      countElement.textContent =
+        status.count;
+
+    }
+
+
+    // STATUS UPDATE
+
+    const bonusStatus =
+      document.getElementById(
+        "bonusStatus"
+      );
+
+
+    if (bonusStatus) {
+
+      if (status.completed) {
+
+        bonusStatus.textContent =
+          "🎉 ৪টি রেফার সম্পূর্ণ হয়েছে!";
+
+      } else {
+
+        bonusStatus.textContent =
+          `⏳ আরও ${
+            status.limit - status.count
+          }টি রেফার পূরণ করুন`;
+
+      }
+
+    }
+
+
+    console.log(
+      "Daily Referral Status:",
+      status
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Daily Referral Load Error:",
+      error
+    );
+
+  }
+
+});
+
+      </script>
 </body>
 </html>
