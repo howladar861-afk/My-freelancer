@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -27,7 +26,7 @@ body{
     background:#00a651;
     color:white;
     text-align:center;
-    padding:25px 10px;
+    padding:24px 10px;
 }
 
 .header h1{
@@ -46,14 +45,14 @@ body{
     margin:20px 15px;
     padding:5px 15px;
     border-radius:22px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.12);
+    box-shadow:0 4px 15px rgba(0,0,0,.12);
 }
 
 .search-box input{
     width:100%;
     border:none;
     outline:none;
-    font-size:20px;
+    font-size:21px;
     padding:15px 5px;
 }
 
@@ -64,7 +63,7 @@ body{
     overflow-x:auto;
     background:#00a651;
     padding:15px 10px;
-    gap:25px;
+    gap:28px;
     scrollbar-width:none;
 }
 
@@ -77,7 +76,7 @@ body{
     font-size:18px;
     white-space:nowrap;
     cursor:pointer;
-    padding:5px 8px;
+    padding:4px 8px;
 }
 
 .categories .active{
@@ -94,10 +93,10 @@ body{
 
 .offer-card{
     background:white;
-    border-radius:16px;
+    border-radius:17px;
     margin-bottom:15px;
     padding:18px;
-    box-shadow:0 3px 12px rgba(0,0,0,0.10);
+    box-shadow:0 3px 12px rgba(0,0,0,.10);
     border:1px solid #e5e5e5;
 }
 
@@ -106,7 +105,7 @@ body{
     background:#8793ed;
     color:white;
     padding:7px 12px;
-    border-radius:10px;
+    border-radius:9px;
     font-size:14px;
     margin-bottom:10px;
 }
@@ -135,7 +134,7 @@ body{
 .price-area{
     display:flex;
     flex-direction:column;
-    gap:5px;
+    gap:4px;
 }
 
 .old-price{
@@ -194,7 +193,7 @@ body{
 }
 
 .star{
-    font-size:25px;
+    font-size:24px;
 }
 
 /* ================= NO RESULT ================= */
@@ -214,7 +213,7 @@ body{
 .popup-overlay{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,0.70);
+    background:rgba(0,0,0,.70);
     display:none;
     align-items:center;
     justify-content:center;
@@ -229,20 +228,18 @@ body{
 
 .popup{
     width:100%;
-    max-width:450px;
-    max-height:95vh;
+    max-width:460px;
+    max-height:94vh;
     overflow-y:auto;
     background:white;
-    border-radius:20px;
-    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+    border-radius:22px;
+    box-shadow:0 10px 40px rgba(0,0,0,.35);
 }
-
-/* POPUP HEADER */
 
 .popup-header{
     background:#00a651;
     color:white;
-    padding:18px;
+    padding:20px;
     text-align:center;
     position:relative;
 }
@@ -262,17 +259,17 @@ body{
     cursor:pointer;
 }
 
-/* POPUP BODY */
-
 .popup-body{
     padding:20px;
 }
 
+/* ================= SELECTED OFFER ================= */
+
 .selected-offer{
     background:#f5f5f5;
-    border-radius:12px;
+    border-radius:13px;
     padding:15px;
-    margin-bottom:15px;
+    margin-bottom:16px;
 }
 
 .selected-offer p{
@@ -281,26 +278,30 @@ body{
     line-height:1.5;
 }
 
+.selected-offer p:last-child{
+    margin-bottom:0;
+}
+
 .selected-offer strong{
     color:#00a651;
 }
 
-/* PAYMENT WARNING */
+/* ================= PAYMENT WARNING ================= */
 
 .payment-warning{
-    background:#fff1c7;
-    border-radius:15px;
+    background:#fff2c7;
+    border-radius:14px;
     padding:15px;
-    margin-bottom:15px;
+    margin-bottom:16px;
     font-size:16px;
     line-height:1.7;
 }
 
-.payment-warning strong{
+.payment-warning b{
     font-size:18px;
 }
 
-/* PAYMENT NUMBERS */
+/* ================= PAYMENT NUMBER ================= */
 
 .payment-number{
     background:#f1f1f1;
@@ -310,59 +311,42 @@ body{
     font-size:18px;
 }
 
-.payment-number b{
-    color:#111;
+.payment-number strong{
+    color:#008f45;
 }
 
-/* FORM LABEL */
+/* ================= FORM ================= */
 
 .form-label{
     display:block;
-    font-size:18px;
+    font-size:17px;
     font-weight:bold;
     margin:16px 0 8px;
 }
 
-/* INPUT */
-
-.popup-input{
+.form-input{
     width:100%;
-    border:1px solid #ccc;
+    border:1px solid #d8d8d8;
     border-radius:12px;
     padding:14px;
     font-size:17px;
     outline:none;
 }
 
-.popup-input:focus{
+.form-input:focus{
     border-color:#00a651;
 }
 
-/* SCREENSHOT */
-
 .file-input{
     width:100%;
-    border:1px solid #ccc;
+    border:1px solid #d8d8d8;
     border-radius:12px;
     padding:12px;
-    font-size:16px;
     background:white;
+    font-size:15px;
 }
 
-/* MESSAGE */
-
-.popup-message{
-    width:100%;
-    min-height:130px;
-    resize:vertical;
-    border:1px solid #ddd;
-    border-radius:12px;
-    padding:12px;
-    font-size:16px;
-    outline:none;
-}
-
-/* WHATSAPP */
+/* ================= WHATSAPP ================= */
 
 .whatsapp-btn{
     display:block;
@@ -377,14 +361,14 @@ body{
     font-size:19px;
     font-weight:bold;
     cursor:pointer;
-    margin-top:15px;
+    margin-top:18px;
 }
 
 .whatsapp-btn:hover{
     background:#1ebe5d;
 }
 
-/* CLOSE */
+/* ================= CLOSE ================= */
 
 .close-btn{
     width:100%;
@@ -428,9 +412,13 @@ body{
         font-size:19px;
     }
 
+    .offer-info{
+        font-size:15px;
+    }
+
     .buy-btn{
         padding:11px 13px;
-        font-size:17px;
+        font-size:16px;
     }
 
     .buy-price{
@@ -441,10 +429,13 @@ body{
         max-height:92vh;
     }
 
+    .popup-header h2{
+        font-size:22px;
+    }
+
 }
 
 </style>
-
 </head>
 
 <body>
@@ -524,7 +515,7 @@ body{
 </div>
 
 
-<!-- ================= POPUP ================= -->
+<!-- ================= PAYMENT POPUP ================= -->
 
 <div
     class="popup-overlay"
@@ -543,7 +534,9 @@ body{
             <button
                 class="popup-close"
                 onclick="closePopup()">
+
                 ×
+
             </button>
 
             <h2>
@@ -569,7 +562,7 @@ body{
 
                 <p>
                     <strong>পেমেন্ট:</strong>
-                    ৳<span id="popupPrice"></span>
+                    <span id="popupPrice"></span>
                 </p>
 
                 <p>
@@ -584,16 +577,16 @@ body{
 
             <div class="payment-warning">
 
-                ⚠️ <strong>পেমেন্ট করার আগে ভালোভাবে যাচাই করুন।</strong>
+                ⚠️ <b>পেমেন্ট করার আগে ভালোভাবে যাচাই করুন।</b>
 
                 <br><br>
 
-                এই নাম্বারে <b>Send Money</b> করবেন।
+                এই নম্বরে <b>Send Money</b> করবেন।
 
                 <br>
 
-                ভুল করে <b>Flexiload</b> বা <b>Cash Out</b> করলে
-                টাকা ফেরত দেওয়া হবে না।
+                ভুল করে <b>Flexiload</b> বা
+                <b>Cash Out</b> করলে টাকা ফেরত দেওয়া হবে না।
 
             </div>
 
@@ -602,7 +595,7 @@ body{
 
             <div class="payment-number">
 
-                <b>বিকাশ:</b>
+                <strong>bKash:</strong>
                 01837976455
 
             </div>
@@ -612,24 +605,25 @@ body{
 
             <div class="payment-number">
 
-                <b>নগদ:</b>
+                <strong>Nagad:</strong>
                 01404534868
 
             </div>
 
 
-            <!-- OFFER NUMBER -->
+            <!-- CUSTOMER NUMBER -->
 
             <label class="form-label">
 
-                যে বাংলালিংক নাম্বারে অফার নেবেন
+                যে বাংলালিংক/গ্রামীণফোন নম্বরে
+                অফার নেবেন
 
             </label>
 
             <input
                 type="tel"
                 id="offerNumber"
-                class="popup-input"
+                class="form-input"
                 placeholder="01XXXXXXXXX"
                 maxlength="11"
                 inputmode="numeric">
@@ -650,29 +644,15 @@ body{
                 accept="image/*">
 
 
-            <!-- MESSAGE -->
+            <!-- WHATSAPP -->
 
-            <label class="form-label">
-
-                WhatsApp Message
-
-            </label>
-
-            <textarea
-                class="popup-message"
-                id="popupMessage"></textarea>
-
-
-            <!-- WHATSAPP BUTTON -->
-
-            <a
-                href="#"
-                id="whatsappButton"
-                class="whatsapp-btn">
+            <button
+                class="whatsapp-btn"
+                onclick="sendToWhatsApp()">
 
                 💬 WhatsApp এ অর্ডার করুন
 
-            </a>
+            </button>
 
 
             <!-- CLOSE -->
@@ -703,15 +683,13 @@ body{
 
 <script>
 
+
 /* ==================================================
-   SETTINGS
+   আপনার WhatsApp নম্বর
+   01837976455 → 8801837976455
    ================================================== */
 
 const WHATSAPP_NUMBER = "8801837976455";
-
-const BKASH_NUMBER = "01837976455";
-
-const NAGAD_NUMBER = "01404534868";
 
 
 /* ==================================================
@@ -928,26 +906,18 @@ const offers = [
         price:519,
         buyPrice:477,
         discount:42
-    },
-
-    {
-        category:"Call Rate",
-        title:"Call Rate Offer",
-        details:"কম রেটে কল সুবিধা",
-        validity:"৩০ দিন",
-        price:50,
-        buyPrice:45,
-        discount:5
     }
 
 ];
 
 
 /* ==================================================
-   CURRENT CATEGORY
+   VARIABLES
    ================================================== */
 
 let currentCategory = "All";
+
+let selectedOffer = null;
 
 
 /* ==================================================
@@ -962,14 +932,12 @@ function displayOffers(){
     const noResult =
         document.getElementById("noResult");
 
-    const searchInput =
-        document.getElementById("searchInput");
-
     const searchText =
-        searchInput.value
+        document
+        .getElementById("searchInput")
+        .value
         .toLowerCase()
         .trim();
-
 
     offerList.innerHTML = "";
 
@@ -984,7 +952,6 @@ function displayOffers(){
         const searchMatch =
             offer.title.toLowerCase().includes(searchText) ||
             offer.details.toLowerCase().includes(searchText) ||
-            offer.category.toLowerCase().includes(searchText) ||
             offer.validity.toLowerCase().includes(searchText) ||
             String(offer.price).includes(searchText) ||
             String(offer.buyPrice).includes(searchText);
@@ -1025,9 +992,11 @@ function displayOffers(){
                 Discount: ৳${offer.discount}
             </div>
 
+
             <div class="offer-title">
                 ${offer.title}
             </div>
+
 
             <div class="offer-info">
 
@@ -1038,6 +1007,7 @@ function displayOffers(){
                 ➡️ সারা বাংলাদেশ পাবে ★
 
             </div>
+
 
             <div class="offer-bottom">
 
@@ -1057,6 +1027,7 @@ function displayOffers(){
 
                 </div>
 
+
                 <button
                     class="buy-btn"
                     onclick="openPopup(${originalIndex})">
@@ -1067,14 +1038,19 @@ function displayOffers(){
 
             </div>
 
+
             <div class="offer-footer">
 
                 <span class="validity">
+
                     ⏱ ${offer.validity}
+
                 </span>
 
                 <span class="star">
+
                     ⭐
+
                 </span>
 
             </div>
@@ -1099,12 +1075,12 @@ function filterCategory(category,element){
 
 
     document
-        .querySelectorAll(".categories div")
-        .forEach(function(item){
+    .querySelectorAll(".categories div")
+    .forEach(function(item){
 
-            item.classList.remove("active");
+        item.classList.remove("active");
 
-        });
+    });
 
 
     element.classList.add("active");
@@ -1132,20 +1108,50 @@ function searchOffers(){
 
 function openPopup(index){
 
-    const offer = offers[index];
+    selectedOffer = offers[index];
 
 
-    document.getElementById("popupOffer")
-        .textContent = offer.title;
+    document
+    .getElementById("popupOffer")
+    .textContent = selectedOffer.title;
 
 
-    document.getElementById("popupPrice")
-        .textContent = offer.buyPrice;
+    document
+    .getElementById("popupPrice")
+    .textContent =
+        "৳" + selectedOffer.buyPrice;
 
 
-    document.getElementById("popupValidity")
-        .textContent = offer.validity;
+    document
+    .getElementById("popupValidity")
+    .textContent =
+        selectedOffer.validity;
 
 
-    document.getElementById("offerNumber")
-        .value = 
+    /* আগের customer number মুছে দিচ্ছি */
+
+    document
+    .getElementById("offerNumber")
+    .value = "";
+
+
+    /* Screenshot input reset */
+
+    document
+    .getElementById("paymentScreenshot")
+    .value = "";
+
+
+    document
+    .getElementById("popupOverlay")
+    .classList.add("show");
+
+
+    document
+    .getElementById("offerNumber")
+    .focus();
+
+}
+
+
+/* =====================================
