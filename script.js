@@ -198,10 +198,13 @@ batch.set(
 
 try {
 
-  await addDailyReferral(
-    db,
-    directReferrerUid
-  );
+  const { addDailyReferral } =
+  await import("./dailyReferral.js");
+
+await addDailyReferral(
+  db,
+  directReferrerUid
+);
 
 } catch (dailyReferralError) {
 
