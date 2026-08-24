@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>গ্রামীণফোন অফার - রাকিব ফ্রিল্যান্সার</title>
 
+
 <style>
+
+/* =========================
+   BASIC
+========================= */
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -19,7 +29,11 @@ body{
     color:#222;
 }
 
-/* HEADER */
+
+/* =========================
+   HEADER
+========================= */
+
 .header{
     background:#00a651;
     color:white;
@@ -36,13 +50,19 @@ body{
     font-size:20px;
 }
 
-/* SEARCH */
+
+/* =========================
+   SEARCH
+========================= */
+
 .search-box{
     background:white;
     margin:15px;
     padding:5px 15px;
     border-radius:20px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.12);
+
+    box-shadow:
+    0 4px 15px rgba(0,0,0,0.12);
 }
 
 .search-box input{
@@ -53,13 +73,21 @@ body{
     padding:14px 5px;
 }
 
-/* CATEGORIES */
+
+/* =========================
+   CATEGORIES
+========================= */
+
 .categories{
     display:flex;
     overflow-x:auto;
+
     background:#00a651;
+
     padding:15px 10px;
+
     gap:30px;
+
     scrollbar-width:none;
 }
 
@@ -70,8 +98,11 @@ body{
 .categories div{
     color:white;
     font-size:18px;
+
     white-space:nowrap;
+
     cursor:pointer;
+
     padding:3px 5px;
 }
 
@@ -80,7 +111,11 @@ body{
     font-weight:bold;
 }
 
-/* OFFER */
+
+/* =========================
+   OFFER AREA
+========================= */
+
 .offer-area{
     padding:15px;
     min-height:400px;
@@ -88,47 +123,70 @@ body{
 
 .offer-card{
     background:white;
+
     border-radius:16px;
+
     margin-bottom:15px;
+
     padding:18px;
-    box-shadow:0 3px 12px rgba(0,0,0,0.10);
+
+    box-shadow:
+    0 3px 12px rgba(0,0,0,0.10);
+
     border:1px solid #e5e5e5;
 }
 
 .discount{
     display:inline-block;
+
     background:#8793ed;
+
     color:white;
+
     padding:7px 12px;
+
     border-radius:10px;
+
     font-size:14px;
+
     margin-bottom:10px;
 }
 
 .offer-title{
     font-size:21px;
+
     font-weight:bold;
+
     line-height:1.5;
+
     margin-bottom:8px;
 }
 
 .offer-info{
     color:#555;
+
     font-size:16px;
+
     line-height:1.6;
+
     margin-bottom:12px;
 }
 
 .offer-bottom{
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     gap:10px;
 }
 
 .price-area{
     display:flex;
+
     flex-direction:column;
+
     gap:4px;
 }
 
@@ -139,51 +197,77 @@ body{
 
 .buy-price{
     color:#168b35;
+
     font-size:22px;
+
     font-weight:bold;
 }
 
 .category-badge{
     display:inline-block;
+
     background:#8793ed;
+
     color:white;
+
     padding:5px 12px;
+
     border-radius:8px;
+
     font-size:14px;
+
     margin-top:5px;
 }
 
 .buy-btn{
     background:white;
+
     color:#168b35;
+
     border:2px solid #d7d7d7;
+
     border-radius:12px;
+
     padding:13px 18px;
+
     font-size:18px;
+
     font-weight:bold;
+
     cursor:pointer;
 }
 
 .buy-btn:hover{
     background:#00a651;
+
     color:white;
+
     border-color:#00a651;
 }
 
 .offer-footer{
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     margin-top:15px;
+
     padding-top:10px;
+
     border-top:1px solid #eee;
 }
 
 .validity{
     background:#eeeeee;
+
     color:#c52ba3;
+
     border-radius:25px;
+
     padding:8px 14px;
+
     font-size:15px;
 }
 
@@ -191,28 +275,51 @@ body{
     font-size:25px;
 }
 
-/* NO RESULT */
+
+/* =========================
+   NO RESULT
+========================= */
+
 .no-result{
     background:white;
+
     border-radius:15px;
+
     padding:50px 20px;
+
     text-align:center;
+
     color:#777;
+
     font-size:19px;
+
     display:none;
 }
 
-/* ================= POPUP ================= */
+
+/* =========================
+   POPUP
+========================= */
 
 .popup-overlay{
+
     position:fixed;
+
     inset:0;
+
     background:rgba(0,0,0,0.65);
+
     display:none;
+
     align-items:center;
+
     justify-content:center;
-    padding:20px;
+
+    padding:15px;
+
     z-index:99999;
+
+    overflow-y:auto;
 }
 
 .popup-overlay.show{
@@ -220,123 +327,297 @@ body{
 }
 
 .popup{
+
     width:100%;
+
     max-width:430px;
+
+    max-height:95vh;
+
+    overflow-y:auto;
+
     background:white;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 10px 40px rgba(0,0,0,0.3);
+
+    border-radius:25px;
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,0.3);
+
+    position:relative;
 }
 
+
+/* CLOSE X */
+
+.popup-close{
+
+    position:absolute;
+
+    top:12px;
+
+    right:15px;
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    background:white;
+
+    border-radius:50%;
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    color:#333;
+
+    cursor:pointer;
+
+    z-index:5;
+}
+
+
+/* POPUP HEADER */
+
 .popup-header{
-    background:#00a651;
-    color:white;
-    padding:18px;
+
+    padding:28px 45px 18px;
+
     text-align:center;
+
+    background:white;
 }
 
 .popup-header h2{
-    font-size:24px;
+
+    font-size:27px;
+
+    line-height:1.5;
+
+    color:#111;
 }
+
+
+/* POPUP BODY */
 
 .popup-body{
-    padding:22px;
+
+    padding:10px 22px 25px;
 }
 
+
+/* SELECTED OFFER */
+
 .selected-offer{
+
     background:#f5f5f5;
-    border-radius:12px;
+
+    border-radius:14px;
+
     padding:15px;
+
     margin-bottom:18px;
 }
 
 .selected-offer p{
+
     margin-bottom:8px;
-    font-size:17px;
+
+    font-size:18px;
+
     line-height:1.5;
 }
 
+.selected-offer p:last-child{
+    margin-bottom:0;
+}
+
 .selected-offer strong{
-    color:#00a651;
+    color:#111;
 }
 
-/* MOBILE NUMBER INPUT */
 
-.offer-number{
-    width:100%;
-    border:1px solid #d5d5d5;
-    border-radius:12px;
-    padding:14px;
+/* WARNING */
+
+.payment-warning{
+
+    background:#fff1bd;
+
+    border-radius:15px;
+
+    padding:18px;
+
+    margin-bottom:18px;
+
+    font-size:17px;
+
+    line-height:1.8;
+}
+
+.payment-warning strong{
+    font-size:19px;
+}
+
+
+/* PAYMENT NUMBER */
+
+.payment-number{
+
+    background:#f1f1f1;
+
+    border-radius:15px;
+
+    padding:17px;
+
+    margin-bottom:12px;
+
+    font-size:20px;
+
+    font-weight:bold;
+}
+
+.payment-number span{
+    font-weight:normal;
+
+    margin-left:5px;
+}
+
+
+/* OFFER NUMBER LABEL */
+
+.input-label{
+
+    display:block;
+
     font-size:18px;
-    outline:none;
-    margin-bottom:15px;
+
+    font-weight:bold;
+
+    margin:20px 0 8px;
 }
 
-.offer-number:focus{
+
+/* INPUT */
+
+.offer-number-input{
+
+    width:100%;
+
+    border:2px solid #ddd;
+
+    border-radius:14px;
+
+    padding:15px;
+
+    font-size:18px;
+
+    outline:none;
+}
+
+.offer-number-input:focus{
     border-color:#00a651;
 }
 
-/* MESSAGE */
 
-.popup-message{
+/* SCREENSHOT */
+
+.screenshot-input{
+
     width:100%;
-    min-height:150px;
-    resize:none;
-    border:1px solid #ddd;
-    border-radius:12px;
-    padding:12px;
+
+    border:2px solid #ddd;
+
+    border-radius:14px;
+
+    padding:14px;
+
     font-size:16px;
-    outline:none;
-    margin-bottom:15px;
+
+    background:white;
 }
 
-/* WHATSAPP */
+
+/* WHATSAPP BUTTON */
 
 .whatsapp-btn{
+
     display:block;
+
     width:100%;
+
     text-align:center;
+
     background:#25D366;
+
     color:white;
+
     text-decoration:none;
+
     border:none;
-    border-radius:12px;
-    padding:14px;
+
+    border-radius:14px;
+
+    padding:15px;
+
     font-size:19px;
+
     font-weight:bold;
+
     cursor:pointer;
-    margin-bottom:10px;
+
+    margin-top:20px;
 }
 
-.whatsapp-btn.disabled{
-    opacity:0.6;
-}
 
-/* CLOSE */
+/* CLOSE BUTTON */
 
 .close-btn{
+
     width:100%;
+
     background:#eeeeee;
+
     color:#333;
+
     border:none;
-    border-radius:12px;
-    padding:13px;
+
+    border-radius:14px;
+
+    padding:14px;
+
     font-size:17px;
+
     cursor:pointer;
-}
 
-/* FOOTER */
-
-.footer{
-    text-align:center;
-    padding:20px;
-    background:#00a651;
-    color:white;
-    font-size:16px;
     margin-top:10px;
 }
 
-/* MOBILE */
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+
+    text-align:center;
+
+    padding:20px;
+
+    background:#00a651;
+
+    color:white;
+
+    font-size:16px;
+
+    margin-top:10px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:500px){
 
@@ -364,21 +645,63 @@ body{
     .buy-price{
         font-size:20px;
     }
+
+    .popup-header h2{
+        font-size:24px;
+    }
+
+    .popup-body{
+        padding:10px 18px 22px;
+    }
+
 }
+
+
+/* =========================
+   SMALL SCREEN
+========================= */
+
+@media(max-width:360px){
+
+    .offer-bottom{
+        align-items:flex-start;
+    }
+
+    .buy-btn{
+        padding:10px;
+        font-size:15px;
+    }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
-<!-- HEADER -->
+
+<!-- =========================
+     HEADER
+========================= -->
 
 <div class="header">
-    <h1>গ্রামীণফোন অফার</h1>
-    <p>রাকিব ফ্রিল্যান্সার</p>
+
+    <h1>
+        গ্রামীণফোন অফার
+    </h1>
+
+    <p>
+        রাকিব ফ্রিল্যান্সার
+    </p>
+
 </div>
 
 
-<!-- SEARCH -->
+<!-- =========================
+     SEARCH
+========================= -->
 
 <div class="search-box">
 
@@ -391,7 +714,9 @@ body{
 </div>
 
 
-<!-- CATEGORIES -->
+<!-- =========================
+     CATEGORIES
+========================= -->
 
 <div class="categories">
 
@@ -424,83 +749,199 @@ body{
 </div>
 
 
-<!-- OFFER AREA -->
+<!-- =========================
+     OFFER AREA
+========================= -->
 
 <div class="offer-area">
 
     <div id="offerList"></div>
 
-    <div class="no-result" id="noResult">
+    <div
+        class="no-result"
+        id="noResult">
+
         😔 কোনো অফার পাওয়া যায়নি।
+
     </div>
 
 </div>
 
 
-<!-- ================= POPUP ================= -->
+<!-- =========================
+     PAYMENT POPUP
+========================= -->
 
 <div
     class="popup-overlay"
     id="popupOverlay"
     onclick="closePopupOutside(event)">
 
-    <div
-        class="popup"
-        onclick="event.stopPropagation()">
+
+    <div class="popup">
+
+
+        <!-- CLOSE X -->
+
+        <button
+            class="popup-close"
+            onclick="closePopup()">
+
+            ×
+
+        </button>
+
+
+        <!-- HEADER -->
 
         <div class="popup-header">
 
-            <h2>অফার অর্ডার করুন</h2>
+            <h2>
+                অফারটি নিতে পেমেন্ট করুন
+            </h2>
 
         </div>
 
 
+        <!-- BODY -->
+
         <div class="popup-body">
+
 
             <!-- SELECTED OFFER -->
 
             <div class="selected-offer">
 
                 <p>
-                    <strong>অফার:</strong>
-                    <span id="popupOffer"></span>
+
+                    <strong>
+                        অফার:
+                    </strong>
+
+                    <span id="popupOffer">
+                    </span>
+
                 </p>
 
-                <p>
-                    <strong>মূল্য:</strong>
-                    <span id="popupPrice"></span>
-                </p>
 
                 <p>
-                    <strong>মেয়াদ:</strong>
-                    <span id="popupValidity"></span>
+
+                    <strong>
+                        পেমেন্ট:
+                    </strong>
+
+                    <span id="popupPrice">
+                    </span>
+
                 </p>
+
+
+                <p>
+
+                    <strong>
+                        মেয়াদ:
+                    </strong>
+
+                    <span id="popupValidity">
+                    </span>
+
+                </p>
+
+            </div>
+
+
+            <!-- WARNING -->
+
+            <div class="payment-warning">
+
+                ⚠️
+
+                <strong>
+                    পেমেন্ট করার আগে ভালোভাবে যাচাই করুন।
+                </strong>
+
+                <br><br>
+
+                এই নাম্বারে
+                <b>Send Money</b>
+                করবেন।
+
+                <br>
+
+                ভুল করে
+                <b>Flexiload</b>
+                বা
+                <b>Cash Out</b>
+                করলে টাকা ফেরত দেওয়া হবে না।
+
+            </div>
+
+
+            <!-- BKASH -->
+
+            <div class="payment-number">
+
+                বিকাশ:
+
+                <span>
+                    01837976455
+                </span>
+
+            </div>
+
+
+            <!-- NAGAD -->
+
+            <div class="payment-number">
+
+                নগদ:
+
+                <span>
+                    01404534868
+                </span>
 
             </div>
 
 
             <!-- OFFER NUMBER -->
 
+            <label
+                class="input-label"
+                for="offerNumber">
+
+                যে নাম্বারে অফার নেবেন
+
+            </label>
+
+
             <input
                 type="tel"
                 id="offerNumber"
-                class="offer-number"
-                placeholder="অফার নেওয়ার মোবাইল নাম্বার লিখুন"
+                class="offer-number-input"
+                placeholder="01XXXXXXXXX"
                 maxlength="11"
-                inputmode="numeric"
-                oninput="updateWhatsAppLink()">
+                inputmode="numeric">
 
 
-            <!-- MESSAGE -->
+            <!-- SCREENSHOT -->
 
-            <textarea
-                class="popup-message"
-                id="popupMessage"
-                placeholder="WhatsApp মেসেজ">
-            </textarea>
+            <label
+                class="input-label"
+                for="paymentScreenshot">
+
+                পেমেন্টের Screenshot দিন
+
+            </label>
 
 
-            <!-- WHATSAPP BUTTON -->
+            <input
+                type="file"
+                id="paymentScreenshot"
+                class="screenshot-input"
+                accept="image/*">
+
+
+            <!-- WHATSAPP -->
 
             <a
                 href="#"
@@ -523,6 +964,7 @@ body{
 
             </button>
 
+
         </div>
 
     </div>
@@ -530,24 +972,31 @@ body{
 </div>
 
 
-<!-- FOOTER -->
+<!-- =========================
+     FOOTER
+========================= -->
 
 <div class="footer">
+
     Rakib Freelancer © 2026
+
 </div>
 
 
 <script>
 
+
 /* ==================================================
-   আপনার WhatsApp নম্বর
-   01837976455
-   ================================================== */
+   WHATSAPP NUMBER
+   01837976455 → 8801837976455
+================================================== */
 
 const WHATSAPP_NUMBER = "8801837976455";
 
 
-/* ================= OFFER LIST ================= */
+/* ==================================================
+   OFFER LIST
+================================================== */
 
 const offers = [
 
@@ -764,13 +1213,16 @@ const offers = [
 ];
 
 
-/* ================= VARIABLES ================= */
+/* ==================================================
+   CURRENT CATEGORY
+================================================== */
 
 let currentCategory = "All";
-let selectedOffer = null;
 
 
-/* ================= DISPLAY ================= */
+/* ==================================================
+   DISPLAY OFFERS
+================================================== */
 
 function displayOffers(){
 
@@ -790,26 +1242,46 @@ function displayOffers(){
     offerList.innerHTML = "";
 
 
-    const filteredOffers = offers.filter(function(offer){
+    const filteredOffers =
+        offers.filter(function(offer){
 
-        const categoryMatch =
-            currentCategory === "All" ||
-            offer.category === currentCategory;
+            const categoryMatch =
+                currentCategory === "All" ||
+                offer.category === currentCategory;
 
-        const searchMatch =
-            offer.title.toLowerCase().includes(searchText) ||
-            offer.details.toLowerCase().includes(searchText) ||
-            offer.validity.toLowerCase().includes(searchText) ||
-            String(offer.buyPrice).includes(searchText);
 
-        return categoryMatch && searchMatch;
+            const searchMatch =
+                offer.title
+                .toLowerCase()
+                .includes(searchText)
 
-    });
+                ||
+
+                offer.details
+                .toLowerCase()
+                .includes(searchText)
+
+                ||
+
+                offer.validity
+                .toLowerCase()
+                .includes(searchText)
+
+                ||
+
+                String(offer.buyPrice)
+                .includes(searchText);
+
+
+            return categoryMatch && searchMatch;
+
+        });
 
 
     if(filteredOffers.length === 0){
 
         noResult.style.display = "block";
+
         return;
 
     }
@@ -823,8 +1295,10 @@ function displayOffers(){
         const originalIndex =
             offers.indexOf(offer);
 
+
         const card =
             document.createElement("div");
+
 
         card.className = "offer-card";
 
@@ -832,7 +1306,7 @@ function displayOffers(){
         card.innerHTML = `
 
             <div class="discount">
-                discount: ৳${offer.discount}
+                Discount: ৳${offer.discount}
             </div>
 
             <div class="offer-title">
@@ -840,28 +1314,37 @@ function displayOffers(){
             </div>
 
             <div class="offer-info">
+
                 ➡️ ${offer.details}
+
                 <br>
+
                 ➡️ সারা বাংলাদেশ পাবে ★
+
             </div>
 
+
             <div class="offer-bottom">
+
 
                 <div class="price-area">
 
                     <span class="old-price">
-                        price: ৳${offer.price}
+                        Price: ৳${offer.price}
                     </span>
+
 
                     <span class="buy-price">
                         Buy ৳${offer.buyPrice}
                     </span>
+
 
                     <span class="category-badge">
                         ${offer.category}
                     </span>
 
                 </div>
+
 
                 <button
                     class="buy-btn"
@@ -871,7 +1354,9 @@ function displayOffers(){
 
                 </button>
 
+
             </div>
+
 
             <div class="offer-footer">
 
@@ -879,11 +1364,13 @@ function displayOffers(){
                     ⏱ ${offer.validity}
                 </span>
 
+
                 <span class="star">
                     ⭐
                 </span>
 
             </div>
+
         `;
 
 
@@ -894,217 +1381,4 @@ function displayOffers(){
 }
 
 
-/* ================= CATEGORY ================= */
-
-function filterCategory(category,element){
-
-    currentCategory = category;
-
-
-    document
-    .querySelectorAll(".categories div")
-    .forEach(function(item){
-
-        item.classList.remove("active");
-
-    });
-
-
-    element.classList.add("active");
-
-
-    displayOffers();
-
-}
-
-
-/* ================= SEARCH ================= */
-
-function searchOffers(){
-
-    displayOffers();
-
-}
-
-
-/* ================= OPEN POPUP ================= */
-
-function openPopup(index){
-
-    selectedOffer = offers[index];
-
-
-    document.getElementById("popupOffer")
-        .textContent = selectedOffer.title;
-
-
-    document.getElementById("popupPrice")
-        .textContent = "৳" + selectedOffer.buyPrice;
-
-
-    document.getElementById("popupValidity")
-        .textContent = selectedOffer.validity;
-
-
-    /* নাম্বার ইনপুট খালি করা */
-
-    document.getElementById("offerNumber")
-        .value = "";
-
-
-    /* মেসেজ তৈরি */
-
-    const message =
-`আসসালামু আলাইকুম,
-
-আমি এই অফারটি নিতে চাই।
-
-অফার: ${selectedOffer.title}
-মূল্য: ৳${selectedOffer.buyPrice}
-মেয়াদ: ${selectedOffer.validity}
-অফার নেওয়ার নাম্বার: [এখানে নাম্বার দিন]
-
-দয়া করে অফারটি অ্যাক্টিভ করে দিন।
-
-ধন্যবাদ।
-Rakib Freelancer`;
-
-
-    document.getElementById("popupMessage")
-        .value = message;
-
-
-    /* WhatsApp link reset */
-
-    document.getElementById("whatsappButton")
-        .href = "#";
-
-
-    document
-        .getElementById("popupOverlay")
-        .classList.add("show");
-
-}
-
-
-/* ================= UPDATE WHATSAPP ================= */
-
-function updateWhatsAppLink(){
-
-    if(!selectedOffer){
-        return;
-    }
-
-
-    let offerNumber =
-        document
-        .getElementById("offerNumber")
-        .value
-        .replace(/\D/g,"");
-
-
-    /* 11 digit না হলে WhatsApp link তৈরি হবে না */
-
-    if(offerNumber.length !== 11){
-
-        document.getElementById("whatsappButton")
-            .href = "#";
-
-        return;
-
-    }
-
-
-    const message =
-`আসসালামু আলাইকুম,
-
-আমি এই অফারটি নিতে চাই।
-
-অফার: ${selectedOffer.title}
-মূল্য: ৳${selectedOffer.buyPrice}
-মেয়াদ: ${selectedOffer.validity}
-অফার নেওয়ার নাম্বার: ${offerNumber}
-
-দয়া করে অফারটি অ্যাক্টিভ করে দিন।
-
-ধন্যবাদ।
-Rakib Freelancer`;
-
-
-    /* Popup-এর মেসেজেও নাম্বার দেখাবে */
-
-    document.getElementById("popupMessage")
-        .value = message;
-
-
-    /* Message encode */
-
-    const encodedMessage =
-        encodeURIComponent(message);
-
-
-    /* আপনার WhatsApp নম্বর */
-
-    const whatsappURL =
-        "https://wa.me/" +
-        WHATSAPP_NUMBER +
-        "?text=" +
-        encodedMessage;
-
-
-    /* WhatsApp button-এর link */
-
-    document.getElementById("whatsappButton")
-        .href = whatsappURL;
-
-}
-
-
-/* ================= CLOSE POPUP ================= */
-
-function closePopup(){
-
-    document
-        .getElementById("popupOverlay")
-        .classList.remove("show");
-
-}
-
-
-/* ================= CLOSE OUTSIDE ================= */
-
-function closePopupOutside(event){
-
-    if(
-        event.target ===
-        document.getElementById("popupOverlay")
-    ){
-
-        closePopup();
-
-    }
-
-}
-
-
-/* ================= ESC ================= */
-
-document.addEventListener("keydown",function(event){
-
-    if(event.key === "Escape"){
-
-        closePopup();
-
-    }
-
-});
-
-
-/* ================= START ================= */
-
-displayOffers();
-
-</script>
-
-</body>
-        </html>
+/* ==============
