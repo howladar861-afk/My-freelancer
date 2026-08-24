@@ -1,4 +1,5 @@
 import {
+    initializeApp,
     getApp,
     getApps
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
@@ -35,8 +36,8 @@ const firebaseConfig = {
 // =====================================
 
 const app = getApps().length
-  ? getApp()
-  : initializeApp(firebaseConfig);
+    ? getApp()
+    : initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -51,7 +52,7 @@ const timerElement =
 
 
 // =====================================
-// SHOW TIMER
+// TIMER
 // =====================================
 
 function startTimer(startedAt) {
@@ -73,7 +74,7 @@ function startTimer(startedAt) {
     }
 
 
-    let startTime;
+    let startTime = null;
 
 
     // Firestore Timestamp
@@ -86,7 +87,7 @@ function startTimer(startedAt) {
 
     }
 
-    // Date
+    // JavaScript Date
     else if (
         startedAt instanceof Date
     ) {
@@ -96,7 +97,18 @@ function startTimer(startedAt) {
 
     }
 
-    else {
+    // Firestore timestamp object
+    else if (
+        startedAt.seconds !== undefined
+    ) {
+
+        startTime =
+            Number(startedAt.seconds) * 1000;
+
+    }
+
+
+    if (!startTime) {
 
         timerElement.textContent =
             "❌ সময়ের তথ্য সঠিক নয়";
@@ -110,6 +122,7 @@ function startTimer(startedAt) {
     }
 
 
+    // ২৪ ঘণ্টা
     const endTime =
         startTime +
         (24 * 60 * 60 * 1000);
@@ -121,6 +134,7 @@ function startTimer(startedAt) {
             endTime - Date.now();
 
 
+        // সময় শেষ
         if (remaining <= 0) {
 
             timerElement.textContent =
