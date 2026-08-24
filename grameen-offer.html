@@ -117,6 +117,87 @@
     margin-top: 12px;
     color: #555;
 }
+        /* BUY NOW POPUP */
+
+.popup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.popup-box {
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    border-radius: 25px;
+    padding: 25px;
+    box-sizing: border-box;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.popup-box h2 {
+    text-align: center;
+    font-size: 28px;
+    margin: 10px 25px 30px;
+}
+
+.popup-close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    border: none;
+    background: transparent;
+    font-size: 38px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.popup-offer {
+    font-size: 20px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.popup-price {
+    font-size: 21px;
+    margin-bottom: 20px;
+}
+
+.popup-warning {
+    background: #fff3c4;
+    padding: 20px;
+    border-radius: 18px;
+    font-size: 18px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.whatsapp-number {
+    background: #f1f1f1;
+    padding: 17px;
+    border-radius: 15px;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.whatsapp-btn {
+    width: 100%;
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
     </style>
 </head>
 
@@ -366,6 +447,259 @@
     </div>
 
     </div>
+<!-- BUY NOW POPUP -->
 
+<div id="buyPopup" class="popup-overlay">
+
+    <div class="popup-box">
+
+        <span class="popup-close" onclick="closeBuyPopup()">×</span>
+
+        <h2>অফারটি নিতে Buy Now করুন</h2>
+
+        <div class="popup-offer">
+            <b>অফার:</b>
+            <span id="popupOfferName"></span>
+        </div>
+
+        <div class="popup-offer">
+            <b>পেমেন্ট:</b>
+            ৳ <span id="popupOfferPrice"></span>
+        </div>
+
+        <div class="popup-warning">
+            ⚠️ পেমেন্ট করার আগে ভালোভাবে যাচাই করুন।<br><br>
+            নিচের WhatsApp নম্বরে মেসেজ করে
+            অফারটি Buy Now করুন।
+        </div>
+
+        <div class="popup-number">
+            <b>WhatsApp:</b> 01837976455
+        </div>
+
+        <div>
+            <b>যে নম্বরে অফারটি নেবেন</b>
+            <input
+                id="customerNumber"
+                class="popup-input"
+                type="tel"
+                placeholder="01XXXXXXXXX"
+            >
+        </div>
+
+        <button class="whatsapp-buy" onclick="buyViaWhatsApp()">
+            WhatsApp এ Buy Now
+        </button>
+
+    </div>
+
+</div>
+
+<!-- BUY NOW POPUP -->
+<div id="buyPopup" class="popup-overlay">
+
+    <div class="popup-box">
+
+        <button class="popup-close" onclick="closeBuyPopup()">×</button>
+
+        <h2>অফারটি নিতে পেমেন্ট করুন</h2>
+
+        <div class="popup-offer">
+            <b>অফার:</b>
+            <span id="popupOfferName">-</span>
+        </div>
+
+        <div class="popup-price">
+            <b>মূল্য:</b>
+            ৳<span id="popupOfferPrice">0</span>
+        </div>
+
+        <div class="payment-card">
+            <b>বিকাশ</b>
+            <span>01837976455</span>
+        </div>
+
+        <div class="payment-card">
+            <b>নগদ</b>
+            <span>01404534868</span>
+        </div>
+
+        <div class="popup-warning">
+
+            ⚠️ <b>গুরুত্বপূর্ণ নির্দেশনা</b>
+
+            <br><br>
+
+            যে নাম্বারে অফারটি নিতে চাচ্ছেন,
+            সেই নাম্বারটি নিচে দিন।
+
+            <br><br>
+
+            এই নাম্বারে টাকা
+            <b>Send Money</b> করবেন।
+
+            <br><br>
+
+            টাকা Send Money করার পর
+            পেমেন্টের Screenshot WhatsApp-এ পাঠাবেন।
+
+            <br><br>
+
+            ❌ টাকা Send Money না করে
+            Admin-কে মেসেজ করবেন না।
+
+            <br><br>
+
+            ⚠️ ভুল করে <b>Flexiload</b> বা
+            <b>Cash Out</b> করলে টাকা ফেরত দেওয়া হবে না।
+
+            <br><br>
+
+            অবশ্যই <b>Send Money</b> করতে হবে।
+
+        </div>
+
+        <label>
+            যে নাম্বারে অফারটি নিতে চান
+        </label>
+
+        <input
+            type="tel"
+            id="customerNumber"
+            placeholder="01XXXXXXXXX"
+            maxlength="11"
+        >
+
+        <button
+            class="whatsapp-btn"
+            onclick="buyViaWhatsApp()"
+        >
+            💬 WhatsApp-এ Screenshot পাঠান
+        </button>
+
+    </div>
+</div>
+
+
+<script>
+
+/* =========================
+   BUY NOW POPUP
+========================= */
+
+let selectedOfferName = "";
+let selectedOfferPrice = "";
+
+
+/* Popup Open */
+
+function openBuyPopup(name, price) {
+
+    selectedOfferName = name;
+    selectedOfferPrice = price;
+
+    document.getElementById("popupOfferName").textContent = name;
+    document.getElementById("popupOfferPrice").textContent = price;
+
+    document.getElementById("buyPopup").style.display = "flex";
+}
+
+
+/* Popup Close */
+
+function closeBuyPopup() {
+
+    document.getElementById("buyPopup").style.display = "none";
+
+}
+
+
+/* WhatsApp */
+
+function buyViaWhatsApp() {
+
+    const customerNumber =
+        document.getElementById("customerNumber").value.trim();
+
+
+    if (customerNumber === "") {
+
+        alert("অফার নিতে চান এমন নাম্বারটি দিন।");
+
+        return;
+    }
+
+
+    if (!/^01[0-9]{9}$/.test(customerNumber)) {
+
+        alert("সঠিক ১১ সংখ্যার মোবাইল নাম্বার দিন।");
+
+        return;
+    }
+
+
+    const message =
+        "আমি একটি অফার নিতে চাই।\n\n" +
+
+        "অফার: " + selectedOfferName + "\n" +
+
+        "মূল্য: ৳" + selectedOfferPrice + "\n\n" +
+
+        "যে নাম্বারে অফার নিতে চাই: " +
+        customerNumber + "\n\n" +
+
+        "আমি Send Money করেছি। " +
+        "পেমেন্টের Screenshot পাঠাচ্ছি।";
+
+
+    const whatsappURL =
+        "https://wa.me/8801837976455?text=" +
+        encodeURIComponent(message);
+
+
+    window.open(whatsappURL, "_blank");
+
+}
+
+
+/* =========================
+   সব Buy Now Button কাজ করবে
+========================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const buttons =
+        document.querySelectorAll(".offer button");
+
+
+    buttons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            const offer =
+                button.closest(".offer");
+
+            if (!offer) return;
+
+
+            const name =
+                offer.querySelector("b").textContent.trim();
+
+
+            const price =
+                offer.querySelector("strong").textContent
+                .replace("৳", "")
+                .trim();
+
+
+            openBuyPopup(name, price);
+
+        });
+
+    });
+
+});
+
+</script>
 </body>
 </html>
