@@ -20,10 +20,6 @@ import {
   browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-import {
-  addDailyReferral
-} from "./dailyReferral.js";
-
 // আপনার Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
