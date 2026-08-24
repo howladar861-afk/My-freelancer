@@ -9,10 +9,12 @@ import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-import {
+ import {
     getFirestore,
     doc,
-    getDoc
+    getDoc,
+    updateDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -234,11 +236,29 @@ onAuthStateChanged(
                 userSnap.data();
 
 
-            const startedAt =
-                userData.dailyReferralStartedAt;
+            let startedAt =
+    userData.dailyReferralStartedAt;
 
+if (!startedAt) {
 
-            startTimer(startedAt);
+    await updateDoc(userRef, {
+        dailyReferralStartedAt: serverTimestamp()
+    });
+
+    const updatedSnap =
+        await getDoc(userRef);
+
+    if (updatedSnap.exists()) {
+
+        const updatedData =
+            updatedSnap.data();
+
+        startedAt =
+            updatedData.dailyReferralStartedAt;
+    }
+}
+
+startTimer(startedAt);
 
 
         } catch (error) {
