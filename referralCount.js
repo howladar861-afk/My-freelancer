@@ -16,7 +16,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const DAILY_REFERRAL_LIMIT = 4;
-const DAILY_REFERRAL_HOURS = 24;
 
 export function addReferralCounts(
   transaction,
