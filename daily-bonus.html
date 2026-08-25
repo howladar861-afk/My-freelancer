@@ -351,7 +351,7 @@
 
 
       /* =========================
-   START TIMER MODULE
+   DAILY TIMER
 ========================= */
 
 const timerElement =
@@ -363,26 +363,20 @@ function updateDailyTimer() {
 
   const now = new Date();
 
-  const tomorrow = new Date(now);
+  const tomorrow = new Date();
   tomorrow.setHours(24, 0, 0, 0);
 
   const remaining =
-    Math.max(0, tomorrow.getTime() - now.getTime());
+    tomorrow.getTime() - now.getTime();
 
   const hours =
-    Math.floor(remaining / (1000 * 60 * 60));
+    Math.floor(remaining / 3600000);
 
   const minutes =
-    Math.floor(
-      (remaining % (1000 * 60 * 60)) /
-      (1000 * 60)
-    );
+    Math.floor((remaining % 3600000) / 60000);
 
   const seconds =
-    Math.floor(
-      (remaining % (1000 * 60)) /
-      1000
-    );
+    Math.floor((remaining % 60000) / 1000);
 
   timerElement.textContent =
     "⏳ সময় বাকি: " +
@@ -417,6 +411,3 @@ setInterval(updateDailyTimer, 1000);
 
 </body>
 </html>
-
-</body>
-  </html>
