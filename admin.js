@@ -1122,14 +1122,40 @@ const result =
     db,
     id
   );
-if (
-  !result.alreadyPaid &&
-  result.level1Uid
-) {
-  await addDailyReferral(
-    db,
-    result.level1Uid
-  );
+// =====================================
+// DAILY REFERRAL COUNT +1
+// =====================================
+
+const userRef = doc(db, "users", userId);
+
+const userSnap = await getDoc(userRef);
+
+if (userSnap.exists()) {
+
+  const userData = userSnap.data();
+
+  const referrerUid = userData.referredBy;
+
+  if (referrerUid) {
+
+    const counted = await addDailyReferral(
+      db,
+      referrerUid
+    );
+
+    console.log(
+      "Daily Referral Count:",
+      counted
+    );
+
+  } else {
+
+    console.log(
+      "এই User-এর referredBy নেই"
+    );
+
+  }
+}
 }
 await setDoc(
   doc(db, "users", userId),
