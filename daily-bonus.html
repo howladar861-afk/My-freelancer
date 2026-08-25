@@ -171,7 +171,56 @@
   <div id="bonusStatus">
     ⏳ ৪টি রেফার পূর্ণ করুন
   </div>
+<!-- ===================================== -->
+<!-- BONUS CLAIM -->
+<!-- ===================================== -->
 
+<div id="bonusClaimBox" style="
+  background:white;
+  border-radius:25px;
+  padding:25px;
+  margin-top:20px;
+  box-shadow:0 5px 15px rgba(0,0,0,.08);
+">
+
+  <div style="
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:15px;
+  ">
+    🎁 দৈনিক বোনাস
+  </div>
+
+  <div id="bonusAmount" style="
+    font-size:32px;
+    font-weight:bold;
+    color:#16a34a;
+    margin-bottom:18px;
+  ">
+    ৳২০
+  </div>
+
+  <button
+    id="claimBonusBtn"
+    disabled
+    style="
+      width:100%;
+      padding:16px;
+      border:0;
+      border-radius:18px;
+      background:#9ca3af;
+      color:white;
+      font-size:21px;
+      font-weight:bold;
+    ">
+    🎁 বোনাস নিন
+  </button>
+
+</div>
+
+<!-- ===================================== -->
+<!-- END BONUS CLAIM -->
+<!-- ===================================== -->
 
   <div id="loginStatus" class="login">
     🔄 লগইন যাচাই করা হচ্ছে...
@@ -331,21 +380,34 @@
 
       if (status?.completed) {
 
-        bonusElement.textContent =
-          "🎉 অভিনন্দন! আজকের ২০ টাকা বোনাস পাওয়ার যোগ্য হয়েছেন।";
+  bonusElement.textContent =
+    "🎉 অভিনন্দন! ৪টি ভেরিফাইড রেফার পূর্ণ হয়েছে।";
 
-      } else {
+  const claimButton =
+    document.getElementById("claimBonusBtn");
 
-        const remaining =
-          Math.max(
-            0,
-            limit - count
-          );
+  if (claimButton) {
 
-        bonusElement.textContent =
-          "⏳ আরও " +
-          remaining +
-          "টি রেফার পূর্ণ করুন";
+    claimButton.disabled = false;
+
+    claimButton.style.background =
+      "#16a34a";
+
+  }
+
+} else {
+
+  const remaining =
+    Math.max(
+      0,
+      limit - count
+    );
+
+  bonusElement.textContent =
+    "⏳ আরও " +
+    remaining +
+    "টি ভেরিফাইড রেফার পূর্ণ করুন";
+
       }
 
 
