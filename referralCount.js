@@ -49,86 +49,99 @@ export function addReferralCounts(
         currentCount + 1
     };
 
-    // -------------------------------------
-    // DAILY REFERRAL COUNT
-    // -------------------------------------
+    // =====================================
+// DAILY REFERRAL COUNT
+// RESET EVERY MIDNIGHT
+// =====================================
 
-    const dailyCount =
-      Number(
-        level1User.dailyReferralCount || 0
-      );
+const dailyCount =
+  Number(level1User.dailyReferralCount || 0);
 
-    const startedAt =
-      level1User.dailyReferralStartedAt || null;
+const lastReferralAt =
+  level1User.dailyReferralLastAt || null;
 
-    let dailyNewCount = 1;
-    let dailyStartedAt = true;
+let dailyNewCount = 1;
+let dailyStartedAt = true;
 
-    // 24 hours already passed
-    if (startedAt && typeof startedAt.toMillis === "function") {
+// আজকের তারিখ বের করা
+const now = new Date();
 
-      const hoursPassed =
-        (Date.now() - startedAt.toMillis())
-        / (1000 * 60 * 60);
+const todayKey =
+  now.getFullYear() + "-" +
+  String(now.getMonth() + 1).padStart(2, "0") + "-" +
+  String(now.getDate()).padStart(2, "0");
 
-      if (hoursPassed < DAILY_REFERRAL_HOURS) {
 
-        // Daily limit reached
-        if (
-          dailyCount >= DAILY_REFERRAL_LIMIT
-        ) {
-          throw new Error(
-            "আজকের ৪টি রেফার ইতিমধ্যে পূর্ণ হয়েছে।"
-          );
-        }
+// আগের referral-এর তারিখ
+let lastReferralDay = null;
 
-        dailyNewCount =
-          dailyCount + 1;
+if (
+  lastReferralAt &&
+  typeof lastReferralAt.toDate === "function"
+) {
 
-        dailyStartedAt = false;
-      }
+  const lastDate =
+    lastReferralAt.toDate();
 
-    } else if (
-      dailyCount > 0
-    ) {
+  lastReferralDay =
+    lastDate.getFullYear() + "-" +
+    String(lastDate.getMonth() + 1).padStart(2, "0") + "-" +
+    String(lastDate.getDate()).padStart(2, "0");
+}
 
-      // Existing count but no valid start time
-      if (
-        dailyCount >= DAILY_REFERRAL_LIMIT
-      ) {
-        throw new Error(
-          "আজকের ৪টি রেফার ইতিমধ্যে পূর্ণ হয়েছে।"
-        );
-      }
 
-      dailyNewCount =
-        dailyCount + 1;
+// =====================================
+// একই দিনে হলে COUNT +1
+// নতুন দিন হলে COUNT = 1
+// =====================================
 
-      dailyStartedAt = false;
-    }
+if (
+  lastReferralDay === todayKey
+) {
 
-    updateData.dailyReferralCount =
-      dailyNewCount;
+  if (
+    dailyCount >= DAILY_REFERRAL_LIMIT
+  ) {
 
-    if (dailyStartedAt) {
-      updateData.dailyReferralStartedAt =
-        serverTimestamp();
-
-      updateData.dailyReferralLastAt =
-        serverTimestamp();
-
-      updateData.dailyBonusClaimed =
-        false;
-    } else {
-      updateData.dailyReferralLastAt =
-        serverTimestamp();
-    }
-
-    transaction.update(
-      level1Ref,
-      updateData
+    throw new Error(
+      "আজকের ৪টি রেফার ইতিমধ্যে পূর্ণ হয়েছে।"
     );
   }
+
+  dailyNewCount =
+    dailyCount + 1;
+
+  dailyStartedAt = false;
+
+} else {
+
+  // নতুন দিন
+  dailyNewCount = 1;
+
+  dailyStartedAt = true;
+}
+
+
+// =====================================
+// DAILY DATA UPDATE
+// =====================================
+
+updateData.dailyReferralCount =
+  dailyNewCount;
+
+updateData.dailyReferralLastAt =
+  serverTimestamp();
+
+
+// নতুন দিন / প্রথম referral
+if (dailyStartedAt) {
+
+  updateData.dailyReferralStartedAt =
+    serverTimestamp();
+
+  updateData.dailyBonusClaimed =
+    false;
+}
 
 
   // =====================================
