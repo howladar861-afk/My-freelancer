@@ -142,7 +142,14 @@ if (dailyStartedAt) {
     false;
 }
 
+    // =====================================
+    // APPLY LEVEL 1 REFERRAL DATA
+    // =====================================
 
+    transaction.update(
+      level1Ref,
+      updateData
+    );
   // =====================================
   // LEVEL 2 REFERRAL COUNT
   // =====================================
