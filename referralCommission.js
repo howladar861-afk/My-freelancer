@@ -257,36 +257,7 @@ export async function processReferralCommission(db, requestId) {
           }
         }
       }
-      // =================================
-      // DAILY REFERRAL COUNT
-      // =================================
-
-      let dailyReferralRef = null;
-      let dailyReferralData = null;
-
-      if (level1Uid) {
-
-        dailyReferralRef =
-          getDailyReferralRef(
-            db,
-            level1Uid
-          );
-
-        const dailyReferralSnap =
-          await transaction.get(
-            dailyReferralRef
-          );
-
-        if (dailyReferralSnap.exists()) {
-
-          dailyReferralData =
-            dailyReferralSnap.data();
-
-        } else {
-
-          dailyReferralData = {};
-        }
-      }
+      
       // =================================
       // TOTAL COMMISSION
       // =================================
@@ -328,21 +299,6 @@ addReferralCounts(
   level2Ref,
   level2User
 );
-            // =================================
-      // DAILY VERIFIED REFERRAL COUNT +1
-      // =================================
-
-      if (
-        dailyReferralRef &&
-        level1Uid
-      ) {
-
-        addDailyReferral(
-          transaction,
-          dailyReferralRef,
-          dailyReferralData
-        );
-      }
       // =================================
       // UPDATE VERIFICATION USER
       // =================================
