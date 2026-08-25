@@ -150,6 +150,7 @@ if (dailyStartedAt) {
       level1Ref,
       updateData
     );
+  }
   // =====================================
   // LEVEL 2 REFERRAL COUNT
   // =====================================
