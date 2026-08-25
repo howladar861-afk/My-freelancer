@@ -25,9 +25,6 @@ import {
 import {
   processReferralCommission
 } from "./referralCommission.js";
-import {
-  addDailyReferralCount
-} from "./dailyReferralCount.js";
 // =====================================
 // FIREBASE CONFIG
 // =====================================
@@ -1145,14 +1142,6 @@ await setDoc(
 
       return;
     }
-// =====================================
-// DAILY REFERRAL COUNT +1
-// =====================================
-
-await addDailyReferralCount(
-  db,
-  result.level1Uid
-);
 
     alert(
       "✅ Verification Approved!\n\n" +
