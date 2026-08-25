@@ -354,86 +354,34 @@
          START TIMER MODULE
       ========================= */
 
-      try {
+      <script>
+function startDailyTimer() {
+  const timer = document.getElementById("dailyReferralTimer");
+  if (!timer) return;
 
-        const timerModule =
-          await import(
-            "./daily-referral-timer.js"
-          );
+  function updateTimer() {
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setHours(24, 0, 0, 0);
 
+    const remaining = Math.max(0, tomorrow - now);
 
-        if (
-          typeof timerModule.startDailyReferralTimer
-          === "function"
-        ) {
+    const hours = Math.floor(remaining / (1000 * 60 * 60));
+    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
 
-          timerModule.startDailyReferralTimer(
-            db,
-            user.uid,
-            "dailyReferralTimer"
-          );
+    timer.textContent =
+      "⏳ সময় বাকি: " +
+      String(hours).padStart(2, "0") + ":" +
+      String(minutes).padStart(2, "0") + ":" +
+      String(seconds).padStart(2, "0");
+  }
 
-        } else if (
-          typeof timerModule.startReferralCountdown
-          === "function"
-        ) {
+  updateTimer();
+  setInterval(updateTimer, 1000);
+}
 
-          timerModule.startReferralCountdown(
-            db,
-            user.uid,
-            "dailyReferralTimer"
-          );
-
-        } else {
-
-          console.error(
-            "Timer function পাওয়া যায়নি"
-          );
-
-          document.getElementById(
-            "dailyReferralTimer"
-          ).textContent =
-            "⏳ Timer চালু করা যাচ্ছে না";
-        }
-
-      } catch (timerError) {
-
-        console.error(
-          "Timer Error:",
-          timerError
-        );
-
-        document.getElementById(
-          "dailyReferralTimer"
-        ).textContent =
-          "⏳ Timer Error";
-      }
-
-
-    } catch (error) {
-
-      console.error(
-        "Daily Referral Error:",
-        error
-      );
-
-
-      errorElement.style.display =
-        "block";
-
-      errorElement.textContent =
-        "❌ ডেইলি রেফার ডাটা লোড হয়নি।";
-
-
-      countElement.textContent =
-        "0 / 4";
-
-      bonusElement.textContent =
-        "⚠️ ডাটা লোড করা যায়নি";
-    }
-
-  });
-
+startDailyTimer();
 </script>
 
 </body>
