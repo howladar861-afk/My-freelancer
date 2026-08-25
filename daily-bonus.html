@@ -227,183 +227,433 @@
 </div>
 
 
-<!-- Firebase + Daily Referral -->
-
+<!-- Firebase + Daily Bonus -->
 <script type="module">
 
-  import { initializeApp }
-  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-  import { getFirestore }
-  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  runTransaction
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-  import {
-    getAuth,
-    onAuthStateChanged
-  }
-  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  getAuth,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-  import {
-  getDailyReferralCount
-} from "./dailyReferral.js";
-
-
-  /* =========================
-     FIREBASE CONFIG
-  ========================= */
-
-  const firebaseConfig = {
-
-    apiKey: "AIzaSyBFUKPT7fo6sUofd009ffiZgjdlaR5Evm8",
-
-    authDomain:
-      "rakib-freelancer-9c66b.firebaseapp.com",
-
-    projectId:
-      "rakib-freelancer-9c66b",
-
-    storageBucket:
-      "rakib-freelancer-9c66b.firebasestorage.app",
-
-    messagingSenderId:
-      "541209844482",
-
-    appId:
-      "1:541209844482:web:510568d5226c9bf47ac01b",
-
-    measurementId:
-      "G-F6QNE0QN5K"
-  };
+import {
+  getDailyReferralRef,
+  canClaimDailyBonus,
+  claimDailyBonus
+}
+from "./dailyReferral.js";
 
 
-  /* =========================
-     FIREBASE START
-  ========================= */
+/* =========================
+   FIREBASE CONFIG
+========================= */
 
-  const app = initializeApp(firebaseConfig);
+const firebaseConfig = {
 
-  const auth = getAuth(app);
+  apiKey:
+    "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5Evm8",
 
-  const db = getFirestore(app);
+  authDomain:
+    "rakib-freelancer-9c66b.firebaseapp.com",
+
+  projectId:
+    "rakib-freelancer-9c66b",
+
+  storageBucket:
+    "rakib-freelancer-9c66b.firebasestorage.app",
+
+  messagingSenderId:
+    "541209844482",
+
+  appId:
+    "1:541209844482:web:510568d5226c9bf47ac01b",
+
+  measurementId:
+    "G-F6QNE0QN5K"
+};
 
 
-  /* =========================
-     ELEMENTS
-  ========================= */
+/* =========================
+   FIREBASE START
+========================= */
 
-  const bonusElement =
-    document.getElementById("bonusStatus");
+const app =
+  initializeApp(firebaseConfig);
 
-  const loginElement =
-    document.getElementById("loginStatus");
+const auth =
+  getAuth(app);
 
-  const errorElement =
-    document.getElementById("errorBox");
+const db =
+  getFirestore(app);
 
 
-  /* =========================
-     LOAD DAILY STATUS
-  ========================= */
+/* =========================
+   ELEMENTS
+========================= */
 
-  onAuthStateChanged(auth, async (user) => {
+const bonusElement =
+  document.getElementById("bonusStatus");
+
+const claimButton =
+  document.getElementById("claimBonusBtn");
+
+const errorElement =
+  document.getElementById("errorBox");
+
+
+/* =========================
+   LOAD DAILY BONUS
+========================= */
+
+onAuthStateChanged(
+  auth,
+  async (user) => {
 
     if (!user) {
 
-
-      countElement.textContent =
-        "0 / 4";
-
       bonusElement.textContent =
-        "🔒 রেফার করতে আগে লগইন করুন";
+        "🔒 আগে লগইন করুন";
+
+      if (claimButton) {
+        claimButton.disabled = true;
+      }
 
       return;
     }
 
 
-    console.log("LOGIN UID:", user.uid);
-
-
     try {
 
-      const status =
-  await getDailyReferralCount(
-    db,
-    user.uid
-  );
-
-
-      console.log(
-        "DAILY STATUS:",
-        status
-      );
-
-
       /* =========================
-         REFERRAL COUNT
+         DAILY REFERRAL
       ========================= */
+
+      const dailyReferralRef =
+        getDailyReferralRef(
+          db,
+          user.uid
+        );
+
+      const dailySnap =
+        await getDoc(
+          dailyReferralRef
+        );
+
+
+      if (!dailySnap.exists()) {
+
+        bonusElement.textContent =
+          "⏳ ৪টি ভেরিফাইড রেফার পূর্ণ করুন";
+
+        return;
+      }
+
+
+      const dailyData =
+        dailySnap.data();
+
 
       const count =
-        Number(status?.count ?? 0);
+        Number(
+          dailyData.count || 0
+        );
 
       const limit =
-        Number(status?.limit ?? 4);
+        Number(
+          dailyData.limit || 4
+        );
 
 
       /* =========================
-         BONUS STATUS
+         BONUS ALREADY CLAIMED
       ========================= */
 
-      if (status?.completed) {
+      if (
+        dailyData.bonusClaimed === true
+      ) {
 
-  bonusElement.textContent =
-    "🎉 অভিনন্দন! ৪টি ভেরিফাইড রেফার পূর্ণ হয়েছে।";
+        bonusElement.textContent =
+          "✅ আজকের ২০ টাকা বোনাস নেওয়া হয়েছে।";
 
-  const claimButton =
-    document.getElementById("claimBonusBtn");
+        if (claimButton) {
 
-  if (claimButton) {
+          claimButton.disabled = true;
 
-    claimButton.disabled = false;
+          claimButton.style.background =
+            "#9ca3af";
 
-    claimButton.style.background =
-      "#16a34a";
+          claimButton.textContent =
+            "✅ বোনাস নেওয়া হয়েছে";
 
-  }
+        }
 
-} else {
+        return;
+      }
 
-  const remaining =
-    Math.max(
-      0,
-      limit - count
-    );
 
-  bonusElement.textContent =
-    "⏳ আরও " +
-    remaining +
-    "টি ভেরিফাইড রেফার পূর্ণ করুন";
+      /* =========================
+         CHECK 4 VERIFIED REFERRALS
+      ========================= */
+
+      if (
+        count >= limit &&
+        dailyData.completed === true
+      ) {
+
+        bonusElement.textContent =
+          "🎉 ৪টি ভেরিফাইড রেফার পূর্ণ হয়েছে। বোনাস নিন।";
+
+        if (claimButton) {
+
+          claimButton.disabled = false;
+
+          claimButton.style.background =
+            "#16a34a";
+
+        }
+
+      } else {
+
+        const remaining =
+          Math.max(
+            0,
+            limit - count
+          );
+
+        bonusElement.textContent =
+          "⏳ আরও " +
+          remaining +
+          "টি ভেরিফাইড রেফার পূর্ণ করুন";
+
+        if (claimButton) {
+          claimButton.disabled = true;
+        }
 
       }
 
 
-
-/* =========================
-   CLOSE AUTH FUNCTION
-========================= */
-
     } catch (error) {
 
-      console.error("DAILY REFERRAL ERROR:", error);
+      console.error(
+        "DAILY BONUS LOAD ERROR:",
+        error
+      );
 
-      errorElement.style.display = "block";
+      errorElement.style.display =
+        "block";
 
       errorElement.textContent =
-        "⚠️ তথ্য লোড করতে সমস্যা হয়েছে।";
+        "⚠️ বোনাস তথ্য লোড করতে সমস্যা হয়েছে।";
 
     }
 
-  });
-  </script>
+  }
+);
+
+
+/* =========================
+   CLAIM BONUS
+========================= */
+
+if (claimButton) {
+
+  claimButton.onclick =
+    async function () {
+
+      const user =
+        auth.currentUser;
+
+
+      if (!user) {
+
+        alert(
+          "⚠️ আগে Login করুন"
+        );
+
+        return;
+      }
+
+
+      claimButton.disabled =
+        true;
+
+      claimButton.textContent =
+        "⏳ বোনাস যোগ হচ্ছে...";
+
+
+      try {
+
+        const result =
+          await runTransaction(
+            db,
+            async (transaction) => {
+
+              /* =========================
+                 USER
+              ========================= */
+
+              const userRef =
+                doc(
+                  db,
+                  "users",
+                  user.uid
+                );
+
+              const userSnap =
+                await transaction.get(
+                  userRef
+                );
+
+
+              if (!userSnap.exists()) {
+
+                throw new Error(
+                  "User account পাওয়া যায়নি"
+                );
+
+              }
+
+
+              const userData =
+                userSnap.data();
+
+
+              /* =========================
+                 DAILY REFERRAL
+              ========================= */
+
+              const dailyReferralRef =
+                getDailyReferralRef(
+                  db,
+                  user.uid
+                );
+
+              const dailySnap =
+                await transaction.get(
+                  dailyReferralRef
+                );
+
+
+              if (!dailySnap.exists()) {
+
+                throw new Error(
+                  "Daily referral data পাওয়া যায়নি"
+                );
+
+              }
+
+
+              const dailyData =
+                dailySnap.data();
+
+
+              /* =========================
+                 CHECK BONUS
+              ========================= */
+
+              if (
+                !canClaimDailyBonus(
+                  dailyData
+                )
+              ) {
+
+                throw new Error(
+                  "৪টি verified referral পূর্ণ হয়নি অথবা bonus আগে নেওয়া হয়েছে"
+                );
+
+              }
+
+
+              /* =========================
+                 ADD ৳20
+              ========================= */
+
+              const bonus =
+                claimDailyBonus(
+                  transaction,
+                  userRef,
+                  userData,
+                  dailyReferralRef,
+                  dailyData
+                );
+
+
+              return bonus;
+
+            }
+          );
+
+
+        /* =========================
+           SUCCESS
+        ========================= */
+
+        bonusElement.textContent =
+          "🎉 অভিনন্দন! আপনার ব্যালেন্সে ৳20 যোগ হয়েছে।";
+
+
+        claimButton.textContent =
+          "✅ বোনাস নেওয়া হয়েছে";
+
+        claimButton.disabled =
+          true;
+
+        claimButton.style.background =
+          "#9ca3af";
+
+
+        alert(
+          "🎉 ৳20 বোনাস আপনার ব্যালেন্সে যোগ হয়েছে!"
+        );
+
+
+        console.log(
+          "BONUS CLAIM SUCCESS:",
+          result
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "BONUS CLAIM ERROR:",
+          error
+        );
+
+
+        claimButton.disabled =
+          false;
+
+        claimButton.textContent =
+          "🎁 বোনাস নিন";
+
+        claimButton.style.background =
+          "#16a34a";
+
+
+        alert(
+          "❌ " +
+          error.message
+        );
+
+      }
+
+    };
+
+}
+
+</script>
 /* =========================
    DAILY TIMER
 ========================= */
