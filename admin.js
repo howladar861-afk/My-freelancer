@@ -1151,7 +1151,7 @@ await setDoc(
 
 await addDailyReferralCount(
   db,
-  userId
+  result.level1Uid
 );
 
     alert(
