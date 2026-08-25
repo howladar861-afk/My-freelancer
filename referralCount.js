@@ -39,108 +39,112 @@ export function addReferralCounts(
         level1User.referralCount || 0
       );
 
-    // -------------------------------------
     // TOTAL REFERRAL COUNT
-    // -------------------------------------
-
     const updateData = {
       referralCount:
         currentCount + 1
     };
 
     // =====================================
-// DAILY REFERRAL COUNT
-// RESET EVERY MIDNIGHT
-// =====================================
+    // DAILY REFERRAL COUNT
+    // RESET EVERY MIDNIGHT
+    // =====================================
 
-const dailyCount =
-  Number(level1User.dailyReferralCount || 0);
+    const dailyCount =
+      Number(
+        level1User.dailyReferralCount || 0
+      );
 
-const lastReferralAt =
-  level1User.dailyReferralLastAt || null;
+    const lastReferralAt =
+      level1User.dailyReferralLastAt || null;
 
-let dailyNewCount = 1;
-let dailyStartedAt = true;
+    let dailyNewCount = 1;
+    let dailyStartedAt = true;
 
-// আজকের তারিখ বের করা
-const now = new Date();
+    // আজকের তারিখ
+    const now = new Date();
 
-const todayKey =
-  now.getFullYear() + "-" +
-  String(now.getMonth() + 1).padStart(2, "0") + "-" +
-  String(now.getDate()).padStart(2, "0");
+    const todayKey =
+      now.getFullYear() + "-" +
+      String(now.getMonth() + 1).padStart(2, "0") + "-" +
+      String(now.getDate()).padStart(2, "0");
 
+    // আগের referral-এর তারিখ
+    let lastReferralDay = null;
 
-// আগের referral-এর তারিখ
-let lastReferralDay = null;
+    if (
+      lastReferralAt &&
+      typeof lastReferralAt.toDate === "function"
+    ) {
 
-if (
-  lastReferralAt &&
-  typeof lastReferralAt.toDate === "function"
-) {
+      const lastDate =
+        lastReferralAt.toDate();
 
-  const lastDate =
-    lastReferralAt.toDate();
+      lastReferralDay =
+        lastDate.getFullYear() + "-" +
+        String(lastDate.getMonth() + 1).padStart(2, "0") + "-" +
+        String(lastDate.getDate()).padStart(2, "0");
+    }
 
-  lastReferralDay =
-    lastDate.getFullYear() + "-" +
-    String(lastDate.getMonth() + 1).padStart(2, "0") + "-" +
-    String(lastDate.getDate()).padStart(2, "0");
-}
+    // =====================================
+    // একই দিনে হলে COUNT +1
+    // নতুন দিন হলে COUNT = 1
+    // =====================================
 
+    if (
+      lastReferralDay === todayKey
+    ) {
 
-// =====================================
-// একই দিনে হলে COUNT +1
-// নতুন দিন হলে COUNT = 1
-// =====================================
+      if (
+        dailyCount >= DAILY_REFERRAL_LIMIT
+      ) {
 
-if (
-  lastReferralDay === todayKey
-) {
+        throw new Error(
+          "আজকের ৪টি রেফার ইতিমধ্যে পূর্ণ হয়েছে।"
+        );
+      }
 
-  if (
-    dailyCount >= DAILY_REFERRAL_LIMIT
-  ) {
+      dailyNewCount =
+        dailyCount + 1;
 
-    throw new Error(
-      "আজকের ৪টি রেফার ইতিমধ্যে পূর্ণ হয়েছে।"
+      dailyStartedAt = false;
+
+    } else {
+
+      // নতুন দিন
+      dailyNewCount = 1;
+      dailyStartedAt = true;
+    }
+
+    // =====================================
+    // DAILY DATA UPDATE
+    // =====================================
+
+    updateData.dailyReferralCount =
+      dailyNewCount;
+
+    updateData.dailyReferralLastAt =
+      serverTimestamp();
+
+    // নতুন দিন / প্রথম referral
+    if (dailyStartedAt) {
+
+      updateData.dailyReferralStartedAt =
+        serverTimestamp();
+
+      updateData.dailyBonusClaimed =
+        false;
+    }
+
+    // =====================================
+    // APPLY LEVEL 1 REFERRAL DATA
+    // =====================================
+
+    transaction.update(
+      level1Ref,
+      updateData
     );
   }
-
-  dailyNewCount =
-    dailyCount + 1;
-
-  dailyStartedAt = false;
-
-} else {
-
-  // নতুন দিন
-  dailyNewCount = 1;
-
-  dailyStartedAt = true;
-}
-
-
-// =====================================
-// DAILY DATA UPDATE
-// =====================================
-
-updateData.dailyReferralCount =
-  dailyNewCount;
-
-updateData.dailyReferralLastAt =
-  serverTimestamp();
-
-
-// নতুন দিন / প্রথম referral
-if (dailyStartedAt) {
-
-  updateData.dailyReferralStartedAt =
-    serverTimestamp();
-
-  updateData.dailyBonusClaimed =
-    false;
-}
 
   // =====================================
   // LEVEL 2 REFERRAL COUNT
@@ -164,5 +168,4 @@ if (dailyStartedAt) {
       }
     );
   }
-
-}
+      }
