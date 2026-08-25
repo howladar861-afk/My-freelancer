@@ -115,57 +115,56 @@ export async function addDailyReferralCount(
   referrerUid
 ) {
 
+  // Referrer UID না থাকলে
   if (!referrerUid) {
     return false;
   }
 
+  // Referrer User
+  const userRef = doc(
+    db,
+    "users",
+    referrerUid
+  );
 
-  const userRef =
-    doc(
-      db,
-      "users",
-      referrerUid
-    );
-
-
+  // 24 ঘণ্টা শেষ হলে আগে reset করবে
   const currentCount =
     await resetDailyReferralIfExpired(
       db,
       userRef
     );
 
-
+  // User পাওয়া না গেলে
   if (currentCount === null) {
     return false;
   }
 
-
-  // ৪টি হয়ে গেলে আর +1 হবে না
+  // সর্বোচ্চ ৪ জন
   if (
     currentCount >=
     DAILY_REFERRAL_LIMIT
   ) {
+    console.log(
+      "Daily referral limit already reached:",
+      currentCount + "/" + DAILY_REFERRAL_LIMIT
+    );
 
     return false;
   }
 
-
+  // +1
   const newCount =
     currentCount + 1;
 
-
   const updateData = {
-
     dailyReferralCount:
       newCount,
 
     dailyReferralLastAt:
       serverTimestamp()
-
   };
 
-
-  // প্রথম referral হলে timer শুরু
+  // প্রথম referral হলে 24 ঘণ্টার timer শুরু
   if (currentCount === 0) {
 
     updateData.dailyReferralStartedAt =
@@ -175,20 +174,16 @@ export async function addDailyReferralCount(
       false;
   }
 
-
+  // User update
   await updateDoc(
     userRef,
     updateData
   );
 
-
   console.log(
     "Daily Referral Count:",
-    newCount +
-    "/" +
-    DAILY_REFERRAL_LIMIT
+    newCount + "/" + DAILY_REFERRAL_LIMIT
   );
-
 
   return true;
 }
