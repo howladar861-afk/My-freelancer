@@ -207,9 +207,8 @@
   from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
   import {
-    getDailyReferralStatus
-  }
-  from "./dailyReferral.js";
+  getDailyReferralCount
+} from "./dailyReferral.js";
 
 
   /* =========================
@@ -299,10 +298,10 @@
     try {
 
       const status =
-        await getDailyReferralStatus(
-          db,
-          user.uid
-        );
+  await getDailyReferralCount(
+    db,
+    user.uid
+  );
 
 
       console.log(
