@@ -1,123 +1,129 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Daily Bonus - Rakib Freelancer</title>
+  <title>Daily Bonus</title>
 
-<style>
-*{
-  box-sizing:border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#eef5ff;
-  color:#222;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #eef5ff;
+      color: #111;
+      text-align: center;
+    }
 
-.container{
-  width:92%;
-  max-width:650px;
-  margin:25px auto;
-}
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
 
-.card{
-  background:#fff;
-  border-radius:28px;
-  padding:28px 20px;
-  margin-bottom:25px;
-  text-align:center;
-  box-shadow:0 5px 20px rgba(0,0,0,.10);
-}
+    .card {
+      background: white;
+      border-radius: 30px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.10);
+    }
 
-.title{
-  font-size:28px;
-  font-weight:800;
-  margin-bottom:20px;
-}
+    .title {
+      font-size: 38px;
+      font-weight: bold;
+      margin-bottom: 25px;
+    }
 
-.money{
-  background:#2467d8;
-  color:#ffd900;
-  border-radius:55px;
-  padding:22px 10px;
-  font-size:42px;
-  font-weight:900;
-}
+    .gift {
+      background: #2867d7;
+      color: #ffd900;
+      border-radius: 50px;
+      padding: 25px;
+      font-size: 55px;
+      font-weight: bold;
+    }
 
-.subtitle{
-  font-size:22px;
-  margin-top:30px;
-}
+    .sub {
+      font-size: 25px;
+      margin-top: 25px;
+    }
 
-.referral-box{
-  background:#edf5ff;
-  border-radius:28px;
-  padding:35px 15px;
-  text-align:center;
-}
+    .section {
+      background: #eaf3ff;
+      border-radius: 30px;
+      padding: 30px 20px;
+      margin-top: 20px;
+    }
 
-.referral-title{
-  display:inline-block;
-  background:#2467d8;
-  color:white;
-  padding:16px 55px;
-  border-radius:22px;
-  font-size:28px;
-  font-weight:800;
-}
+    .section-title {
+      display: inline-block;
+      background: #2867d7;
+      color: white;
+      border-radius: 25px;
+      padding: 18px 45px;
+      font-size: 32px;
+      font-weight: bold;
+    }
 
-.count{
-  color:#1760d8;
-  font-size:58px;
-  font-weight:900;
-  margin:55px 0 25px;
-}
+    #dailyReferralCount {
+      font-size: 60px;
+      color: #1762d2;
+      font-weight: bold;
+      margin: 35px 0 20px;
+    }
 
-.timer{
-  background:white;
-  border-radius:28px;
-  padding:22px 10px;
-  color:#1760d8;
-  font-size:25px;
-  font-weight:800;
-  box-shadow:0 4px 15px rgba(0,0,0,.08);
-}
+    #dailyReferralTimer {
+      background: white;
+      border-radius: 30px;
+      padding: 25px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #1762d2;
+      box-shadow: 0 5px 15px rgba(0,0,0,.08);
+    }
 
-.small-title{
-  font-size:22px;
-  margin-top:35px;
-}
+    #bonusStatus {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 25px;
+      font-size: 25px;
+      font-weight: bold;
+      background: #effff4;
+      color: #16823b;
+    }
 
-.status{
-  margin-top:35px;
-  padding:20px;
-  border:4px solid #91d9ad;
-  border-radius:25px;
-  background:#effff4;
-  color:#16883d;
-  font-size:24px;
-  font-weight:800;
-}
+    .login {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-top: 20px;
+      font-size: 28px;
+      font-weight: bold;
+    }
 
-.help{
-  background:white;
-  border-radius:25px;
-  padding:25px;
-  text-align:center;
-  font-size:21px;
-  box-shadow:0 4px 15px rgba(0,0,0,.08);
-}
+    .help {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-top: 20px;
+      font-size: 22px;
+    }
 
-.error{
-  color:#d00000;
-  font-size:17px;
-  margin-top:15px;
-}
-</style>
+    #errorBox {
+      display: none;
+      background: #ffe5e5;
+      color: #c00;
+      padding: 15px;
+      border-radius: 15px;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
 </head>
 
 <body>
@@ -130,40 +136,49 @@ body{
       প্রতিদিন ৪টা রেফার করলে
     </div>
 
-    <div class="money">
+    <div class="gift">
       🎁 ২০ টাকা 🎁
     </div>
 
-    <div class="subtitle">
+    <div class="sub">
       বোনাস পাওয়া যাবে
     </div>
 
   </div>
 
 
-  <div class="referral-box">
+  <div class="section">
 
-    <div class="referral-title">
+    <div class="section-title">
       রেফার কাউন্ট
     </div>
 
-    <div id="dailyReferralCount" class="count">
+    <div id="dailyReferralCount">
       0 / 4
     </div>
 
-    <div id="dailyReferralTimer" class="timer">
+    <div id="dailyReferralTimer">
       ⏳ সময় হিসাব করা হচ্ছে...
     </div>
 
-    <div class="small-title">
+    <div style="font-size:22px;margin-top:25px;">
       আজকের রেফার কাউন্ট
     </div>
 
-    <div id="bonusStatus" class="status">
-      ⏳ ৪টি রেফার পূর্ণ করুন
-    </div>
-
   </div>
+
+
+  <div id="bonusStatus">
+    ⏳ ৪টি রেফার পূর্ণ করুন
+  </div>
+
+
+  <div id="loginStatus" class="login">
+    🔄 লগইন যাচাই করা হচ্ছে...
+  </div>
+
+
+  <div id="errorBox"></div>
 
 
   <div class="help">
@@ -175,280 +190,251 @@ body{
 </div>
 
 
+<!-- Firebase + Daily Referral -->
+
 <script type="module">
 
-/* =====================================
-   FIREBASE IMPORT
-===================================== */
+  import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+  import { getFirestore }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-import {
-  getFirestore,
-  doc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-
-/* =====================================
-   FIREBASE CONFIG
-===================================== */
-
-const firebaseConfig = {
-
-  apiKey: "AIzaSyBFUKPT7fo6sUofd009ffiZgjdlaR5evm8",
-
-  authDomain:
-    "rakib-freelancer-9c66b.firebaseapp.com",
-
-  projectId:
-    "rakib-freelancer-9c66b",
-
-  storageBucket:
-    "rakib-freelancer-9c66b.firebasestorage.app",
-
-  messagingSenderId:
-    "541209844482",
-
-  appId:
-    "1:541209844482:web:510568d5226c9bf47ac01b",
-
-  measurementId:
-    "G-F6QNEOQN5K"
-};
-
-
-/* =====================================
-   START FIREBASE
-===================================== */
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-const db = getFirestore(app);
-
-
-/* =====================================
-   ELEMENTS
-===================================== */
-
-const countElement =
-  document.getElementById("dailyReferralCount");
-
-const timerElement =
-  document.getElementById("dailyReferralTimer");
-
-const bonusStatus =
-  document.getElementById("bonusStatus");
-
-
-/* =====================================
-   USER LOGIN CHECK
-===================================== */
-
-onAuthStateChanged(auth, async (user) => {
-
-  if (!user) {
-
-    countElement.textContent = "0 / 4";
-
-    timerElement.textContent =
-      "🔒 আগে লগইন করুন";
-
-    bonusStatus.textContent =
-      "🔒 লগইন করলে রেফার কাউন্ট দেখা যাবে";
-
-    return;
+  import {
+    getAuth,
+    onAuthStateChanged
   }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+  import {
+    getDailyReferralStatus
+  }
+  from "./dailyReferral.js";
 
 
-  try {
+  /* =========================
+     FIREBASE CONFIG
+  ========================= */
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyBFUKPT7fo6sUofd009ffiZgjdlaR5Evm8",
+
+    authDomain:
+      "rakib-freelancer-9c66b.firebaseapp.com",
+
+    projectId:
+      "rakib-freelancer-9c66b",
+
+    storageBucket:
+      "rakib-freelancer-9c66b.firebasestorage.app",
+
+    messagingSenderId:
+      "541209844482",
+
+    appId:
+      "1:541209844482:web:510568d5226c9bf47ac01b",
+
+    measurementId:
+      "G-F6QNE0QN5K"
+  };
+
+
+  /* =========================
+     FIREBASE START
+  ========================= */
+
+  const app = initializeApp(firebaseConfig);
+
+  const auth = getAuth(app);
+
+  const db = getFirestore(app);
+
+
+  /* =========================
+     ELEMENTS
+  ========================= */
+
+  const countElement =
+    document.getElementById("dailyReferralCount");
+
+  const bonusElement =
+    document.getElementById("bonusStatus");
+
+  const loginElement =
+    document.getElementById("loginStatus");
+
+  const errorElement =
+    document.getElementById("errorBox");
+
+
+  /* =========================
+     LOAD DAILY STATUS
+  ========================= */
+
+  onAuthStateChanged(auth, async (user) => {
+
+    if (!user) {
+
+      loginElement.innerHTML =
+        "🔒 আগে লগইন করুন";
+
+      countElement.textContent =
+        "0 / 4";
+
+      bonusElement.textContent =
+        "🔒 রেফার করতে আগে লগইন করুন";
+
+      return;
+    }
+
+
+    loginElement.innerHTML =
+      "✅ লগইন করা আছে";
+
 
     console.log("LOGIN UID:", user.uid);
 
 
-    /* ================================
-       USER DOCUMENT
-    ================================= */
+    try {
 
-    const userRef =
-      doc(db, "users", user.uid);
-
-    const userSnap =
-      await getDoc(userRef);
-
-
-    if (!userSnap.exists()) {
-
-      countElement.textContent = "0 / 4";
-
-      timerElement.textContent =
-        "❌ ইউজারের তথ্য পাওয়া যায়নি";
-
-      bonusStatus.textContent =
-        "❌ User data পাওয়া যায়নি";
-
-      return;
-    }
-
-
-    const data =
-      userSnap.data();
-
-
-    console.log("USER DATA:", data);
-
-
-    /* ================================
-       REFERRAL COUNT
-    ================================= */
-
-    let count =
-      Number(data.referralCount ?? 0);
-
-
-    if (count < 0) count = 0;
-
-    if (count > 4) count = 4;
-
-
-    countElement.textContent =
-      count + " / 4";
-
-
-    /* ================================
-       BONUS STATUS
-    ================================= */
-
-    if (count >= 4) {
-
-      bonusStatus.textContent =
-        "🎉 ৪টি রেফার পূর্ণ হয়েছে!";
-
-    } else {
-
-      const remaining =
-        4 - count;
-
-      bonusStatus.textContent =
-        "⏳ আরও " +
-        remaining +
-        "টি রেফার পূর্ণ করুন";
-
-    }
-
-
-    /* ================================
-       DAILY TIMER
-    ================================= */
-
-    const startedAt =
-      data.dailyReferralStartedAt;
-
-
-    if (!startedAt) {
-
-      timerElement.textContent =
-        "⏳ রেফার শুরু হলে ২৪ ঘণ্টার সময় শুরু হবে";
-
-      return;
-    }
-
-
-    const startTime =
-      startedAt.toMillis();
-
-    const endTime =
-      startTime + (24 * 60 * 60 * 1000);
-
-
-    function updateTimer(){
-
-      const now =
-        Date.now();
-
-      const remaining =
-        endTime - now;
-
-
-      if (remaining <= 0) {
-
-        timerElement.textContent =
-          "✅ ২৪ ঘণ্টার সময় শেষ";
-
-        return;
-      }
-
-
-      const totalSeconds =
-        Math.floor(remaining / 1000);
-
-
-      const hours =
-        Math.floor(totalSeconds / 3600);
-
-
-      const minutes =
-        Math.floor(
-          (totalSeconds % 3600) / 60
+      const status =
+        await getDailyReferralStatus(
+          db,
+          user.uid
         );
 
 
-      const seconds =
-        totalSeconds % 60;
+      console.log(
+        "DAILY STATUS:",
+        status
+      );
 
 
-      timerElement.textContent =
-        "⏳ সময় বাকি: " +
+      /* =========================
+         REFERRAL COUNT
+      ========================= */
 
-        String(hours).padStart(2,"0") +
+      const count =
+        Number(status?.count ?? 0);
 
-        ":" +
+      const limit =
+        Number(status?.limit ?? 4);
 
-        String(minutes).padStart(2,"0") +
 
-        ":" +
+      countElement.textContent =
+        count + " / " + limit;
 
-        String(seconds).padStart(2,"0");
+
+      /* =========================
+         BONUS STATUS
+      ========================= */
+
+      if (status?.completed) {
+
+        bonusElement.textContent =
+          "🎉 অভিনন্দন! আজকের ২০ টাকা বোনাস পাওয়ার যোগ্য হয়েছেন।";
+
+      } else {
+
+        const remaining =
+          Math.max(
+            0,
+            limit - count
+          );
+
+        bonusElement.textContent =
+          "⏳ আরও " +
+          remaining +
+          "টি রেফার পূর্ণ করুন";
+      }
+
+
+      /* =========================
+         START TIMER MODULE
+      ========================= */
+
+      try {
+
+        const timerModule =
+          await import(
+            "./daily-referral-timer.js"
+          );
+
+
+        if (
+          typeof timerModule.startDailyReferralTimer
+          === "function"
+        ) {
+
+          timerModule.startDailyReferralTimer(
+            db,
+            user.uid,
+            "dailyReferralTimer"
+          );
+
+        } else if (
+          typeof timerModule.startReferralCountdown
+          === "function"
+        ) {
+
+          timerModule.startReferralCountdown(
+            db,
+            user.uid,
+            "dailyReferralTimer"
+          );
+
+        } else {
+
+          console.error(
+            "Timer function পাওয়া যায়নি"
+          );
+
+          document.getElementById(
+            "dailyReferralTimer"
+          ).textContent =
+            "⏳ Timer চালু করা যাচ্ছে না";
+        }
+
+      } catch (timerError) {
+
+        console.error(
+          "Timer Error:",
+          timerError
+        );
+
+        document.getElementById(
+          "dailyReferralTimer"
+        ).textContent =
+          "⏳ Timer Error";
+      }
+
+
+    } catch (error) {
+
+      console.error(
+        "Daily Referral Error:",
+        error
+      );
+
+
+      errorElement.style.display =
+        "block";
+
+      errorElement.textContent =
+        "❌ ডেইলি রেফার ডাটা লোড হয়নি।";
+
+
+      countElement.textContent =
+        "0 / 4";
+
+      bonusElement.textContent =
+        "⚠️ ডাটা লোড করা যায়নি";
     }
 
-
-    updateTimer();
-
-    setInterval(updateTimer,1000);
-
-
-  } catch(error) {
-
-    console.error(
-      "Daily Bonus Error:",
-      error
-    );
-
-
-    countElement.textContent =
-      "0 / 4";
-
-
-    timerElement.textContent =
-      "❌ Data Load Error";
-
-
-    bonusStatus.textContent =
-      "❌ ডাটা লোড করা যায়নি";
-  }
-
-});
+  });
 
 </script>
 
 </body>
-</html>
+  </html>
