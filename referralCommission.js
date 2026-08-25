@@ -11,10 +11,6 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-import {
-  addReferralCounts
-} from "./referralCount.js";
-
 // =====================================
 // PROCESS VERIFICATION + REFERRAL COMMISSION
 // =====================================
@@ -285,18 +281,6 @@ export async function processReferralCommission(db, requestId) {
           totalCommission
         );
       }
-
-      // =================================
-      // UPDATE REFERRAL COUNTS
-      // =================================
-
-      addReferralCounts(
-        transaction,
-        level1Ref,
-        level1User,
-        level2Ref,
-        level2User
-      );
 
       // =================================
       // NOW ALL READS ARE FINISHED
