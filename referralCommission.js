@@ -14,10 +14,6 @@ import {
 import {
   addReferralCounts
 } from "./referralCount.js";
-import {
-  getDailyReferralRef,
-  addDailyReferral
-} from "./dailyReferral.js";
 // =====================================
 // PROCESS VERIFICATION + REFERRAL COMMISSION
 // =====================================
