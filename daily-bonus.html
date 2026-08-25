@@ -210,8 +210,8 @@
 
 
     import {
-        getDailyReferralStatus
-    } from "./dailyReferral.js";
+  getDailyReferralCount
+} from "./dailyReferral.js";
 
 
     /* =====================================
@@ -275,10 +275,10 @@ console.log("LOGIN UID:", user.uid);
         try {
 
             const status =
-                await getDailyReferralStatus(
-                    db,
-                    user.uid
-                );
+  await getDailyReferralCount(
+    db,
+    user.uid
+  );
 console.log("DAILY STATUS:", status);
 
             /* ===============================
