@@ -7,6 +7,7 @@
 
 import {
   doc,
+  collection,
   runTransaction,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
@@ -261,7 +262,32 @@ export async function processReferralCommission(db, requestId) {
       const totalCommission =
         level1Amount +
         level2Amount;
+// =================================
+// CREATE INCOME RECORD REFERENCES
+// =================================
 
+let level1IncomeRef = null;
+let level2IncomeRef = null;
+
+// Level 1 income document
+if (
+  level1Ref &&
+  level1Amount > 0
+) {
+  level1IncomeRef = doc(
+    collection(db, "income")
+  );
+}
+
+// Level 2 income document
+if (
+  level2Ref &&
+  level2Amount > 0
+) {
+  level2IncomeRef = doc(
+    collection(db, "income")
+  );
+}
       // =================================
       // COMPANY WALLET BALANCE
       // =================================
@@ -284,7 +310,70 @@ export async function processReferralCommission(db, requestId) {
           totalCommission
         );
       }
+// =================================
+// SAVE INCOME RECORDS
+// =================================
 
+// Level 1 Income
+if (
+  level1IncomeRef &&
+  level1Uid &&
+  level1Amount > 0
+) {
+
+  transaction.set(
+    level1IncomeRef,
+    {
+      uid: level1Uid,
+
+      amount: level1Amount,
+
+      type: "level1Commission",
+
+      sourceUserId: userId,
+
+      requestId: requestId,
+
+      createdAt: serverTimestamp()
+    }
+  );
+
+}
+
+
+// Level 2 Income UID
+let level2Uid = null;
+
+// Level 2 Income
+if (
+  level2IncomeRef &&
+  level2Amount > 0
+) {
+if (level2Ref) {
+  level2Uid = level2Ref.id;
+}
+  if (level2Uid) {
+
+    transaction.set(
+      level2IncomeRef,
+      {
+        uid: level2Uid,
+
+        amount: level2Amount,
+
+        type: "level2Commission",
+
+        sourceUserId: userId,
+
+        requestId: requestId,
+
+        createdAt: serverTimestamp()
+      }
+    );
+
+  }
+
+}
       // =================================
       // NOW ALL READS ARE FINISHED
       // =================================
