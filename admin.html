@@ -252,6 +252,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const messaging = getMessaging(app);
+  const VAPID_KEY =
+  "BEGOq9ZyJS_JiILQPrej62bAts6D9yDVXZzFgAz48mMiBl5Q8R-Bb1lq9rbTABzE_xVx1omSa707NNElprRVipc";
 async function setupPushNotification() {
 
   try {
