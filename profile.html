@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Profile - Rakib Freelancer</title>
+  <title>আমার ইনকাম - Rakib Freelancer</title>
 
   <style>
     * {
@@ -18,105 +18,189 @@
       color: #222;
     }
 
-    .container {
-      width: 92%;
-      max-width: 600px;
-      margin: 30px auto;
+    .header {
+      text-align: center;
+      padding: 35px 15px 25px;
+      background: white;
     }
 
-    h1 {
+    .header h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px 15px 100px;
+    }
+
+    .loading {
       text-align: center;
-      margin-bottom: 25px;
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .error {
+      display: none;
+      background: #ffe1e1;
+      color: #c62828;
+      padding: 18px;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 17px;
     }
 
     .income-card {
       background: white;
-      border-radius: 14px;
-      padding: 20px;
       margin-bottom: 15px;
+      padding: 22px;
+      border-radius: 18px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .income-title {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .income-value {
-      font-size: 25px;
-      font-weight: bold;
-    }
-
-    #loadingBox {
-      text-align: center;
-      padding: 40px 10px;
+    .income-name {
       font-size: 18px;
+      font-weight: bold;
     }
 
-    #errorBox {
-      display: none;
-      background: #ffe5e5;
-      color: #b00020;
-      padding: 15px;
-      border-radius: 10px;
+    .income-amount {
+      font-size: 22px;
+      font-weight: bold;
+      color: #08a879;
+    }
+
+    .total-card {
+      background: #08a879;
+      color: white;
+    }
+
+    .total-card .income-amount {
+      color: white;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 65px;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 -3px 15px rgba(0,0,0,0.1);
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #555;
+      font-size: 13px;
       text-align: center;
-      margin-bottom: 15px;
     }
 
-    #profileSection {
-      display: none;
+    .nav-icon {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      color: #08a879;
+      font-weight: bold;
     }
   </style>
 </head>
 
 <body>
 
+  <div class="header">
+    <h1>আমার ইনকাম</h1>
+  </div>
+
   <div class="container">
 
-    <h1>আমার ইনকাম</h1>
-
-    <div id="loadingBox">
-      Profile Loading...
+    <div id="loadingBox" class="loading">
+      ইনকাম লোড হচ্ছে...
     </div>
 
-    <div id="errorBox"></div>
+    <div id="errorBox" class="error"></div>
 
-    <div id="profileSection">
+    <div id="incomeSection" style="display:none;">
 
       <div class="income-card">
-        <div class="income-title">আজকের ইনকাম</div>
-        <div class="income-value" id="todayIncome">৳0</div>
+        <div class="income-name">📅 আজকের ইনকাম</div>
+        <div id="todayIncome" class="income-amount">৳0</div>
       </div>
 
       <div class="income-card">
-        <div class="income-title">গতকালের ইনকাম</div>
-        <div class="income-value" id="yesterdayIncome">৳0</div>
+        <div class="income-name">📆 গতকালের ইনকাম</div>
+        <div id="yesterdayIncome" class="income-amount">৳0</div>
       </div>
 
       <div class="income-card">
-        <div class="income-title">গত ৭ দিনের ইনকাম</div>
-        <div class="income-value" id="sevenDayIncome">৳0</div>
+        <div class="income-name">📊 গত ৭ দিনের ইনকাম</div>
+        <div id="sevenDayIncome" class="income-amount">৳0</div>
       </div>
 
       <div class="income-card">
-        <div class="income-title">গত ৩০ দিনের ইনকাম</div>
-        <div class="income-value" id="thirtyDayIncome">৳0</div>
+        <div class="income-name">📈 গত ৩০ দিনের ইনকাম</div>
+        <div id="thirtyDayIncome" class="income-amount">৳0</div>
       </div>
 
-      <div class="income-card">
-        <div class="income-title">মোট ইনকাম</div>
-        <div class="income-value" id="totalIncome">৳0</div>
+      <div class="income-card total-card">
+        <div class="income-name">💰 মোট ইনকাম</div>
+        <div id="totalIncome" class="income-amount">৳0</div>
       </div>
 
     </div>
   </div>
 
 
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      Home
+    </a>
+
+    <a href="reels.html" class="nav-item">
+      <span class="nav-icon">🎬</span>
+      Reels
+    </a>
+
+    <a href="reselling.html" class="nav-item">
+      <span class="nav-icon">🛒</span>
+      Reselling
+    </a>
+
+    <a href="microjob.html" class="nav-item">
+      <span class="nav-icon">💼</span>
+      Micro Job
+    </a>
+
+    <a href="profile.html" class="nav-item active">
+      <span class="nav-icon">👤</span>
+      Profile
+    </a>
+
+  </div>
+
+
+  <!-- Firebase -->
   <script type="module">
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
     import {
       getAuth,
@@ -132,29 +216,35 @@
     } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-    // ==============================
+    // =====================================
     // FIREBASE CONFIG
-    // ==============================
+    // =====================================
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBFUKPT7fo6sUofd009ffiZgjdlaR5evm8",
+      apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
       authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
       projectId: "rakib-freelancer-9c66b",
       storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
-      messagingSenderId: "54120984482",
-      appId: "1:54120984482:web:5105d65226c9bf47ac01b",
-      measurementId: "G-F6QNEQN5K"
+      messagingSenderId: "541209844482",
+      appId: "1:541209844482:web:510568d5226c9bf47ac01b",
+      measurementId: "G-F6QNE0QN5K"
     };
 
 
+    // =====================================
+    // FIREBASE START
+    // =====================================
+
     const app = initializeApp(firebaseConfig);
+
     const auth = getAuth(app);
+
     const db = getFirestore(app);
 
 
-    // ==============================
+    // =====================================
     // ELEMENTS
-    // ==============================
+    // =====================================
 
     const loadingBox =
       document.getElementById("loadingBox");
@@ -162,241 +252,407 @@
     const errorBox =
       document.getElementById("errorBox");
 
-    const profileSection =
-      document.getElementById("profileSection");
+    const incomeSection =
+      document.getElementById("incomeSection");
 
 
-    // ==============================
-    // NUMBER FORMAT
-    // ==============================
+    // =====================================
+    // MONEY FORMAT
+    // =====================================
 
     function money(amount) {
 
-      return "৳" + Number(amount || 0).toLocaleString("en-BD", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-      });
+      return "৳" + Number(amount || 0)
+        .toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        });
 
     }
 
 
-    // ==============================
+    // =====================================
+    // DATE CONVERT
+    // =====================================
+
+    function convertDate(value) {
+
+      if (!value) {
+        return null;
+      }
+
+      // Firebase Timestamp
+      if (
+        typeof value.toDate === "function"
+      ) {
+        return value.toDate();
+      }
+
+      // JS Date
+      if (value instanceof Date) {
+        return value;
+      }
+
+      // Timestamp-like object
+      if (
+        value.seconds !== undefined
+      ) {
+        return new Date(
+          value.seconds * 1000
+        );
+      }
+
+      // Normal date/string
+      const date = new Date(value);
+
+      if (isNaN(date.getTime())) {
+        return null;
+      }
+
+      return date;
+    }
+
+
+    // =====================================
+    // START OF DAY
+    // =====================================
+
+    function startOfDay(date) {
+
+      const d = new Date(date);
+
+      d.setHours(0, 0, 0, 0);
+
+      return d;
+    }
+
+
+    // =====================================
     // LOAD INCOME
-    // ==============================
+    // =====================================
 
-    async function loadIncome(uid) {
-
-      let todayIncome = 0;
-      let yesterdayIncome = 0;
-      let sevenDayIncome = 0;
-      let thirtyDayIncome = 0;
-      let totalIncome = 0;
-
-
-      const incomeRef = collection(db, "income");
-
-      const incomeQuery = query(
-        incomeRef,
-        where("uid", "==", uid)
-      );
-
-      const snapshot = await getDocs(incomeQuery);
-
-
-      // আজকের তারিখ
-      const now = new Date();
-
-      const todayStart = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-      );
-
-      const tomorrowStart = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + 1
-      );
-
-
-      // গতকাল
-      const yesterdayStart = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() - 1
-      );
-
-
-      // ৭ দিন
-      const sevenDayStart = new Date(
-        now.getTime() - (7 * 24 * 60 * 60 * 1000)
-      );
-
-
-      // ৩০ দিন
-      const thirtyDayStart = new Date(
-        now.getTime() - (30 * 24 * 60 * 60 * 1000)
-      );
-
-
-      snapshot.forEach((docSnap) => {
-
-        const data = docSnap.data();
-
-        const amount = Number(data.amount || 0);
-
-        totalIncome += amount;
-
-
-        let incomeDate = null;
-
-
-        // Firebase Timestamp
-        if (
-          data.createdAt &&
-          typeof data.createdAt.toDate === "function"
-        ) {
-
-          incomeDate = data.createdAt.toDate();
-
-        }
-
-
-        // যদি createdAt string/date হয়
-        else if (data.createdAt) {
-
-          incomeDate = new Date(data.createdAt);
-
-        }
-
-
-        if (
-          !incomeDate ||
-          isNaN(incomeDate.getTime())
-        ) {
-          return;
-        }
-
-
-        // আজ
-        if (
-          incomeDate >= todayStart &&
-          incomeDate < tomorrowStart
-        ) {
-
-          todayIncome += amount;
-
-        }
-
-
-        // গতকাল
-        if (
-          incomeDate >= yesterdayStart &&
-          incomeDate < todayStart
-        ) {
-
-          yesterdayIncome += amount;
-
-        }
-
-
-        // গত ৭ দিন
-        if (
-          incomeDate >= sevenDayStart &&
-          incomeDate <= now
-        ) {
-
-          sevenDayIncome += amount;
-
-        }
-
-
-        // গত ৩০ দিন
-        if (
-          incomeDate >= thirtyDayStart &&
-          incomeDate <= now
-        ) {
-
-          thirtyDayIncome += amount;
-
-        }
-
-      });
-
-
-      // ==============================
-      // SHOW DATA
-      // ==============================
-
-      document.getElementById("todayIncome").textContent =
-        money(todayIncome);
-
-      document.getElementById("yesterdayIncome").textContent =
-        money(yesterdayIncome);
-
-      document.getElementById("sevenDayIncome").textContent =
-        money(sevenDayIncome);
-
-      document.getElementById("thirtyDayIncome").textContent =
-        money(thirtyDayIncome);
-
-      document.getElementById("totalIncome").textContent =
-        money(totalIncome);
-
-    }
-
-
-    // ==============================
-    // AUTH
-    // ==============================
-
-    onAuthStateChanged(auth, async (user) => {
+    async function loadIncome(user) {
 
       try {
 
-        if (!user) {
+        const uid = user.uid;
 
-          loadingBox.style.display = "none";
-
-          errorBox.style.display = "block";
-
-          errorBox.textContent =
-            "❌ আপনি Login করা নেই।";
-
-          return;
-
-        }
+        console.log(
+          "Loading income for UID:",
+          uid
+        );
 
 
-        await loadIncome(user.uid);
+        // =================================
+        // GET USER'S JOB SUBMISSIONS
+        // =================================
+
+        const incomeQuery = query(
+          collection(
+            db,
+            "jobSubmissions"
+          ),
+          where(
+            "userId",
+            "==",
+            uid
+          )
+        );
 
 
-        loadingBox.style.display = "none";
+        const snapshot =
+          await getDocs(incomeQuery);
 
-        profileSection.style.display = "block";
+
+        console.log(
+          "Job submissions:",
+          snapshot.size
+        );
 
 
-      } catch (error) {
+        // =================================
+        // DATE RANGE
+        // =================================
+
+        const now = new Date();
+
+        const todayStart =
+          startOfDay(now);
+
+
+        const yesterdayStart =
+          new Date(todayStart);
+
+        yesterdayStart.setDate(
+          yesterdayStart.getDate() - 1
+        );
+
+
+        const sevenDaysStart =
+          new Date(todayStart);
+
+        sevenDaysStart.setDate(
+          sevenDaysStart.getDate() - 6
+        );
+
+
+        const thirtyDaysStart =
+          new Date(todayStart);
+
+        thirtyDaysStart.setDate(
+          thirtyDaysStart.getDate() - 29
+        );
+
+
+        // =================================
+        // INCOME VARIABLES
+        // =================================
+
+        let todayIncome = 0;
+
+        let yesterdayIncome = 0;
+
+        let sevenDayIncome = 0;
+
+        let thirtyDayIncome = 0;
+
+        let totalIncome = 0;
+
+
+        // =================================
+        // LOOP
+        // =================================
+
+        snapshot.forEach((docSnap) => {
+
+          const data =
+            docSnap.data();
+
+
+          // শুধুমাত্র APPROVED কাজের টাকা
+          if (
+            String(data.status || "")
+              .toLowerCase()
+              !== "approved"
+          ) {
+            return;
+          }
+
+
+          const amount =
+            Number(
+              data.payPerTask || 0
+            );
+
+
+          if (
+            !amount ||
+            amount < 0
+          ) {
+            return;
+          }
+
+
+          // approvedAt আগে ব্যবহার হবে
+          // না থাকলে createdAt
+          const incomeDate =
+            convertDate(
+              data.approvedAt ||
+              data.createdAt
+            );
+
+
+          if (!incomeDate) {
+            return;
+          }
+
+
+          // =================================
+          // TOTAL
+          // =================================
+
+          totalIncome += amount;
+
+
+          // =================================
+          // TODAY
+          // =================================
+
+          if (
+            incomeDate >= todayStart &&
+            incomeDate <= now
+          ) {
+
+            todayIncome += amount;
+
+          }
+
+
+          // =================================
+          // YESTERDAY
+          // =================================
+
+          if (
+            incomeDate >= yesterdayStart &&
+            incomeDate < todayStart
+          ) {
+
+            yesterdayIncome += amount;
+
+          }
+
+
+          // =================================
+          // LAST 7 DAYS
+          // =================================
+
+          if (
+            incomeDate >= sevenDaysStart &&
+            incomeDate <= now
+          ) {
+
+            sevenDayIncome += amount;
+
+          }
+
+
+          // =================================
+          // LAST 30 DAYS
+          // =================================
+
+          if (
+            incomeDate >= thirtyDaysStart &&
+            incomeDate <= now
+          ) {
+
+            thirtyDayIncome += amount;
+
+          }
+
+        });
+
+
+        // =================================
+        // DISPLAY
+        // =================================
+
+        document.getElementById(
+          "todayIncome"
+        ).textContent =
+          money(todayIncome);
+
+
+        document.getElementById(
+          "yesterdayIncome"
+        ).textContent =
+          money(yesterdayIncome);
+
+
+        document.getElementById(
+          "sevenDayIncome"
+        ).textContent =
+          money(sevenDayIncome);
+
+
+        document.getElementById(
+          "thirtyDayIncome"
+        ).textContent =
+          money(thirtyDayIncome);
+
+
+        document.getElementById(
+          "totalIncome"
+        ).textContent =
+          money(totalIncome);
+
+
+        // =================================
+        // SHOW PROFILE
+        // =================================
+
+        loadingBox.style.display =
+          "none";
+
+        incomeSection.style.display =
+          "block";
+
+
+        console.log(
+          "Income Summary:",
+          {
+            today: todayIncome,
+            yesterday: yesterdayIncome,
+            sevenDays: sevenDayIncome,
+            thirtyDays: thirtyDayIncome,
+            total: totalIncome
+          }
+        );
+
+      }
+
+      catch (error) {
 
         console.error(
-          "Profile Error:",
+          "Income Load Error:",
           error
         );
 
 
-        loadingBox.style.display = "none";
+        loadingBox.style.display =
+          "none";
 
-        profileSection.style.display = "none";
+        incomeSection.style.display =
+          "none";
 
-        errorBox.style.display = "block";
+        errorBox.style.display =
+          "block";
 
         errorBox.textContent =
-          "❌ Income Load Error: " +
-          (error.message || "Unknown error");
+          "❌ ইনকাম লোড করা যায়নি: " +
+          (
+            error.message ||
+            "Unknown error"
+          );
 
       }
 
-    });
+    }
+
+
+    // =====================================
+    // AUTH
+    // =====================================
+
+    onAuthStateChanged(
+      auth,
+      async (user) => {
+
+        if (!user) {
+
+          loadingBox.style.display =
+            "none";
+
+          errorBox.style.display =
+            "block";
+
+          errorBox.textContent =
+            "❌ আপনি Login করা নেই। আগে Login করুন।";
+
+          return;
+
+        }
+
+
+        console.log(
+          "Logged in UID:",
+          user.uid
+        );
+
+
+        await loadIncome(user);
+
+      }
+    );
 
   </script>
 
