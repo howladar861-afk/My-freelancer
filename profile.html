@@ -610,7 +610,20 @@
 
     const profileSection =
       document.getElementById("profileSection");
+// LOADING FAILSAFE
+setTimeout(() => {
+  if (loadingBox && loadingBox.style.display !== "none") {
+    loadingBox.style.display = "none";
 
+    if (errorBox) {
+      errorBox.style.display = "block";
+      errorBox.textContent =
+        "❌ Firebase/Auth থেকে response আসছে না। Console দেখুন।";
+    }
+
+    console.error("LOADING TIMEOUT: Firebase/Auth callback did not complete.");
+  }
+}, 10000);
 
     /*
      * ==========================================
