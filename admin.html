@@ -260,7 +260,7 @@ async function setupPushNotification() {
     // Notification permission
     const permission =
       await Notification.requestPermission();
-
+alert("📢 Permission status: " + permission);
     if (permission !== "granted") {
 
       console.log(
