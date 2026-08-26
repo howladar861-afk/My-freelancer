@@ -365,13 +365,22 @@
 
         const snapshot =
           await getDocs(incomeQuery);
+// =================================
 // REFERRAL COMMISSION HISTORY
+// =================================
+
 const referralIncomeQuery = query(
-  collection(db, "referralCommissions"),
-  where("fromUid", "==", uid)
+  collection(db, "income"),
+  where("uid", "==", uid)
 );
 
-const referralIncomeSnapshot = await getDocs(referralIncomeQuery);
+const referralIncomeSnapshot =
+  await getDocs(referralIncomeQuery);
+
+console.log(
+  "Referral commission records:",
+  referralIncomeSnapshot.size
+);
 
         console.log(
           "Job submissions:",
