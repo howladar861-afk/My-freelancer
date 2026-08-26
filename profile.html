@@ -161,7 +161,7 @@
       </div>
 <div class="income-card">
   <div class="income-name">🎁 আজকের রেফার ভেরিফিকেশন কমিশন</div>
-  <div id="referralVerificationBalance" class="income-amount">৳0</div>
+  <div id="todayReferralCommission" class="income-amount">৳0</div>
 </div>
     </div>
   </div>
@@ -365,7 +365,13 @@
 
         const snapshot =
           await getDocs(incomeQuery);
+// REFERRAL COMMISSION HISTORY
+const referralIncomeQuery = query(
+  collection(db, "income"),
+  where("uid", "==", uid)
+);
 
+const referralIncomeSnapshot = await getDocs(referralIncomeQuery);
 
         console.log(
           "Job submissions:",
@@ -414,14 +420,39 @@
         let todayIncome = 0;
 
         let yesterdayIncome = 0;
-
+let todayReferralCommission = 0;
         let sevenDayIncome = 0;
 
         let thirtyDayIncome = 0;
 
         let totalIncome = 0;
+// TODAY'S REFERRAL VERIFICATION COMMISSION
+const tomorrowStart = new Date(todayStart);
+tomorrowStart.setDate(tomorrowStart.getDate() + 1);
 
+referralIncomeSnapshot.forEach((docSnap) => {
+  const data = docSnap.data();
 
+  // Only referral verification commissions
+  if (
+    data.type !== "level1Commission" &&
+    data.type !== "level2Commission"
+  ) {
+    return;
+  }
+
+  const date = convertDate(data.createdAt);
+
+  if (
+    date &&
+    date >= todayStart &&
+    date < tomorrowStart
+  ) {
+    todayReferralCommission += Number(data.amount || 0);
+  }
+});
+document.getElementById("todayReferralCommission").textContent =
+  money(todayReferralCommission);
         // =================================
         // LOOP
         // =================================
