@@ -278,10 +278,9 @@ alert("📢 Permission status: " + permission);
     // Get FCM Token
 let registration;
 
-try {
-  navigator.serviceWorker.register(
+registration = await navigator.serviceWorker.register(
   "/My-freelancer/firebase-messaging-sw.js"
-)
+);
 
   alert("✅ Service Worker register হয়েছে!");
 } catch (error) {
@@ -294,7 +293,7 @@ console.log(
   "✅ Service Worker registered:",
   registration
 );
-
+alert("⏳ এখন FCM Token নেওয়ার চেষ্টা হচ্ছে...");
 const token =
   await getToken(
     messaging,
