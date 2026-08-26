@@ -295,7 +295,11 @@ const token =
       serviceWorkerRegistration: registration
     }
   );
-
+alert(
+  token
+    ? "✅ FCM Token পাওয়া গেছে!"
+    : "❌ FCM Token পাওয়া যায়নি!"
+);
 
     if (!token) {
 
