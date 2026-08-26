@@ -1,53 +1,205 @@
-<style>
-.ads-notice {
-  margin: 20px;
-  padding: 25px;
-  background: #f8faff;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-  text-align: center;
-  line-height: 1.8;
-}
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ads - My Freelancer</title>
 
-.ads-notice h2 {
-  color: #2563eb;
-  margin-bottom: 20px;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-.ads-notice p {
-  color: #333;
-  font-size: 16px;
-  margin: 15px 0;
-}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5ff;
+      color: #222;
+      min-height: 100vh;
+      padding: 25px 15px;
+    }
 
-.ads-notice strong {
-  color: #1d4ed8;
-}
-</style>
-<div class="ads-notice">
-  <h2>📢 Ads কাজের আপডেট</h2>
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+    }
 
-  <p>
-    🚧 <strong>এই সাইটে কাজ চলছে।</strong><br>
-    খুব শীঘ্রই Ads-এর কাজ সম্পূর্ণভাবে চালু হবে।
-  </p>
+    .ads-notice {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 35px 25px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.10);
+      text-align: center;
+    }
 
-  <p>
-    👥 <strong>টিম নিয়ে কাজ করুন</strong><br>
-    বন্ধুদের রেফার করুন এবং একসাথে কাজ করে ইনকাম করুন।
-  </p>
+    .icon {
+      font-size: 65px;
+      margin-bottom: 15px;
+    }
 
-  <p>
-    ✅ <strong>কাজটি সফলভাবে চালু করার প্রস্তুতি চলছে।</strong><br>
-    অনুগ্রহ করে ধৈর্য ধরে আমাদের সাথে থাকুন।
-  </p>
+    h1 {
+      font-size: 32px;
+      color: #2563eb;
+      margin-bottom: 12px;
+    }
 
-  <p>
-    ⏳ ইনশাআল্লাহ, আগামী কয়েক দিনের মধ্যেই সাইটের কাজ সম্পূর্ণ হবে।
-  </p>
+    .subtitle {
+      font-size: 18px;
+      color: #64748b;
+      margin-bottom: 30px;
+    }
 
-  <p>
-    ❤️ <strong>পাশেই থাকবেন।</strong><br>
-    আপনাদের সহযোগিতা ও ধৈর্যের জন্য আন্তরিক ধন্যবাদ।
-  </p>
-</div>
+    .notice-box {
+      background: #f8faff;
+      border-radius: 20px;
+      padding: 22px 18px;
+      margin: 18px 0;
+      border-left: 6px solid #2563eb;
+      text-align: left;
+    }
+
+    .notice-box h2 {
+      font-size: 21px;
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+
+    .notice-box p {
+      font-size: 17px;
+      line-height: 1.9;
+      color: #374151;
+    }
+
+    .success {
+      border-left-color: #16a34a;
+      background: #f0fdf4;
+    }
+
+    .success h2 {
+      color: #15803d;
+    }
+
+    .team {
+      border-left-color: #9333ea;
+      background: #faf5ff;
+    }
+
+    .team h2 {
+      color: #7e22ce;
+    }
+
+    .internet {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .internet h2 {
+      color: #d97706;
+    }
+
+    .bottom-message {
+      margin-top: 28px;
+      padding: 22px;
+      background: #2563eb;
+      color: white;
+      border-radius: 20px;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .bottom-message strong {
+      font-size: 21px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 14px 30px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .back-btn:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="ads-notice">
+
+      <div class="icon">📺</div>
+
+      <h1>Ads কাজের আপডেট</h1>
+
+      <p class="subtitle">
+        My Freelancer — কাজের সর্বশেষ আপডেট
+      </p>
+
+
+      <div class="notice-box">
+        <h2>🚧 এই সাইটে কাজ চলছে</h2>
+        <p>
+          খুব শীঘ্রই Ads-এর কাজ সম্পূর্ণভাবে চালু হবে।
+          কাজটি সুন্দরভাবে প্রস্তুত করার জন্য আমাদের টিম কাজ করছে।
+        </p>
+      </div>
+
+
+      <div class="notice-box success">
+        <h2>✅ অন্যান্য কাজ চালু আছে</h2>
+        <p>
+          অন্যান্য কাজগুলো বর্তমানে চালু আছে।
+          আপনারা ধৈর্য ধরে অন্যান্য কাজ করতে থাকুন এবং নিয়মিত
+          সাইটে ভিজিট করুন।
+        </p>
+      </div>
+
+
+      <div class="notice-box team">
+        <h2>👥 বন্ধুদের শেয়ার করুন</h2>
+        <p>
+          আপনার বন্ধুদের সাথে সাইটটি শেয়ার করুন।
+          বন্ধুদের রেফার করে ইনকাম করার সুযোগ এখন চালু আছে।
+          সবাই মিলে টিম তৈরি করে কাজ করুন।
+        </p>
+      </div>
+
+
+      <div class="notice-box internet">
+        <h2>🌐 ইন্টারনেট / মিনিট</h2>
+        <p>
+          ইন্টারনেট / মিনিট বিক্রির কাজটি সফলভাবে চালু আছে।
+          আপনারা এই কাজটি করতে পারবেন এবং নিয়মিত ইনকাম করতে পারবেন।
+        </p>
+      </div>
+
+
+      <div class="bottom-message">
+        <strong>❤️ আমাদের পাশেই থাকবেন</strong>
+        <br><br>
+        ইনশাআল্লাহ, খুব শীঘ্রই এই সাইটের বাকি কাজগুলোও
+        সম্পূর্ণভাবে চালু হবে।
+        <br>
+        আপনাদের সহযোগিতা ও ধৈর্যের জন্য আন্তরিক ধন্যবাদ।
+      </div>
+
+
+      <a href="index.html" class="back-btn">
+        🏠 হোমে ফিরে যান
+      </a>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
