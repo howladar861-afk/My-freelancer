@@ -804,7 +804,11 @@
          * Load Income
          */
 
-        await loadIncome(user.uid);
+        try {
+    await loadIncome(user.uid);
+} catch (error) {
+    console.error("Income Error:", error);
+        }
 
 
         /*
