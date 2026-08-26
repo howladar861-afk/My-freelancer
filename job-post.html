@@ -810,86 +810,149 @@
     }
 
   }
+function escapeHtml(text) {
 
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+    }
 /* =====================================
-   LOAD AVAILABLE JOBS
+   LOAD AVAILABLE JOBS - FIXED
 ===================================== */
 
 async function loadAvailableJobs() {
 
   const box = document.getElementById("availableJobs");
 
+  if (!box) {
+    console.error("availableJobs element পাওয়া যায়নি");
+    return;
+  }
+
+  box.innerHTML = `
+    <p style="
+      text-align:center;
+      padding:20px;
+      color:#666;
+      font-size:16px;
+    ">
+      ⏳ কাজ খোঁজা হচ্ছে...
+    </p>
+  `;
+
   try {
 
+    const jobsRef = collection(db, "jobs");
+
     const q = query(
-      collection(db, "jobs"),
+      jobsRef,
       where("status", "==", "active")
     );
 
-    const snap = await getDocs(q);
+    const snapshot = await getDocs(q);
 
     box.innerHTML = "";
 
-    if (snap.empty) {
+    let jobFound = false;
 
-      box.innerHTML =
-        "<p style='text-align:center;'>এখন কোনো কাজ available নেই।</p>";
-
-      return;
-    }
-
-    snap.forEach((jobDoc) => {
+    snapshot.forEach((jobDoc) => {
 
       const job = jobDoc.data();
 
-      // নিজের পোস্ট করা কাজ নিজে করতে পারবে না
-      if (job.ownerId === currentUser.uid) {
+      // নিজের পোস্ট করা Job দেখাবে না
+      if (
+        currentUser &&
+        job.ownerId === currentUser.uid
+      ) {
         return;
       }
 
-      // কাজের slot শেষ হলে দেখাবে না
-      if (Number(job.remainingSlots || 0) <= 0) {
+      // Slot শেষ হলে দেখাবে না
+      if (
+        Number(job.remainingSlots || 0) <= 0
+      ) {
         return;
       }
 
-      const div = document.createElement("div");
+      jobFound = true;
 
-      div.className = "job-card";
+      const card = document.createElement("div");
 
-      div.innerHTML = `
+      card.className = "job-card";
 
-        <h3>📋 ${escapeHtml(job.title || "")}</h3>
+      card.innerHTML = `
+        <h3>
+          📋 ${escapeHtml(job.title || "কাজ")}
+        </h3>
 
         <div class="job-info">
           📝 ${escapeHtml(job.description || "")}
         </div>
 
         <div class="job-info">
-          💰 প্রতি কাজ: ৳${Number(job.payPerTask || 0)}
+          💰 প্রতি কাজ:
+          <strong>
+            ৳${Number(job.payPerTask || 0)}
+          </strong>
         </div>
 
         <div class="job-info">
-          👥 বাকি কাজ: ${Number(job.remainingSlots || 0)}
+          👥 বাকি কাজ:
+          ${Number(job.remainingSlots || 0)}
         </div>
 
         <div class="job-info">
           🔗
-          <a href="${escapeHtml(job.link || "#")}"
-             target="_blank"
-             rel="noopener">
-             কাজের লিংক খুলুন
+          <a
+            href="${escapeHtml(job.link || "#")}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            কাজের লিংক খুলুন
           </a>
         </div>
 
-        <button onclick="openSubmitJob('${jobDoc.id}')">
-    🚀 কাজ জমা দিন
-</button>
-
+        <button
+          type="button"
+          onclick="openSubmitJob('${jobDoc.id}')"
+        >
+          🚀 কাজ জমা দিন
+        </button>
       `;
 
-      box.appendChild(div);
+      box.appendChild(card);
 
     });
+
+    // কোনো Job না থাকলে
+    if (!jobFound) {
+
+      box.innerHTML = `
+        <div style="
+          text-align:center;
+          padding:25px 15px;
+          background:#f8faff;
+          border-radius:15px;
+        ">
+          <div style="font-size:40px;">
+            📭
+          </div>
+
+          <h3 style="margin:10px 0;">
+            এখন কোনো কাজ নেই
+          </h3>
+
+          <p style="color:#666;">
+            নতুন কাজ পোস্ট হলে এখানে দেখা যাবে।
+          </p>
+        </div>
+      `;
+
+    }
 
   } catch (error) {
 
@@ -898,12 +961,33 @@ async function loadAvailableJobs() {
       error
     );
 
-    box.innerHTML =
-      "❌ Available Jobs লোড করা যায়নি।";
+    box.innerHTML = `
+      <div style="
+        text-align:center;
+        padding:20px;
+        background:#fff1f2;
+        border-radius:15px;
+        color:#b91c1c;
+      ">
+
+        <div style="font-size:35px;">
+          ⚠️
+        </div>
+
+        <h3>
+          Job লোড করা যাচ্ছে না
+        </h3>
+
+        <p>
+          Firebase থেকে Job আনতে সমস্যা হয়েছে।
+        </p>
+
+      </div>
+    `;
 
   }
 
-}
+        }
 
 /* =====================================
    START JOB
