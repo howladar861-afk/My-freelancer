@@ -4,659 +4,366 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Daily Bonus</title>
+  <title>Daily Bonus | Rakib Freelancer</title>
 
   <style>
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
 
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #eef5ff;
-      color: #111;
-      text-align: center;
+      background: #f4f7fb;
+      color: #1f2937;
+      min-height: 100vh;
     }
 
     .container {
-      max-width: 700px;
+      max-width: 500px;
       margin: auto;
-      padding: 20px;
+      padding: 18px;
     }
 
-    .card {
-      background: white;
-      border-radius: 30px;
-      padding: 25px;
-      margin-bottom: 25px;
-      box-shadow: 0 8px 25px rgba(0,0,0,.10);
-    }
-
-    .title {
-      font-size: 38px;
-      font-weight: bold;
-      margin-bottom: 25px;
-    }
-
-    .gift {
-      background: #2867d7;
-      color: #ffd900;
-      border-radius: 50px;
-      padding: 25px;
-      font-size: 55px;
-      font-weight: bold;
-    }
-
-    .sub {
-      font-size: 25px;
-      margin-top: 25px;
-    }
-
-    .section {
-      background: #eaf3ff;
-      border-radius: 30px;
-      padding: 30px 20px;
-      margin-top: 20px;
-    }
-
-    .section-title {
-      display: inline-block;
-      background: #2867d7;
+    .header {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
       color: white;
-      border-radius: 25px;
-      padding: 18px 45px;
-      font-size: 32px;
-      font-weight: bold;
+      text-align: center;
+      padding: 28px 20px;
+      border-radius: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.25);
     }
 
-    #dailyReferralCount {
-      font-size: 60px;
-      color: #1762d2;
-      font-weight: bold;
-      margin: 35px 0 20px;
+    .header-icon {
+      font-size: 45px;
+      margin-bottom: 8px;
     }
 
-    #dailyReferralTimer {
+    .header h1 {
+      font-size: 27px;
+      margin-bottom: 6px;
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .bonus-card {
       background: white;
-      border-radius: 30px;
-      padding: 25px;
-      font-size: 28px;
+      border-radius: 20px;
+      padding: 24px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    .bonus-title {
+      text-align: center;
+      font-size: 20px;
       font-weight: bold;
-      color: #1762d2;
-      box-shadow: 0 5px 15px rgba(0,0,0,.08);
+      margin-bottom: 20px;
     }
 
-    #bonusStatus {
-      margin-top: 25px;
-      padding: 20px;
-      border-radius: 25px;
-      font-size: 25px;
+    .bonus-money {
+      text-align: center;
+      font-size: 42px;
       font-weight: bold;
-      background: #effff4;
-      color: #16823b;
+      color: #16a34a;
+      margin-bottom: 8px;
     }
 
-    .login {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-top: 20px;
-      font-size: 28px;
-      font-weight: bold;
+    .bonus-subtitle {
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 22px;
     }
 
-    .help {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-top: 20px;
-      font-size: 22px;
-    }
-
-    #errorBox {
-      display: none;
-      background: #ffe5e5;
-      color: #c00;
-      padding: 15px;
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #f8fafc;
       border-radius: 15px;
-      margin-top: 20px;
+      padding: 15px;
+      margin-bottom: 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .step-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #eef2ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+      flex-shrink: 0;
+    }
+
+    .step-text h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .step-text p {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    .screenshot-box {
+      background: linear-gradient(135deg, #fff7ed, #fffbeb);
+      border: 1px solid #fed7aa;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .screenshot-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .screenshot-box h2 {
+      font-size: 19px;
+      color: #c2410c;
+      margin-bottom: 8px;
+    }
+
+    .screenshot-box p {
+      font-size: 14px;
+      color: #57534e;
+      line-height: 1.6;
+    }
+
+    .whatsapp-card {
+      background: #ecfdf5;
+      border: 1px solid #bbf7d0;
+      border-radius: 20px;
+      padding: 22px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .whatsapp-icon {
+      font-size: 42px;
+      margin-bottom: 8px;
+    }
+
+    .whatsapp-card h2 {
+      color: #15803d;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .whatsapp-number {
+      background: white;
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #15803d;
+      margin: 15px 0;
+      border: 1px solid #bbf7d0;
+    }
+
+    .whatsapp-btn {
+      display: block;
+      width: 100%;
+      background: #22c55e;
+      color: white;
+      text-decoration: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .whatsapp-btn:hover {
+      background: #16a34a;
+    }
+
+    .notice {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .notice h3 {
       font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .notice p {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.7;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px 0 10px;
+      color: #94a3b8;
+      font-size: 12px;
     }
   </style>
 </head>
 
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <div class="card">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-icon">🎁</div>
 
-    <div class="title">
-      প্রতিদিন ৪টা রেফার করলে
+      <h1>Daily Bonus</h1>
+
+      <p>প্রতিদিন ভেরিফাই করুন এবং বোনাস পান</p>
     </div>
 
-    <div class="gift">
-      🎁 ২০ টাকা 🎁
+
+    <!-- Bonus -->
+    <div class="bonus-card">
+
+      <div class="bonus-title">
+        🎉 আজকের Daily Bonus
+      </div>
+
+      <div class="bonus-money">
+        ৳20
+      </div>
+
+      <div class="bonus-subtitle">
+        প্রতিদিন ৪টি Verification সম্পূর্ণ করলে
+      </div>
+
+
+      <!-- Step 1 -->
+      <div class="step">
+
+        <div class="step-icon">
+          👤
+        </div>
+
+        <div class="step-text">
+
+          <h3>৪টি Verification সম্পূর্ণ করুন</h3>
+
+          <p>
+            প্রতিদিন মোট ৪টি Member Verification
+            সম্পূর্ণ করতে হবে।
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- Step 2 -->
+      <div class="step">
+
+        <div class="step-icon">
+          💰
+        </div>
+
+        <div class="step-text">
+
+          <h3>৳২০ Bonus</h3>
+
+          <p>
+            ৪টি Verification পূর্ণ হলে
+            ২০ টাকা Daily Bonus দেওয়া হবে।
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- Screenshot -->
+      <div class="screenshot-box">
+
+        <div class="screenshot-icon">
+          📸
+        </div>
+
+        <h2>
+          আজকের Income Screenshot
+        </h2>
+
+        <p>
+          ৪টি Verification পূর্ণ হলেই
+          আজকের Income-এর একটি Screenshot
+          দিতে হবে।
+        </p>
+
+      </div>
+
     </div>
 
-    <div class="sub">
-      বোনাস পাওয়া যাবে
+
+    <!-- WhatsApp -->
+    <div class="whatsapp-card">
+
+      <div class="whatsapp-icon">
+        💬
+      </div>
+
+      <h2>
+        WhatsApp এ Screenshot পাঠান
+      </h2>
+
+      <p>
+        ৪টি Verification পূর্ণ করার পর
+        আজকের Income-এর Screenshot
+        WhatsApp-এ পাঠিয়ে দিন।
+      </p>
+
+      <div class="whatsapp-number">
+        01837976455
+      </div>
+
+      <a
+        class="whatsapp-btn"
+        href="https://wa.me/8801837976455"
+        target="_blank"
+      >
+        💚 WhatsApp এ যোগাযোগ করুন
+      </a>
+
+    </div>
+
+
+    <!-- Notice -->
+    <div class="notice">
+
+      <h3>
+        📌 গুরুত্বপূর্ণ
+      </h3>
+
+      <p>
+        প্রতিদিন ৪টি Verification সম্পূর্ণ করলেই
+        ৳২০ Daily Bonus পাওয়া যাবে।
+        ৪টি Verification পূর্ণ হওয়ার পর
+        আজকের Income-এর Screenshot
+        WhatsApp নম্বরে পাঠাতে হবে।
+      </p>
+
+    </div>
+
+
+    <div class="footer">
+      Daily Bonus • Rakib Freelancer
     </div>
 
   </div>
 
-
-  <div class="section">
-      
-
-    <div id="dailyReferralTimer">
-      ⏳ সময় হিসাব করা হচ্ছে...
-    </div>
-
-    <div style="font-size:22px;margin-top:25px;">
-      আজকের রেফার কাউন্ট
-    </div>
-
-  </div>
-
-
-  <div id="bonusStatus">
-    ⏳ ৪টি রেফার পূর্ণ করুন
-  </div>
-<!-- ===================================== -->
-<!-- BONUS CLAIM -->
-<!-- ===================================== -->
-
-<div id="bonusClaimBox" style="
-  background:white;
-  border-radius:25px;
-  padding:25px;
-  margin-top:20px;
-  box-shadow:0 5px 15px rgba(0,0,0,.08);
-">
-
-  <div style="
-    font-size:24px;
-    font-weight:bold;
-    margin-bottom:15px;
-  ">
-    🎁 দৈনিক বোনাস
-  </div>
-
-  <div id="bonusAmount" style="
-    font-size:32px;
-    font-weight:bold;
-    color:#16a34a;
-    margin-bottom:18px;
-  ">
-    ৳২০
-  </div>
-
-  <button
-    id="claimBonusBtn"
-    disabled
-    style="
-      width:100%;
-      padding:16px;
-      border:0;
-      border-radius:18px;
-      background:#9ca3af;
-      color:white;
-      font-size:21px;
-      font-weight:bold;
-    ">
-    🎁 বোনাস নিন
-  </button>
-
-</div>
-
-<!-- ===================================== -->
-<!-- END BONUS CLAIM -->
-<!-- ===================================== -->
-
-  <div id="errorBox"></div>
-
-
-  <div class="help">
-    📱 01837976455 (WhatsApp)
-    <br>
-    <small>এডমিন এর সাথে যোগাযোগ করুন</small>
-  </div>
-
-</div>
-
-
-<!-- Firebase + Daily Bonus -->
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  runTransaction
-}
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-import {
-  getAuth,
-  onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-import {
-  getDailyReferralRef,
-  canClaimDailyBonus,
-  claimDailyBonus
-}
-from "./dailyReferral.js";
-
-/* =========================
-   FIREBASE START
-========================= */
-
-const app =
-  initializeApp(firebaseConfig);
-
-const auth =
-  getAuth(app);
-
-const db =
-  getFirestore(app);
-
-
-/* =========================
-   ELEMENTS
-========================= */
-
-const bonusElement =
-  document.getElementById("bonusStatus");
-
-const claimButton =
-  document.getElementById("claimBonusBtn");
-
-const errorElement =
-  document.getElementById("errorBox");
-
-
-/* =========================
-   LOAD DAILY BONUS
-========================= */
-
-onAuthStateChanged(
-  auth,
-  async (user) => {
-
-    if (!user) {
-
-      bonusElement.textContent =
-        "🔒 আগে লগইন করুন";
-
-      if (claimButton) {
-        claimButton.disabled = true;
-      }
-
-      return;
-    }
-
-
-    try {
-
-      /* =========================
-         DAILY REFERRAL
-      ========================= */
-
-      const dailyReferralRef =
-        getDailyReferralRef(
-          db,
-          user.uid
-        );
-
-      const dailySnap =
-        await getDoc(
-          dailyReferralRef
-        );
-
-
-      if (!dailySnap.exists()) {
-
-        bonusElement.textContent =
-          "⏳ ৪টি ভেরিফাইড রেফার পূর্ণ করুন";
-
-        return;
-      }
-
-
-      const dailyData =
-        dailySnap.data();
-
-
-      const count =
-        Number(
-          dailyData.count || 0
-        );
-
-      const limit =
-        Number(
-          dailyData.limit || 4
-        );
-
-
-      /* =========================
-         BONUS ALREADY CLAIMED
-      ========================= */
-
-      if (
-        dailyData.bonusClaimed === true
-      ) {
-
-        bonusElement.textContent =
-          "✅ আজকের ২০ টাকা বোনাস নেওয়া হয়েছে।";
-
-        if (claimButton) {
-
-          claimButton.disabled = true;
-
-          claimButton.style.background =
-            "#9ca3af";
-
-          claimButton.textContent =
-            "✅ বোনাস নেওয়া হয়েছে";
-
-        }
-
-        return;
-      }
-
-
-      /* =========================
-         CHECK 4 VERIFIED REFERRALS
-      ========================= */
-
-      if (
-        count >= limit &&
-        dailyData.completed === true
-      ) {
-
-        bonusElement.textContent =
-          "🎉 ৪টি ভেরিফাইড রেফার পূর্ণ হয়েছে। বোনাস নিন।";
-
-        if (claimButton) {
-
-          claimButton.disabled = false;
-
-          claimButton.style.background =
-            "#16a34a";
-
-        }
-
-      } else {
-
-        const remaining =
-          Math.max(
-            0,
-            limit - count
-          );
-
-        bonusElement.textContent =
-          "⏳ আরও " +
-          remaining +
-          "টি ভেরিফাইড রেফার পূর্ণ করুন";
-
-        if (claimButton) {
-          claimButton.disabled = true;
-        }
-
-      }
-
-
-    } catch (error) {
-
-      console.error(
-        "DAILY BONUS LOAD ERROR:",
-        error
-      );
-
-      errorElement.style.display =
-        "block";
-
-      errorElement.textContent =
-        "⚠️ বোনাস তথ্য লোড করতে সমস্যা হয়েছে।";
-
-    }
-
-  }
-);
-
-
-/* =========================
-   CLAIM BONUS
-========================= */
-
-if (claimButton) {
-
-  claimButton.onclick =
-    async function () {
-
-      const user =
-        auth.currentUser;
-
-
-      if (!user) {
-
-        alert(
-          "⚠️ আগে Login করুন"
-        );
-
-        return;
-      }
-
-
-      claimButton.disabled =
-        true;
-
-      claimButton.textContent =
-        "⏳ বোনাস যোগ হচ্ছে...";
-
-
-      try {
-
-        const result =
-          await runTransaction(
-            db,
-            async (transaction) => {
-
-              /* =========================
-                 USER
-              ========================= */
-
-              const userRef =
-                doc(
-                  db,
-                  "users",
-                  user.uid
-                );
-
-              const userSnap =
-                await transaction.get(
-                  userRef
-                );
-
-
-              if (!userSnap.exists()) {
-
-                throw new Error(
-                  "User account পাওয়া যায়নি"
-                );
-
-              }
-
-
-              const userData =
-                userSnap.data();
-
-
-              /* =========================
-                 DAILY REFERRAL
-              ========================= */
-
-              const dailyReferralRef =
-                getDailyReferralRef(
-                  db,
-                  user.uid
-                );
-
-              const dailySnap =
-                await transaction.get(
-                  dailyReferralRef
-                );
-
-
-              if (!dailySnap.exists()) {
-
-                throw new Error(
-                  "Daily referral data পাওয়া যায়নি"
-                );
-
-              }
-
-
-              const dailyData =
-                dailySnap.data();
-
-
-              /* =========================
-                 CHECK BONUS
-              ========================= */
-
-              if (
-                !canClaimDailyBonus(
-                  dailyData
-                )
-              ) {
-
-                throw new Error(
-                  "৪টি verified referral পূর্ণ হয়নি অথবা bonus আগে নেওয়া হয়েছে"
-                );
-
-              }
-
-
-              /* =========================
-                 ADD ৳20
-              ========================= */
-
-              const bonus =
-                claimDailyBonus(
-                  transaction,
-                  userRef,
-                  userData,
-                  dailyReferralRef,
-                  dailyData
-                );
-
-
-              return bonus;
-
-            }
-          );
-
-
-        /* =========================
-           SUCCESS
-        ========================= */
-
-        bonusElement.textContent =
-          "🎉 অভিনন্দন! আপনার ব্যালেন্সে ৳20 যোগ হয়েছে।";
-
-
-        claimButton.textContent =
-          "✅ বোনাস নেওয়া হয়েছে";
-
-        claimButton.disabled =
-          true;
-
-        claimButton.style.background =
-          "#9ca3af";
-
-
-        alert(
-          "🎉 ৳20 বোনাস আপনার ব্যালেন্সে যোগ হয়েছে!"
-        );
-
-
-        console.log(
-          "BONUS CLAIM SUCCESS:",
-          result
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "BONUS CLAIM ERROR:",
-          error
-        );
-
-
-        claimButton.disabled =
-          false;
-
-        claimButton.textContent =
-          "🎁 বোনাস নিন";
-
-        claimButton.style.background =
-          "#16a34a";
-
-
-        alert(
-          "❌ " +
-          error.message
-        );
-
-      }
-
-    };
-
-}
-
-</script>
-/* =========================
-   DAILY TIMER
-========================= */
-
-<script>
-(function () {
-  const timer = document.getElementById("dailyReferralTimer");
-  if (!timer) return;
-
-  function updateTimer() {
-    const now = new Date();
-    const tomorrow = new Date(now);
-
-    tomorrow.setHours(24, 0, 0, 0);
-
-    let remaining = tomorrow.getTime() - now.getTime();
-
-    if (remaining < 0) remaining = 0;
-
-    const hours = Math.floor(remaining / 3600000);
-    const minutes = Math.floor((remaining % 3600000) / 60000);
-    const seconds = Math.floor((remaining % 60000) / 1000);
-
-    timer.textContent =
-      "⏳ সময় বাকি: " +
-      String(hours).padStart(2, "0") + ":" +
-      String(minutes).padStart(2, "0") + ":" +
-      String(seconds).padStart(2, "0");
-  }
-
-  updateTimer();
-  setInterval(updateTimer, 1000);
-})();
-</script>
 </body>
 </html>
