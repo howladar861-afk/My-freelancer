@@ -292,25 +292,50 @@
      LOAD USER
   ===================================== */
 
-  onAuthStateChanged(auth, async (user) => {
+ onAuthStateChanged(auth, async (user) => {
 
-    if (!user) {
+  if (!user) {
 
-      alert("⚠️ আগে Login করুন");
+    alert("⚠️ আগে Login করুন");
 
-      window.location.href = "index.html";
+    window.location.href = "index.html";
 
-      return;
-    }
+    return;
+  }
 
-    currentUser = user;
+  currentUser = user;
 
+  try {
     await loadUserBalance();
+  } catch (error) {
+    console.error("Balance Error:", error);
+  }
 
+  try {
     await loadMyJobs();
+  } catch (error) {
+    console.error("My Jobs Error:", error);
 
+    const box = document.getElementById("myJobs");
+
+    if (box) {
+      box.innerHTML = "❌ আমার পোস্ট করা কাজ লোড করা যায়নি।";
+    }
+  }
+
+  try {
     await loadAvailableJobs();
-  });
+  } catch (error) {
+    console.error("Available Jobs Error:", error);
+
+    const box = document.getElementById("availableJobs");
+
+    if (box) {
+      box.innerHTML = "❌ Available Jobs লোড করা যায়নি।";
+    }
+  }
+
+});
 
 
   /* =====================================
