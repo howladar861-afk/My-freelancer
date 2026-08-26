@@ -367,8 +367,8 @@
           await getDocs(incomeQuery);
 // REFERRAL COMMISSION HISTORY
 const referralIncomeQuery = query(
-  collection(db, "income"),
-  where("uid", "==", uid)
+  collection(db, "referralCommissions"),
+  where("fromUid", "==", uid)
 );
 
 const referralIncomeSnapshot = await getDocs(referralIncomeQuery);
