@@ -276,11 +276,20 @@ alert("📢 Permission status: " + permission);
 
 
     // Get FCM Token
-    const registration =
-  await navigator.serviceWorker.register(
+let registration;
+
+try {
+  registration = await navigator.serviceWorker.register(
     "/firebase-messaging-sw.js"
   );
-alert("✅ Service Worker register হয়েছে!");
+
+  alert("✅ Service Worker register হয়েছে!");
+} catch (error) {
+  alert("❌ Service Worker Error: " + error.message);
+  console.error("Service Worker Error:", error);
+  return;
+}
+
 console.log(
   "✅ Service Worker registered:",
   registration
