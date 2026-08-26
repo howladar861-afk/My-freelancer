@@ -279,9 +279,9 @@ alert("📢 Permission status: " + permission);
 let registration;
 
 try {
-  registration = await navigator.serviceWorker.register(
-    "/firebase-messaging-sw.js"
-  );
+  navigator.serviceWorker.register(
+  "/My-freelancer/firebase-messaging-sw.js"
+)
 
   alert("✅ Service Worker register হয়েছে!");
 } catch (error) {
