@@ -971,39 +971,15 @@ async function loadAvailableJobs() {
     }
 
   } catch (error) {
+  console.error("Load Jobs Error:", error);
 
-    console.error(
-      "Available Jobs Error:",
-      error
-    );
-
-    box.innerHTML = `
-      <div style="
-        text-align:center;
-        padding:20px;
-        background:#fff1f2;
-        border-radius:15px;
-        color:#b91c1c;
-      ">
-
-        <div style="font-size:35px;">
-          ⚠️
-        </div>
-
-        <h3>
-          Job লোড করা যাচ্ছে না
-        </h3>
-
-        <p>
-          Firebase থেকে Job আনতে সমস্যা হয়েছে।
-        </p>
-
-      </div>
-    `;
-
+  box.innerHTML =
+    "❌ কাজ লোড করা যায়নি<br>" +
+    error.code + "<br>" +
+    error.message;
   }
 
-        }
+  }
 
 /* =====================================
    START JOB
