@@ -1,260 +1,1152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Profile</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
+  <title>My Profile</title>
 
-body{
-    min-height:100vh;
-    background:linear-gradient(135deg,#07172a,#123b73,#2563eb);
-    color:#fff;
-    padding-bottom:90px;
-}
-
-.header{
-    padding:22px 18px;
-    background:rgba(255,255,255,.10);
-    backdrop-filter:blur(12px);
-    text-align:center;
-    box-shadow:0 4px 20px rgba(0,0,0,.25);
-}
-
-.header h2{
-    font-size:24px;
-}
-
-.profile-box{
-    width:92%;
-    max-width:500px;
-    margin:30px auto;
-    background:rgba(255,255,255,.95);
-    color:#222;
-    border-radius:22px;
-    padding:30px 20px;
-    text-align:center;
-    box-shadow:0 10px 35px rgba(0,0,0,.25);
-}
-
-.avatar{
-    width:100px;
-    height:100px;
-    margin:0 auto 15px;
-    border-radius:50%;
-    background:#2563eb;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:52px;
-    box-shadow:0 5px 20px rgba(37,99,235,.4);
-}
-
-.profile-box h1{
-    font-size:25px;
-    margin-bottom:8px;
-}
-
-.email{
-    color:#666;
-    margin-bottom:25px;
-    word-break:break-word;
-}
-
-.info{
-    text-align:left;
-    margin-top:15px;
-}
-
-.info-item{
-    background:#f4f7fb;
-    border-radius:12px;
-    padding:15px;
-    margin:10px 0;
-}
-
-.info-item strong{
-    display:block;
-    color:#2563eb;
-    margin-bottom:5px;
-}
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:#fff;
-    color:#777;
-    display:flex;
-    justify-content:space-around;
-    padding:10px 0 8px;
-    box-shadow:0 -3px 15px rgba(0,0,0,.18);
-}
-
-.nav-item{
-    text-align:center;
-    font-size:12px;
-    cursor:pointer;
-}
-
-.nav-item .icon{
-    font-size:24px;
-    margin-bottom:3px;
-}
-
-.nav-item.active{
-    color:#2563eb;
-    font-weight:bold;
-}
-
-@media(max-width:600px){
-    .profile-box{
-        margin-top:20px;
-        padding:25px 16px;
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .header h2{
-        font-size:21px;
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #082b57, #075dcc);
+      min-height: 100vh;
+      color: #1f2937;
+      padding-bottom: 90px;
     }
-}
 
-</style>
+    /* Header */
+    .header {
+      background: rgba(255,255,255,0.10);
+      padding: 22px 15px;
+      text-align: center;
+      color: white;
+      backdrop-filter: blur(8px);
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .header-icon {
+      font-size: 32px;
+      vertical-align: middle;
+    }
+
+    /* Main */
+    .container {
+      max-width: 520px;
+      margin: auto;
+      padding: 20px 15px;
+    }
+
+    /* Profile */
+    .profile-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 25px 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      margin-bottom: 20px;
+    }
+
+    .profile-top {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .profile-image {
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
+      box-shadow: 0 8px 25px rgba(37,99,235,0.35);
+    }
+
+    .profile-image span {
+      font-size: 65px;
+    }
+
+    .profile-name {
+      font-size: 25px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .profile-email {
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 5px;
+      word-break: break-word;
+    }
+
+    /* User Info */
+    .info-box {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 14px;
+      margin-top: 10px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .info-value {
+      font-weight: bold;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    /* Income Title */
+    .income-title {
+      color: white;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 25px 0 15px;
+    }
+
+    /* Income Grid */
+    .income-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .income-card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px 12px;
+      text-align: center;
+      box-shadow: 0 7px 20px rgba(0,0,0,0.13);
+    }
+
+    .income-icon {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .income-name {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 7px;
+    }
+
+    .income-amount {
+      font-size: 21px;
+      font-weight: bold;
+      color: #16a34a;
+    }
+
+    /* Total */
+    .total-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      padding: 23px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(79,70,229,0.30);
+    }
+
+    .total-card .income-name {
+      color: rgba(255,255,255,0.85);
+    }
+
+    .total-card .income-amount {
+      color: white;
+      font-size: 30px;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      color: white;
+      padding: 40px 10px;
+      font-size: 18px;
+    }
+
+    .spinner {
+      width: 45px;
+      height: 45px;
+      border: 5px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Error */
+    .error-box {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 18px;
+      border-radius: 16px;
+      text-align: center;
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 78px;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.12);
+      z-index: 999;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #64748b;
+      text-align: center;
+      font-size: 12px;
+      min-width: 65px;
+    }
+
+    .nav-icon {
+      display: block;
+      font-size: 27px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      color: #2563eb;
+      font-weight: bold;
+    }
+
+    /* Mobile */
+    @media (max-width: 380px) {
+
+      .container {
+        padding: 15px 10px;
+      }
+
+      .income-grid {
+        gap: 9px;
+      }
+
+      .income-card {
+        padding: 15px 8px;
+      }
+
+      .income-amount {
+        font-size: 18px;
+      }
+
+      .profile-image {
+        width: 110px;
+        height: 110px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="header">
-    <h2>👤 My Profile</h2>
-</div>
+  <!-- Header -->
+  <div class="header">
+    <h1>
+      <span class="header-icon">👤</span>
+      My Profile
+    </h1>
+  </div>
 
-<div class="profile-box">
 
-    <div class="avatar">👤</div>
+  <div class="container">
 
-    <h1 id="profileName">Loading...</h1>
-
-    <p class="email" id="profileEmail">
-        Loading...
-    </p>
-
-    
-
-<div class="bottom-nav">
-
-    <div class="nav-item" onclick="window.location.href='dashboard.html'">
-        <div class="icon">🏠</div>
-        Home
+    <!-- Loading -->
+    <div id="loadingBox" class="loading">
+      <div class="spinner"></div>
+      Profile Loading...
     </div>
 
-    <div class="nav-item">
-        <div class="icon">🎬</div>
-        Reels
+
+    <!-- Error -->
+    <div id="errorBox" class="error-box"></div>
+
+
+    <!-- Profile -->
+    <div id="profileSection" style="display:none;">
+
+      <div class="profile-card">
+
+        <div class="profile-top">
+
+          <div class="profile-image">
+            <span>👤</span>
+          </div>
+
+          <div id="profileName" class="profile-name">
+            User
+          </div>
+
+          <div id="profileEmail" class="profile-email">
+            Loading...
+          </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+          <div class="info-row">
+            <span class="info-label">
+              📧 Email
+            </span>
+
+            <span id="emailValue" class="info-value">
+              -
+            </span>
+          </div>
+
+
+          <div class="info-row">
+            <span class="info-label">
+              🔗 Referral Code
+            </span>
+
+            <span id="referralValue" class="info-value">
+              -
+            </span>
+          </div>
+
+
+          <div class="info-row">
+            <span class="info-label">
+              💰 Current Balance
+            </span>
+
+            <span id="balanceValue"
+                  class="info-value"
+                  style="color:#16a34a;">
+              ৳0
+            </span>
+          </div>
+
+
+          <div class="info-row">
+            <span class="info-label">
+              ✅ Verification
+            </span>
+
+            <span id="verifiedValue"
+                  class="info-value">
+              -
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Income Title -->
+      <div class="income-title">
+        💰 Income Summary
+      </div>
+
+
+      <!-- Income Cards -->
+      <div class="income-grid">
+
+
+        <!-- Today -->
+        <div class="income-card">
+
+          <div class="income-icon">
+            🌞
+          </div>
+
+          <div class="income-name">
+            আজকের ইনকাম
+          </div>
+
+          <div id="todayIncome"
+               class="income-amount">
+            ৳0
+          </div>
+
+        </div>
+
+
+        <!-- Yesterday -->
+        <div class="income-card">
+
+          <div class="income-icon">
+            📅
+          </div>
+
+          <div class="income-name">
+            গতকালের ইনকাম
+          </div>
+
+          <div id="yesterdayIncome"
+               class="income-amount">
+            ৳0
+          </div>
+
+        </div>
+
+
+        <!-- 7 Days -->
+        <div class="income-card">
+
+          <div class="income-icon">
+            📊
+          </div>
+
+          <div class="income-name">
+            ৭ দিনের ইনকাম
+          </div>
+
+          <div id="sevenDayIncome"
+               class="income-amount">
+            ৳0
+          </div>
+
+        </div>
+
+
+        <!-- 30 Days -->
+        <div class="income-card">
+
+          <div class="income-icon">
+            📈
+          </div>
+
+          <div class="income-name">
+            ৩০ দিনের ইনকাম
+          </div>
+
+          <div id="thirtyDayIncome"
+               class="income-amount">
+            ৳0
+          </div>
+
+        </div>
+
+
+        <!-- 1 Year -->
+        <div class="income-card">
+
+          <div class="income-icon">
+            🗓️
+          </div>
+
+          <div class="income-name">
+            ১ বছরের ইনকাম
+          </div>
+
+          <div id="yearIncome"
+               class="income-amount">
+            ৳0
+          </div>
+
+        </div>
+
+
+        <!-- Total -->
+        <div class="total-card">
+
+          <div class="income-icon">
+            💎
+          </div>
+
+          <div class="income-name">
+            টোটাল ইনকাম
+          </div>
+
+          <div id="totalIncome"
+               class="income-amount">
+            ৳0
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
 
-    <div class="nav-item">
-        <div class="icon">🛒</div>
-        Reselling
-    </div>
-
-    <div class="nav-item">
-        <div class="icon">💼</div>
-        Micro Job
-    </div>
-
-    <div class="nav-item active">
-        <div class="icon">👤</div>
-        Profile
-    </div>
-
-</div>
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
-import {
-    getAuth,
-    onAuthStateChanged,
-    setPersistence,
-    browserLocalPersistence
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-import {
-    getFirestore,
-    doc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+  </div>
 
 
-const firebaseConfig = {
-    apiKey: "AIzaSyBFUKPT76os6u0d09ff1jZgjdIaR5ew8m",
-    authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
-    projectId: "rakib-freelancer-9c66b",
-    storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
-    messagingSenderId: "541209844482",
-    appId: "1:541209844482:web:5105685226c9bf47ac01b"
-};
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      Home
+    </a>
+
+    <a href="reels.html" class="nav-item">
+      <span class="nav-icon">🎬</span>
+      Reels
+    </a>
+
+    <a href="reselling.html" class="nav-item">
+      <span class="nav-icon">🛒</span>
+      Reselling
+    </a>
+
+    <a href="microjob.html" class="nav-item">
+      <span class="nav-icon">💼</span>
+      Micro Job
+    </a>
+
+    <a href="profile.html"
+       class="nav-item active">
+      <span class="nav-icon">👤</span>
+      Profile
+    </a>
+
+  </div>
 
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+  <!-- Firebase -->
+  <script type="module">
 
-await setPersistence(auth, browserLocalPersistence);
-    
-console.log("Firebase started");
-
-
-async function loadProfile(user) {
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 
-    if (!user) {
-        document.getElementById("profileName").textContent =
-            "Profile";
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-        document.getElementById("profileEmail").textContent =
-            "Please login first";
 
-        return;
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      query,
+      where,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+    /*
+     * ==========================================
+     * FIREBASE CONFIG
+     * ==========================================
+     *
+     * এখানে আপনার আগের Firebase Config বসাবেন।
+     */
+
+    const firebaseConfig = {
+
+      apiKey: "YOUR_API_KEY",
+
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+
+      projectId: "YOUR_PROJECT_ID",
+
+      storageBucket: "YOUR_PROJECT.firebasestorage.app",
+
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+
+      appId: "YOUR_APP_ID"
+
+    };
+
+
+    const app =
+      initializeApp(firebaseConfig);
+
+
+    const auth =
+      getAuth(app);
+
+
+    const db =
+      getFirestore(app);
+
+
+    /*
+     * ==========================================
+     * ELEMENTS
+     * ==========================================
+     */
+
+    const loadingBox =
+      document.getElementById("loadingBox");
+
+    const errorBox =
+      document.getElementById("errorBox");
+
+    const profileSection =
+      document.getElementById("profileSection");
+
+
+    /*
+     * ==========================================
+     * NUMBER FORMAT
+     * ==========================================
+     */
+
+    function money(amount) {
+
+      return "৳" +
+        Number(amount || 0)
+          .toLocaleString("en-US", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+          });
+
     }
 
 
-    // Email
-    document.getElementById("profileEmail").textContent =
-        user.email || "No Email";
+    /*
+     * ==========================================
+     * DATE CONVERT
+     * ==========================================
+     */
+
+    function getDate(value) {
+
+      if (!value) {
+        return null;
+      }
 
 
-    try {
+      if (
+        typeof value.toDate === "function"
+      ) {
 
-        const userRef = doc(db, "users", user.uid);
+        return value.toDate();
 
-        const userSnap = await getDoc(userRef);
+      }
 
 
-        if (userSnap.exists()) {
+      if (
+        value.seconds !== undefined
+      ) {
 
-            const data = userSnap.data();
-            document.getElementById("profileName").textContent =
-                user.displayName || "My Profile";
+        return new Date(
+          value.seconds * 1000
+        );
+
+      }
+
+
+      if (
+        value instanceof Date
+      ) {
+
+        return value;
+
+      }
+
+
+      const date =
+        new Date(value);
+
+
+      if (
+        isNaN(date.getTime())
+      ) {
+
+        return null;
+
+      }
+
+
+      return date;
+
+    }
+
+
+    /*
+     * ==========================================
+     * LOAD PROFILE
+     * ==========================================
+     */
+
+    async function loadProfile(user) {
+
+      try {
+
+        /*
+         * users/{uid}
+         */
+
+        const userRef =
+          doc(
+            db,
+            "users",
+            user.uid
+          );
+
+
+        const userSnap =
+          await getDoc(userRef);
+
+
+        if (!userSnap.exists()) {
+
+          throw new Error(
+            "আপনার Profile Data পাওয়া যায়নি।"
+          );
+
         }
 
 
-    } catch (error) {
+        const userData =
+          userSnap.data();
 
-        console.error("Firestore Error:", error);
+
+        /*
+         * Profile Name
+         */
+
+        const name =
+          userData.name ||
+          userData.displayName ||
+          "User";
+
+
+        document.getElementById(
+          "profileName"
+        ).textContent = name;
+
+
+        /*
+         * Email
+         */
+
+        const email =
+          userData.email ||
+          user.email ||
+          "-";
+
+
+        document.getElementById(
+          "profileEmail"
+        ).textContent = email;
+
+
+        document.getElementById(
+          "emailValue"
+        ).textContent = email;
+
+
+        /*
+         * Referral
+         */
+
+        document.getElementById(
+          "referralValue"
+        ).textContent =
+          userData.referralCode || "-";
+
+
+        /*
+         * Balance
+         */
+
+        document.getElementById(
+          "balanceValue"
+        ).textContent =
+          money(userData.balance);
+
+
+        /*
+         * Verification
+         */
+
+        const verified =
+          userData.verified === true;
+
+
+        document.getElementById(
+          "verifiedValue"
+        ).textContent =
+          verified
+            ? "✅ Verified"
+            : "❌ Not Verified";
+
+
+        /*
+         * Load Income
+         */
+
+        await loadIncome(user.uid);
+
+
+        /*
+         * Hide Loading
+         */
+
+        loadingBox.style.display =
+          "none";
+
+
+        profileSection.style.display =
+          "block";
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Profile Error:",
+          error
+        );
+
+
+        loadingBox.style.display =
+          "none";
+
+
+        errorBox.style.display =
+          "block";
+
+
+        errorBox.textContent =
+          "❌ " +
+          (
+            error.message ||
+            "Profile Load করতে সমস্যা হয়েছে।"
+          );
+
+      }
+
     }
-}
-// Login state
-onAuthStateChanged(auth, async (user) => {
 
-    if (!user) {
-        document.getElementById("profileName").textContent = "Please Login";
-        document.getElementById("profileEmail").textContent = "Please login first";
-    });
+
+    /*
+     * ==========================================
+     * LOAD INCOME
+     * ==========================================
+     */
+
+    async function loadIncome(uid) {
+
+      let today = 0;
+      let yesterday = 0;
+      let sevenDays = 0;
+      let thirtyDays = 0;
+      let oneYear = 0;
+      let total = 0;
+
+
+      /*
+       * income collection
+       *
+       * প্রত্যেক document:
+       *
+       * uid
+       * amount
+       * createdAt
+       */
+
+      const incomeRef =
+        collection(
+          db,
+          "income"
+        );
+
+
+      const incomeQuery =
+        query(
+          incomeRef,
+          where(
+            "uid",
+            "==",
+            uid
+          )
+        );
+
+
+      const snapshot =
+        await getDocs(incomeQuery);
+
+
+      /*
+       * আজকের শুরু
+       */
+
+      const now =
+        new Date();
+
+
+      const todayStart =
+        new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate()
+        );
+
+
+      /*
+       * গতকালের শুরু
+       */
+
+      const yesterdayStart =
+        new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() - 1
+        );
+
+
+      /*
+       * ৭ দিন
+       */
+
+      const sevenDaysStart =
+        new Date(
+          now.getTime() -
+          (7 * 24 * 60 * 60 * 1000)
+        );
+
+
+      /*
+       * ৩০ দিন
+       */
+
+      const thirtyDaysStart =
+        new Date(
+          now.getTime() -
+          (30 * 24 * 60 * 60 * 1000)
+        );
+
+
+      /*
+       * ১ বছর
+       */
+
+      const oneYearStart =
+        new Date(
+          now.getFullYear() - 1,
+          now.getMonth(),
+          now.getDate()
+        );
+
+
+      snapshot.forEach(
+        (incomeDoc) => {
+
+          const data =
+            incomeDoc.data();
+
+
+          const amount =
+            Number(
+              data.amount || 0
+            );
+
+
+          const date =
+            getDate(
+              data.createdAt ||
+              data.timestamp ||
+              data.date
+            );
+
+
+          if (!date) {
+            return;
+          }
+
+
+          /*
+           * Total
+           */
+
+          total += amount;
+
+
+          /*
+           * Today
+           */
+
+          if (
+            date >= todayStart &&
+            date <= now
+          ) {
+
+            today += amount;
+
+          }
+
+
+          /*
+           * Yesterday
+           */
+
+          if (
+            date >= yesterdayStart &&
+            date < todayStart
+          ) {
+
+            yesterday += amount;
+
+          }
+
+
+          /*
+           * 7 Days
+           */
+
+          if (
+            date >= sevenDaysStart &&
+            date <= now
+          ) {
+
+            sevenDays += amount;
+
+          }
+
+
+          /*
+           * 30 Days
+           */
+
+          if (
+            date >= thirtyDaysStart &&
+            date <= now
+          ) {
+
+            thirtyDays += amount;
+
+          }
+
+
+          /*
+           * 1 Year
+           */
+
+          if (
+            date >= oneYearStart &&
+            date <= now
+          ) {
+
+            oneYear += amount;
+
+          }
+
+        }
+      );
+
+
+      /*
+       * Display
+       */
+
+      document.getElementById(
+        "todayIncome"
+      ).textContent =
+        money(today);
+
+
+      document.getElementById(
+        "yesterdayIncome"
+      ).textContent =
+        money(yesterday);
+
+
+      document.getElementById(
+        "sevenDayIncome"
+      ).textContent =
+        money(sevenDays);
+
+
+      document.getElementById(
+        "thirtyDayIncome"
+      ).textContent =
+        money(thirtyDays);
+
+
+      document.getElementById(
+        "yearIncome"
+      ).textContent =
+        money(oneYear);
+
+
+      document.getElementById(
+        "totalIncome"
+      ).textContent =
+        money(total);
+
+    }
+
+
+    /*
+     * ==========================================
+     * AUTH
+     * ==========================================
+     */
+
+    onAuthStateChanged(
+      auth,
+      async (user) => {
+
+        if (!user) {
+
+          loadingBox.style.display =
+            "none";
+
+
+          errorBox.style.display =
+            "block";
+
+
+          errorBox.textContent =
+            "🔐 আগে Login করুন।";
+
+
+          return;
+
+        }
+
+
+        await loadProfile(user);
+
+      }
+    );
+
+  </script>
+
+</body>
+    </html>
