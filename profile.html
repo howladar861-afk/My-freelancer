@@ -539,7 +539,23 @@
 
   </div>
 
+<script>
+setTimeout(function () {
+  var loading = document.getElementById("loadingBox");
 
+  if (loading) {
+    loading.style.display = "none";
+
+    var error = document.getElementById("errorBox");
+
+    if (error) {
+      error.style.display = "block";
+      error.textContent =
+        "❌ JavaScript/Firebase script চালু হচ্ছে না।";
+    }
+  }
+}, 5000);
+</script>
   <!-- Firebase -->
   <script type="module">
 
