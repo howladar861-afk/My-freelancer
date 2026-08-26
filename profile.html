@@ -1239,35 +1239,22 @@ async function loadIncome(uid) {
      * ==========================================
      */
 
-    onAuthStateChanged(
-      auth,
-      async (user) => {
+    onAuthStateChanged(auth, async (user) => {
+    loadingBox.style.display = "none";
 
-        if (!user) {
+    if (!user) {
+        errorBox.style.display = "block";
+        errorBox.textContent = "🔒 Login করা নেই";
+        return;
+    }
 
-          loadingBox.style.display =
-            "none";
-
-
-          errorBox.style.display =
-            "block";
-
-
-          errorBox.textContent =
-            "🔐 আগে Login করুন।";
-
-
-          return;
-
-        }
-
-
+    try {
         await loadProfile(user);
+    } catch (error) {
+        console.error("PROFILE ERROR:", error);
 
-      }
-    );
-
-  </script>
-
-</body>
-    </html>
+        errorBox.style.display = "block";
+        errorBox.textContent =
+            "❌ Error: " + (error.message || "Unknown error");
+    }
+});
