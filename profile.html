@@ -862,257 +862,331 @@
 
     async function loadIncome(uid) {
 
-      let today = 0;
-      let yesterday = 0;
-      let sevenDays = 0;
-      let thirtyDays = 0;
-      let oneYear = 0;
-      let total = 0;
+  try {
+
+    // =====================================
+    // INCOME COLLECTION
+    // =====================================
+
+    const incomeRef = collection(
+      db,
+      "income"
+    );
+
+    const incomeQuery = query(
+      incomeRef,
+      where("uid", "==", uid)
+    );
+
+    const snapshot = await getDocs(
+      incomeQuery
+    );
 
 
-      /*
-       * income collection
-       *
-       * প্রত্যেক document:
-       *
-       * uid
-       * amount
-       * createdAt
-       */
+    // =====================================
+    // CURRENT TIME
+    // =====================================
 
-      const incomeRef =
-        collection(
-          db,
-          "income"
-        );
+    const now = new Date();
 
 
-      const incomeQuery =
-        query(
-          incomeRef,
-          where(
-            "uid",
-            "==",
-            uid
-          )
-        );
+    // =====================================
+    // TODAY START
+    // আজ রাত ১২টা থেকে এখন পর্যন্ত
+    // =====================================
+
+    const todayStart = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0, 0, 0, 0
+    );
 
 
-      const snapshot =
-        await getDocs(incomeQuery);
+    // =====================================
+    // TOMORROW START
+    // =====================================
+
+    const tomorrowStart = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1,
+      0, 0, 0, 0
+    );
 
 
-      /*
-       * আজকের শুরু
-       */
+    // =====================================
+    // YESTERDAY START
+    // =====================================
 
-      const now =
-        new Date();
-
-
-      const todayStart =
-        new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate()
-        );
+    const yesterdayStart = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - 1,
+      0, 0, 0, 0
+    );
 
 
-      /*
-       * গতকালের শুরু
-       */
+    // =====================================
+    // 7 DAYS START
+    // =====================================
 
-      const yesterdayStart =
-        new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate() - 1
-        );
+    const sevenDaysStart = new Date(
+      now.getTime() -
+      (7 * 24 * 60 * 60 * 1000)
+    );
 
 
-      /*
-       * ৭ দিন
-       */
+    // =====================================
+    // 30 DAYS START
+    // =====================================
 
-      const sevenDaysStart =
-        new Date(
-          now.getTime() -
-          (7 * 24 * 60 * 60 * 1000)
-        );
-
-
-      /*
-       * ৩০ দিন
-       */
-
-      const thirtyDaysStart =
-        new Date(
-          now.getTime() -
-          (30 * 24 * 60 * 60 * 1000)
-        );
+    const thirtyDaysStart = new Date(
+      now.getTime() -
+      (30 * 24 * 60 * 60 * 1000)
+    );
 
 
-      /*
-       * ১ বছর
-       */
+    // =====================================
+    // 1 YEAR START
+    // =====================================
 
-      const oneYearStart =
-        new Date(
-          now.getFullYear() - 1,
-          now.getMonth(),
-          now.getDate()
-        );
-
-
-      snapshot.forEach(
-        (incomeDoc) => {
-
-          const data =
-            incomeDoc.data();
+    const oneYearStart = new Date(
+      now.getFullYear() - 1,
+      now.getMonth(),
+      now.getDate(),
+      now.getHours(),
+      now.getMinutes(),
+      now.getSeconds()
+    );
 
 
-          const amount =
-            Number(
-              data.amount || 0
-            );
+    // =====================================
+    // AMOUNTS
+    // =====================================
+
+    let todayIncome = 0;
+
+    let yesterdayIncome = 0;
+
+    let sevenDayIncome = 0;
+
+    let thirtyDayIncome = 0;
+
+    let yearIncome = 0;
+
+    let totalIncome = 0;
 
 
-          const date =
-            getDate(
-              data.createdAt ||
-              data.timestamp ||
-              data.date
-            );
+    // =====================================
+    // READ ALL USER INCOME
+    // =====================================
+
+    snapshot.forEach((incomeDoc) => {
+
+      const data = incomeDoc.data();
 
 
-          if (!date) {
-            return;
-          }
-
-
-          /*
-           * Total
-           */
-
-          total += amount;
-
-
-          /*
-           * Today
-           */
-
-          if (
-            date >= todayStart &&
-            date <= now
-          ) {
-
-            today += amount;
-
-          }
-
-
-          /*
-           * Yesterday
-           */
-
-          if (
-            date >= yesterdayStart &&
-            date < todayStart
-          ) {
-
-            yesterday += amount;
-
-          }
-
-
-          /*
-           * 7 Days
-           */
-
-          if (
-            date >= sevenDaysStart &&
-            date <= now
-          ) {
-
-            sevenDays += amount;
-
-          }
-
-
-          /*
-           * 30 Days
-           */
-
-          if (
-            date >= thirtyDaysStart &&
-            date <= now
-          ) {
-
-            thirtyDays += amount;
-
-          }
-
-
-          /*
-           * 1 Year
-           */
-
-          if (
-            date >= oneYearStart &&
-            date <= now
-          ) {
-
-            oneYear += amount;
-
-          }
-
-        }
+      // Amount
+      const amount = Number(
+        data.amount || 0
       );
 
 
-      /*
-       * Display
-       */
-
-      document.getElementById(
-        "todayIncome"
-      ).textContent =
-        money(today);
+      // Date
+      let incomeDate = null;
 
 
-      document.getElementById(
-        "yesterdayIncome"
-      ).textContent =
-        money(yesterday);
+      if (data.createdAt) {
+
+        if (
+          typeof data.createdAt.toDate ===
+          "function"
+        ) {
+
+          incomeDate =
+            data.createdAt.toDate();
+
+        }
+
+        else if (
+          data.createdAt.seconds !==
+          undefined
+        ) {
+
+          incomeDate =
+            new Date(
+              data.createdAt.seconds * 1000
+            );
+
+        }
+
+        else {
+
+          incomeDate =
+            new Date(data.createdAt);
+
+        }
+
+      }
 
 
-      document.getElementById(
-        "sevenDayIncome"
-      ).textContent =
-        money(sevenDays);
+      // Invalid date হলে বাদ
+      if (
+        !incomeDate ||
+        isNaN(incomeDate.getTime())
+      ) {
+
+        return;
+
+      }
 
 
-      document.getElementById(
-        "thirtyDayIncome"
-      ).textContent =
-        money(thirtyDays);
+      // =====================================
+      // TOTAL INCOME
+      // =====================================
+
+      totalIncome += amount;
 
 
-      document.getElementById(
-        "yearIncome"
-      ).textContent =
-        money(oneYear);
+      // =====================================
+      // TODAY
+      // =====================================
+
+      if (
+        incomeDate >= todayStart &&
+        incomeDate < tomorrowStart
+      ) {
+
+        todayIncome += amount;
+
+      }
 
 
-      document.getElementById(
-        "totalIncome"
-      ).textContent =
-        money(total);
+      // =====================================
+      // YESTERDAY
+      // =====================================
+
+      if (
+        incomeDate >= yesterdayStart &&
+        incomeDate < todayStart
+      ) {
+
+        yesterdayIncome += amount;
+
+      }
+
+
+      // =====================================
+      // LAST 7 DAYS
+      // =====================================
+
+      if (
+        incomeDate >= sevenDaysStart &&
+        incomeDate <= now
+      ) {
+
+        sevenDayIncome += amount;
+
+      }
+
+
+      // =====================================
+      // LAST 30 DAYS
+      // =====================================
+
+      if (
+        incomeDate >= thirtyDaysStart &&
+        incomeDate <= now
+      ) {
+
+        thirtyDayIncome += amount;
+
+      }
+
+
+      // =====================================
+      // LAST 1 YEAR
+      // =====================================
+
+      if (
+        incomeDate >= oneYearStart &&
+        incomeDate <= now
+      ) {
+
+        yearIncome += amount;
+
+      }
+
+    });
+
+
+    // =====================================
+    // DISPLAY
+    // =====================================
+
+    document.getElementById(
+      "todayIncome"
+    ).textContent =
+      money(todayIncome);
+
+
+    document.getElementById(
+      "yesterdayIncome"
+    ).textContent =
+      money(yesterdayIncome);
+
+
+    document.getElementById(
+      "sevenDayIncome"
+    ).textContent =
+      money(sevenDayIncome);
+
+
+    document.getElementById(
+      "thirtyDayIncome"
+    ).textContent =
+      money(thirtyDayIncome);
+
+
+    document.getElementById(
+      "yearIncome"
+    ).textContent =
+      money(yearIncome);
+
+
+    document.getElementById(
+      "totalIncome"
+    ).textContent =
+      money(totalIncome);
+
+
+    console.log(
+      "Income Loaded:",
+      {
+        today: todayIncome,
+        yesterday: yesterdayIncome,
+        sevenDays: sevenDayIncome,
+        thirtyDays: thirtyDayIncome,
+        oneYear: yearIncome,
+        total: totalIncome
+      }
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Income Load Error:",
+      error
+    );
+
+    throw error;
+
+  }
 
     }
-
-
-    /*
      * ==========================================
      * AUTH
      * ==========================================
