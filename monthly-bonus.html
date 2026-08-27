@@ -567,11 +567,9 @@ body{
 /* =========================================
    FIREBASE IMPORT
 ========================================= */
-
 import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
 
 import {
   getAuth,
@@ -580,13 +578,17 @@ import {
   browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-
 import {
   getFirestore,
   doc,
   getDoc,
   setDoc,
-  serverTimestamp
+  collection,
+  query,
+  where,
+  getDocs,
+  serverTimestamp,
+  Timestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -680,7 +682,7 @@ const status =
 
 
 /* =========================================
-   GO LOGIN
+   LOGIN
 ========================================= */
 
 window.goLogin = function(){
@@ -692,19 +694,19 @@ window.goLogin = function(){
 
 
 /* =========================================
-   AUTH CHECK
+   AUTH PERSISTENCE
 ========================================= */
 
-try{
+try {
 
   await setPersistence(
     auth,
     browserLocalPersistence
   );
 
-}catch(error){
+} catch(error) {
 
-  console.log(
+  console.error(
     "Persistence Error:",
     error
   );
@@ -713,28 +715,25 @@ try{
 
 
 /* =========================================
-   LOGIN STATE
+   AUTH STATE
 ========================================= */
 
 onAuthStateChanged(
   auth,
   async (user) => {
 
-    loading.style.display =
-      "none";
+    loading.style.display = "none";
 
 
     /* ===============================
-       USER NOT LOGIN
+       NOT LOGIN
     =============================== */
 
     if(!user){
 
-      bonusPage.style.display =
-        "none";
+      bonusPage.style.display = "none";
 
-      loginBox.style.display =
-        "block";
+      loginBox.style.display = "block";
 
       return;
 
@@ -742,35 +741,30 @@ onAuthStateChanged(
 
 
     /* ===============================
-       USER LOGIN
+       LOGIN
     =============================== */
 
-    loginBox.style.display =
-      "none";
+    loginBox.style.display = "none";
 
-    errorBox.style.display =
-      "none";
+    errorBox.style.display = "none";
 
-    bonusPage.style.display =
-      "block";
+    bonusPage.style.display = "block";
 
 
-    try{
+    try {
 
       await loadMonthlyBonus(user);
 
-    }catch(error){
+    } catch(error) {
 
       console.error(
         "Monthly Bonus Error:",
         error
       );
 
-      bonusPage.style.display =
-        "none";
+      bonusPage.style.display = "none";
 
-      errorBox.style.display =
-        "block";
+      errorBox.style.display = "block";
 
       errorBox.innerHTML =
         "❌ Bonus তথ্য লোড করা যায়নি।<br><br>" +
@@ -786,7 +780,56 @@ onAuthStateChanged(
    LOAD MONTHLY BONUS
 ========================================= */
 
-async function loadMonthlyBonus(user){
+async function loadMonthlyBonus(user) {
+
+  /* =====================================
+     USER DATA
+  ===================================== */
+
+  const userRef =
+    doc(
+      db,
+      "users",
+      user.uid
+    );
+
+  const userSnap =
+    await getDoc(userRef);
+
+
+  if(!userSnap.exists()) {
+
+    throw new Error(
+      "আপনার User Account পাওয়া যায়নি।"
+    );
+
+  }
+
+
+  const userData =
+    userSnap.data();
+
+
+  /* =====================================
+     MY REFERRAL CODE
+  ===================================== */
+
+  const myReferralCode =
+    userData.referralCode;
+
+
+  if(!myReferralCode) {
+
+    throw new Error(
+      "আপনার Referral Code পাওয়া যায়নি।"
+    );
+
+  }
+
+
+  /* =====================================
+     MONTHLY BONUS DOCUMENT
+  ===================================== */
 
   const bonusRef =
     doc(
@@ -800,143 +843,141 @@ async function loadMonthlyBonus(user){
     await getDoc(bonusRef);
 
 
-  let data;
+  let periodStart;
 
 
-  /* =======================================
+  /* =====================================
      FIRST TIME
-  ======================================= */
+  ===================================== */
 
-  if(!bonusSnap.exists()){
+  if(!bonusSnap.exists()) {
 
-    const start =
+    periodStart =
       new Date();
 
-
-    data = {
-
-      verifyCount: 0,
-
-      periodStart:
-        start.toISOString(),
-
-      target:
-        TARGET,
-
-      bonusAmount:
-        BONUS,
-
-      createdAt:
-        serverTimestamp()
-
-    };
-
-
-    await setDoc(
-      bonusRef,
-      data
-    );
-
-  }
-
-  else{
-
-    data =
-      bonusSnap.data();
-
-  }
-
-
-  /* =======================================
-     START DATE
-  ======================================= */
-
-  let startDate;
-
-
-  if(
-    data.periodStart &&
-    typeof data.periodStart.toDate === "function"
-  ){
-
-    startDate =
-      data.periodStart.toDate();
-
-  }
-
-  else{
-
-    startDate =
-      new Date(
-        data.periodStart
-      );
-
-  }
-
-
-  if(
-    isNaN(
-      startDate.getTime()
-    )
-  ){
-
-    startDate =
-      new Date();
 
     await setDoc(
       bonusRef,
       {
+        verifyCount: 0,
+
         periodStart:
-          startDate.toISOString()
-      },
-      {
-        merge:true
+          periodStart.toISOString(),
+
+        target:
+          TARGET,
+
+        bonusAmount:
+          BONUS,
+
+        createdAt:
+          serverTimestamp()
       }
     );
 
   }
 
+  else {
 
-  /* =======================================
-     CURRENT TIME
-  ======================================= */
+    const bonusData =
+      bonusSnap.data();
+
+
+    /* =================================
+       READ START DATE
+    ================================= */
+
+    if(
+      bonusData.periodStart &&
+      typeof bonusData.periodStart.toDate === "function"
+    ) {
+
+      periodStart =
+        bonusData.periodStart.toDate();
+
+    }
+
+    else {
+
+      periodStart =
+        new Date(
+          bonusData.periodStart
+        );
+
+    }
+
+
+    /* =================================
+       INVALID DATE
+    ================================= */
+
+    if(
+      isNaN(
+        periodStart.getTime()
+      )
+    ) {
+
+      periodStart =
+        new Date();
+
+      await setDoc(
+        bonusRef,
+        {
+          periodStart:
+            periodStart.toISOString()
+        },
+        {
+          merge: true
+        }
+      );
+
+    }
+
+  }
+
+
+  /* =====================================
+     CHECK 30 DAYS
+  ===================================== */
 
   const now =
     new Date();
 
 
-  const difference =
+  let difference =
     now.getTime() -
-    startDate.getTime();
+    periodStart.getTime();
 
 
-  const passedDays =
+  let passedDays =
     Math.floor(
       difference /
       (1000 * 60 * 60 * 24)
     );
 
 
-  /* =======================================
-     30 DAYS COMPLETED
-  ======================================= */
+  /* =====================================
+     NEW 30 DAY CHALLENGE
+  ===================================== */
 
   if(
     passedDays >= TOTAL_DAYS
-  ){
+  ) {
 
-    const newStart =
-      now.toISOString();
+    periodStart =
+      now;
+
+
+    passedDays = 0;
 
 
     await setDoc(
       bonusRef,
       {
-
         verifyCount: 0,
 
         periodStart:
-          newStart,
+          periodStart.toISOString(),
 
         target:
           TARGET,
@@ -946,39 +987,102 @@ async function loadMonthlyBonus(user){
 
         updatedAt:
           serverTimestamp()
-
       },
       {
-        merge:true
+        merge: true
       }
     );
-
-
-    data.verifyCount =
-      0;
-
-    data.periodStart =
-      newStart;
-
-
-    startDate =
-      new Date(newStart);
 
   }
 
 
-  /* =======================================
-     SHOW DATA
-  ======================================= */
+  /* =====================================
+     COUNT VERIFIED REFERRAL ACCOUNTS
+  ===================================== */
+
+  const startTimestamp =
+    Timestamp.fromDate(
+      periodStart
+    );
+
+
+  const usersRef =
+    collection(
+      db,
+      "users"
+    );
+
+
+  const referralQuery =
+    query(
+      usersRef,
+
+      where(
+        "referredBy",
+        "==",
+        myReferralCode
+      ),
+
+      where(
+        "verified",
+        "==",
+        true
+      ),
+
+      where(
+        "verifiedAt",
+        ">=",
+        startTimestamp
+      )
+    );
+
+
+  const referralSnapshot =
+    await getDocs(
+      referralQuery
+    );
+
+
+  /* =====================================
+     VERIFIED REFERRAL COUNT
+  ===================================== */
+
+  const verifiedReferralCount =
+    referralSnapshot.size;
+
+
+  /* =====================================
+     SAVE COUNT
+  ===================================== */
+
+  await setDoc(
+    bonusRef,
+    {
+      verifyCount:
+        verifiedReferralCount,
+
+      target:
+        TARGET,
+
+      bonusAmount:
+        BONUS,
+
+      updatedAt:
+        serverTimestamp()
+    },
+    {
+      merge: true
+    }
+  );
+
+
+  /* =====================================
+     UPDATE SCREEN
+  ===================================== */
 
   updateUI(
-
-    Number(
-      data.verifyCount || 0
-    ),
-
-    startDate
-
+    verifiedReferralCount,
+    periodStart
   );
 
 }
@@ -991,17 +1095,17 @@ async function loadMonthlyBonus(user){
 function updateUI(
   count,
   startDate
-){
+) {
 
-  /* =======================================
+  /* =====================================
      COUNT
-  ======================================= */
+  ===================================== */
 
   const safeCount =
     Math.max(
       0,
       Math.min(
-        count,
+        Number(count || 0),
         TARGET
       )
     );
@@ -1013,9 +1117,9 @@ function updateUI(
     TARGET;
 
 
-  /* =======================================
+  /* =====================================
      PROGRESS
-  ======================================= */
+  ===================================== */
 
   const percent =
     Math.round(
@@ -1035,9 +1139,9 @@ function updateUI(
     "% সম্পন্ন";
 
 
-  /* =======================================
+  /* =====================================
      DAYS
-  ======================================= */
+  ===================================== */
 
   const now =
     new Date();
@@ -1078,32 +1182,34 @@ function updateUI(
     left;
 
 
-  /* =======================================
+  /* =====================================
      STATUS
-  ======================================= */
+  ===================================== */
 
   if(
     safeCount >= TARGET
-  ){
+  ) {
 
     status.innerHTML =
       "🎉 অভিনন্দন!<br>" +
-      "১২০টি Verify সম্পন্ন হয়েছে।<br>" +
+      "১২০টি Referral Account Verify সম্পন্ন হয়েছে।<br>" +
       "৳১,০০০ Bonus-এর জন্য আপনি যোগ্য!";
 
   }
 
-  else{
+  else {
+
+    const remaining =
+      TARGET -
+      safeCount;
+
 
     status.innerHTML =
       "🚀 Monthly Challenge চলছে<br>" +
-      "লক্ষ্য: ১২০ Verify";
+      "আরও " +
+      remaining +
+      "টি Referral Account Verify করুন।";
 
   }
 
-}
-
-</script>
-
-</body>
-</html>
+  }
