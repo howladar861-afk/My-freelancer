@@ -1,15 +1,585 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Monthly Bonus - Rakib Freelancer</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:linear-gradient(135deg,#eef4ff,#ffffff);
+  min-height:100vh;
+  padding:18px;
+  color:#222;
+}
+
+.container{
+  max-width:520px;
+  margin:auto;
+}
+
+/* TOP */
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:25px;
+}
+
+.back-btn{
+  border:0;
+  background:#2563eb;
+  color:white;
+  padding:13px 20px;
+  border-radius:14px;
+  font-size:17px;
+  cursor:pointer;
+  box-shadow:0 6px 15px rgba(37,99,235,.25);
+}
+
+.title{
+  flex:1;
+  text-align:center;
+  font-size:25px;
+  font-weight:bold;
+}
+
+/* LOADING */
+
+#loading{
+  text-align:center;
+  padding:80px 10px;
+  color:#555;
+  font-size:18px;
+}
+
+/* LOGIN */
+
+#loginBox{
+  display:none;
+}
+
+.login-card{
+  background:white;
+  border-radius:28px;
+  padding:40px 22px;
+  text-align:center;
+  box-shadow:0 10px 35px rgba(0,0,0,.10);
+}
+
+.login-icon{
+  font-size:75px;
+  margin-bottom:15px;
+}
+
+.login-card h1{
+  font-size:30px;
+  margin-bottom:15px;
+}
+
+.login-card p{
+  color:#666;
+  font-size:17px;
+  line-height:1.7;
+  margin-bottom:25px;
+}
+
+.login-btn{
+  border:0;
+  background:#2563eb;
+  color:white;
+  padding:15px 35px;
+  border-radius:15px;
+  font-size:18px;
+  cursor:pointer;
+  box-shadow:0 7px 18px rgba(37,99,235,.25);
+}
+
+/* MAIN */
+
+#bonusPage{
+  display:none;
+}
+
+.card{
+  background:white;
+  border-radius:28px;
+  padding:25px 20px;
+  box-shadow:0 10px 35px rgba(0,0,0,.10);
+  text-align:center;
+}
+
+.icon{
+  font-size:65px;
+  margin-bottom:8px;
+}
+
+.card h1{
+  font-size:29px;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  color:#666;
+  font-size:16px;
+  margin-bottom:22px;
+}
+
+/* REWARD */
+
+.reward{
+  background:linear-gradient(135deg,#2563eb,#4f46e5);
+  color:white;
+  border-radius:22px;
+  padding:24px 15px;
+  margin-bottom:20px;
+}
+
+.reward-title{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.amount{
+  font-size:40px;
+  font-weight:bold;
+  margin:8px 0;
+}
+
+.reward-text{
+  font-size:15px;
+}
+
+/* VERIFY */
+
+.verify{
+  background:#f7f9ff;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:18px;
+}
+
+.verify-title{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.count{
+  color:#2563eb;
+  font-size:34px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.progress-bg{
+  width:100%;
+  height:18px;
+  background:#e5e7eb;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#2563eb,#06b6d4);
+  border-radius:20px;
+  transition:.5s;
+}
+
+.percent{
+  color:#666;
+  margin-top:9px;
+  font-size:14px;
+}
+
+/* DAYS */
+
+.days{
+  display:flex;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.day-box{
+  flex:1;
+  background:#f8fafc;
+  padding:18px 10px;
+  border-radius:20px;
+}
+
+.day-icon{
+  font-size:30px;
+}
+
+.day-number{
+  font-size:28px;
+  font-weight:bold;
+  color:#2563eb;
+  margin:5px 0;
+}
+
+.day-label{
+  font-size:13px;
+  color:#666;
+}
+
+/* STATUS */
+
+.status{
+  background:#ecfdf5;
+  color:#047857;
+  padding:16px;
+  border-radius:17px;
+  font-weight:bold;
+  margin-bottom:18px;
+  line-height:1.6;
+}
+
+/* MESSAGE */
+
+.message{
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:18px;
+  text-align:left;
+}
+
+.message h3{
+  margin-bottom:9px;
+  text-align:center;
+}
+
+.message p{
+  color:#555;
+  line-height:1.7;
+  font-size:14px;
+}
+
+/* RULES */
+
+.rules{
+  text-align:left;
+  background:#f8fafc;
+  padding:20px;
+  border-radius:20px;
+}
+
+.rules h3{
+  text-align:center;
+  margin-bottom:12px;
+}
+
+.rules p{
+  font-size:14px;
+  padding:6px 0;
+  line-height:1.5;
+}
+
+/* ERROR */
+
+#error{
+  display:none;
+  background:#fef2f2;
+  color:#b91c1c;
+  padding:18px;
+  border-radius:15px;
+  text-align:center;
+  line-height:1.6;
+}
+
+/* FOOTER */
+
+.footer{
+  text-align:center;
+  color:#888;
+  font-size:14px;
+  margin-top:22px;
+  padding-bottom:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- TOP -->
+
+  <div class="top">
+
+    <button
+      class="back-btn"
+      onclick="history.back()">
+      ← Back
+    </button>
+
+    <div class="title">
+      Monthly Bonus
+    </div>
+
+  </div>
+
+
+  <!-- LOADING -->
+
+  <div id="loading">
+    ⏳ Bonus তথ্য লোড হচ্ছে...
+  </div>
+
+
+  <!-- LOGIN BOX -->
+
+  <div id="loginBox">
+
+    <div class="login-card">
+
+      <div class="login-icon">
+        🔐
+      </div>
+
+      <h1>
+        আগে Login করুন
+      </h1>
+
+      <p>
+        Monthly Bonus দেখতে আপনার
+        অ্যাকাউন্টে Login করতে হবে।
+      </p>
+
+      <button
+        class="login-btn"
+        onclick="goLogin()">
+        Login করুন
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ERROR -->
+
+  <div id="error"></div>
+
+
+  <!-- BONUS PAGE -->
+
+  <div id="bonusPage">
+
+    <div class="card">
+
+      <div class="icon">
+        💎
+      </div>
+
+      <h1>
+        Monthly Bonus
+      </h1>
+
+      <div class="subtitle">
+        ৩০ দিনের Verification Challenge
+      </div>
+
+
+      <!-- REWARD -->
+
+      <div class="reward">
+
+        <div class="reward-title">
+          🏆 ৩০ দিনে লক্ষ্য পূরণ করুন
+        </div>
+
+        <div class="amount">
+          ৳ 1,000
+        </div>
+
+        <div class="reward-text">
+          ৩০ দিনে ১২০টি Verify সম্পন্ন করলে
+          Bonus পাওয়ার জন্য যোগ্য হবেন।
+        </div>
+
+      </div>
+
+
+      <!-- VERIFY COUNT -->
+
+      <div class="verify">
+
+        <div class="verify-title">
+          🔎 আপনার Verify Count
+        </div>
+
+        <div
+          id="verifyCount"
+          class="count">
+          0 / 120
+        </div>
+
+        <div class="progress-bg">
+
+          <div
+            id="progressBar"
+            class="progress">
+          </div>
+
+        </div>
+
+        <div
+          id="progressText"
+          class="percent">
+          0% সম্পন্ন
+        </div>
+
+      </div>
+
+
+      <!-- DAYS -->
+
+      <div class="days">
+
+        <div class="day-box">
+
+          <div class="day-icon">
+            📅
+          </div>
+
+          <div
+            id="daysPassed"
+            class="day-number">
+            0
+          </div>
+
+          <div class="day-label">
+            দিন সম্পন্ন
+          </div>
+
+        </div>
+
+
+        <div class="day-box">
+
+          <div class="day-icon">
+            ⏳
+          </div>
+
+          <div
+            id="daysLeft"
+            class="day-number">
+            30
+          </div>
+
+          <div class="day-label">
+            দিন বাকি
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STATUS -->
+
+      <div
+        id="status"
+        class="status">
+        🚀 Monthly Challenge চলছে
+      </div>
+
+
+      <!-- TEAM MESSAGE -->
+
+      <div class="message">
+
+        <h3>
+          👥 টিম তৈরি করুন
+        </h3>
+
+        <p>
+          ধৈর্য ধরে কাজ করুন এবং আপনার টিম তৈরি করুন।
+          নিয়মিত Verify সম্পন্ন করুন এবং Monthly Bonus-এর
+          লক্ষ্যে পৌঁছানোর চেষ্টা করুন।
+        </p>
+
+      </div>
+
+
+      <!-- RULES -->
+
+      <div class="rules">
+
+        <h3>
+          📋 Bonus Rules
+        </h3>
+
+        <p>
+          ✅ প্রতি মাসে নতুন ৩০ দিনের Challenge
+        </p>
+
+        <p>
+          ✅ ৩০ দিনে ১২০টি Verify সম্পন্ন করতে হবে
+        </p>
+
+        <p>
+          ✅ ১২০টি Verify সম্পন্ন হলে ৳১,০০০ Bonus
+        </p>
+
+        <p>
+          ✅ ৩০ দিন শেষ হলে Count আবার ০ থেকে শুরু হবে
+        </p>
+
+        <p>
+          ✅ নতুন ৩০ দিনের Challenge স্বয়ংক্রিয়ভাবে শুরু হবে
+        </p>
+
+        <p>
+          ✅ ধৈর্য ধরে নিয়মিত কাজ করুন
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="footer">
+    Rakib Freelancer © 2026
+  </div>
+
+</div>
+
+
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+/* =========================================
+   FIREBASE IMPORT
+========================================= */
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 
 import {
   getAuth,
   onAuthStateChanged,
   setPersistence,
   browserLocalPersistence
-}
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
 
 import {
   getFirestore,
@@ -17,14 +587,12 @@ import {
   getDoc,
   setDoc,
   serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-// =====================================
-// FIREBASE CONFIG
-// LOGIN FILE-এর সাথে একই
-// =====================================
+/* =========================================
+   FIREBASE CONFIG
+========================================= */
 
 const firebaseConfig = {
 
@@ -51,48 +619,46 @@ const firebaseConfig = {
 };
 
 
-// =====================================
-// FIREBASE START
-// =====================================
+/* =========================================
+   FIREBASE START
+========================================= */
 
-const app = initializeApp(firebaseConfig);
+const app =
+  initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth =
+  getAuth(app);
 
-const db = getFirestore(app);
-
-
-// =====================================
-// LOGIN SESSION LOCAL রাখবে
-// =====================================
-
-await setPersistence(
-  auth,
-  browserLocalPersistence
-);
+const db =
+  getFirestore(app);
 
 
-// =====================================
-// SETTINGS
-// =====================================
+/* =========================================
+   SETTINGS
+========================================= */
 
 const TARGET = 120;
+
 const BONUS = 1000;
+
 const TOTAL_DAYS = 30;
 
 
-// =====================================
-// ELEMENTS
-// =====================================
+/* =========================================
+   ELEMENTS
+========================================= */
 
 const loading =
   document.getElementById("loading");
 
-const errorBox =
-  document.getElementById("error");
+const loginBox =
+  document.getElementById("loginBox");
 
 const bonusPage =
   document.getElementById("bonusPage");
+
+const errorBox =
+  document.getElementById("error");
 
 const verifyCount =
   document.getElementById("verifyCount");
@@ -113,100 +679,114 @@ const status =
   document.getElementById("status");
 
 
-// =====================================
-// AUTH CHECK
-// =====================================
+/* =========================================
+   GO LOGIN
+========================================= */
 
-onAuthStateChanged(auth, async (user) => {
+window.goLogin = function(){
 
-  console.log("Monthly Bonus User:", user);
+  window.location.href =
+    "index.html";
 
-  // Login করা নেই
-  if (!user) {
+};
 
-    loading.style.display = "none";
 
-    bonusPage.style.display = "block";
+/* =========================================
+   AUTH CHECK
+========================================= */
 
-    bonusPage.innerHTML = `
-      <div class="card">
+try{
 
-        <div class="icon">
-          🔐
-        </div>
+  await setPersistence(
+    auth,
+    browserLocalPersistence
+  );
 
-        <h1>
-          আগে Login করুন
-        </h1>
+}catch(error){
 
-        <div class="subtitle">
-          Monthly Bonus দেখতে আপনার
-          Account-এ Login থাকতে হবে।
-        </div>
+  console.log(
+    "Persistence Error:",
+    error
+  );
 
-        <button
-          onclick="window.location.href='index.html'"
-          style="
-            border:none;
-            background:#2563eb;
-            color:white;
-            padding:15px 35px;
-            border-radius:15px;
-            font-size:18px;
-            cursor:pointer;
-          ">
-          Login করুন
-        </button>
+}
 
-      </div>
-    `;
 
-    return;
+/* =========================================
+   LOGIN STATE
+========================================= */
+
+onAuthStateChanged(
+  auth,
+  async (user) => {
+
+    loading.style.display =
+      "none";
+
+
+    /* ===============================
+       USER NOT LOGIN
+    =============================== */
+
+    if(!user){
+
+      bonusPage.style.display =
+        "none";
+
+      loginBox.style.display =
+        "block";
+
+      return;
+
+    }
+
+
+    /* ===============================
+       USER LOGIN
+    =============================== */
+
+    loginBox.style.display =
+      "none";
+
+    errorBox.style.display =
+      "none";
+
+    bonusPage.style.display =
+      "block";
+
+
+    try{
+
+      await loadMonthlyBonus(user);
+
+    }catch(error){
+
+      console.error(
+        "Monthly Bonus Error:",
+        error
+      );
+
+      bonusPage.style.display =
+        "none";
+
+      errorBox.style.display =
+        "block";
+
+      errorBox.innerHTML =
+        "❌ Bonus তথ্য লোড করা যায়নি।<br><br>" +
+        error.message;
+
+    }
+
   }
+);
 
 
-  // ===================================
-  // USER LOGIN করা আছে
-  // ===================================
+/* =========================================
+   LOAD MONTHLY BONUS
+========================================= */
 
-  try {
-
-    await loadMonthlyBonus(user);
-
-    loading.style.display = "none";
-
-    bonusPage.style.display = "block";
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "Monthly Bonus Error:",
-      error
-    );
-
-    loading.style.display = "none";
-
-    errorBox.style.display = "block";
-
-    errorBox.innerHTML =
-      "❌ Bonus তথ্য লোড করা যায়নি<br><br>" +
-      "<b>Error:</b> " +
-      error.code +
-      "<br>" +
-      error.message;
-
-  }
-
-});
-
-
-// =====================================
-// LOAD MONTHLY BONUS
-// =====================================
-
-async function loadMonthlyBonus(user) {
+async function loadMonthlyBonus(user){
 
   const bonusRef =
     doc(
@@ -223,18 +803,22 @@ async function loadMonthlyBonus(user) {
   let data;
 
 
-  // ===================================
-  // প্রথমবার Monthly Bonus
-  // ===================================
+  /* =======================================
+     FIRST TIME
+  ======================================= */
 
-  if (!bonusSnap.exists()) {
+  if(!bonusSnap.exists()){
+
+    const start =
+      new Date();
+
 
     data = {
 
       verifyCount: 0,
 
       periodStart:
-        new Date().toISOString(),
+        start.toISOString(),
 
       target:
         TARGET,
@@ -255,7 +839,7 @@ async function loadMonthlyBonus(user) {
 
   }
 
-  else {
+  else{
 
     data =
       bonusSnap.data();
@@ -263,25 +847,41 @@ async function loadMonthlyBonus(user) {
   }
 
 
-  // ===================================
-  // START DATE
-  // ===================================
+  /* =======================================
+     START DATE
+  ======================================= */
 
-  let startDate =
-    new Date(
-      data.periodStart
-    );
+  let startDate;
 
 
-  if (
+  if(
+    data.periodStart &&
+    typeof data.periodStart.toDate === "function"
+  ){
+
+    startDate =
+      data.periodStart.toDate();
+
+  }
+
+  else{
+
+    startDate =
+      new Date(
+        data.periodStart
+      );
+
+  }
+
+
+  if(
     isNaN(
       startDate.getTime()
     )
-  ) {
+  ){
 
     startDate =
       new Date();
-
 
     await setDoc(
       bonusRef,
@@ -290,45 +890,42 @@ async function loadMonthlyBonus(user) {
           startDate.toISOString()
       },
       {
-        merge: true
+        merge:true
       }
     );
 
   }
 
 
-  // ===================================
-  // 30 DAYS CHECK
-  // ===================================
+  /* =======================================
+     CURRENT TIME
+  ======================================= */
 
   const now =
     new Date();
 
 
-  const diff =
+  const difference =
     now.getTime() -
     startDate.getTime();
 
 
   const passedDays =
     Math.floor(
-      diff /
+      difference /
       (1000 * 60 * 60 * 24)
     );
 
 
-  // ===================================
-  // 30 DAYS শেষ
-  // নতুন মাস শুরু
-  // ===================================
+  /* =======================================
+     30 DAYS COMPLETED
+  ======================================= */
 
-  if (
+  if(
     passedDays >= TOTAL_DAYS
-  ) {
+  ){
 
-    data.verifyCount = 0;
-
-    data.periodStart =
+    const newStart =
       now.toISOString();
 
 
@@ -339,7 +936,7 @@ async function loadMonthlyBonus(user) {
         verifyCount: 0,
 
         periodStart:
-          now.toISOString(),
+          newStart,
 
         target:
           TARGET,
@@ -352,39 +949,53 @@ async function loadMonthlyBonus(user) {
 
       },
       {
-        merge: true
+        merge:true
       }
     );
 
 
+    data.verifyCount =
+      0;
+
+    data.periodStart =
+      newStart;
+
+
     startDate =
-      now;
+      new Date(newStart);
 
   }
 
 
-  // ===================================
-  // UPDATE SCREEN
-  // ===================================
+  /* =======================================
+     SHOW DATA
+  ======================================= */
 
   updateUI(
+
     Number(
       data.verifyCount || 0
     ),
+
     startDate
+
   );
 
 }
 
 
-// =====================================
-// UPDATE UI
-// =====================================
+/* =========================================
+   UPDATE UI
+========================================= */
 
 function updateUI(
   count,
   startDate
-) {
+){
+
+  /* =======================================
+     COUNT
+  ======================================= */
 
   const safeCount =
     Math.max(
@@ -396,17 +1007,15 @@ function updateUI(
     );
 
 
-  // VERIFY COUNT
-
   verifyCount.textContent =
     safeCount +
     " / " +
     TARGET;
 
 
-  // ===================================
-  // PROGRESS
-  // ===================================
+  /* =======================================
+     PROGRESS
+  ======================================= */
 
   const percent =
     Math.round(
@@ -426,22 +1035,22 @@ function updateUI(
     "% সম্পন্ন";
 
 
-  // ===================================
-  // DAYS
-  // ===================================
+  /* =======================================
+     DAYS
+  ======================================= */
 
   const now =
     new Date();
 
 
-  const diff =
+  const difference =
     now.getTime() -
     startDate.getTime();
 
 
   let passed =
     Math.floor(
-      diff /
+      difference /
       (1000 * 60 * 60 * 24)
     );
 
@@ -469,27 +1078,32 @@ function updateUI(
     left;
 
 
-  // ===================================
-  // STATUS
-  // ===================================
+  /* =======================================
+     STATUS
+  ======================================= */
 
-  if (
+  if(
     safeCount >= TARGET
-  ) {
+  ){
 
     status.innerHTML =
-      "🎉 অভিনন্দন! ১২০টি Verify সম্পন্ন হয়েছে।<br>" +
-      "৳১,০০০ Bonus-এর জন্য যোগ্য!";
+      "🎉 অভিনন্দন!<br>" +
+      "১২০টি Verify সম্পন্ন হয়েছে।<br>" +
+      "৳১,০০০ Bonus-এর জন্য আপনি যোগ্য!";
 
   }
 
-  else {
+  else{
 
     status.innerHTML =
-      "🚀 Monthly Challenge চলছে — লক্ষ্য ১২০ Verify";
+      "🚀 Monthly Challenge চলছে<br>" +
+      "লক্ষ্য: ১২০ Verify";
 
   }
 
 }
 
-      </script>
+</script>
+
+</body>
+</html>
