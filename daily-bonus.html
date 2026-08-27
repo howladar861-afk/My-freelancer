@@ -1,235 +1,375 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Daily Bonus | Rakib Freelancer</title>
+<title>Daily Bonus | Rakib Freelancer</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      color: #1f2937;
-      min-height: 100vh;
-    }
+body{
+  background:#f4f7fb;
+  color:#1f2937;
+  min-height:100vh;
+}
 
-    .container {
-      max-width: 500px;
-      margin: auto;
-      padding: 18px;
-    }
+.container{
+  max-width:500px;
+  margin:auto;
+  padding:18px;
+}
 
-    .header {
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: white;
-      text-align: center;
-      padding: 28px 20px;
-      border-radius: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.25);
-    }
+.header{
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);
+  color:white;
+  text-align:center;
+  padding:28px 20px;
+  border-radius:22px;
+  margin-bottom:18px;
+}
 
-    .header-icon {
-      font-size: 45px;
-      margin-bottom: 8px;
-    }
+.header-icon{
+  font-size:45px;
+  margin-bottom:8px;
+}
 
-    .header h1 {
-      font-size: 27px;
-      margin-bottom: 6px;
-    }
+.header h1{
+  font-size:27px;
+  margin-bottom:6px;
+}
 
-    .header p {
-      font-size: 14px;
-      opacity: 0.9;
-    }
+.header p{
+  font-size:14px;
+  opacity:.9;
+}
 
-    .bonus-card {
-      background: white;
-      border-radius: 20px;
-      padding: 24px 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
-    }
+.login-card,
+.bonus-card,
+.notice{
+  background:white;
+  border-radius:20px;
+  padding:24px 20px;
+  margin-bottom:18px;
+  box-shadow:0 5px 20px rgba(0,0,0,.07);
+}
 
-    .bonus-title {
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
+.login-card{
+  text-align:center;
+}
 
-    .bonus-money {
-      text-align: center;
-      font-size: 42px;
-      font-weight: bold;
-      color: #16a34a;
-      margin-bottom: 8px;
-    }
+.login-icon{
+  font-size:60px;
+  margin-bottom:12px;
+}
 
-    .bonus-subtitle {
-      text-align: center;
-      color: #64748b;
-      font-size: 14px;
-      margin-bottom: 22px;
-    }
+.login-card h2{
+  margin-bottom:10px;
+}
 
-    .step {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: #f8fafc;
-      border-radius: 15px;
-      padding: 15px;
-      margin-bottom: 12px;
-      border: 1px solid #e5e7eb;
-    }
+.login-card p{
+  color:#64748b;
+  line-height:1.6;
+  margin-bottom:20px;
+}
 
-    .step-icon {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: #eef2ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 23px;
-      flex-shrink: 0;
-    }
+.login-btn{
+  border:0;
+  background:#4f46e5;
+  color:white;
+  padding:14px 28px;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .step-text h3 {
-      font-size: 16px;
-      margin-bottom: 4px;
-    }
+#loading{
+  background:white;
+  border-radius:20px;
+  padding:35px 20px;
+  text-align:center;
+  color:#64748b;
+}
 
-    .step-text p {
-      font-size: 13px;
-      color: #64748b;
-      line-height: 1.5;
-    }
+#error{
+  display:none;
+  background:#fef2f2;
+  color:#b91c1c;
+  padding:18px;
+  border-radius:15px;
+  margin-bottom:18px;
+  text-align:center;
+  line-height:1.6;
+}
 
-    .screenshot-box {
-      background: linear-gradient(135deg, #fff7ed, #fffbeb);
-      border: 1px solid #fed7aa;
-      border-radius: 18px;
-      padding: 20px;
-      margin-top: 18px;
-      text-align: center;
-    }
+#loginBox,
+#bonusPage{
+  display:none;
+}
 
-    .screenshot-icon {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
+.bonus-title{
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
 
-    .screenshot-box h2 {
-      font-size: 19px;
-      color: #c2410c;
-      margin-bottom: 8px;
-    }
+.bonus-money{
+  text-align:center;
+  font-size:42px;
+  font-weight:bold;
+  color:#16a34a;
+  margin-bottom:8px;
+}
 
-    .screenshot-box p {
-      font-size: 14px;
-      color: #57534e;
-      line-height: 1.6;
-    }
+.bonus-subtitle{
+  text-align:center;
+  color:#64748b;
+  font-size:14px;
+  margin-bottom:22px;
+}
 
-    .whatsapp-card {
-      background: #ecfdf5;
-      border: 1px solid #bbf7d0;
-      border-radius: 20px;
-      padding: 22px;
-      text-align: center;
-      margin-bottom: 18px;
-    }
+.count-box{
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  padding:22px;
+  text-align:center;
+  margin-bottom:18px;
+}
 
-    .whatsapp-icon {
-      font-size: 42px;
-      margin-bottom: 8px;
-    }
+.count-title{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
 
-    .whatsapp-card h2 {
-      color: #15803d;
-      font-size: 20px;
-      margin-bottom: 8px;
-    }
+.count{
+  font-size:42px;
+  font-weight:bold;
+  color:#4f46e5;
+  margin:8px 0;
+}
 
-    .whatsapp-number {
-      background: white;
-      border-radius: 12px;
-      padding: 13px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #15803d;
-      margin: 15px 0;
-      border: 1px solid #bbf7d0;
-    }
+.progress-bg{
+  width:100%;
+  height:18px;
+  background:#e5e7eb;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:12px;
+}
 
-    .whatsapp-btn {
-      display: block;
-      width: 100%;
-      background: #22c55e;
-      color: white;
-      text-decoration: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: bold;
-    }
+.progress{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#4f46e5,#06b6d4);
+  border-radius:20px;
+  transition:.5s;
+}
 
-    .whatsapp-btn:hover {
-      background: #16a34a;
-    }
+.percent{
+  color:#64748b;
+  font-size:14px;
+  margin-top:8px;
+}
 
-    .notice {
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
-    }
+.status{
+  padding:17px;
+  border-radius:17px;
+  text-align:center;
+  font-weight:bold;
+  line-height:1.6;
+  margin-bottom:18px;
+}
 
-    .notice h3 {
-      font-size: 18px;
-      margin-bottom: 12px;
-    }
+.status.running{
+  background:#fff7ed;
+  color:#c2410c;
+}
 
-    .notice p {
-      font-size: 14px;
-      color: #64748b;
-      line-height: 1.7;
-    }
+.status.success{
+  background:#ecfdf5;
+  color:#047857;
+}
 
-    .footer {
-      text-align: center;
-      padding: 20px 0 10px;
-      color: #94a3b8;
-      font-size: 12px;
-    }
-  </style>
+.step{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:#f8fafc;
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:12px;
+  border:1px solid #e5e7eb;
+}
+
+.step-icon{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  background:#eef2ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+  flex-shrink:0;
+}
+
+.step-text h3{
+  font-size:16px;
+  margin-bottom:4px;
+}
+
+.step-text p{
+  font-size:13px;
+  color:#64748b;
+  line-height:1.5;
+}
+
+.screenshot-box{
+  background:linear-gradient(135deg,#fff7ed,#fffbeb);
+  border:1px solid #fed7aa;
+  border-radius:18px;
+  padding:20px;
+  margin-top:18px;
+  text-align:center;
+}
+
+.screenshot-icon{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.screenshot-box h2{
+  font-size:19px;
+  color:#c2410c;
+  margin-bottom:8px;
+}
+
+.screenshot-box p{
+  font-size:14px;
+  color:#57534e;
+  line-height:1.6;
+}
+
+.whatsapp-card{
+  background:#ecfdf5;
+  border:1px solid #bbf7d0;
+  border-radius:20px;
+  padding:22px;
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.whatsapp-icon{
+  font-size:42px;
+  margin-bottom:8px;
+}
+
+.whatsapp-card h2{
+  color:#15803d;
+  font-size:20px;
+  margin-bottom:8px;
+}
+
+.whatsapp-number{
+  background:white;
+  border-radius:12px;
+  padding:13px;
+  font-size:20px;
+  font-weight:bold;
+  color:#15803d;
+  margin:15px 0;
+  border:1px solid #bbf7d0;
+}
+
+.whatsapp-btn{
+  display:block;
+  width:100%;
+  background:#22c55e;
+  color:white;
+  text-decoration:none;
+  padding:14px;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.notice h3{
+  font-size:18px;
+  margin-bottom:12px;
+}
+
+.notice p{
+  font-size:14px;
+  color:#64748b;
+  line-height:1.7;
+}
+
+.footer{
+  text-align:center;
+  padding:20px 0 10px;
+  color:#94a3b8;
+  font-size:12px;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <!-- Header -->
-    <div class="header">
-      <div class="header-icon">🎁</div>
+  <div class="header">
+    <div class="header-icon">🎁</div>
+    <h1>Daily Bonus</h1>
+    <p>প্রতিদিন Referral Verification করুন এবং Bonus পান</p>
+  </div>
 
-      <h1>Daily Bonus</h1>
 
-      <p>প্রতিদিন ভেরিফাই করুন এবং বোনাস পান</p>
+  <div id="loading">
+    ⏳ Daily Bonus তথ্য লোড হচ্ছে...
+  </div>
+
+
+  <div id="loginBox">
+
+    <div class="login-card">
+
+      <div class="login-icon">
+        🔐
+      </div>
+
+      <h2>আগে Login করুন</h2>
+
+      <p>
+        Daily Bonus দেখতে আপনার
+        অ্যাকাউন্টে Login করতে হবে।
+      </p>
+
+      <button
+        class="login-btn"
+        onclick="goLogin()">
+        Login করুন
+      </button>
+
     </div>
 
+  </div>
 
-    <!-- Bonus -->
+
+  <div id="error"></div>
+
+
+  <div id="bonusPage">
+
     <div class="bonus-card">
 
       <div class="bonus-title">
@@ -241,11 +381,47 @@
       </div>
 
       <div class="bonus-subtitle">
-        প্রতিদিন ৪টি Verification সম্পূর্ণ করলে
+        আজ ৪টি Verified Referral Account সম্পূর্ণ করুন
       </div>
 
 
-      <!-- Step 1 -->
+      <div class="count-box">
+
+        <div class="count-title">
+          👥 আজকের Referral Count
+        </div>
+
+        <div
+          id="referralCount"
+          class="count">
+          0 / 4
+        </div>
+
+        <div class="progress-bg">
+
+          <div
+            id="progressBar"
+            class="progress">
+          </div>
+
+        </div>
+
+        <div
+          id="progressText"
+          class="percent">
+          0% সম্পন্ন
+        </div>
+
+      </div>
+
+
+      <div
+        id="status"
+        class="status running">
+        🚀 আজকের Challenge চলছে
+      </div>
+
+
       <div class="step">
 
         <div class="step-icon">
@@ -254,11 +430,11 @@
 
         <div class="step-text">
 
-          <h3>৪টি Verification সম্পূর্ণ করুন</h3>
+          <h3>৪টি Referral Verification</h3>
 
           <p>
-            প্রতিদিন মোট ৪টি Member Verification
-            সম্পূর্ণ করতে হবে।
+            আপনার Referral Code দিয়ে আসা
+            Verified Member আজকে ৪টি পূর্ণ করতে হবে।
           </p>
 
         </div>
@@ -266,7 +442,6 @@
       </div>
 
 
-      <!-- Step 2 -->
       <div class="step">
 
         <div class="step-icon">
@@ -275,11 +450,11 @@
 
         <div class="step-text">
 
-          <h3>৳২০ Bonus</h3>
+          <h3>৳২০ Daily Bonus</h3>
 
           <p>
-            ৪টি Verification পূর্ণ হলে
-            ২০ টাকা Daily Bonus দেওয়া হবে।
+            আজকের ৪টি Verification পূর্ণ হলে
+            আপনি ৳২০ Daily Bonus-এর জন্য যোগ্য হবেন।
           </p>
 
         </div>
@@ -287,7 +462,6 @@
       </div>
 
 
-      <!-- Screenshot -->
       <div class="screenshot-box">
 
         <div class="screenshot-icon">
@@ -299,9 +473,9 @@
         </h2>
 
         <p>
-          ৪টি Verification পূর্ণ হলেই
-          আজকের Income-এর একটি Screenshot
-          দিতে হবে।
+          ৪টি Verification পূর্ণ হলে
+          আজকের Income-এর Screenshot
+          WhatsApp-এ পাঠাতে হবে।
         </p>
 
       </div>
@@ -309,7 +483,6 @@
     </div>
 
 
-    <!-- WhatsApp -->
     <div class="whatsapp-card">
 
       <div class="whatsapp-icon">
@@ -322,8 +495,7 @@
 
       <p>
         ৪টি Verification পূর্ণ করার পর
-        আজকের Income-এর Screenshot
-        WhatsApp-এ পাঠিয়ে দিন।
+        Screenshot পাঠিয়ে দিন।
       </p>
 
       <div class="whatsapp-number">
@@ -333,15 +505,13 @@
       <a
         class="whatsapp-btn"
         href="https://wa.me/8801837976455"
-        target="_blank"
-      >
+        target="_blank">
         💚 WhatsApp এ যোগাযোগ করুন
       </a>
 
     </div>
 
 
-    <!-- Notice -->
     <div class="notice">
 
       <h3>
@@ -349,21 +519,525 @@
       </h3>
 
       <p>
-        প্রতিদিন ৪টি Verification সম্পূর্ণ করলেই
-        ৳২০ Daily Bonus পাওয়া যাবে।
-        ৪টি Verification পূর্ণ হওয়ার পর
-        আজকের Income-এর Screenshot
-        WhatsApp নম্বরে পাঠাতে হবে।
+        প্রতিদিনের Referral Count রাত ১২টার পর
+        নতুন দিনের জন্য আবার ০ থেকে শুরু হবে।
+        শুধু Verified Referral Account গণনা করা হবে।
       </p>
 
     </div>
 
-
-    <div class="footer">
-      Daily Bonus • Rakib Freelancer
-    </div>
-
   </div>
 
+
+  <div class="footer">
+    Daily Bonus • Rakib Freelancer © 2026
+  </div>
+
+</div>
+
+
+<script type="module">
+
+/* =========================================
+   FIREBASE IMPORT
+========================================= */
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  serverTimestamp,
+  Timestamp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+/* =========================================
+   FIREBASE CONFIG
+========================================= */
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+
+  authDomain:
+    "rakib-freelancer-9c66b.firebaseapp.com",
+
+  projectId:
+    "rakib-freelancer-9c66b",
+
+  storageBucket:
+    "rakib-freelancer-9c66b.firebasestorage.app",
+
+  messagingSenderId:
+    "541209844482",
+
+  appId:
+    "1:541209844482:web:510568d5226c9bf47ac01b",
+
+  measurementId:
+    "G-F6QNE0QN5K"
+};
+
+
+/* =========================================
+   FIREBASE START
+========================================= */
+
+const app =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(app);
+
+const db =
+  getFirestore(app);
+
+
+/* =========================================
+   SETTINGS
+========================================= */
+
+const TARGET = 4;
+
+const BONUS = 20;
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const loading =
+  document.getElementById("loading");
+
+const loginBox =
+  document.getElementById("loginBox");
+
+const bonusPage =
+  document.getElementById("bonusPage");
+
+const errorBox =
+  document.getElementById("error");
+
+const referralCount =
+  document.getElementById("referralCount");
+
+const progressBar =
+  document.getElementById("progressBar");
+
+const progressText =
+  document.getElementById("progressText");
+
+const status =
+  document.getElementById("status");
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+window.goLogin = function(){
+
+  window.location.href =
+    "index.html";
+
+};
+
+
+/* =========================================
+   AUTH PERSISTENCE
+========================================= */
+
+try {
+
+  await setPersistence(
+    auth,
+    browserLocalPersistence
+  );
+
+} catch(error) {
+
+  console.error(
+    "Persistence Error:",
+    error
+  );
+
+}
+
+
+/* =========================================
+   AUTH STATE
+========================================= */
+
+onAuthStateChanged(
+  auth,
+  async (user) => {
+
+    loading.style.display =
+      "none";
+
+
+    if(!user){
+
+      bonusPage.style.display =
+        "none";
+
+      loginBox.style.display =
+        "block";
+
+      return;
+
+    }
+
+
+    loginBox.style.display =
+      "none";
+
+    errorBox.style.display =
+      "none";
+
+    bonusPage.style.display =
+      "block";
+
+
+    try {
+
+      await loadDailyBonus(user);
+
+    } catch(error) {
+
+      console.error(
+        "Daily Bonus Error:",
+        error
+      );
+
+      bonusPage.style.display =
+        "none";
+
+      errorBox.style.display =
+        "block";
+
+      errorBox.innerHTML =
+        "❌ Daily Bonus তথ্য লোড করা যায়নি।<br><br>" +
+        error.message;
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   LOAD DAILY BONUS
+========================================= */
+
+async function loadDailyBonus(user){
+
+  /* =======================================
+     USER DATA
+  ======================================= */
+
+  const userRef =
+    doc(
+      db,
+      "users",
+      user.uid
+    );
+
+  const userSnap =
+    await getDoc(userRef);
+
+
+  if(!userSnap.exists()){
+
+    throw new Error(
+      "আপনার User Account পাওয়া যায়নি।"
+    );
+
+  }
+
+
+  const userData =
+    userSnap.data();
+
+
+  /* =======================================
+     MY REFERRAL CODE
+  ======================================= */
+
+  const myReferralCode =
+    userData.referralCode;
+
+
+  if(!myReferralCode){
+
+    throw new Error(
+      "আপনার Referral Code পাওয়া যায়নি।"
+    );
+
+  }
+
+
+  /* =======================================
+     TODAY START
+  ======================================= */
+
+  const now =
+    new Date();
+
+
+  const todayStart =
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
+    );
+
+
+  const todayEnd =
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1,
+      0,
+      0,
+      0,
+      0
+    );
+
+
+  /* =======================================
+     FIREBASE TIMESTAMP
+  ======================================= */
+
+  const startTimestamp =
+    Timestamp.fromDate(
+      todayStart
+    );
+
+  const endTimestamp =
+    Timestamp.fromDate(
+      todayEnd
+    );
+
+
+  /* =======================================
+     USERS
+  ======================================= */
+
+  const usersRef =
+    collection(
+      db,
+      "users"
+    );
+
+
+  /* =======================================
+     DAILY REFERRAL QUERY
+  ======================================= */
+
+  const referralQuery =
+    query(
+
+      usersRef,
+
+      where(
+        "referredBy",
+        "==",
+        myReferralCode
+      ),
+
+      where(
+        "verified",
+        "==",
+        true
+      ),
+
+      where(
+        "verifiedAt",
+        ">=",
+        startTimestamp
+      ),
+
+      where(
+        "verifiedAt",
+        "<",
+        endTimestamp
+      )
+
+    );
+
+
+  /* =======================================
+     GET TODAY'S REFERRALS
+  ======================================= */
+
+  const referralSnapshot =
+    await getDocs(
+      referralQuery
+    );
+
+
+  const todayCount =
+    referralSnapshot.size;
+
+
+  /* =======================================
+     SAVE DAILY DATA
+  ======================================= */
+
+  const dailyRef =
+    doc(
+      db,
+      "dailyBonus",
+      user.uid
+    );
+
+
+  await setDoc(
+    dailyRef,
+    {
+
+      referralCount:
+        todayCount,
+
+      target:
+        TARGET,
+
+      bonusAmount:
+        BONUS,
+
+      date:
+        now.toISOString().split("T")[0],
+
+      updatedAt:
+        serverTimestamp()
+
+    },
+    {
+      merge:true
+    }
+  );
+
+
+  /* =======================================
+     UPDATE UI
+  ======================================= */
+
+  updateUI(
+    todayCount
+  );
+
+}
+
+
+/* =========================================
+   UPDATE UI
+========================================= */
+
+function updateUI(count){
+
+  const safeCount =
+    Math.max(
+      0,
+      Math.min(
+        Number(count || 0),
+        TARGET
+      )
+    );
+
+
+  /* =======================================
+     COUNT
+  ======================================= */
+
+  referralCount.textContent =
+    safeCount +
+    " / " +
+    TARGET;
+
+
+  /* =======================================
+     PROGRESS
+  ======================================= */
+
+  const percent =
+    Math.round(
+      (
+        safeCount /
+        TARGET
+      ) * 100
+    );
+
+
+  progressBar.style.width =
+    percent + "%";
+
+
+  progressText.textContent =
+    percent +
+    "% সম্পন্ন";
+
+
+  /* =======================================
+     STATUS
+  ======================================= */
+
+  if(
+    safeCount >= TARGET
+  ){
+
+    status.className =
+      "status success";
+
+    status.innerHTML =
+      "🎉 অভিনন্দন!<br>" +
+      "আজকের ৪টি Referral Verification সম্পন্ন হয়েছে।<br>" +
+      "৳২০ Daily Bonus-এর জন্য আপনি যোগ্য!";
+
+  }
+
+  else {
+
+    const remaining =
+      TARGET -
+      safeCount;
+
+
+    status.className =
+      "status running";
+
+    status.innerHTML =
+      "🚀 আজকের Challenge চলছে<br>" +
+      "আরও " +
+      remaining +
+      "টি Verified Referral দরকার।";
+
+  }
+
+}
+
+</script>
+
 </body>
-</html>
+  </html>
