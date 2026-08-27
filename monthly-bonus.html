@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Monthly Bonus</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #eef4ff, #ffffff);
+      min-height: 100vh;
+      color: #222;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .back-btn {
+      border: none;
+      background: #2563eb;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .title {
+      text-align: center;
+      flex: 1;
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .main-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+      text-align: center;
+    }
+
+    .bonus-icon {
+      font-size: 60px;
+      margin-bottom: 10px;
+    }
+
+    .main-card h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 15px;
+      margin-bottom: 25px;
+    }
+
+    .reward-card {
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: white;
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .reward-card .amount {
+      font-size: 34px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .verify-box {
+      background: #f7f9ff;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .verify-title {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .count {
+      font-size: 32px;
+      font-weight: bold;
+      color: #2563eb;
+      margin-bottom: 15px;
+    }
+
+    .progress-bg {
+      width: 100%;
+      height: 18px;
+      background: #e5e7eb;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2563eb, #06b6d4);
+      border-radius: 20px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-text {
+      margin-top: 10px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .days-card {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .info-box {
+      flex: 1;
+      background: #f8fafc;
+      border-radius: 18px;
+      padding: 17px 10px;
+    }
+
+    .info-icon {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2563eb;
+    }
+
+    .info-label {
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .message-card {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .message-card h3 {
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .message-card p {
+      color: #555;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .rules {
+      text-align: left;
+      background: #f8fafc;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .rules h3 {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .rules p {
+      padding: 7px 0;
+      font-size: 14px;
+    }
+
+    .status {
+      padding: 14px;
+      border-radius: 14px;
+      background: #ecfdf5;
+      color: #047857;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+
+    .error {
+      background: #fef2f2;
+      color: #b91c1c;
+      padding: 15px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .footer {
+      text-align: center;
+      color: #888;
+      font-size: 13px;
+      margin-top: 20px;
+      padding-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="top-bar">
+    <button class="back-btn" onclick="history.back()">
+      ← Back
+    </button>
+
+    <div class="title">
+      Monthly Bonus
+    </div>
+
+    <div style="width:65px;"></div>
+  </div>
+
+
+  <div id="loadingBox" class="loading">
+    ⏳ Bonus তথ্য লোড হচ্ছে...
+  </div>
+
+
+  <div id="bonusPage" style="display:none;">
+
+    <div class="main-card">
+
+      <div class="bonus-icon">
+        💎
+      </div>
+
+      <h1>Monthly Bonus</h1>
+
+      <div class="subtitle">
+        ৩০ দিনের Verification Challenge
+      </div>
+
+
+      <!-- REWARD -->
+      <div class="reward-card">
+
+        <div>
+          🏆 ৩০ দিনের লক্ষ্য
+        </div>
+
+        <div class="amount">
+          ৳ 1,000
+        </div>
+
+        <div style="margin-top:8px;">
+          120টি Verify সম্পন্ন করুন
+        </div>
+
+      </div>
+
+
+      <!-- VERIFY -->
+      <div class="verify-box">
+
+        <div class="verify-title">
+          🔎 আপনার Verify Count
+        </div>
+
+        <div id="verifyCount" class="count">
+          0 / 120
+        </div>
+
+        <div class="progress-bg">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+
+        <div id="progressText" class="progress-text">
+          0% সম্পন্ন
+        </div>
+
+      </div>
+
+
+      <!-- DAYS -->
+      <div class="days-card">
+
+        <div class="info-box">
+
+          <div class="info-icon">
+            📅
+          </div>
+
+          <div id="daysPassed" class="info-value">
+            0
+          </div>
+
+          <div class="info-label">
+            দিন সম্পন্ন
+          </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+          <div class="info-icon">
+            ⏳
+          </div>
+
+          <div id="daysLeft" class="info-value">
+            30
+          </div>
+
+          <div class="info-label">
+            দিন বাকি
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STATUS -->
+      <div id="statusBox" class="status">
+        🚀 আপনার Monthly Challenge চলছে
+      </div>
+
+
+      <!-- MESSAGE -->
+      <div class="message-card">
+
+        <h3>
+          👥 টিম তৈরি করুন
+        </h3>
+
+        <p>
+          ধৈর্য ধরে কাজ করুন এবং আপনার টিম তৈরি করুন।
+          নিয়মিত Verify সম্পন্ন করে Monthly Bonus-এর লক্ষ্যে পৌঁছান।
+        </p>
+
+      </div>
+
+
+      <!-- RULES -->
+      <div class="rules">
+
+        <h3>
+          📋 Bonus Rules
+        </h3>
+
+        <p>
+          ✅ প্রতি মাসে নতুন করে ৩০ দিনের Challenge শুরু হবে
+        </p>
+
+        <p>
+          ✅ ৩০ দিনে ১২০টি Verify সম্পন্ন করতে হবে
+        </p>
+
+        <p>
+          ✅ ১২০টি Verify সম্পন্ন হলে ৳১,০০০ Bonus
+        </p>
+
+        <p>
+          ✅ ৩০ দিন শেষ হলে নতুন মাসের Count শুরু হবে
+        </p>
+
+        <p>
+          ✅ নিয়মিত কাজ করুন এবং লক্ষ্য পূরণ করুন
+        </p>
+
+      </div>
+
+
+      <div style="font-size:15px;color:#666;">
+        🎯 লক্ষ্য:
+        <strong>120 Verify</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div id="errorBox" style="display:none;" class="error"></div>
+
+
+  <div class="footer">
+    Rakib Freelancer © 2026
+  </div>
+
+</div>
+
+
+<script type="module">
+
+  import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+
+  import {
+    getAuth,
+    onAuthStateChanged
+  }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+  }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+  // ================================
+  // FIREBASE CONFIG
+  // ================================
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyBKUPFTp7fo6uQfd009ffhZgjdIaR5evm8",
+
+    authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+
+    projectId: "rakib-freelancer-9c66b",
+
+    storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+
+    messagingSenderId: "541209844482",
+
+    appId: "1:541209844482:web:510568d5226c9bf47ac01b"
+
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+
+  const auth = getAuth(app);
+
+  const db = getFirestore(app);
+
+
+  // ================================
+  // SETTINGS
+  // ================================
+
+  const TARGET_VERIFY = 120;
+
+  const BONUS_AMOUNT = 1000;
+
+  const TOTAL_DAYS = 30;
+
+
+  // ================================
+  // ELEMENTS
+  // ================================
+
+  const loadingBox =
+    document.getElementById("loadingBox");
+
+  const bonusPage =
+    document.getElementById("bonusPage");
+
+  const errorBox =
+    document.getElementById("errorBox");
+
+  const verifyCount =
+    document.getElementById("verifyCount");
+
+  const progressBar =
+    document.getElementById("progressBar");
+
+  const progressText =
+    document.getElementById("progressText");
+
+  const daysPassed =
+    document.getElementById("daysPassed");
+
+  const daysLeft =
+    document.getElementById("daysLeft");
+
+  const statusBox =
+    document.getElementById("statusBox");
+
+
+  // ================================
+  // AUTH
+  // ================================
+
+  onAuthStateChanged(auth, async (user) => {
+
+    if (!user) {
+
+      alert("⚠️ আগে Login করুন");
+
+      window.location.href = "index.html";
+
+      return;
+    }
+
+
+    try {
+
+      await loadMonthlyBonus(user);
+
+      loadingBox.style.display = "none";
+
+      bonusPage.style.display = "block";
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Monthly Bonus Error:",
+        error
+      );
+
+      loadingBox.style.display = "none";
+
+      errorBox.style.display = "block";
+
+      errorBox.innerHTML =
+        "❌ Monthly Bonus লোড করা যায়নি<br><br>" +
+        error.code + "<br>" +
+        error.message;
+
+    }
+
+  });
+
+
+  // ================================
+  // LOAD MONTHLY BONUS
+  // ================================
+
+  async function loadMonthlyBonus(user) {
+
+    const bonusRef =
+      doc(
+        db,
+        "monthlyBonus",
+        user.uid
+      );
+
+
+    const bonusSnap =
+      await getDoc(bonusRef);
+
+
+    let bonusData;
+
+
+    // =================================
+    // FIRST TIME USER
+    // =================================
+
+    if (!bonusSnap.exists()) {
+
+      bonusData = {
+
+        verifyCount: 0,
+
+        periodStart:
+          new Date().toISOString(),
+
+        bonusAmount: BONUS_AMOUNT,
+
+        target: TARGET_VERIFY,
+
+        createdAt:
+          serverTimestamp()
+
+      };
+
+
+      await setDoc(
+        bonusRef,
+        bonusData
+      );
+
+    }
+
+    else {
+
+      bonusData =
+        bonusSnap.data();
+
+    }
+
+
+    // =================================
+    // CHECK 30 DAYS
+    // =================================
+
+    let startDate =
+      new Date(
+        bonusData.periodStart
+      );
+
+
+    if (
+      isNaN(
+        startDate.getTime()
+      )
+    ) {
+
+      startDate = new Date();
+
+      await setDoc(
+        bonusRef,
+        {
+          periodStart:
+            startDate.toISOString()
+        },
+        { merge: true }
+      );
+
+    }
+
+
+    const now =
+      new Date();
+
+
+    const difference =
+      now.getTime() -
+      startDate.getTime();
+
+
+    const passed =
+      Math.floor(
+        difference /
+        (1000 * 60 * 60 * 24)
+      );
+
+
+    // =================================
+    // 30 DAYS COMPLETED
+    // =================================
+
+    if (passed >= TOTAL_DAYS) {
+
+      bonusData.verifyCount = 0;
+
+      bonusData.periodStart =
+        now.toISOString();
+
+      bonusData.bonusAmount =
+        BONUS_AMOUNT;
+
+      bonusData.target =
+        TARGET_VERIFY;
+
+
+      await setDoc(
+        bonusRef,
+        {
+
+          verifyCount: 0,
+
+          periodStart:
+            now.toISOString(),
+
+          bonusAmount:
+            BONUS_AMOUNT,
+
+          target:
+            TARGET_VERIFY,
+
+          updatedAt:
+            serverTimestamp()
+
+        },
+        {
+          merge: true
+        }
+      );
+
+      startDate = now;
+
+    }
+
+
+    // =================================
+    // UPDATE UI
+    // =================================
+
+    const count =
+      Number(
+        bonusData.verifyCount || 0
+      );
+
+
+    updateUI(
+      count,
+      startDate
+    );
+
+  }
+
+
+  // ================================
+  // UPDATE UI
+  // ================================
+
+  function updateUI(
+    count,
+    startDate
+  ) {
+
+    let safeCount =
+      Math.max(
+        0,
+        Math.min(
+          count,
+          TARGET_VERIFY
+        )
+      );
+
+
+    verifyCount.textContent =
+      safeCount +
+      " / " +
+      TARGET_VERIFY;
+
+
+    const percentage =
+      Math.round(
+        (safeCount /
+        TARGET_VERIFY) *
+        100
+      );
+
+
+    progressBar.style.width =
+      percentage + "%";
+
+
+    progressText.textContent =
+      percentage +
+      "% সম্পন্ন";
+
+
+    // ================================
+    // DAYS
+    // ================================
+
+    const now =
+      new Date();
+
+
+    const difference =
+      now.getTime() -
+      startDate.getTime();
+
+
+    let passed =
+      Math.floor(
+        difference /
+        (1000 * 60 * 60 * 24)
+      );
+
+
+    passed =
+      Math.max(
+        0,
+        Math.min(
+          passed,
+          TOTAL_DAYS
+        )
+      );
+
+
+    const left =
+      TOTAL_DAYS -
+      passed;
+
+
+    daysPassed.textContent =
+      passed;
+
+
+    daysLeft.textContent =
+      left;
+
+
+    // ================================
+    // STATUS
+    // ================================
+
+    if (
+      safeCount >= TARGET_VERIFY
+    ) {
+
+      statusBox.innerHTML =
+        "🎉 অভিনন্দন! আপনি ১২০টি Verify সম্পন্ন করেছেন। ৳১,০০০ Bonus-এর জন্য যোগ্য!";
+
+      statusBox.style.background =
+        "#ecfdf5";
+
+      statusBox.style.color =
+        "#047857";
+
+    }
+
+    else {
+
+      statusBox.innerHTML =
+        "🚀 আপনার Monthly Challenge চলছে — লক্ষ্য ১২০ Verify";
+
+    }
+
+  }
+
+</script>
+
+</body>
+          </html>
