@@ -23,6 +23,7 @@
   padding:20px;
   border-radius:10px;
   box-sizing:border-box;
+  overflow:hidden;
     }
 
     .top-header{
@@ -292,21 +293,25 @@
 ‎    font-weight:800;
 ‎}
     .income-banner {
-  width: 100%;
-  max-width: 380px;
-  margin: 15px auto 25px;
-  padding: 0;
-  overflow: hidden;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 15px 0 25px 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
   border-radius: 18px;
-  box-shadow: 0 5px 18px rgba(0,0,0,0.15);
 }
 
 .income-banner img {
-  display: block;
-  width: 100%;
-  height: auto;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  object-fit: contain !important;
   border-radius: 18px;
-  object-fit: cover;
 }
   </style>
 </head>
