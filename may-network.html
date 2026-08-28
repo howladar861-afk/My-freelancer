@@ -391,11 +391,18 @@ const networkSummary =
       অপেক্ষা করবে।
     */
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
 
-      currentUser = user;
+  currentUser = user;
 
-    });
+  if (user) {
+
+    // Login করা User-এর Network automatically দেখাবে
+    searchNetwork();
+
+  }
+
+});
 
 
     /* =====================================
@@ -446,15 +453,61 @@ const networkSummary =
 
       if (!referralCode) {
 
-        result.innerHTML = `
-          <div class="message error">
-            ❌ Referral Code লিখুন।
-          </div>
-        `;
+  // Search Box খালি থাকলে
+  // Login করা User-এর নিজের Referral Code নেওয়া হবে
 
-        searchInput.focus();
+  try {
 
-        return;
+    const myQuery = query(
+      collection(db, "users"),
+      where("uid", "==", currentUser.uid)
+    );
+
+    const mySnapshot = await getDocs(myQuery);
+
+    if (mySnapshot.empty) {
+
+      result.innerHTML = `
+        <div class="message error">
+          ❌ আপনার Account তথ্য পাওয়া যায়নি।
+        </div>
+      `;
+
+      return;
+    }
+
+    const myData =
+      mySnapshot.docs[0].data();
+
+    referralCode =
+      myData.referralCode || "";
+
+    if (!referralCode) {
+
+      result.innerHTML = `
+        <div class="message error">
+          ❌ আপনার Referral Code পাওয়া যায়নি।
+        </div>
+      `;
+
+      return;
+    }
+
+  }
+
+  catch (error) {
+
+    result.innerHTML = `
+      <div class="message error">
+        ❌ আপনার Network লোড করা যায়নি।
+        <br><br>
+        ${escapeHtml(error.message)}
+      </div>
+    `;
+
+    return;
+  }
+
       }
 
 
