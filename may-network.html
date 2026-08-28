@@ -192,6 +192,41 @@
       color: #6b7280;
       font-size: 14px;
     }
+    .network-summary {
+  background: white;
+  padding: 18px;
+  border-radius: 16px;
+  margin-top: 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+.network-summary h2 {
+  margin-top: 0;
+  color: #2563eb;
+  font-size: 21px;
+}
+
+.summary-box {
+  padding: 14px;
+  border-radius: 12px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.registered-summary {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.verified-summary {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.unverified-summary {
+  background: #fee2e2;
+  color: #dc2626;
+}
   </style>
 </head>
 
@@ -257,7 +292,11 @@
     </button>
 
   </div>
+<!-- =====================================
+     NETWORK SUMMARY
+====================================== -->
 
+<div id="networkSummary"></div>
 
   <!-- =======================================
        FIREBASE
@@ -337,7 +376,8 @@
 
     const result =
       document.getElementById("result");
-
+const networkSummary =
+  document.getElementById("networkSummary");
 
     /* =====================================
        CURRENT USER
@@ -854,7 +894,34 @@ const verificationDate =
         result.innerHTML =
           ownerHTML +
           membersHTML;
+/* =================================
+   NETWORK SUMMARY BELOW BACK
+================================= */
 
+networkSummary.innerHTML = `
+
+  <div class="network-summary">
+
+    <h2>📊 Referral Network Summary</h2>
+
+    <div class="summary-box registered-summary">
+      👥 মোট Registered Member:
+      ${totalMembers} জন
+    </div>
+
+    <div class="summary-box verified-summary">
+      ✅ Verified Member:
+      ${verifiedCount} জন
+    </div>
+
+    <div class="summary-box unverified-summary">
+      ❌ Not Verified Member:
+      ${unverifiedCount} জন
+    </div>
+
+  </div>
+
+`;
 
       }
 
