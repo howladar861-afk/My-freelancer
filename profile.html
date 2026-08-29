@@ -435,6 +435,38 @@ let todayReferralCommission = 0;
         let thirtyDayIncome = 0;
 
         let totalIncome = 0;
+        // =================================
+// ADD REFERRAL COMMISSION TO INCOME
+// =================================
+
+referralIncomeSnapshot.forEach((docSnap) => {
+
+  const data = docSnap.data();
+
+  // শুধু referral commission
+  if (
+    data.type !== "level1Commission" &&
+    data.type !== "level2Commission"
+  ) {
+    return;
+  }
+
+  const amount = Number(data.amount || 0);
+
+  if (!amount || amount < 0) {
+    return;
+  }
+
+  const incomeDate = convertDate(data.createdAt);
+
+  if (!incomeDate) {
+    return;
+  }
+
+  // মোট ইনকামে Referral Commission যোগ
+  totalIncome += amount;
+
+});
 // TODAY'S REFERRAL VERIFICATION COMMISSION
 const tomorrowStart = new Date(todayStart);
 tomorrowStart.setDate(tomorrowStart.getDate() + 1);
