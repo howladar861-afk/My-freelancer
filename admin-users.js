@@ -10,7 +10,9 @@ import {
   collection,
   query,
   orderBy,
-  onSnapshot
+  onSnapshot,
+  doc,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -89,24 +91,127 @@ function loadUsers() {
         `;
 
         card.innerHTML = `
-          <h3>👤 ${data.name || "নাম নেই"}</h3>
+  <h3>👤 ${data.name || "নাম নেই"}</h3>
 
-          <p>
-            <b>Email:</b>
-            ${data.email || "নেই"}
-          </p>
+  <p>
+    <b>Email:</b>
+    ${data.email || "নেই"}
+  </p>
 
-          <p>
-            <b>User ID:</b>
-            ${uid}
-          </p>
+  <p>
+    <b>User ID:</b>
+    ${uid}
+  </p>
 
-          <p>
-            <b>Status:</b>
-            ${data.verified ? "✅ Verified" : "⏳ New User"}
-          </p>
-        `;
+  <p>
+    <b>Status:</b>
+    ${data.verified ? "✅ Verified" : "⏳ New User"}
+  </p>
 
+  <p>
+    <b>Account:</b>
+    ${
+      data.isBanned === true
+        ? "🚫 Banned"
+        : "🟢 Active"
+    }
+  </p>
+
+  <button
+    class="banBtn"
+    style="
+      width:100%;
+      padding:12px;
+      margin-top:8px;
+      border:0;
+      border-radius:8px;
+      background:#dc2626;
+      color:white;
+      font-weight:bold;
+    "
+  >
+    🚫 BAN
+  </button>
+
+  <button
+    class="unbanBtn"
+    style="
+      width:100%;
+      padding:12px;
+      margin-top:8px;
+      border:0;
+      border-radius:8px;
+      background:#16a34a;
+      color:white;
+      font-weight:bold;
+    "
+  >
+    ✅ UNBAN
+  </button>
+`;
+const banBtn =
+  card.querySelector(".banBtn");
+
+const unbanBtn =
+  card.querySelector(".unbanBtn");
+
+
+banBtn.onclick = async () => {
+
+  if (!confirm("এই ইউজারকে BAN করবেন?")) {
+    return;
+  }
+
+  try {
+
+    await updateDoc(
+      doc(db, "users", uid),
+      {
+        isBanned: true
+      }
+    );
+
+    alert("🚫 ইউজারকে BAN করা হয়েছে।");
+
+  } catch (error) {
+
+    console.error("Ban Error:", error);
+
+    alert(
+      "❌ BAN করা যায়নি:\n\n" +
+      error.message
+    );
+  }
+};
+
+
+unbanBtn.onclick = async () => {
+
+  if (!confirm("এই ইউজারকে UNBAN করবেন?")) {
+    return;
+  }
+
+  try {
+
+    await updateDoc(
+      doc(db, "users", uid),
+      {
+        isBanned: false
+      }
+    );
+
+    alert("✅ ইউজারকে UNBAN করা হয়েছে।");
+
+  } catch (error) {
+
+    console.error("Unban Error:", error);
+
+    alert(
+      "❌ UNBAN করা যায়নি:\n\n" +
+      error.message
+    );
+  }
+};
         if (data.verified === true) {
           verifiedUsers.appendChild(card);
         } else {
