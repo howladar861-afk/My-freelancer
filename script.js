@@ -153,7 +153,8 @@ if (!directReferrerUid) {
     createdAt: serverTimestamp(),
     balance: 0,
     referralCount: 0,
-    verificationStatus: "Pending"
+    verificationStatus: "Pending",
+    isBanned: false
   }
 );
 // =================================
@@ -247,7 +248,25 @@ document.getElementById("loginBtn").onclick = async () => {
     await setPersistence(auth, browserLocalPersistence);
 
     await signInWithEmailAndPassword(auth, email, password);
+const userDoc = await getDoc(
+  doc(db, "users", auth.currentUser.uid)
+);
 
+if (userDoc.exists()) {
+
+  const data = userDoc.data();
+
+  if (data.isBanned === true) {
+
+    await auth.signOut();
+
+    showCustomPopup(
+      "আপনার একাউন্ট ব্যান করা হয়েছে!"
+    );
+
+    return;
+  }
+}
     showCustomPopup("Login Successful!");
 
     window.location.href = "dashboard.html";
