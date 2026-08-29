@@ -24,53 +24,25 @@ body{
   padding:20px;
 }
 
+.card{
+  background:#111827;
+  padding:20px;
+  border-radius:18px;
+  margin-bottom:20px;
+}
+
 h1{
   text-align:center;
   color:#ffc107;
-  margin-bottom:25px;
 }
 
-.section{
-  background:#111827;
-  padding:18px;
-  border-radius:18px;
-  margin-bottom:25px;
-}
-
-.section-title{
-  margin:0 0 15px;
-  color:#ffc107;
-  font-size:21px;
-}
-
-.user-card{
-  background:#222;
-  padding:18px;
-  margin-top:15px;
-  border-radius:15px;
-  border:1px solid #333;
-}
-
-.user-card h3{
-  margin-top:0;
-  color:#60a5fa;
-}
-
-.user-card p{
-  word-break:break-word;
-  line-height:1.5;
-}
-
-.status{
-  font-weight:bold;
-}
-
-.active{
-  color:#22c55e;
-}
-
-.banned{
-  color:#ef4444;
+input{
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
 }
 
 button{
@@ -79,23 +51,56 @@ button{
   margin-top:10px;
   border:0;
   border-radius:10px;
-  color:white;
   font-size:16px;
   font-weight:bold;
 }
 
+.loginBtn{
+  background:#ffc107;
+}
+
+.logoutBtn{
+  background:#dc2626;
+  color:white;
+}
+
+.section-title{
+  color:#ffc107;
+}
+
+.user-card{
+  background:#222;
+  padding:18px;
+  margin-top:15px;
+  border-radius:15px;
+}
+
+.user-card h3{
+  color:#60a5fa;
+}
+
 .banBtn{
   background:#dc2626;
+  color:white;
 }
 
 .unbanBtn{
   background:#16a34a;
+  color:white;
 }
 
 .empty{
   text-align:center;
   color:#aaa;
-  padding:15px;
+}
+
+#adminPanel{
+  display:none;
+}
+
+#message{
+  text-align:center;
+  color:#ffc107;
 }
 </style>
 </head>
@@ -104,10 +109,52 @@ button{
 
 <div class="container">
 
-  <h1>👑 Admin Users</h1>
+<!-- ADMIN LOGIN -->
+<div class="card" id="loginBox">
+
+  <h1>🔐 Admin Login</h1>
+
+  <input
+    type="email"
+    id="adminEmail"
+    placeholder="Admin Email"
+  >
+
+  <input
+    type="password"
+    id="adminPassword"
+    placeholder="Password"
+  >
+
+  <button
+    class="loginBtn"
+    id="loginBtn">
+    🔐 Login
+  </button>
+
+  <p id="message"></p>
+
+</div>
+
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+
+  <div class="card">
+
+    <h1>👑 Admin Users</h1>
+
+    <button
+      class="logoutBtn"
+      id="logoutBtn">
+      Logout
+    </button>
+
+  </div>
+
 
   <!-- নতুন ইউজার -->
-  <div class="section">
+  <div class="card">
 
     <h2 class="section-title">
       🆕 নতুন রেজিস্ট্রেশন ইউজার
@@ -123,7 +170,7 @@ button{
 
 
   <!-- Verified Member -->
-  <div class="section">
+  <div class="card">
 
     <h2 class="section-title">
       ✅ Verified Member
@@ -139,8 +186,355 @@ button{
 
 </div>
 
+</div>
 
-<script type="module" src="admin-users.js"></script>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+  authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+  projectId: "rakib-freelancer-9c66b",
+  storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+  messagingSenderId: "541209844482",
+  appId: "1:541209844482:web:510568d5226c9bf47ac01b"
+};
+
+const ADMIN_UID =
+"MwiyoLqCJeYERHAwUKAa17sLwop1";
+
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+
+const loginBox =
+document.getElementById("loginBox");
+
+const adminPanel =
+document.getElementById("adminPanel");
+
+const message =
+document.getElementById("message");
+
+
+/* =========================
+   ADMIN LOGIN
+========================= */
+
+document.getElementById("loginBtn").onclick =
+async function(){
+
+  const email =
+  document.getElementById("adminEmail").value.trim();
+
+  const password =
+  document.getElementById("adminPassword").value;
+
+
+  if(!email || !password){
+
+    message.textContent =
+    "Email ও Password দিন।";
+
+    return;
+  }
+
+
+  try{
+
+    const result =
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+
+    if(result.user.uid !== ADMIN_UID){
+
+      await signOut(auth);
+
+      message.textContent =
+      "❌ আপনি Admin নন।";
+
+      return;
+    }
+
+
+    loginBox.style.display =
+    "none";
+
+    adminPanel.style.display =
+    "block";
+
+    message.textContent = "";
+
+    loadUsers();
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    message.textContent =
+    "❌ Login করা যায়নি।";
+
+  }
+
+};
+
+
+/* =========================
+   LOAD USERS
+========================= */
+
+function loadUsers(){
+
+  const pendingUsers =
+  document.getElementById("pendingUsers");
+
+  const verifiedUsers =
+  document.getElementById("verifiedUsers");
+
+
+  const usersRef =
+  collection(db,"users");
+
+
+  const usersQuery =
+  query(
+    usersRef,
+    orderBy("createdAt","desc")
+  );
+
+
+  onSnapshot(
+    usersQuery,
+    (snapshot)=>{
+
+      pendingUsers.innerHTML = "";
+      verifiedUsers.innerHTML = "";
+
+
+      snapshot.forEach((userDoc)=>{
+
+        const data =
+        userDoc.data();
+
+        const uid =
+        userDoc.id;
+
+
+        const card =
+        document.createElement("div");
+
+        card.className =
+        "user-card";
+
+
+        card.innerHTML = `
+
+          <h3>
+            👤 ${data.name || "নাম নেই"}
+          </h3>
+
+          <p>
+            <b>Email:</b>
+            ${data.email || "নেই"}
+          </p>
+
+          <p>
+            <b>User ID:</b><br>
+            ${uid}
+          </p>
+
+          <p>
+            <b>Status:</b>
+            ${
+              data.verified === true
+              ? "✅ Verified"
+              : "⏳ New User"
+            }
+          </p>
+
+          <p>
+            <b>Account:</b>
+            ${
+              data.isBanned === true
+              ? "🚫 Banned"
+              : "🟢 Active"
+            }
+          </p>
+
+          <button class="banBtn">
+            🚫 BAN
+          </button>
+
+          <button class="unbanBtn">
+            ✅ UNBAN
+          </button>
+
+        `;
+
+
+        /* BAN */
+
+        card.querySelector(".banBtn").onclick =
+        async function(){
+
+          if(!confirm("এই ইউজারকে BAN করবেন?")){
+            return;
+          }
+
+          try{
+
+            await updateDoc(
+              doc(db,"users",uid),
+              {
+                isBanned:true
+              }
+            );
+
+            alert("🚫 ইউজার BAN করা হয়েছে।");
+
+          }
+          catch(error){
+
+            alert(
+              "❌ BAN করা যায়নি:\n" +
+              error.message
+            );
+
+          }
+
+        };
+
+
+        /* UNBAN */
+
+        card.querySelector(".unbanBtn").onclick =
+        async function(){
+
+          if(!confirm("এই ইউজারকে UNBAN করবেন?")){
+            return;
+          }
+
+          try{
+
+            await updateDoc(
+              doc(db,"users",uid),
+              {
+                isBanned:false
+              }
+            );
+
+            alert("✅ ইউজার UNBAN করা হয়েছে।");
+
+          }
+          catch(error){
+
+            alert(
+              "❌ UNBAN করা যায়নি:\n" +
+              error.message
+            );
+
+          }
+
+        };
+
+
+        if(data.verified === true){
+
+          verifiedUsers.appendChild(card);
+
+        }else{
+
+          pendingUsers.appendChild(card);
+
+        }
+
+      });
+
+
+      if(!pendingUsers.innerHTML){
+
+        pendingUsers.innerHTML =
+        '<p class="empty">কোনো নতুন ইউজার নেই।</p>';
+
+      }
+
+
+      if(!verifiedUsers.innerHTML){
+
+        verifiedUsers.innerHTML =
+        '<p class="empty">কোনো Verified Member নেই।</p>';
+
+      }
+
+    },
+
+    (error)=>{
+
+      console.error(error);
+
+      pendingUsers.innerHTML =
+      "<p class='empty'>❌ User Load করা যায়নি।</p>";
+
+      verifiedUsers.innerHTML =
+      "<p class='empty'>❌ User Load করা যায়নি।</p>";
+
+    }
+  );
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+document.getElementById("logoutBtn").onclick =
+async function(){
+
+  await signOut(auth);
+
+  adminPanel.style.display =
+  "none";
+
+  loginBox.style.display =
+  "block";
+
+};
+
+</script>
 
 </body>
 </html>
