@@ -142,31 +142,20 @@ if (!directReferrerUid) {
 
     // নতুন ইউজার
     batch.set(
-      newUserRef,
-      {
-        uid:
-          userCredential.user.uid,
-
-        email:
-          email,
-name:
-  name,
-        referralCode:
-          myReferral,
-
-        referredBy:
-  referral,
-
-verified:
-  false,
-
-createdAt:
-  serverTimestamp(),
-
-balance:
-  0
-      }
-    );
+  newUserRef,
+  {
+    uid: userCredential.user.uid,
+    email: email,
+    name: name,
+    referralCode: myReferral,
+    referredBy: referral,
+    verified: false,
+    createdAt: serverTimestamp(),
+    balance: 0,
+    referralCount: 0,
+    verificationStatus: "Pending"
+  }
+);
 // =================================
 // SAVE MY REFERRAL CODE
 // =================================
