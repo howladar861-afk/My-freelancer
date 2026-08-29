@@ -1,18 +1,144 @@
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
-<title>Admin Users</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Users - Rakib Freelancer</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0d1628;
+  color:white;
+}
+
+.container{
+  max-width:650px;
+  margin:auto;
+  padding:20px;
+}
+
+h1{
+  text-align:center;
+  color:#ffc107;
+  margin-bottom:25px;
+}
+
+.section{
+  background:#111827;
+  padding:18px;
+  border-radius:18px;
+  margin-bottom:25px;
+}
+
+.section-title{
+  margin:0 0 15px;
+  color:#ffc107;
+  font-size:21px;
+}
+
+.user-card{
+  background:#222;
+  padding:18px;
+  margin-top:15px;
+  border-radius:15px;
+  border:1px solid #333;
+}
+
+.user-card h3{
+  margin-top:0;
+  color:#60a5fa;
+}
+
+.user-card p{
+  word-break:break-word;
+  line-height:1.5;
+}
+
+.status{
+  font-weight:bold;
+}
+
+.active{
+  color:#22c55e;
+}
+
+.banned{
+  color:#ef4444;
+}
+
+button{
+  width:100%;
+  padding:13px;
+  margin-top:10px;
+  border:0;
+  border-radius:10px;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.banBtn{
+  background:#dc2626;
+}
+
+.unbanBtn{
+  background:#16a34a;
+}
+
+.empty{
+  text-align:center;
+  color:#aaa;
+  padding:15px;
+}
+</style>
 </head>
+
 <body>
 
-<h2>🆕 নতুন রেজিস্ট্রেশন মেম্বার</h2>
-<div id="pendingUsers"></div>
+<div class="container">
 
-<hr>
+  <h1>👑 Admin Users</h1>
 
-<h2>✅ ভেরিফাই মেম্বার</h2>
-<div id="verifiedUsers"></div>
+  <!-- নতুন ইউজার -->
+  <div class="section">
+
+    <h2 class="section-title">
+      🆕 নতুন রেজিস্ট্রেশন ইউজার
+    </h2>
+
+    <div id="pendingUsers">
+      <p class="empty">
+        ইউজার Loading...
+      </p>
+    </div>
+
+  </div>
+
+
+  <!-- Verified Member -->
+  <div class="section">
+
+    <h2 class="section-title">
+      ✅ Verified Member
+    </h2>
+
+    <div id="verifiedUsers">
+      <p class="empty">
+        ইউজার Loading...
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
 
 <script type="module" src="admin-users.js"></script>
 
