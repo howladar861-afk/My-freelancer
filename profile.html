@@ -463,8 +463,41 @@ referralIncomeSnapshot.forEach((docSnap) => {
     return;
   }
 
-  // মোট ইনকামে Referral Commission যোগ
-  totalIncome += amount;
+  // Referral Commission সব ইনকাম হিসাবের সাথে যোগ হবে
+
+totalIncome += amount;
+
+// আজকের Referral Commission
+if (
+  incomeDate >= todayStart &&
+  incomeDate <= now
+) {
+  todayIncome += amount;
+}
+
+// গতকালের Referral Commission
+if (
+  incomeDate >= yesterdayStart &&
+  incomeDate < todayStart
+) {
+  yesterdayIncome += amount;
+}
+
+// গত ৭ দিনের Referral Commission
+if (
+  incomeDate >= sevenDaysStart &&
+  incomeDate <= now
+) {
+  sevenDayIncome += amount;
+}
+
+// গত ৩০ দিনের Referral Commission
+if (
+  incomeDate >= thirtyDaysStart &&
+  incomeDate <= now
+) {
+  thirtyDayIncome += amount;
+}
 
 });
 // TODAY'S REFERRAL VERIFICATION COMMISSION
