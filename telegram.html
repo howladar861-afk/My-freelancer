@@ -8,173 +8,447 @@
 
   <style>
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
 
     body {
-      margin: 0;
-      padding: 20px 12px;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #eef8ff, #f8fbff);
+      background: #f3f6fb;
       color: #222;
+      padding-bottom: 30px;
     }
 
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #0088cc, #229ed9);
+      color: white;
+      padding: 28px 18px;
+      text-align: center;
+      border-radius: 0 0 30px 30px;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.12);
+    }
+
+    .header .icon {
+      font-size: 58px;
+      margin-bottom: 8px;
+    }
+
+    .header h1 {
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .header p {
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    /* Work Status */
+    .status-box {
+      background: #fff4f4;
+      color: #d63031;
+      border: 2px solid #ff7675;
+      border-radius: 18px;
+      padding: 17px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      margin: 20px auto;
+      width: 92%;
+      max-width: 600px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.07);
+    }
+
+    .status-box span {
+      display: block;
+      font-size: 14px;
+      font-weight: normal;
+      margin-top: 7px;
+      color: #555;
+    }
+
+    /* Container */
     .container {
-      max-width: 700px;
-      margin: auto;
+      width: 92%;
+      max-width: 600px;
+      margin: 20px auto;
     }
 
+    /* Card */
     .card {
       background: white;
-      padding: 30px 20px;
-      border-radius: 25px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
     }
 
-    .icon {
-      font-size: 70px;
+    .card h2 {
+      font-size: 21px;
+      margin-bottom: 14px;
+      color: #0088cc;
+    }
+
+    .card p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #444;
+    }
+
+    /* Steps */
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #f7fafc;
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .number {
+      min-width: 32px;
+      height: 32px;
+      background: #229ed9;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .step p {
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* WhatsApp Box */
+    .link-box {
+      background: #f0f8fc;
+      border: 2px dashed #229ed9;
+      border-radius: 16px;
+      padding: 18px;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .link-box p {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .phone {
+      font-size: 24px;
+      font-weight: bold;
+      color: #0088cc;
+      margin: 12px 0;
+      letter-spacing: 1px;
+    }
+
+    /* Button */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #0088cc, #229ed9);
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Admin */
+    .admin {
+      background: linear-gradient(135deg, #006699, #0088cc);
+      color: white;
+      border-radius: 22px;
+      padding: 25px 20px;
+      text-align: center;
+      box-shadow: 0 7px 20px rgba(0,0,0,0.12);
+      margin-bottom: 18px;
+    }
+
+    .admin h2 {
+      color: white;
       margin-bottom: 10px;
     }
 
-    h1 {
-      color: #229ED9;
-      font-size: 30px;
-      margin-bottom: 25px;
-    }
-
-    .box {
-      padding: 22px 18px;
-      margin: 18px 0;
-      border-radius: 18px;
-      line-height: 1.8;
-      background: #f8faff;
-      border-left: 6px solid #229ED9;
-    }
-
-    .box h2 {
-      margin: 0 0 10px;
-      font-size: 22px;
-      color: #1688bd;
-    }
-
-    .box p {
-      margin: 0;
-      font-size: 17px;
-    }
-
-    .warning {
-      background: #fff7ed;
-      border-left-color: #f97316;
-    }
-
-    .warning h2 {
-      color: #ea580c;
-    }
-
-    .team {
-      background: #eff6ff;
-      border-left-color: #2563eb;
-    }
-
-    .team h2 {
-      color: #2563eb;
-    }
-
-    .success {
-      background: #f0fdf4;
-      border-left-color: #16a34a;
-    }
-
-    .success h2 {
-      color: #15803d;
-    }
-
-    .footer {
-      margin-top: 25px;
-      padding: 22px;
-      background: #229ED9;
+    .admin p {
       color: white;
-      border-radius: 18px;
-      font-size: 18px;
-      line-height: 1.8;
+      font-size: 15px;
+      line-height: 1.7;
     }
 
-    .back {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 14px 35px;
-      background: #229ED9;
+    .admin .phone {
       color: white;
+      margin: 15px 0;
+    }
+
+    .whatsapp-btn {
+      display: block;
+      background: white;
+      color: #0088cc;
+      padding: 14px;
+      border-radius: 30px;
       text-decoration: none;
-      border-radius: 12px;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .whatsapp-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Warning */
+    .warning {
+      background: #fff8e6;
+      border-left: 5px solid #ffb300;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 12px;
+    }
+
+    .warning p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #604800;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: #888;
+      font-size: 13px;
+      margin-top: 25px;
+      line-height: 1.6;
     }
   </style>
 </head>
 
 <body>
 
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <div class="header">
+
+    <div class="icon">✈️</div>
+
+    <h1>Telegram Account</h1>
+
+    <p>অ্যাকাউন্ট সেল সংক্রান্ত তথ্য</p>
+
+  </div>
+
+
+  <!-- =========================
+       WORK STATUS
+  ========================== -->
+
+  <div class="status-box">
+
+    ⚠️ কাজ কিছুক্ষণের জন্য বন্ধ আছে
+
+    <span>
+      আবার কাজ চালু হলে জানানো হবে।
+    </span>
+
+  </div>
+
+
   <div class="container">
+
+
+    <!-- =========================
+         INTRODUCTION
+    ========================== -->
 
     <div class="card">
 
-      <div class="icon">📱</div>
+      <h2>💬 Telegram Account Sell</h2>
 
-      <h1>Telegram Account Sell</h1>
+      <p>
+        বর্তমানে Telegram Account সেল করার কাজ
+        কিছুক্ষণের জন্য বন্ধ রয়েছে।
+        কাজ পুনরায় চালু হলে প্রয়োজনীয় তথ্য জানানো হবে।
+      </p>
 
-      <div class="box warning">
-        <h2>🚧 এই সাইটে কাজ চলছে</h2>
+    </div>
+
+
+    <!-- =========================
+         HOW TO START
+    ========================== -->
+
+    <div class="card">
+
+      <h2>📋 কীভাবে শুরু করবেন?</h2>
+
+
+      <div class="step">
+
+        <div class="number">১</div>
+
         <p>
-          খুব শীঘ্রই Telegram Account Sell-এর কাজটি
-          সম্পূর্ণভাবে চালু হবে।
+          <b>Telegram</b> অ্যাপটি খুলুন।
         </p>
+
       </div>
 
-      <div class="box team">
-        <h2>👥 অন্যান্য কাজ চালু আছে</h2>
+
+      <div class="step">
+
+        <div class="number">২</div>
+
         <p>
-          অন্যান্য কাজগুলো বর্তমানে চালু আছে।
-          এগুলো করতে থাকুন এবং ধৈর্য ধরে কাজ করুন।
+          আপনার ব্যবহারের জন্য বৈধ একটি
+          Telegram Account তৈরি করুন।
         </p>
+
       </div>
 
-      <div class="box">
-        <h2>🤝 বন্ধুদের সাথে শেয়ার করুন</h2>
+
+      <div class="step">
+
+        <div class="number">৩</div>
+
         <p>
-          আপনার বন্ধুদের সাইটটি শেয়ার করুন।
-          টিম তৈরি করে একসাথে কাজ করুন এবং ইনকাম করুন।
+          কাজ পুনরায় চালু হলে Account Sell করার
+          পরবর্তী নির্দেশনা জানানো হবে।
         </p>
+
       </div>
 
-      <div class="box success">
-        <h2>✅ কাজটি সফলভাবে চালু আছে</h2>
+    </div>
+
+
+    <!-- =========================
+         WHATSAPP CONTACT
+    ========================== -->
+
+    <div class="card">
+
+      <h2>💬 যোগাযোগ করুন</h2>
+
+      <p>
+        Telegram Account সেল করতে চাইলে অথবা
+        কাজ সম্পর্কে বিস্তারিত জানতে নিচের
+        WhatsApp নম্বরে মেসেজ করুন।
+      </p>
+
+
+      <div class="link-box">
+
         <p>
-          বর্তমানে কিছু কাজ সফলভাবে চালু আছে।
-          আপনারা সেই কাজগুলো করে ইনকাম করতে পারছেন।
+          📞 WhatsApp নম্বর
         </p>
+
+
+        <div class="phone">
+          01837976455
+        </div>
+
+
+        <a
+          href="https://wa.me/8801837976455?text=আমি%20Telegram%20একাউন্ট%20সেল%20করতে%20চাই"
+          class="btn"
+          target="_blank"
+          rel="noopener noreferrer">
+
+          💬 WhatsApp-এ মেসেজ করুন
+
+        </a>
+
       </div>
 
-      <div class="box success">
-        <h2>🌐 ইন্টারনেট / মিনিট বিক্রি</h2>
-        <p>
-          ইন্টারনেট / মিনিট বিক্রির কাজও চালু আছে।
-          আপনারা চাইলে এই কাজটিও করতে পারবেন।
-        </p>
+    </div>
+
+
+    <!-- =========================
+         ADMIN
+    ========================== -->
+
+    <div class="admin">
+
+      <h2>👨‍💻 এডমিনের সাথে যোগাযোগ করুন</h2>
+
+      <p>
+        কাজ পুনরায় চালু হওয়ার সময়,
+        পেমেন্ট এবং অন্যান্য প্রয়োজনীয় তথ্যের জন্য
+        এডমিনের সাথে যোগাযোগ করুন।
+      </p>
+
+
+      <div class="phone">
+        📞 01837976455
       </div>
 
-      <div class="footer">
-        ❤️ ধৈর্য ধরে আমাদের পাশে থাকুন।<br>
-        ইনশাআল্লাহ, খুব শীঘ্রই Telegram Account Sell-এর
-        কাজ সম্পূর্ণভাবে চালু হবে।
-      </div>
 
-      <a href="index.html" class="back">
-        ← ফিরে যান
+      <a
+        href="https://wa.me/8801837976455?text=আমি%20Telegram%20একাউন্ট%20সেল%20করতে%20চাই"
+        class="whatsapp-btn"
+        target="_blank"
+        rel="noopener noreferrer">
+
+        💬 এখনই WhatsApp-এ মেসেজ করুন
+
       </a>
 
     </div>
+
+
+    <!-- =========================
+         IMPORTANT NOTICE
+    ========================== -->
+
+    <div class="card">
+
+      <h2>⚠️ গুরুত্বপূর্ণ নির্দেশনা</h2>
+
+
+      <div class="warning">
+
+        <p>
+          কাজ বর্তমানে সাময়িকভাবে বন্ধ রয়েছে।
+          কাজ পুনরায় চালু হওয়ার আগে কোনো ব্যক্তিগত,
+          পাসওয়ার্ড, OTP বা গোপন তথ্য কারও সাথে
+          শেয়ার করবেন না।
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <div class="footer">
+
+      © 2026 Telegram Account Sell
+
+      <br>
+
+      কাজ পুনরায় চালু হলে এখানে জানানো হবে।
+
+    </div>
+
 
   </div>
 
