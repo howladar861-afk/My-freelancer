@@ -17,7 +17,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   setPersistence,
-  browserLocalPersistence
+  browserLocalPersistence,
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 // আপনার Firebase Config
@@ -285,5 +286,33 @@ function showCustomPopup(message) {
   if (popup && popupMessage) {
     popupMessage.textContent = message;
     popup.style.display = "flex";
+  }
+}
+// Forgot Password
+async function sendResetCode() {
+
+  const email = document.getElementById("resetEmail").value.trim();
+
+  if (email === "") {
+    showCustomPopup("Gmail Address দিন!");
+    return;
+  }
+
+  try {
+
+    await sendPasswordResetEmail(auth, email);
+
+    showCustomPopup(
+      "Password reset link আপনার Gmail-এ পাঠানো হয়েছে!"
+    );
+
+    closeForgotPopup();
+
+  } catch (error) {
+
+    console.error("Password Reset Error:", error);
+
+    showCustomPopup(error.message);
+
   }
 }
