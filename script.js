@@ -317,3 +317,6 @@ async function sendResetCode() {
   }
 }
 window.sendResetCode = sendResetCode;
+
+document.getElementById("sendResetCodeBtn")
+  .addEventListener("click", sendResetCode);
