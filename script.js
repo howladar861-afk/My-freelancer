@@ -316,3 +316,4 @@ async function sendResetCode() {
 
   }
 }
+window.sendResetCode = sendResetCode;
