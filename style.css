@@ -205,3 +205,21 @@ footer {
     font-size: 18px;
   }
 }
+/* Forgot Password */
+.forgot-password {
+  text-align: center;
+  margin-top: 12px;
+  margin-bottom: 5px;
+}
+
+.forgot-password a {
+  color: #1769e0;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
