@@ -293,3 +293,50 @@ footer {
   background: #eee;
   color: #555;
      }
+.youtube-tutorial {
+  text-align: center;
+  margin: 0 auto 20px;
+}
+
+.youtube-tutorial a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 20px;
+  background: #ff0000;
+  color: #fff;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.25);
+}
+
+.youtube-icon {
+  width: 28px;
+  height: 20px;
+  background: #fff;
+  color: #ff0000;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.youtube-tutorial a:active {
+  transform: scale(0.96);
+}
+
+.youtube-tutorial p {
+  margin: 8px 0 2px;
+  color: #555;
+  font-size: 13px;
+}
+
+.youtube-tutorial small {
+  color: #d00000;
+  font-size: 12px;
+  font-weight: 600;
+}
