@@ -385,21 +385,40 @@ let currentUser = null;
 onAuthStateChanged(auth, async (user) => {
 
   if (!user) {
-
     alert("⚠️ আগে Login করুন");
-
     window.location.href = "index.html";
-
     return;
   }
 
   currentUser = user;
 
-  await loadUserBalance();
+  console.log("Logged in UID:", currentUser.uid);
 
-  await loadMyJobs();
+  try {
+    await loadUserBalance();
+  } catch (error) {
+    console.error("Balance Error:", error);
+  }
 
-  await loadAvailableJobs();
+  try {
+    await loadMyJobs();
+  } catch (error) {
+    console.error("My Jobs Error:", error);
+
+    document.getElementById("myJobs").innerHTML =
+      "❌ আমার পোস্ট করা কাজ লোড করা যায়নি<br>" +
+      "<small>" + error.message + "</small>";
+  }
+
+  try {
+    await loadAvailableJobs();
+  } catch (error) {
+    console.error("Available Jobs Error:", error);
+
+    document.getElementById("availableJobs").innerHTML =
+      "❌ Available Jobs লোড করা যায়নি<br>" +
+      "<small>" + error.message + "</small>";
+  }
 
 });
 
