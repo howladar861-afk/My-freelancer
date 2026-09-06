@@ -405,10 +405,131 @@
   color: #222;
   line-height: 1.4;
 }
+    /* ============================= */
+/* VERIFICATION REQUIRED POPUP */
+/* ============================= */
+
+.verify-popup-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  box-sizing:border-box;
+}
+
+.verify-popup{
+  width:100%;
+  max-width:380px;
+  background:#fff;
+  border-radius:25px;
+  padding:28px 20px;
+  box-sizing:border-box;
+  text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
+  animation:verifyPopup .25s ease;
+}
+
+.verify-popup-icon{
+  width:75px;
+  height:75px;
+  margin:0 auto 15px;
+  border-radius:50%;
+  background:#ffe4e6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+}
+
+.verify-popup h2{
+  margin:5px 0 12px;
+  color:#111827;
+  font-size:22px;
+}
+
+.verify-popup p{
+  color:#4b5563;
+  font-size:16px;
+  line-height:1.6;
+  margin:0 0 20px;
+}
+
+.verify-now-btn{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:30px;
+  background:#ef1d2d;
+  color:#fff;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.verify-close-btn{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border:0;
+  border-radius:30px;
+  background:#e5e7eb;
+  color:#374151;
+  font-size:16px;
+  cursor:pointer;
+}
+
+@keyframes verifyPopup{
+  from{
+    transform:scale(.85);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
   </style>
 </head>
 <body>
+<!-- ============================= -->
+<!-- VERIFICATION REQUIRED POPUP -->
+<!-- ============================= -->
 
+<div id="verifyPopupOverlay" class="verify-popup-overlay">
+
+  <div class="verify-popup">
+
+    <div class="verify-popup-icon">
+      🔒
+    </div>
+
+    <h2>অ্যাকাউন্ট ভেরিফাই করুন</h2>
+
+    <p>
+      অ্যাকাউন্ট ভেরিফাই করে এই ফিচারটি চালু করতে পারবেন।
+      <br><br>
+      আপনার অ্যাকাউন্ট ভেরিফাই করুন।
+    </p>
+
+    <button
+      class="verify-now-btn"
+      onclick="goToVerification()">
+      ✅ এখনই ভেরিফাই করুন
+    </button>
+
+    <button
+      class="verify-close-btn"
+      onclick="closeVerifyPopup()">
+      বন্ধ করুন
+    </button>
+
+  </div>
+
+</div>
   <header class="top-header">
   <h2>My Freelancer</h2>
 
@@ -486,20 +607,20 @@
 
     <div class="cards earning-options">
 <!-- Form Fill -->
-<div class="card" onclick="window.location.href='form.html'">
+<div class="card" onclick="openVerifiedPage('form.html')">
   <div class="icon">📝</div>
   <h3>ফর্ম পূরণ</h3>
 </div>
 
 <!-- Watch Video -->
-<div class="card" onclick="window.location.href='video.html'">
+<div class="card" onclick="openVerifiedPage('video.html')">
   <div class="icon">🎬</div>
   <h3>ভিডিও দেখে ইনকাম</h3>
 </div>
   <div class="card">
   <div class="icon">📺</div>
   <h3>Ads দেখুন</h3>
-  <button onclick="window.location.href='ads.html'">
+  <button onclick="openVerifiedPage('ads.html')">
     কাজ করুন
   </button>
   </div>
@@ -507,7 +628,7 @@
   <div class="card">
     <div class="icon">📝</div>
     <h3>Quiz</h3>
-<button onclick="window.location.href='quiz.html'">
+<button onclick="openVerifiedPage('quiz.html')">
   কাজ করুন
 </button>
   </div>
@@ -515,7 +636,7 @@
   <div class="card">
   <div class="icon">📧</div>
   <h3>Gmail Sell করে ইনকাম করুন</h3>
-  <button onclick="window.location.href='gmail-sell.html'">
+  <button onclick="openVerifiedPage('gmail-sell.html')">
     কাজ করুন
   </button>
 </div>
@@ -523,14 +644,14 @@
 <div class="card">
   <div class="icon">📱</div>
   <h3>Telegram Account Sell করে ইনকাম করুন</h3>
-  <button onclick="window.location.href='telegram.html'">
+  <button onclick="openVerifiedPage('telegram.html')">
     কাজ করুন
   </button>
 </div>
-<div class="card" onclick="location.href='whatsapp.html'">
+<div class="card" onclick="openVerifiedPage('whatsapp.html')">
   <div class="icon">📱</div>
   <h3>WhatsApp Account<br>সেল করে ইনকাম করুন</h3>
-  <button onclick="event.stopPropagation(); location.href='whatsapp.html'">
+  <button onclick="event.stopPropagation(); openVerifiedPage('whatsapp.html')">
     Join Now
   </button>
 </div>
@@ -538,7 +659,7 @@
 <div class="card">
   <div class="icon">📋</div>
   <h3>Job Post</h3>
-  <button onclick="location.href='job-post.html'">Join Now</button>
+  <button onclick="openVerifiedPage('job-post.html')">Join Now</button>
 </div>
 </div>
   <div class="section-title">✨ Special Earnings</div>
@@ -548,7 +669,7 @@
   <div class="card">
   <div class="icon">📶</div>
   <h3>Drive Offer</h3>
-  <button onclick="window.location.href='drive-offer.html'">
+  <button onclick="openVerifiedPage('drive-offer.html')">
   এমবি সেল করে ইনকাম করুন
   </button>
   </div>
@@ -800,6 +921,157 @@ onAuthStateChanged(
 
   }
 );
+  // =====================================
+// VERIFICATION REQUIRED CONTROL
+// =====================================
+
+let currentUserVerified = false;
+
+
+// ================================
+// SHOW VERIFICATION POPUP
+// ================================
+
+function showVerifyPopup() {
+
+  const popup =
+    document.getElementById("verifyPopupOverlay");
+
+  if (popup) {
+    popup.style.display = "flex";
+  }
+
+}
+
+
+// ================================
+// CLOSE VERIFICATION POPUP
+// ================================
+
+function closeVerifyPopup() {
+
+  const popup =
+    document.getElementById("verifyPopupOverlay");
+
+  if (popup) {
+    popup.style.display = "none";
+  }
+
+}
+
+
+// ================================
+// GO TO VERIFICATION PAGE
+// ================================
+
+function goToVerification() {
+
+  window.location.href = "verification.html";
+
+}
+
+
+// ================================
+// CHECK USER VERIFICATION
+// ================================
+
+async function checkUserVerification(user) {
+
+  if (!user) {
+
+    currentUserVerified = false;
+
+    return false;
+  }
+
+  try {
+
+    const userRef = doc(
+      verificationDb,
+      "users",
+      user.uid
+    );
+
+    const userSnap =
+      await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+
+      currentUserVerified = false;
+
+      return false;
+    }
+
+    const userData =
+      userSnap.data();
+
+    currentUserVerified =
+      userData.verified === true;
+
+    return currentUserVerified;
+
+  } catch (error) {
+
+    console.error(
+      "Verification Check Error:",
+      error
+    );
+
+    currentUserVerified = false;
+
+    return false;
+  }
+}
+
+
+// ================================
+// OPEN VERIFIED PAGE
+// ================================
+
+async function openVerifiedPage(page) {
+
+  const user =
+    verificationAuth.currentUser;
+
+  if (!user) {
+
+    alert("অনুগ্রহ করে আগে Login করুন।");
+
+    return;
+  }
+
+  const verified =
+    await checkUserVerification(user);
+
+
+  if (!verified) {
+
+    showVerifyPopup();
+
+    return;
+  }
+
+
+  window.location.href = page;
+
+}
+
+
+// =====================================
+// MAKE FUNCTIONS AVAILABLE TO HTML
+// =====================================
+
+window.showVerifyPopup =
+  showVerifyPopup;
+
+window.closeVerifyPopup =
+  closeVerifyPopup;
+
+window.goToVerification =
+  goToVerification;
+
+window.openVerifiedPage =
+  openVerifiedPage;
 </script>
   <script type="module" src="daily-referral-timer.js"></script>
 </body>
