@@ -363,6 +363,48 @@
     line-height: 1.2;
 }
       }
+    /* Easy Earning নতুন কার্ড ডিজাইন */
+.earning-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin: 18px 0;
+}
+
+.earning-options .card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 18px 12px;
+  text-align: center;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.10);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.earning-options .card:active {
+  transform: scale(0.96);
+}
+
+.earning-options .icon {
+  width: 75px;
+  height: 75px;
+  margin: 0 auto 12px;
+  background: #eef4ff;
+  border-radius: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 42px;
+}
+
+.earning-options .card h3 {
+  margin: 5px 0 0;
+  font-size: 17px;
+  color: #222;
+  line-height: 1.4;
+}
   </style>
 </head>
 <body>
@@ -442,8 +484,18 @@
     <h1>My Freelancer</h1>
     <div class="section-title">💰 Easy Earning</div>
 
-    <div class="cards">
+    <div class="cards earning-options">
+<!-- Form Fill -->
+<div class="card" onclick="window.location.href='form.html'">
+  <div class="icon">📝</div>
+  <h3>ফর্ম পূরণ</h3>
+</div>
 
+<!-- Watch Video -->
+<div class="card" onclick="window.location.href='video.html'">
+  <div class="icon">🎬</div>
+  <h3>ভিডিও দেখে ইনকাম</h3>
+</div>
   <div class="card">
   <div class="icon">📺</div>
   <h3>Ads দেখুন</h3>
