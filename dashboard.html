@@ -1076,6 +1076,18 @@ window.goToVerification =
 
 window.openVerifiedPage =
   openVerifiedPage;
+  document.addEventListener("click", function (event) {
+    const menu = document.getElementById("threeDotMenu");
+    const button = document.querySelector(".menu-btn");
+
+    if (
+        menu &&
+        !menu.contains(event.target) &&
+        !button.contains(event.target)
+    ) {
+        menu.style.display = "none";
+    }
+});
 </script>
   <script type="module" src="daily-referral-timer.js"></script>
 </body>
