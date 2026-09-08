@@ -76,11 +76,6 @@ async function checkTwoDayLogin() {
 // =====================================
 
 onAuthStateChanged(auth, async (user) => {
-const sessionValid = await checkTwoDayLogin();
-
-if (!sessionValid) {
-  return;
-}
   // -----------------------------------
   // USER NOT LOGIN
   // -----------------------------------
@@ -93,6 +88,11 @@ if (!sessionValid) {
 
   try {
 
+    const sessionValid = await checkTwoDayLogin();
+
+if (!sessionValid) {
+  return;
+}
     // ---------------------------------
     // USER DOCUMENT
     // ---------------------------------
