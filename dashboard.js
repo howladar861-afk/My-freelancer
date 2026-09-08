@@ -36,14 +36,51 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const db = getFirestore(app);
+// =====================================
+// 2 DAYS LOGIN SESSION CHECK
+// =====================================
 
+const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
+
+async function checkTwoDayLogin() {
+
+  const loginTime = localStorage.getItem("loginTime");
+
+  // Login time না থাকলে Login Page
+  if (!loginTime) {
+    await signOut(auth);
+    window.location.href = "index.html";
+    return false;
+  }
+
+  const elapsedTime =
+    Date.now() - Number(loginTime);
+
+  // ২ দিন শেষ হলে Logout
+  if (elapsedTime >= TWO_DAYS) {
+
+    localStorage.removeItem("loginTime");
+
+    await signOut(auth);
+
+    window.location.href = "index.html";
+
+    return false;
+  }
+
+  return true;
+}
 
 // =====================================
 // USER DATA
 // =====================================
 
 onAuthStateChanged(auth, async (user) => {
+const sessionValid = await checkTwoDayLogin();
 
+if (!sessionValid) {
+  return;
+}
   // -----------------------------------
   // USER NOT LOGIN
   // -----------------------------------
@@ -198,6 +235,7 @@ if (logoutBtn) {
 
     try {
 
+      localStorage.removeItem("loginTime");
       await signOut(auth);
 
       window.location.href =
