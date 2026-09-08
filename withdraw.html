@@ -290,8 +290,8 @@
 
     </div>
 
-    <button class="withdraw-ok" onclick="closeWithdrawPopup()">
-      ✓ ঠিক আছে
+    <button type="button" class="withdraw-ok" id="withdrawOk">
+    ✓ ঠিক আছে
     </button>
 
   </div>
@@ -552,7 +552,7 @@ function closeWithdrawPopup() {
   document.getElementById("withdrawPopup").style.display =
     "none";
 
-  window.closeWithdrawPopup = closeWithdrawPopup;
+  document.getElementById("withdrawOk").addEventListener("click", closeWithdrawPopup);
 }
   </script>
 
