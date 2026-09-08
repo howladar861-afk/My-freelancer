@@ -84,6 +84,112 @@
       background: #ddd;
       font-size: 16px;
     }
+    /* Withdraw Popup */
+.withdraw-popup-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+.withdraw-popup{
+  width:100%;
+  max-width:390px;
+  background:#fff;
+  border-radius:25px;
+  overflow:hidden;
+  animation:popup .3s ease;
+}
+
+@keyframes popup{
+  from{transform:scale(.8);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+.withdraw-popup-head{
+  text-align:center;
+  padding:25px 15px 18px;
+  background:#ecfdf5;
+}
+
+.withdraw-success{
+  width:65px;
+  height:65px;
+  margin:auto;
+  border-radius:50%;
+  background:#16a34a;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  font-weight:bold;
+}
+
+.withdraw-popup-head h2{
+  color:#15803d;
+  margin:12px 0 5px;
+}
+
+.withdraw-popup-head p{
+  color:#64748b;
+  margin:0;
+}
+
+.withdraw-details{
+  margin:18px;
+  padding:5px 15px;
+  background:#f8fafc;
+  border-radius:15px;
+}
+
+.withdraw-row{
+  display:flex;
+  justify-content:space-between;
+  padding:13px 0;
+  border-bottom:1px solid #e2e8f0;
+  font-size:14px;
+}
+
+.withdraw-row:last-child{
+  border-bottom:0;
+}
+
+.withdraw-value{
+  font-weight:bold;
+}
+
+.withdraw-fee{
+  color:#dc2626;
+}
+
+.withdraw-receive{
+  color:#16a34a;
+  font-size:17px;
+}
+
+.withdraw-status{
+  background:#fef3c7;
+  color:#b45309;
+  padding:5px 10px;
+  border-radius:15px;
+}
+
+.withdraw-ok{
+  width:calc(100% - 36px);
+  margin:0 18px 20px;
+  padding:14px;
+  border:0;
+  border-radius:12px;
+  background:#16a34a;
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+}
   </style>
 </head>
 
@@ -135,7 +241,62 @@
     </button>
 
   </div>
+<!-- Withdraw Popup -->
+<div class="withdraw-popup-overlay" id="withdrawPopup">
 
+  <div class="withdraw-popup">
+
+    <div class="withdraw-popup-head">
+
+      <div class="withdraw-success">✓</div>
+
+      <h2>উইথড্র সফল হয়েছে!</h2>
+
+      <p>আপনার Withdraw Request গ্রহণ করা হয়েছে</p>
+
+    </div>
+
+    <div class="withdraw-details">
+
+      <div class="withdraw-row">
+        <span>💰 Withdraw Amount</span>
+        <span class="withdraw-value" id="popAmount">৳0.00</span>
+      </div>
+
+      <div class="withdraw-row">
+        <span>💳 Withdraw Fee (২%)</span>
+        <span class="withdraw-value withdraw-fee" id="popFee">-৳0.00</span>
+      </div>
+
+      <div class="withdraw-row">
+        <span>💵 আপনি পাবেন</span>
+        <span class="withdraw-value withdraw-receive" id="popReceive">৳0.00</span>
+      </div>
+
+      <div class="withdraw-row">
+        <span>📅 তারিখ ও সময়</span>
+        <span class="withdraw-value" id="popDate">-</span>
+      </div>
+
+      <div class="withdraw-row">
+        <span>📱 Payment</span>
+        <span class="withdraw-value" id="popMethod">-</span>
+      </div>
+
+      <div class="withdraw-row">
+        <span>📌 Status</span>
+        <span class="withdraw-status">Pending</span>
+      </div>
+
+    </div>
+
+    <button class="withdraw-ok" onclick="closeWithdrawPopup()">
+      ✓ ঠিক আছে
+    </button>
+
+  </div>
+
+</div>
   <script type="module">
 
 import {
@@ -321,7 +482,12 @@ status: "pending",
   document.getElementById("withdrawBalance").textContent =
     (Number(amount) > 0 ? "৳" + (Number(userData.balance || 0) - Number(amount)).toFixed(2) : "৳0.00");
 
-  alert("Withdraw Request সফলভাবে পাঠানো হয়েছে।");
+  showWithdrawPopup(
+  withdrawAmount,
+  withdrawFee,
+  receiveAmount,
+  method
+);
 
 } catch (error) {
 
@@ -352,7 +518,41 @@ alert(
     }
 
 };
+function showWithdrawPopup(amount, fee, receive, method) {
 
+  document.getElementById("popAmount").textContent =
+    "৳" + amount.toFixed(2);
+
+  document.getElementById("popFee").textContent =
+    "-৳" + fee.toFixed(2);
+
+  document.getElementById("popReceive").textContent =
+    "৳" + receive.toFixed(2);
+
+  document.getElementById("popMethod").textContent =
+    method === "bkash" ? "bKash" : "Nagad";
+
+  const now = new Date();
+
+  document.getElementById("popDate").textContent =
+    now.toLocaleDateString("bn-BD") +
+    " • " +
+    now.toLocaleTimeString("bn-BD", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+  document.getElementById("withdrawPopup").style.display =
+    "flex";
+}
+
+
+function closeWithdrawPopup() {
+
+  document.getElementById("withdrawPopup").style.display =
+    "none";
+
+}
   </script>
 
 </body>
