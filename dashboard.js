@@ -36,41 +36,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const db = getFirestore(app);
-// =====================================
-// 2 DAYS LOGIN CHECK
-// =====================================
-
-const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
-
-async function checkTwoDayLogin() {
-
-  const user = auth.currentUser;
-
-  if (!user) {
-    return false;
-  }
-
-  const lastLoginTime =
-    user.metadata.lastSignInTime;
-
-  if (!lastLoginTime) {
-    return true;
-  }
-
-  const elapsedTime =
-    Date.now() - new Date(lastLoginTime).getTime();
-
-  if (elapsedTime >= TWO_DAYS) {
-
-    await signOut(auth);
-
-    window.location.href = "index.html";
-
-    return false;
-  }
-
-  return true;
-}
 
 // =====================================
 // USER DATA
@@ -89,11 +54,6 @@ onAuthStateChanged(auth, async (user) => {
 
   try {
 
-    const sessionValid = await checkTwoDayLogin();
-
-if (!sessionValid) {
-  return;
-}
     // ---------------------------------
     // USER DOCUMENT
     // ---------------------------------
