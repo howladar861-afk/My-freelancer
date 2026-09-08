@@ -268,10 +268,6 @@ if (userDoc.exists()) {
     return;
   }
 }
-    localStorage.setItem(
-  "loginTime",
-  Date.now().toString()
-);
     showCustomPopup("Login Successful!");
 
     window.location.href = "dashboard.html";
