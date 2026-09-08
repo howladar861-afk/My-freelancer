@@ -37,29 +37,30 @@ const auth = getAuth(app);
 
 const db = getFirestore(app);
 // =====================================
-// 2 DAYS LOGIN SESSION CHECK
+// 2 DAYS LOGIN CHECK
 // =====================================
 
 const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
 
 async function checkTwoDayLogin() {
 
-  const loginTime = localStorage.getItem("loginTime");
+  const user = auth.currentUser;
 
-  // Login time না থাকলে Login Page
-  if (!loginTime) {
-    await signOut(auth);
-    window.location.href = "index.html";
+  if (!user) {
     return false;
   }
 
+  const lastLoginTime =
+    user.metadata.lastSignInTime;
+
+  if (!lastLoginTime) {
+    return true;
+  }
+
   const elapsedTime =
-    Date.now() - Number(loginTime);
+    Date.now() - new Date(lastLoginTime).getTime();
 
-  // ২ দিন শেষ হলে Logout
   if (elapsedTime >= TWO_DAYS) {
-
-    localStorage.removeItem("loginTime");
 
     await signOut(auth);
 
