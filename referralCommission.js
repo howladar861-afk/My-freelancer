@@ -387,7 +387,21 @@ addReferralCounts(
       // =================================
       // UPDATE VERIFICATION USER
       // =================================
+transaction.set(
+  userRef,
+  {
+    verified: true,
 
+    verificationStatus:
+      "approved",
+
+    verifiedAt:
+      serverTimestamp()
+  },
+  {
+    merge: true
+  }
+);
       // =================================
       // UPDATE COMPANY WALLET
       // =================================
