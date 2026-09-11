@@ -388,21 +388,35 @@ addReferralCounts(
       // UPDATE VERIFICATION USER
       // =================================
 
-      transaction.set(
-        userRef,
-        {
-          verified: true,
+      const currentLimit =
+  Number(userData.limit || 0);
 
-          verificationStatus:
-            "approved",
+const isFirstVerification =
+  userData.verified !== true;
 
-          verifiedAt:
-            serverTimestamp()
-        },
-        {
-          merge: true
+transaction.set(
+  userRef,
+  {
+    verified: true,
+
+    verificationStatus:
+      "approved",
+
+    verifiedAt:
+      serverTimestamp(),
+
+    ...(isFirstVerification
+      ? {
+          limit:
+            currentLimit + 5
         }
-      );
+      }
+      : {})
+  },
+  {
+    merge: true
+  }
+);
 
       // =================================
       // UPDATE COMPANY WALLET
