@@ -423,62 +423,193 @@
   </div>
 
 
-  <script>
+  <script type="module">
 
-    function submitForm() {
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-      const name =
-        document.getElementById("name").value.trim();
+  import {
+    getAuth,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-      const house =
-        document.getElementById("house").value.trim();
-
-      const village =
-        document.getElementById("village").value.trim();
-
-      const birthDate =
-        document.getElementById("birthDate").value;
-
-      const father =
-        document.getElementById("father").value;
-
-      const mother =
-        document.getElementById("mother").value;
-
-      const familyMembers =
-        document.getElementById("familyMembers").value;
-
-      const worldOwner =
-        document.getElementById("worldOwner").value.trim();
-
-      const prophet =
-        document.getElementById("prophet").value.trim();
+  import {
+    getFirestore,
+    doc,
+    getDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-      if (
-        !name ||
-        !house ||
-        !village ||
-        !birthDate ||
-        !father ||
-        !mother ||
-        !familyMembers ||
-        !worldOwner ||
-        !prophet
-      ) {
+  // ==============================
+  // FIREBASE CONFIG
+  // ==============================
 
-        alert("⚠️ দয়া করে সব তথ্য পূরণ করুন।");
+  const firebaseConfig = {
 
-        return;
+    apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+
+    authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+
+    projectId: "rakib-freelancer-9c66b",
+
+    storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+
+    messagingSenderId: "541209844482",
+
+    appId: "1:541209844482:web:510568d5226c9bf47ac01b"
+
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+
+  const auth = getAuth(app);
+
+  const db = getFirestore(app);
+
+
+  // ==============================
+  // CHECK USER VERIFICATION
+  // ==============================
+
+  onAuthStateChanged(auth, async (user) => {
+
+    const limitNumber =
+      document.querySelector(".limit-number");
+
+    const limitText =
+      document.querySelector(".limit-text");
+
+
+    // Login না থাকলে
+    if (!user) {
+
+      limitNumber.textContent = "0";
+
+      limitText.textContent =
+        "টি কাজ বাকি আছে";
+
+      return;
+    }
+
+
+    try {
+
+      const userRef =
+        doc(db, "users", user.uid);
+
+      const userSnap =
+        await getDoc(userRef);
+
+
+      if (userSnap.exists()) {
+
+        const userData =
+          userSnap.data();
+
+
+        // Verified হলে ৫টি কাজ
+        if (userData.verified === true) {
+
+          limitNumber.textContent = "5";
+
+          limitText.textContent =
+            "টি কাজ বাকি আছে";
+
+        }
+
+        // Verified না হলে ০
+        else {
+
+          limitNumber.textContent = "0";
+
+          limitText.textContent =
+            "টি কাজ বাকি আছে";
+
+        }
+
+      }
+
+      else {
+
+        limitNumber.textContent = "0";
+
       }
 
 
-      alert(
-        "✅ ফর্মের সব তথ্য পূরণ করা হয়েছে।\n\n" +
-        "পরবর্তী ধাপে Submit ও Balance সিস্টেম যুক্ত করা হবে।"
+    } catch (error) {
+
+      console.error(
+        "Verification Check Error:",
+        error
       );
 
+      limitNumber.textContent = "0";
+
     }
+
+  });
+
+
+  // ==============================
+  // FORM SUBMIT
+  // ==============================
+
+  window.submitForm = function () {
+
+    const name =
+      document.getElementById("name").value.trim();
+
+    const house =
+      document.getElementById("house").value.trim();
+
+    const village =
+      document.getElementById("village").value.trim();
+
+    const birthDate =
+      document.getElementById("birthDate").value;
+
+    const father =
+      document.getElementById("father").value;
+
+    const mother =
+      document.getElementById("mother").value;
+
+    const familyMembers =
+      document.getElementById("familyMembers").value;
+
+    const worldOwner =
+      document.getElementById("worldOwner").value.trim();
+
+    const prophet =
+      document.getElementById("prophet").value.trim();
+
+
+    if (
+      !name ||
+      !house ||
+      !village ||
+      !birthDate ||
+      !father ||
+      !mother ||
+      !familyMembers ||
+      !worldOwner ||
+      !prophet
+    ) {
+
+      alert(
+        "⚠️ দয়া করে সব তথ্য পূরণ করুন।"
+      );
+
+      return;
+    }
+
+
+    alert(
+      "✅ সব তথ্য পূরণ করা হয়েছে।\n\n" +
+      "পরবর্তী ধাপে Firebase-এ Submit ও Balance যুক্ত করা হবে।"
+    );
+
+  };
 
   </script>
 
