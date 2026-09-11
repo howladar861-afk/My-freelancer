@@ -744,7 +744,7 @@
     <div class="custom-alert-icon">✅</div>
     <div class="custom-alert-title">রাকিব ফ্রিল্যান্সার</div>
     <div id="customAlertMessage" class="custom-alert-message"></div>
-    <button onclick="closeCustomAlert()">OK</button>
+    <button type="button" onclick="closeCustomAlert()">OK</button>এটা
   </div>
   </div>
 <!-- ============================= -->
@@ -1438,6 +1438,7 @@ window.viewReferralCount = viewReferralCount;
 function closeCustomAlert() {
   document.getElementById("customAlertOverlay").style.display = "none";
 }
+  window.closeCustomAlert = closeCustomAlert;
 </script>
   <script type="module" src="daily-referral-timer.js"></script>
 </body>
