@@ -406,12 +406,11 @@ transaction.set(
       serverTimestamp(),
 
     ...(isFirstVerification
-      ? {
-          limit:
-            currentLimit + 5
-        }
-      }
-      : {})
+  ? {
+      limit:
+        currentLimit + 5
+    }
+  : {})
   },
   {
     merge: true
