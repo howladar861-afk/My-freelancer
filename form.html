@@ -202,11 +202,164 @@
       margin-top: 18px;
       line-height: 1.6;
     }
+    /* ===== RAKIB FREELANCER POPUP ===== */
+
+.popup-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.60);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.popup-box {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 28px;
+  padding: 28px 22px 24px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+  animation: popupShow .3s ease;
+}
+
+@keyframes popupShow {
+  from {
+    opacity: 0;
+    transform: scale(.85) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.popup-close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.popup-logo {
+  font-size: 25px;
+  font-weight: bold;
+  color: #123c68;
+  margin-bottom: 5px;
+}
+
+.popup-subtitle {
+  color: #16a34a;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.popup-check {
+  width: 90px;
+  height: 90px;
+  margin: 5px auto 18px;
+  border-radius: 50%;
+  background: #22c55e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52px;
+  box-shadow: 0 0 0 12px #dcfce7;
+}
+
+.popup-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #15803d;
+  margin-bottom: 10px;
+}
+
+.popup-message {
+  font-size: 16px;
+  color: #475569;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+.popup-info {
+  background: #ecfdf5;
+  border-radius: 16px;
+  padding: 13px;
+  color: #166534;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.popup-ok {
+  width: 100%;
+  border: none;
+  padding: 14px;
+  border-radius: 15px;
+  background: linear-gradient(135deg,#16a34a,#22c55e);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
   </style>
 </head>
 
 <body>
+<!-- RAKIB FREELANCER POPUP -->
 
+<div class="popup-overlay" id="customPopup">
+
+  <div class="popup-box">
+
+    <button class="popup-close" onclick="closePopup()">×</button>
+
+    <div class="popup-logo">
+      💻 রাকিব ফ্রিল্যান্সার
+    </div>
+
+    <div class="popup-subtitle">
+      Work • Learn • Earn
+    </div>
+
+    <div class="popup-check">
+      ✓
+    </div>
+
+    <div class="popup-title" id="popupTitle">
+      ফর্ম সফলভাবে জমা হয়েছে!
+    </div>
+
+    <div class="popup-message" id="popupMessage">
+      আপনার কাজটি এখন যাচাই করা হবে।
+    </div>
+
+    <div class="popup-info">
+      🛡️ কাজ শেষ হলে, প্রতিটি কাজ সফলভাবে জমা দিলে
+      <b>১২ ঘণ্টার হিসাব</b> হবে।
+    </div>
+
+    <button class="popup-ok" onclick="closePopup()">
+      OK
+    </button>
+
+  </div>
+
+</div>
   <button class="back-btn" onclick="history.back()">‹</button>
 
   <div class="container">
@@ -468,7 +621,26 @@
   const auth = getAuth(app);
 
   const db = getFirestore(app);
+// ==============================
+// RAKIB FREELANCER POPUP
+// ==============================
 
+window.showPopup = function(title, message) {
+
+  document.getElementById("popupTitle").textContent = title;
+
+  document.getElementById("popupMessage").textContent = message;
+
+  document.getElementById("customPopup").style.display = "flex";
+
+};
+
+
+window.closePopup = function() {
+
+  document.getElementById("customPopup").style.display = "none";
+
+};
 
   // ==============================
   // CHECK USER VERIFICATION
@@ -567,7 +739,10 @@ else {
 
   // Login check
   if (!user) {
-    alert("⚠️ আগে লগইন করুন।");
+    showPopup(
+  "আগে লগইন করুন",
+  "ফর্ম পূরণ করার আগে আপনার অ্যাকাউন্টে লগইন করতে হবে।"
+);
     return;
   }
 
@@ -612,9 +787,10 @@ else {
     !prophet
   ) {
 
-    alert(
-      "⚠️ দয়া করে সব তথ্য পূরণ করুন।"
-    );
+    showPopup(
+  "তথ্য অসম্পূর্ণ",
+  "দয়া করে ফর্মের সব তথ্য সঠিকভাবে পূরণ করুন।"
+);
 
     return;
   }
@@ -742,10 +918,10 @@ else {
 
 
     // সফল Submit
-    alert(
-      "✅ ফর্ম সফলভাবে জমা হয়েছে!\n\n" +
-      "আপনার কাজটি এখন যাচাই করা হবে।"
-    );
+showPopup(
+  "ফর্ম সফলভাবে জমা হয়েছে!",
+  "আপনার কাজটি এখন যাচাই করা হবে। ধন্যবাদ!"
+);
 
 
     // Form পরিষ্কার
@@ -811,10 +987,10 @@ else {
       error
     );
 
-    alert(
-      "❌ " +
-      error.message
-    );
+    showPopup(
+  "দুঃখিত!",
+  error.message
+);
 
   }
 
