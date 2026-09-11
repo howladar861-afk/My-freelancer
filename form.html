@@ -433,10 +433,13 @@
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   import {
-    getFirestore,
-    doc,
-    getDoc
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  runTransaction,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
   // ==============================
@@ -507,33 +510,37 @@
           userSnap.data();
 
 
-        // Verified হলে ৫টি কাজ
-        if (userData.verified === true) {
+        // User-এর বর্তমান Limit
+const currentLimit =
+  Number(userData.limit || 0);
 
-          limitNumber.textContent = "5";
+// Verified + Limit থাকলে
+if (
+  userData.verified === true &&
+  currentLimit > 0
+) {
 
-          limitText.textContent =
-            "টি কাজ বাকি আছে";
+  limitNumber.textContent =
+    currentLimit;
 
-        }
+  limitText.textContent =
+    "টি কাজ বাকি আছে";
 
-        // Verified না হলে ০
-        else {
+}
 
-          limitNumber.textContent = "0";
+// Verified না হলে অথবা Limit 0 হলে
+else {
 
-          limitText.textContent =
-            "টি কাজ বাকি আছে";
+  limitNumber.textContent =
+    "0";
 
-        }
+  limitText.textContent =
+    "টি কাজ বাকি আছে";
+
+}
 
       }
 
-      else {
-
-        limitNumber.textContent = "0";
-
-      }
 
 
     } catch (error) {
@@ -554,62 +561,261 @@
   // FORM SUBMIT
   // ==============================
 
-  window.submitForm = function () {
+  window.submitForm = async function () {
 
-    const name =
-      document.getElementById("name").value.trim();
+  const user = auth.currentUser;
 
-    const house =
-      document.getElementById("house").value.trim();
+  // Login check
+  if (!user) {
+    alert("⚠️ আগে লগইন করুন।");
+    return;
+  }
 
-    const village =
-      document.getElementById("village").value.trim();
+  const name =
+    document.getElementById("name").value.trim();
 
-    const birthDate =
-      document.getElementById("birthDate").value;
+  const house =
+    document.getElementById("house").value.trim();
 
-    const father =
-      document.getElementById("father").value;
+  const village =
+    document.getElementById("village").value.trim();
 
-    const mother =
-      document.getElementById("mother").value;
+  const birthDate =
+    document.getElementById("birthDate").value;
 
-    const familyMembers =
-      document.getElementById("familyMembers").value;
+  const father =
+    document.getElementById("father").value;
 
-    const worldOwner =
-      document.getElementById("worldOwner").value.trim();
+  const mother =
+    document.getElementById("mother").value;
 
-    const prophet =
-      document.getElementById("prophet").value.trim();
+  const familyMembers =
+    document.getElementById("familyMembers").value;
+
+  const worldOwner =
+    document.getElementById("worldOwner").value.trim();
+
+  const prophet =
+    document.getElementById("prophet").value.trim();
 
 
-    if (
-      !name ||
-      !house ||
-      !village ||
-      !birthDate ||
-      !father ||
-      !mother ||
-      !familyMembers ||
-      !worldOwner ||
-      !prophet
-    ) {
-
-      alert(
-        "⚠️ দয়া করে সব তথ্য পূরণ করুন।"
-      );
-
-      return;
-    }
-
+  // সব তথ্য পূরণ হয়েছে কিনা
+  if (
+    !name ||
+    !house ||
+    !village ||
+    !birthDate ||
+    !father ||
+    !mother ||
+    !familyMembers ||
+    !worldOwner ||
+    !prophet
+  ) {
 
     alert(
-      "✅ সব তথ্য পূরণ করা হয়েছে।\n\n" +
-      "পরবর্তী ধাপে Firebase-এ Submit ও Balance যুক্ত করা হবে।"
+      "⚠️ দয়া করে সব তথ্য পূরণ করুন।"
     );
 
-  };
+    return;
+  }
+
+
+  const userRef =
+    doc(db, "users", user.uid);
+
+
+  try {
+
+    await runTransaction(
+      db,
+      async (transaction) => {
+
+        // User data read
+        const userSnap =
+          await transaction.get(userRef);
+
+        if (!userSnap.exists()) {
+          throw new Error(
+            "User account পাওয়া যায়নি"
+          );
+        }
+
+        const userData =
+          userSnap.data();
+
+
+        // Verification check
+        if (userData.verified !== true) {
+          throw new Error(
+            "আপনার Verification এখনো অনুমোদিত হয়নি।"
+          );
+        }
+
+
+        // Current limit
+        const currentLimit =
+          Number(userData.limit || 0);
+
+
+        // Limit শেষ
+        if (currentLimit <= 0) {
+          throw new Error(
+            "আপনার কাজের Limit শেষ হয়ে গেছে।"
+          );
+        }
+
+
+        // নতুন Job Submission
+        const submissionRef =
+          doc(
+            collection(
+              db,
+              "jobSubmissions"
+            )
+          );
+
+
+        transaction.set(
+          submissionRef,
+          {
+
+            userId:
+              user.uid,
+
+            userEmail:
+              user.email || "",
+
+            name:
+              name,
+
+            house:
+              house,
+
+            village:
+              village,
+
+            birthDate:
+              birthDate,
+
+            father:
+              father,
+
+            mother:
+              mother,
+
+            familyMembers:
+              Number(familyMembers),
+
+            worldOwner:
+              worldOwner,
+
+            prophet:
+              prophet,
+
+            earning:
+              4,
+
+            status:
+              "pending",
+
+            submittedAt:
+              serverTimestamp()
+
+          }
+        );
+
+
+        // Limit ১ কমানো
+        transaction.update(
+          userRef,
+          {
+            limit:
+              currentLimit - 1
+          }
+        );
+
+      }
+    );
+
+
+    // সফল Submit
+    alert(
+      "✅ ফর্ম সফলভাবে জমা হয়েছে!\n\n" +
+      "আপনার কাজটি এখন যাচাই করা হবে।"
+    );
+
+
+    // Form পরিষ্কার
+    document
+      .getElementById("name")
+      .value = "";
+
+    document
+      .getElementById("house")
+      .value = "";
+
+    document
+      .getElementById("village")
+      .value = "";
+
+    document
+      .getElementById("birthDate")
+      .value = "";
+
+    document
+      .getElementById("father")
+      .value = "";
+
+    document
+      .getElementById("mother")
+      .value = "";
+
+    document
+      .getElementById("familyMembers")
+      .value = "";
+
+    document
+      .getElementById("worldOwner")
+      .value = "";
+
+    document
+      .getElementById("prophet")
+      .value = "";
+
+
+    // Limit display ১ কমানো
+    const limitNumber =
+      document.querySelector(
+        ".limit-number"
+      );
+
+    const currentDisplayedLimit =
+      Number(
+        limitNumber.textContent || 0
+      );
+
+    limitNumber.textContent =
+      Math.max(
+        0,
+        currentDisplayedLimit - 1
+      );
+
+
+  } catch (error) {
+
+    console.error(
+      "Form Submit Error:",
+      error
+    );
+
+    alert(
+      "❌ " +
+      error.message
+    );
+
+  }
+
+};
 
   </script>
 
