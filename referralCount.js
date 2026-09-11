@@ -1,14 +1,21 @@
 // =====================================
 // Rakib Freelancer
-// REFERRAL COUNT SYSTEM
+// REFERRAL COUNT + LIMIT SYSTEM
 // =====================================
-// Level 1 referral count +1
-// Level 2 referral count +1
 //
-// NOTE:
-// Commission payment (৳30 / ৳10)
-// is handled by referralCommission.js
+// Level 1 referral verify হলে:
+// ✅ referralCount +1
+// ✅ limit +1
+//
+// Level 2 referral verify হলে:
+// ✅ referralCount +1
+// ❌ limit বাড়বে না
+//
+// Commission payment:
+// referralCommission.js
 // =====================================
+
+
 export function addReferralCounts(
   transaction,
   level1Ref,
@@ -18,7 +25,7 @@ export function addReferralCounts(
 ) {
 
   // =====================================
-  // LEVEL 1 REFERRAL COUNT
+  // LEVEL 1
   // =====================================
 
   if (
@@ -31,23 +38,30 @@ export function addReferralCounts(
         level1User.referralCount || 0
       );
 
-    // TOTAL REFERRAL COUNT
-    const updateData = {
-      referralCount:
-        currentCount + 1
-    };
-    // =====================================
-    // APPLY LEVEL 1 REFERRAL DATA
-    // =====================================
+    const currentLimit =
+      Number(
+        level1User.limit || 0
+      );
 
     transaction.update(
       level1Ref,
-      updateData
+      {
+
+        // Referral Count +1
+        referralCount:
+          currentCount + 1,
+
+        // ⭐ শুধু Level 1 হলে Limit +1
+        limit:
+          currentLimit + 1
+
+      }
     );
   }
 
+
   // =====================================
-  // LEVEL 2 REFERRAL COUNT
+  // LEVEL 2
   // =====================================
 
   if (
@@ -63,9 +77,16 @@ export function addReferralCounts(
     transaction.update(
       level2Ref,
       {
+
+        // Level 2-এর Referral Count থাকবে
         referralCount:
           currentCount + 1
+
+        // ⚠️ এখানে limit নেই
+        // তাই Level 2-এর Limit বাড়বে না
+
       }
     );
   }
-      }
+
+}
