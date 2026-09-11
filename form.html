@@ -727,12 +727,15 @@ else {
 
         // Limit ১ কমানো
         transaction.update(
-          userRef,
-          {
-            limit:
-              currentLimit - 1
-          }
-        );
+  userRef,
+  {
+    limit:
+      currentLimit - 1,
+
+    balance:
+      Number(userData.balance || 0) + 4
+  }
+);
 
       }
     );
