@@ -388,35 +388,6 @@ addReferralCounts(
       // UPDATE VERIFICATION USER
       // =================================
 
-      const currentLimit =
-  Number(userData.limit || 0);
-
-const isFirstVerification =
-  userData.verified !== true;
-
-transaction.set(
-  userRef,
-  {
-    verified: true,
-
-    verificationStatus:
-      "approved",
-
-    verifiedAt:
-      serverTimestamp(),
-
-    ...(isFirstVerification
-  ? {
-      limit:
-        currentLimit + 5
-    }
-  : {})
-  },
-  {
-    merge: true
-  }
-);
-
       // =================================
       // UPDATE COMPANY WALLET
       // =================================
@@ -446,10 +417,17 @@ transaction.set(
             level1User.balance || 0
           );
 
-        transaction.set(
+        const level1Limit =
+  Number(level1User.limit || 0);
+
+transaction.set(
   level1Ref,
   {
-    balance: level1Balance + level1Amount
+    balance:
+      level1Balance + level1Amount,
+
+    limit:
+      level1Limit + 5
   },
   {
     merge: true
