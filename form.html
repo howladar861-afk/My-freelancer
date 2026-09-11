@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>ফর্ম পূরণ করে ইনকাম</title>
 
   <style>
@@ -14,103 +15,198 @@
       margin: 0;
       min-height: 100vh;
       font-family: Arial, "Noto Sans Bengali", sans-serif;
-      background: linear-gradient(135deg, #eef4ff, #f8f5ff);
+      background: linear-gradient(135deg, #eef4ff, #f7f1ff);
       color: #222;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
+      padding: 18px;
     }
 
-    /* Back Button */
     .back-btn {
       position: fixed;
-      top: 18px;
-      left: 18px;
+      top: 15px;
+      left: 15px;
       width: 44px;
       height: 44px;
       border: none;
       border-radius: 50%;
-      background: #ffffff;
+      background: #fff;
       color: #333;
       font-size: 30px;
-      font-weight: bold;
       box-shadow: 0 5px 18px rgba(0,0,0,0.12);
-      cursor: pointer;
       z-index: 10;
-    }
-
-    .back-btn:active {
-      transform: scale(0.94);
     }
 
     .container {
       width: 100%;
-      max-width: 430px;
+      max-width: 440px;
+      margin: 55px auto 20px;
       background: #fff;
       border-radius: 28px;
-      padding: 30px 22px;
-      text-align: center;
+      padding: 24px 20px 30px;
       box-shadow: 0 12px 35px rgba(0,0,0,0.10);
     }
 
     .icon {
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 18px;
-      border-radius: 25px;
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 14px;
+      border-radius: 24px;
       background: #eef4ff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 50px;
+      font-size: 46px;
     }
 
     h1 {
-      margin: 0 0 12px;
-      font-size: 26px;
+      text-align: center;
+      margin: 0;
+      font-size: 25px;
     }
 
     .subtitle {
-      color: #666;
-      font-size: 16px;
-      line-height: 1.7;
-      margin-bottom: 22px;
-    }
-
-    .notice {
-      background: #f5f7ff;
-      border-radius: 18px;
-      padding: 18px 14px;
-      margin-bottom: 20px;
-      line-height: 1.8;
+      text-align: center;
+      color: #777;
+      margin: 9px 0 20px;
+      line-height: 1.6;
       font-size: 15px;
     }
 
-    .notice strong {
-      display: block;
-      font-size: 18px;
-      margin-bottom: 5px;
+    /* LIMIT */
+    .limit-box {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      border-radius: 20px;
+      padding: 18px;
+      text-align: center;
+      margin-bottom: 15px;
+      box-shadow: 0 8px 20px rgba(79,70,229,0.25);
     }
 
-    .thanks {
+    .limit-title {
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    .limit-number {
+      font-size: 38px;
       font-weight: bold;
-      color: #4b45d9;
-      margin-top: 18px;
+      margin: 3px 0;
+    }
+
+    .limit-text {
+      font-size: 14px;
+    }
+
+    /* EARNING */
+    .earning-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      padding: 14px 16px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+
+    .earning-title {
+      color: #777;
+      font-size: 13px;
+    }
+
+    .earning-amount {
+      color: #16a34a;
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 3px;
+    }
+
+    /* FORM */
+    .form-title {
+      font-size: 19px;
+      font-weight: bold;
+      margin: 10px 0 15px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #d9dce3;
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+      background: #fff;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79,70,229,0.10);
+    }
+
+    .question-box {
+      background: #f8fafc;
+      padding: 14px;
+      border-radius: 15px;
+      margin-bottom: 16px;
+    }
+
+    .question-box label {
+      margin-bottom: 8px;
+    }
+
+    /* NOTICE */
+    .notice {
+      background: #fff7ed;
+      border-left: 4px solid #f97316;
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 13px;
+      line-height: 1.7;
+      margin: 20px 0;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 7px 18px rgba(37,99,235,0.25);
+    }
+
+    .submit-btn:active {
+      transform: scale(0.98);
     }
 
     .footer {
-      margin-top: 22px;
-      font-size: 14px;
-      color: #777;
-      line-height: 1.7;
+      text-align: center;
+      color: #888;
+      font-size: 12px;
+      margin-top: 18px;
+      line-height: 1.6;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Back Button -->
   <button class="back-btn" onclick="history.back()">‹</button>
 
   <div class="container">
@@ -120,27 +216,271 @@
     <h1>ফর্ম পূরণ করে ইনকাম</h1>
 
     <div class="subtitle">
-      এই কাজটি খুব শীঘ্রই চালু করা হবে।
-      নতুন আপডেটের জন্য আমাদের সাথেই থাকুন।
+      নিচের তথ্যগুলো সঠিকভাবে পূরণ করে কাজটি সম্পন্ন করুন।
     </div>
 
+    <!-- কাজের লিমিট -->
+    <div class="limit-box">
+
+      <div class="limit-title">
+        📋 আপনার বর্তমান কাজের লিমিট
+      </div>
+
+      <div class="limit-number">
+        5
+      </div>
+
+      <div class="limit-text">
+        টি কাজ বাকি আছে
+      </div>
+
+    </div>
+
+    <!-- প্রতি কাজের আয় -->
+    <div class="earning-box">
+
+      <div>
+        <div class="earning-title">
+          প্রতি ফর্মের আয়
+        </div>
+
+        <div class="earning-amount">
+          ৳4
+        </div>
+      </div>
+
+      <div style="font-size:32px;">
+        💰
+      </div>
+
+    </div>
+
+    <div class="form-title">
+      📄 তথ্য পূরণ করুন
+    </div>
+
+    <!-- নাম -->
+    <div class="field">
+      <label>👤 আপনার নাম</label>
+
+      <input
+        type="text"
+        id="name"
+        placeholder="আপনার নাম লিখুন"
+        required
+      >
+    </div>
+
+    <!-- বাসা -->
+    <div class="field">
+      <label>🏠 বাসা</label>
+
+      <input
+        type="text"
+        id="house"
+        placeholder="বাসার নাম/ঠিকানা লিখুন"
+        required
+      >
+    </div>
+
+    <!-- গ্রাম -->
+    <div class="field">
+      <label>🌾 গ্রাম</label>
+
+      <input
+        type="text"
+        id="village"
+        placeholder="গ্রামের নাম লিখুন"
+        required
+      >
+    </div>
+
+    <!-- জন্ম তারিখ -->
+    <div class="field">
+      <label>🎂 জন্ম তারিখ</label>
+
+      <input
+        type="date"
+        id="birthDate"
+        required
+      >
+    </div>
+
+    <!-- বাবা -->
+    <div class="question-box">
+
+      <label>👨 বাবা আছেন কি?</label>
+
+      <select id="father" required>
+
+        <option value="">
+          -- নির্বাচন করুন --
+        </option>
+
+        <option value="হ্যাঁ">
+          হ্যাঁ
+        </option>
+
+        <option value="না">
+          না
+        </option>
+
+      </select>
+
+    </div>
+
+    <!-- মা -->
+    <div class="question-box">
+
+      <label>👩 মা আছেন কি?</label>
+
+      <select id="mother" required>
+
+        <option value="">
+          -- নির্বাচন করুন --
+        </option>
+
+        <option value="হ্যাঁ">
+          হ্যাঁ
+        </option>
+
+        <option value="না">
+          না
+        </option>
+
+      </select>
+
+    </div>
+
+    <!-- পরিবারের সদস্য -->
+    <div class="field">
+
+      <label>👨‍👩‍👧‍👦 পরিবারে কতজন সদস্য?</label>
+
+      <input
+        type="number"
+        id="familyMembers"
+        min="1"
+        placeholder="সদস্য সংখ্যা লিখুন"
+        required
+      >
+
+    </div>
+
+    <!-- পৃথিবীর মালিক -->
+    <div class="question-box">
+
+      <label>🌍 এই পৃথিবীর মালিক কে?</label>
+
+      <input
+        type="text"
+        id="worldOwner"
+        placeholder="উত্তর লিখুন"
+        required
+      >
+
+    </div>
+
+    <!-- নবী -->
+    <div class="question-box">
+
+      <label>🕌 আমাদের নবী কে?</label>
+
+      <input
+        type="text"
+        id="prophet"
+        placeholder="উত্তর লিখুন"
+        required
+      >
+
+    </div>
+
+    <!-- নোটিশ -->
     <div class="notice">
-      <strong>⏳ কাজটি প্রস্তুত করা হচ্ছে</strong>
 
-      কিছু সময়ের মধ্যে এই কাজটি চালু করা হবে।
-      চালু হওয়ার সাথে সাথে আপনি এখানে কাজ করার সুযোগ পাবেন।
+      <b>ℹ️ কাজের নিয়ম</b><br>
+
+      একটি ভেরিফিকেশনের মাধ্যমে বর্তমানে
+      <b>৫টি কাজ</b> করা যাবে।
+      প্রতিটি কাজ সফলভাবে জমা দিলে
+      <b>৳৪</b> আয়ের হিসাব হবে।
+
     </div>
 
-    <div class="thanks">
-      💙 ধৈর্য ধরে অপেক্ষা করার জন্য ধন্যবাদ
-    </div>
+    <!-- Submit -->
+    <button
+      class="submit-btn"
+      onclick="submitForm()"
+    >
+      📤 ফর্ম জমা দিন
+    </button>
 
     <div class="footer">
-      এর মধ্যে অন্য কাজগুলো করুন এবং আপনার টিম গঠন করুন।<br>
-      👥 টিম গড়ুন • 💰 ইনকাম করুন • 🚀 এগিয়ে যান
+      আপনার তথ্য সঠিকভাবে পূরণ করুন।<br>
+      কাজের লিমিট শেষ হলে নতুন কাজের জন্য পরবর্তী লেভেল প্রয়োজন হবে।
     </div>
 
   </div>
+
+
+  <script>
+
+    function submitForm() {
+
+      const name =
+        document.getElementById("name").value.trim();
+
+      const house =
+        document.getElementById("house").value.trim();
+
+      const village =
+        document.getElementById("village").value.trim();
+
+      const birthDate =
+        document.getElementById("birthDate").value;
+
+      const father =
+        document.getElementById("father").value;
+
+      const mother =
+        document.getElementById("mother").value;
+
+      const familyMembers =
+        document.getElementById("familyMembers").value;
+
+      const worldOwner =
+        document.getElementById("worldOwner").value.trim();
+
+      const prophet =
+        document.getElementById("prophet").value.trim();
+
+
+      if (
+        !name ||
+        !house ||
+        !village ||
+        !birthDate ||
+        !father ||
+        !mother ||
+        !familyMembers ||
+        !worldOwner ||
+        !prophet
+      ) {
+
+        alert("⚠️ দয়া করে সব তথ্য পূরণ করুন।");
+
+        return;
+      }
+
+
+      alert(
+        "✅ ফর্মের সব তথ্য পূরণ করা হয়েছে।\n\n" +
+        "পরবর্তী ধাপে Submit ও Balance সিস্টেম যুক্ত করা হবে।"
+      );
+
+    }
+
+  </script>
 
 </body>
 </html>
