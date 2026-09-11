@@ -682,9 +682,71 @@
     font-size:15px;
   }
 }
+    /* ============================= */
+/* RAKIB FREELANCER POPUP */
+/* ============================= */
+
+.custom-alert-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:999999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  box-sizing:border-box;
+}
+
+.custom-alert{
+  width:100%;
+  max-width:360px;
+  background:#fff;
+  border-radius:25px;
+  padding:25px 20px;
+  text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
+}
+
+.custom-alert-icon{
+  font-size:45px;
+  margin-bottom:10px;
+}
+
+.custom-alert-title{
+  font-size:22px;
+  font-weight:800;
+  color:#2563eb;
+  margin-bottom:10px;
+}
+
+.custom-alert-message{
+  font-size:17px;
+  color:#374151;
+  margin-bottom:20px;
+}
+
+.custom-alert button{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:25px;
+  background:linear-gradient(45deg,#2563eb,#7c3aed);
+  color:#fff;
+  font-size:17px;
+  font-weight:bold;
+}
   </style>
 </head>
 <body>
+  <div id="customAlertOverlay" class="custom-alert-overlay">
+  <div class="custom-alert">
+    <div class="custom-alert-icon">✅</div>
+    <div class="custom-alert-title">রাকিব ফ্রিল্যান্সার</div>
+    <div id="customAlertMessage" class="custom-alert-message"></div>
+    <button onclick="closeCustomAlert()">OK</button>
+  </div>
+  </div>
 <!-- ============================= -->
 <!-- VERIFICATION REQUIRED POPUP -->
 <!-- ============================= -->
@@ -1325,10 +1387,10 @@ function copyInfo(id) {
 
   navigator.clipboard.writeText(text)
     .then(() => {
-      alert("কপি হয়েছে ✅");
+      showCustomAlert("কপি হয়েছে ✅");
     })
     .catch(() => {
-      alert("কপি করা যায়নি ❌");
+      showCustomAlert("কপি করা যায়নি ❌");
     });
 }
 
@@ -1347,7 +1409,7 @@ function viewReferralCount() {
   const count =
     element.textContent.trim();
 
-  alert("আপনার Referral Count: " + count);
+  showCustomAlert("আপনার Referral Count: " + count);
 }
 window.copyInfo = copyInfo;
 window.viewReferralCount = viewReferralCount;
@@ -1368,6 +1430,14 @@ window.viewReferralCount = viewReferralCount;
         menu.style.display = "none";
     }
 });
+  function showCustomAlert(message) {
+  document.getElementById("customAlertMessage").textContent = message;
+  document.getElementById("customAlertOverlay").style.display = "flex";
+}
+
+function closeCustomAlert() {
+  document.getElementById("customAlertOverlay").style.display = "none";
+}
 </script>
   <script type="module" src="daily-referral-timer.js"></script>
 </body>
