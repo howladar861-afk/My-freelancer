@@ -316,10 +316,165 @@
   font-weight: bold;
   cursor: pointer;
 }
+    /* ===== THREE DOT MENU ===== */
+
+.menu-btn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  color: #333;
+  font-size: 28px;
+  font-weight: bold;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.12);
+  z-index: 20;
+  cursor: pointer;
+}
+    /* ===== MENU BOX ===== */
+
+.menu-box {
+  display: none;
+  position: fixed;
+  top: 68px;
+  right: 15px;
+  width: 210px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 8px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+  z-index: 1000;
+}
+
+.menu-box button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 14px 12px;
+  text-align: left;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.menu-box button:active {
+  background: #f1f5f9;
+}
+    /* ===== INFO POPUP ===== */
+
+.info-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.60);
+  backdrop-filter: blur(5px);
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.info-box {
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 25px;
+  padding: 24px 20px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+}
+
+.info-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f5f9;
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.info-title {
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 18px;
+  padding-right: 40px;
+}
+
+.history-item {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 15px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.history-item b {
+  color: #15803d;
+}
+
+.rule-box {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 16px;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.rule-highlight {
+  background: #ecfdf5;
+  border-left: 4px solid #22c55e;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 12px;
+  color: #166534;
+  font-weight: bold;
+}
   </style>
 </head>
 
 <body>
+  <!-- THREE DOT BUTTON -->
+
+<button class="menu-btn" onclick="toggleMenu()">⋮</button>
+  <div class="menu-box" id="menuBox">
+
+  <button onclick="openHistory()">
+    📊 ইনকাম হিস্টোরি
+  </button>
+
+  <button onclick="openRules()">
+    📖 কাজের নিয়ম
+  </button>
+
+  </div>
+  <!-- HISTORY & RULES POPUP -->
+
+<div class="info-overlay" id="infoPopup">
+
+  <div class="info-box">
+
+    <button class="info-close" onclick="closeInfoPopup()">
+      ×
+    </button>
+
+    <div class="info-title" id="infoTitle">
+      তথ্য
+    </div>
+
+    <div id="infoContent"></div>
+
+  </div>
+
+</div>
 <!-- RAKIB FREELANCER POPUP -->
 
 <div class="popup-overlay" id="customPopup">
@@ -728,11 +883,90 @@ else {
 
   });
 
+// ==============================
+// কাজের নিয়ম
+// ==============================
 
+window.openRules = function () {
+
+  // মেনু বন্ধ
+  document.getElementById("menuBox").style.display = "none";
+
+  // Popup-এর শিরোনাম
+  document.getElementById("infoTitle").textContent =
+    "📖 কাজের নিয়ম";
+
+  // নিয়মের লেখা
+  document.getElementById("infoContent").innerHTML = `
+
+    <div class="rule-box">
+
+      <p>
+        📋 ফর্ম পূরণ করে কাজটি সম্পূর্ণ করুন।
+      </p>
+
+      <p>
+        💰 প্রতিটি সফল কাজের জন্য
+        <b>৳৪</b> আয়ের হিসাব হবে।
+      </p>
+
+      <div class="rule-highlight">
+        ⭐ ফর্ম পূরণ কাজের লিমিট বাড়াতে
+        আপনার প্রথম লেভেলে
+        <b>১ জনকে ভেরিফাই</b> করাতে হবে।
+        <br><br>
+        👤 ১ জনকে ভেরিফাই করালে
+        <b>৫টি অতিরিক্ত কাজের লিমিট</b>
+        পাবেন।
+      </div>
+
+    </div>
+
+  `;
+
+  // Popup দেখানো
+  document.getElementById("infoPopup").style.display = "flex";
+
+};
   // ==============================
   // FORM SUBMIT
   // ==============================
 
+    // ==============================
+// THREE DOT MENU
+// ==============================
+
+window.toggleMenu = function () {
+
+  const menu = document.getElementById("menuBox");
+
+  if (menu.style.display === "block") {
+    menu.style.display = "none";
+  } else {
+    menu.style.display = "block";
+  }
+
+};
+
+
+// ==============================
+// CLOSE MENU WHEN CLICK OUTSIDE
+// ==============================
+
+document.addEventListener("click", function(event) {
+
+  const menu = document.getElementById("menuBox");
+  const button = document.querySelector(".menu-btn");
+
+  if (
+    menu &&
+    !menu.contains(event.target) &&
+    !button.contains(event.target)
+  ) {
+    menu.style.display = "none";
+  }
+
+});
   window.submitForm = async function () {
 
   const user = auth.currentUser;
@@ -996,6 +1230,31 @@ showPopup(
 
 };
 
+    // ==============================
+// MENU BUTTON CLICK OUTSIDE
+// ==============================
+
+document.addEventListener("click", function(event) {
+
+  const menu = document.getElementById("menuBox");
+  const button = document.querySelector(".menu-btn");
+
+  if (
+    menu &&
+    !menu.contains(event.target) &&
+    !button.contains(event.target)
+  ) {
+    menu.style.display = "none";
+  }
+
+});
+    // ==============================
+// CLOSE INFO POPUP
+// ==============================
+
+window.closeInfoPopup = function () {
+  document.getElementById("infoPopup").style.display = "none";
+};
   </script>
 
 </body>
