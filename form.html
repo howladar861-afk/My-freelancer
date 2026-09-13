@@ -742,11 +742,14 @@
 
   import {
   getFirestore,
-  doc,
-  getDoc,
-  collection,
-  runTransaction,
-  serverTimestamp
+doc,
+getDoc,
+collection,
+query,
+where,
+getDocs,
+runTransaction,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
@@ -926,6 +929,137 @@ window.openRules = function () {
 
   // Popup দেখানো
   document.getElementById("infoPopup").style.display = "flex";
+
+};
+    // ==============================
+// INCOME HISTORY
+// ==============================
+
+window.openHistory = async function () {
+
+  // মেনু বন্ধ
+  document.getElementById("menuBox").style.display = "none";
+
+  const user = auth.currentUser;
+
+  // লগইন না থাকলে
+  if (!user) {
+    document.getElementById("infoTitle").textContent =
+      "📊 ইনকাম হিস্টোরি";
+
+    document.getElementById("infoContent").innerHTML = `
+      <div class="rule-box">
+        🔐 ইনকাম হিস্টোরি দেখতে আগে লগইন করুন।
+      </div>
+    `;
+
+    document.getElementById("infoPopup").style.display = "flex";
+    return;
+  }
+
+  document.getElementById("infoTitle").textContent =
+    "📊 আমার ইনকাম হিস্টোরি";
+
+  document.getElementById("infoContent").innerHTML = `
+    <div class="rule-box">
+      ⏳ আপনার কাজের হিস্টোরি লোড হচ্ছে...
+    </div>
+  `;
+
+  document.getElementById("infoPopup").style.display = "flex";
+
+  try {
+
+    // শুধু বর্তমান ইউজারের কাজ খোঁজা হবে
+    const q = query(
+      collection(db, "formSubmissions"),
+      where("userId", "==", user.uid)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+
+      document.getElementById("infoContent").innerHTML = `
+        <div class="rule-box">
+          📭 এখনো কোনো কাজের হিস্টোরি নেই।
+        </div>
+      `;
+
+      return;
+    }
+
+    let historyHTML = "";
+
+    let serial = 1;
+
+    snapshot.forEach((docSnap) => {
+
+      const data = docSnap.data();
+
+      const earning = Number(data.earning || 0);
+
+      historyHTML += `
+
+        <div class="history-item">
+
+          <div style="
+            font-size:17px;
+            font-weight:bold;
+            margin-bottom:8px;
+          ">
+            📝 কাজ #${serial}
+          </div>
+
+          <div>
+            💰 আয়:
+            <b>৳${earning}</b>
+          </div>
+
+          <div>
+            👤 নাম:
+            ${data.name || "—"}
+          </div>
+
+          <div>
+            📍 গ্রাম:
+            ${data.village || "—"}
+          </div>
+
+          <div>
+            📅 জন্ম তারিখ:
+            ${data.birthDate || "—"}
+          </div>
+
+          <div style="margin-top:8px;">
+            📌 স্ট্যাটাস:
+            <b>${data.status || "জমা হয়েছে"}</b>
+          </div>
+
+        </div>
+
+      `;
+
+      serial++;
+
+    });
+
+    document.getElementById("infoContent").innerHTML =
+      historyHTML;
+
+  } catch (error) {
+
+    console.error("History Error:", error);
+
+    document.getElementById("infoContent").innerHTML = `
+      <div class="rule-box">
+        ❌ হিস্টোরি লোড করা যায়নি।
+        <br><br>
+        ${error.message}
+      </div>
+    `;
+
+  }
 
 };
   // ==============================
