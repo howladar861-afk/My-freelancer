@@ -82,6 +82,70 @@
       color: #222;
       font-size: 16px;
     }
+    /* Success Popup */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.popup-box {
+  width: 100%;
+  max-width: 350px;
+  background: white;
+  border-radius: 20px;
+  padding: 28px 22px;
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  animation: popupShow 0.25s ease;
+}
+
+.popup-icon {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.popup-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2563eb;
+  margin-bottom: 12px;
+}
+
+.popup-message {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.popup-close {
+  width: 100%;
+  margin-top: 20px;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+@keyframes popupShow {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
   </style>
 </head>
 
@@ -155,7 +219,30 @@
     </button>
 
   </div>
+<!-- Success Popup -->
+<div id="successPopup" class="popup-overlay">
+  <div class="popup-box">
 
+    <div class="popup-icon">✅</div>
+
+    <div class="popup-title">
+      Rakib Freelancer
+    </div>
+
+    <div class="popup-message">
+      আপনার Verification Request<br>
+      সফলভাবে পাঠানো হয়েছে।<br><br>
+
+      Admin Approve করলে আপনার<br>
+      Account Verified হবে।
+    </div>
+
+    <button class="popup-close" onclick="closeSuccessPopup()">
+      ঠিক আছে
+    </button>
+
+  </div>
+</div>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
@@ -185,7 +272,14 @@ import {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
     const db = getFirestore(app);
-  
+  window.showSuccessPopup = function () {
+  document.getElementById("successPopup").style.display = "flex";
+};
+
+window.closeSuccessPopup = function () {
+  document.getElementById("successPopup").style.display = "none";
+  window.location.href = "dashboard.html";
+};
     // =====================================
 // CHECK ACCOUNT VERIFICATION
 // =====================================
@@ -306,11 +400,7 @@ onAuthStateChanged(auth, async (user) => {
       }
     );
 
-    alert(
-      "✅ Verification request সফলভাবে পাঠানো হয়েছে। Admin Approve করলে Account Verified হবে।"
-    );
-
-    window.location.href = "dashboard.html";
+    showSuccessPopup();
 
   } catch (error) {
 
