@@ -586,6 +586,21 @@ function closeModal() {
 
       alert("✅ আপনার অর্ডার সফলভাবে পাঠানো হয়েছে!");
 
+        const whatsappNumber = "8801837976455";
+
+const message = `আমি এই অফার নিতে চাই।
+
+পণ্য: ${product}
+নাম: ${customerName}
+জেলা: ${district}
+Free Fire UID: ${gameUID}
+যে নম্বর থেকে টাকা দিয়েছি: ${senderNumber}
+Transaction ID: ${transactionID}`;
+
+window.open(
+  `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`,
+  "_blank"
+);
       document.querySelector(".modal-box form").reset();
       closeModal();
 
