@@ -15,7 +15,7 @@
 
 body{
     background:#f4f7ff;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
     padding:20px 12px 40px;
 }
 
@@ -31,9 +31,8 @@ body{
     width:100%;
     max-width:720px;
     margin:auto;
-
     display:grid;
-    grid-template-columns:repeat(2, 1fr);
+    grid-template-columns:repeat(2,1fr);
     gap:16px;
 }
 
@@ -43,64 +42,45 @@ body{
     border-radius:24px;
     overflow:hidden;
     text-align:center;
-
     box-shadow:0 5px 18px rgba(0,0,0,.12);
-
-    transition:transform .2s;
+    cursor:pointer;
 }
 
 .card:active{
     transform:scale(.97);
 }
 
-/* শুধু ছবির জন্য */
 .card img{
     width:100%;
     height:190px;
-    display:block;
     object-fit:cover;
+    display:block;
 }
 
-/* নিচের নাম */
 .card-name{
     min-height:85px;
     display:flex;
     align-items:center;
     justify-content:center;
-
     padding:10px;
-
     font-size:21px;
     font-weight:700;
     line-height:1.3;
     color:#111;
 }
 
-
-/* মোবাইল */
 @media(max-width:500px){
-
-    body{
-        padding:15px 10px 35px;
-    }
 
     .title{
         font-size:40px;
-        margin-bottom:30px;
     }
 
     .cards{
         gap:12px;
     }
 
-    .card{
-        border-radius:22px;
-    }
-
     .card img{
-        width:100%;
         height:160px;
-        object-fit:cover;
     }
 
     .card-name{
@@ -117,79 +97,60 @@ body{
 
 <div class="cards">
 
-    <!-- 1 UID TopUp -->
-    <div class="card" onclick="openPage('uid-topup.html')">
-
-        <img src="uid-topup.jpg" alt="UID TopUp">
-
-        <div class="card-name">
-            UID TopUp<br>(BD)
-        </div>
-
+<!-- UID TOPUP -->
+<div class="card" onclick="openPage('uid-topup.html')">
+    <img src="IMG-20260915-WA0034--3.jpg" alt="UID TopUp">
+    <div class="card-name">
+        UID TopUp<br>(BD)
     </div>
-
-
-    <!-- 2 Weekly Monthly -->
-    <div class="card" onclick="openPage('weekly-monthly.html')">
-
-        <img src="weekly-monthly.jpg" alt="Weekly Monthly">
-
-        <div class="card-name">
-            Weekly/Monthly<br>Offer
-        </div>
-
-    </div>
-
-
-    <!-- 3 Weekly Lite -->
-    <div class="card" onclick="openPage('weekly-lite.html')">
-
-        <img src="weekly-lite.jpg" alt="Weekly Lite">
-
-        <div class="card-name">
-            Weekly Lite<br>(BD Server)
-        </div>
-
-    </div>
-
-
-    <!-- 4 Level Up Pass -->
-    <div class="card" onclick="openPage('level-up-pass.html')">
-
-        <img src="level-up-pass.jpg" alt="Level Up Pass">
-
-        <div class="card-name">
-            Level Up Pass
-        </div>
-
-    </div>
-
-
-    <!-- 5 FF Likes -->
-    <div class="card" onclick="openPage('ff-likes.html')">
-
-        <img src="ff-likes.jpg" alt="FF Likes">
-
-        <div class="card-name">
-            FF Likes
-        </div>
-
-    </div>
-
-
-    <!-- 6 Indonesia Server -->
-    <div class="card" onclick="openPage('indonesia.html')">
-
-        <img src="indonesia.jpg" alt="Indonesia Server">
-
-        <div class="card-name">
-            Indonesia<br>Server
-        </div>
-
-    </div>
-
 </div>
 
+
+<!-- WEEKLY MONTHLY -->
+<div class="card" onclick="openPage('weekly-monthly.html')">
+    <img src="IMG-20260915-WA0034--8.jpg" alt="Weekly Monthly">
+    <div class="card-name">
+        Weekly/Monthly<br>Offer
+    </div>
+</div>
+
+
+<!-- WEEKLY LITE -->
+<div class="card" onclick="openPage('weekly-lite.html')">
+    <img src="IMG-20260915-WA0034--5.jpg" alt="Weekly Lite">
+    <div class="card-name">
+        Weekly Lite<br>(BD Server)
+    </div>
+</div>
+
+
+<!-- LEVEL UP PASS -->
+<div class="card" onclick="openPage('level-up-pass.html')">
+    <img src="IMG-20260915-WA0034--6.jpg" alt="Level Up Pass">
+    <div class="card-name">
+        Level Up Pass
+    </div>
+</div>
+
+
+<!-- FF LIKES -->
+<div class="card" onclick="openPage('ff-likes.html')">
+    <img src="IMG-20260915-WA0034--7.jpg" alt="FF Likes">
+    <div class="card-name">
+        FF Likes
+    </div>
+</div>
+
+
+<!-- INDONESIA SERVER -->
+<div class="card" onclick="openPage('indonesia.html')">
+    <img src="IMG-20260915-WA0034--2.jpg" alt="Indonesia Server">
+    <div class="card-name">
+        Indonesia<br>Server
+    </div>
+</div>
+
+</div>
 
 <script>
 function openPage(page){
