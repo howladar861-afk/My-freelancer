@@ -183,6 +183,20 @@ button{
         Request Loading...
       </p>
     </div>
+    <!-- Free Fire TopUp Orders -->
+<div class="card" style="margin-top:20px;">
+
+  <h2 style="color:#ffc107;">
+    🔥 Free Fire TopUp Orders
+  </h2>
+
+  <div id="freeFireOrders">
+    <p class="empty">
+      Free Fire Order Loading...
+    </p>
+  </div>
+
+</div>
 <!-- Pending Job Submissions -->
 <div class="card" style="margin-top:20px;">
   <h2 style="color:#ffc107;">
@@ -316,6 +330,7 @@ loginBtn.onclick = async function () {
 loadVerificationRequests();
 loadCompanyWallet();
 loadJobSubmissions();
+    loadFreeFireOrders();
   }
 
   catch (error) {
