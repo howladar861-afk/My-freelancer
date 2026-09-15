@@ -529,5 +529,71 @@ function closeModal() {
     </div>
 
 </div>
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+    authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+    projectId: "rakib-freelancer-9c66b",
+    storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+    messagingSenderId: "541209844482",
+    appId: "1:541209844482:web:510568d5226c9bf47ac01b",
+    measurementId: "G-F6QNE0QN5K"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.submitOrder = async function(event) {
+    event.preventDefault();
+
+    const product = document.getElementById("selectedProduct").innerText.trim();
+    const customerName = document.getElementById("customerName").value.trim();
+    const district = document.getElementById("district").value.trim();
+    const gameUID = document.getElementById("gameUID").value.trim();
+    const senderNumber = document.getElementById("senderNumber").value.trim();
+    const transactionID = document.getElementById("transactionID").value.trim();
+
+    if (
+      !customerName ||
+      !district ||
+      !gameUID ||
+      !senderNumber ||
+      !transactionID
+    ) {
+      alert("⚠️ সব তথ্য পূরণ করুন।");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "orders"), {
+        product: product,
+        customerName: customerName,
+        district: district,
+        gameUID: gameUID,
+        senderNumber: senderNumber,
+        transactionID: transactionID,
+        status: "pending",
+        createdAt: serverTimestamp()
+      });
+
+      alert("✅ আপনার অর্ডার সফলভাবে পাঠানো হয়েছে!");
+
+      document.querySelector(".modal-box form").reset();
+      closeModal();
+
+    } catch (error) {
+      console.error("Order Error:", error);
+      alert("❌ অর্ডার পাঠানো যায়নি। আবার চেষ্টা করুন।");
+    }
+  };
+    </script>
 </body>
           </html>
