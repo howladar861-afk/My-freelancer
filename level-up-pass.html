@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level Up Pass</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(145deg,#050b2b,#11195c,#080d30);
+  color:white;
+}
+
+.page{
+  min-height:100vh;
+  padding:15px;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.back{
+  border:0;
+  background:none;
+  color:white;
+  font-size:42px;
+}
+
+.header h1{
+  margin:0;
+  font-size:30px;
+  font-weight:900;
+}
+
+/* Banner */
+
+.banner{
+  border:2px solid #8b2cff;
+  border-radius:24px;
+  padding:25px 15px;
+  margin-bottom:25px;
+  background:linear-gradient(135deg,#3b0870,#120b46,#351070);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  box-shadow:0 0 30px rgba(130,40,255,.5);
+}
+
+.ticket{
+  font-size:65px;
+}
+
+.banner h2{
+  margin:0;
+  font-size:30px;
+  line-height:1;
+}
+
+.banner h2 span{
+  color:#ffd21c;
+}
+
+.banner p{
+  margin:12px 0 0;
+  font-size:14px;
+  font-weight:bold;
+}
+
+/* Offers */
+
+.offers{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:17px;
+}
+
+.card{
+  border-radius:22px;
+  padding:11px;
+  background:linear-gradient(145deg,#07143d,#101b48);
+  border:3px solid;
+  box-shadow:0 8px 25px rgba(0,0,0,.4);
+}
+
+.blue{border-color:#00bfff;}
+.purple{border-color:#a02cff;}
+.green{border-color:#00df66;}
+.orange{border-color:#ff8a00;}
+.red{border-color:#ff3150;}
+.cyan{border-color:#00d9ff;}
+
+.level{
+  display:inline-block;
+  padding:7px 16px;
+  border-radius:0 0 15px 0;
+  font-size:19px;
+  font-weight:900;
+}
+
+.blue .level{background:#078de8;}
+.purple .level{background:#8e26e8;}
+.green .level{background:#13b956;}
+.orange .level{background:#ed7900;}
+.red .level{background:#ee2743;}
+.cyan .level{background:#08afd0;}
+
+.info{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:17px 3px;
+}
+
+.badge{
+  min-width:65px;
+  height:65px;
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle,#ffe76a,#9c5500);
+  border:4px solid #ffd43b;
+  font-size:25px;
+}
+
+.badge b{
+  font-size:14px;
+}
+
+.info small{
+  font-size:12px;
+}
+
+.info h3{
+  margin:4px 0 9px;
+  font-size:20px;
+}
+
+.price{
+  display:inline-block;
+  background:#ffd329;
+  color:#111;
+  padding:8px 12px;
+  border-radius:13px;
+  font-size:17px;
+  font-weight:900;
+}
+
+/* Button */
+
+.recharge{
+  width:100%;
+  border:0;
+  border-radius:30px;
+  padding:14px 5px;
+  color:white;
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.blue .recharge{
+  background:linear-gradient(90deg,#00a9ff,#0878ff);
+}
+
+.purple .recharge{
+  background:linear-gradient(90deg,#ad3cff,#7020ff);
+}
+
+.green .recharge{
+  background:linear-gradient(90deg,#20d84d,#0bbf69);
+}
+
+.orange .recharge{
+  background:linear-gradient(90deg,#ff9d00,#ff5b00);
+}
+
+.red .recharge{
+  background:linear-gradient(90deg,#ff4050,#f02043);
+}
+
+.cyan .recharge{
+  background:linear-gradient(90deg,#08c8e8,#079bd1);
+}
+
+.recharge:active{
+  transform:scale(.97);
+}
+
+/* Footer */
+
+.footer{
+  margin-top:24px;
+  padding:18px 8px;
+  text-align:center;
+  border:2px solid #252e85;
+  border-radius:20px;
+  font-weight:bold;
+  font-size:14px;
+}
+
+/* Mobile */
+
+@media(max-width:600px){
+
+  .offers{
+    grid-template-columns:1fr;
+  }
+
+  .banner h2{
+    font-size:27px;
+  }
+
+  .ticket{
+    font-size:55px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <div class="header">
+    <button class="back" onclick="history.back()">←</button>
+    <h1>Level Up Pass</h1>
+  </div>
+
+  <div class="banner">
+
+    <div class="ticket">🎫</div>
+
+    <div>
+      <h2>
+        LEVEL UP<br>
+        <span>PASS</span>
+      </h2>
+
+      <p>
+        Level Up Your Game<br>
+        Get More Rewards!
+      </p>
+    </div>
+
+  </div>
+
+
+  <div class="offers">
+
+    <!-- LEVEL 6 -->
+
+    <div class="card blue">
+
+      <div class="level">
+        Level 6
+      </div>
+
+      <div class="info">
+
+        <div class="badge">
+          👑
+          <b>6</b>
+        </div>
+
+        <div>
+          <small>Level Up Package -</small>
+          <h3>Level 6</h3>
+
+          <div class="price">
+            🪙 BDT 40
+          </div>
+        </div>
+
+      </div>
+
+      <button class="recharge"
+      onclick="selectRecharge('Level Up Package - Level 6','40')">
+        ⚡ Select Recharge
+      </button>
+
+    </div>
+
+
+    <!-- LEVEL 10 -->
+
+    <div class="card purple">
+
+      <div class="level">
+        Level 10
+      </div>
+
+      <div class="info">
+
+        <div class="badge">
+          👑
+          <b>10</b>
+        </div>
+
+        <div>
+          <small>Level Up Package -</small>
+          <h3>Level 10</h3>
+
+          <div class="price">
+            🪙 BDT 75
+          </div>
+        </div>
+
+      </div>
+
+      <button class="recharge"
+      onclick="selectRecharge('Level Up Package - Level 10','75')">
+        ⚡ Select Recharge
+      </button>
+
+    </div>
+
+
+    <!-- LEVEL 15 -->
+
+    <div class="card green">
+
+      <div class="level">
+        Level 15
+      </div>
+
+      <div class="info">
+
+        <div class="badge">
+          👑
+          <b>15</b>
+        </div>
+
+        <div>
+          <small>Level Up Package -</small>
+          <h3>Level 15</h3>
+
+          <div class="price">
+            🪙 BDT 75
+          </div>
+        </div>
+
+      </div>
+
+      <button class="recharge"
+      onclick="selectRecharge('Level Up Package - Level 15','75')">
+        ⚡ Select Recharge
+      </button>
+
+    </div>
+
+
+    <!-- LEVEL 20 -->
+
+    <div class="card orange">
+
+      <div class="level">
+        Level 20
+      </div>
+
+      <div class="info">
+
+        <div class="badge">
+          👑
+          <b>20</b>
+        </div>
+
+        <div>
+          <small>Level Up Package -</small>
+          <h3>Level 20</h3>
+
+          <div class="price">
+            🪙 BDT 75
+          </div>
+        </div>
+
+      </div>
+
+      <button class="recharge"
+      onclick="selectRecharge('Level Up Package - Level 20','75')">
+        ⚡ Select Recharge
+      </button>
+
+    </div>
+
+
+    <!-- LEVEL 25 -->
+
+    <div class="card red">
+
+      <div class="level">
+        Level 25
+      </div>
+
+      <div class="info">
+
+        <div class="badge">
+          👑
+          <b>25</b>
+        </div>
+
+        <div>
+          <small>Level Up Package -</small>
+          <h3>Level 25</h3>
+
+          <div class="price">
+            🪙 BDT 75
+          </div>
+        </div>
+
+      </div>
+
+      <button class="recharge"
+      onclick="selectRecharge('Level Up Package - Level 25','75')">
+        ⚡ Select Recharge
+      </button>
+
+    </div>
+
+
+    <!-- LEVEL 30 -->
+
+    <div class="card cyan">
+
+      <div class="level">
+        Level 30
+      </div>
+
+      <div class="info">
+
+        <div class="badge">
+          👑
+          <b>30</b>
+        </div>
+
+        <div>
+          <small>Level Up Package -</small>
+          <h3>Level 30</h3>
+
+          <div class="price">
+            🪙 BDT 105
+          </div>
+        </div>
+
+      </div>
+
+      <button class="recharge"
+      onclick="selectRecharge('Level Up Package - Level 30','105')">
+        ⚡ Select Recharge
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="footer">
+    👑 Play More &nbsp; • &nbsp;
+    Level Up &nbsp; • &nbsp;
+    Get More Rewards
+  </div>
+
+</div>
+
+
+<script>
+
+function selectRecharge(packageName,price){
+
+  alert(
+    "আপনি নির্বাচন করেছেন:\n\n" +
+    packageName +
+    "\nমূল্য: BDT " +
+    price
+  );
+
+}
+
+</script>
+
+</body>
+      </html>
