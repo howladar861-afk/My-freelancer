@@ -114,6 +114,7 @@ onAuthStateChanged(auth, (user) => {
   loadVerificationRequests();
 loadCompanyWallet();
   loadJobSubmissions();
+  loadFreeFireOrders();
   });
 // =====================================
 // LOAD PENDING JOB SUBMISSIONS
@@ -1291,7 +1292,242 @@ async function deleteRequest(id) {
 
 }
 
+// =====================================
+// FREE FIRE TOPUP ORDERS
+// =====================================
 
+function loadFreeFireOrders() {
+
+  const orderList =
+    document.getElementById("freeFireOrders");
+
+  if (!orderList) {
+    console.error("❌ freeFireOrders element পাওয়া যায়নি");
+    return;
+  }
+
+  orderList.innerHTML = `
+    <div class="message">
+      ⏳ Free Fire Order Loading...
+    </div>
+  `;
+
+  const ordersRef =
+    collection(db, "orders");
+
+  onSnapshot(
+    ordersRef,
+
+    (snapshot) => {
+
+      orderList.innerHTML = "";
+
+      let pendingCount = 0;
+
+      snapshot.forEach((docSnap) => {
+
+        const data = docSnap.data();
+        const id = docSnap.id;
+
+        if (data.status !== "pending") {
+          return;
+        }
+
+        pendingCount++;
+
+        const card =
+          document.createElement("div");
+
+        card.className = "request-card";
+
+        card.innerHTML = `
+
+          <h3>🔥 Free Fire TopUp Order</h3>
+
+          <div class="info">
+            💎 Product:
+            ${escapeHtml(data.product || "নেই")}
+          </div>
+
+          <div class="info">
+            👤 Customer Name:
+            ${escapeHtml(data.customerName || "নেই")}
+          </div>
+
+          <div class="info">
+            📍 District:
+            ${escapeHtml(data.district || "নেই")}
+          </div>
+
+          <div class="info">
+            🎮 Game UID:
+            ${escapeHtml(data.gameUID || "নেই")}
+          </div>
+
+          <div class="info">
+            📱 Sender Number:
+            ${escapeHtml(data.senderNumber || "নেই")}
+          </div>
+
+          <div class="info">
+            🧾 Transaction ID:
+            ${escapeHtml(data.transactionID || "নেই")}
+          </div>
+
+          <div class="status">
+            ⏳ Pending
+          </div>
+
+          <div class="buttons">
+
+            <button
+              class="ff-approve"
+              data-id="${escapeHtml(id)}">
+              ✅ Approve
+            </button>
+
+            <button
+              class="ff-reject"
+              data-id="${escapeHtml(id)}">
+              ❌ Reject
+            </button>
+
+          </div>
+        `;
+
+        orderList.appendChild(card);
+
+      });
+
+      if (pendingCount === 0) {
+
+        orderList.innerHTML = `
+          <div class="message">
+            ✅ কোনো Pending Free Fire Order নেই।
+          </div>
+        `;
+
+        return;
+      }
+
+      orderList
+        .querySelectorAll(".ff-approve")
+        .forEach((button) => {
+
+          button.onclick = () => {
+            approveFreeFireOrder(button.dataset.id);
+          };
+
+        });
+
+      orderList
+        .querySelectorAll(".ff-reject")
+        .forEach((button) => {
+
+          button.onclick = () => {
+            rejectFreeFireOrder(button.dataset.id);
+          };
+
+        });
+
+    },
+
+    (error) => {
+
+      console.error(
+        "❌ Free Fire Order Error:",
+        error
+      );
+
+      orderList.innerHTML = `
+        <div class="message">
+          ❌ Free Fire Order Load করা যায়নি।
+          <br><br>
+          ${escapeHtml(error.message)}
+        </div>
+      `;
+
+    }
+  );
+}
+
+
+// =====================================
+// APPROVE FREE FIRE ORDER
+// =====================================
+
+async function approveFreeFireOrder(id) {
+
+  if (!confirm("এই Free Fire Order Approve করবেন?")) {
+    return;
+  }
+
+  try {
+
+    const orderRef =
+      doc(db, "orders", id);
+
+    await updateDoc(orderRef, {
+      status: "approved",
+      approvedAt: serverTimestamp(),
+      approvedBy: auth.currentUser.uid
+    });
+
+    alert("✅ Free Fire Order Approve হয়েছে!");
+
+  } catch (error) {
+
+    console.error(
+      "Approve Free Fire Order Error:",
+      error
+    );
+
+    alert(
+      "❌ Approve করা যায়নি:\n\n" +
+      error.message
+    );
+
+  }
+}
+
+
+// =====================================
+// REJECT FREE FIRE ORDER
+// =====================================
+
+async function rejectFreeFireOrder(id) {
+
+  if (!confirm("এই Free Fire Order Reject করবেন?")) {
+    return;
+  }
+
+  try {
+
+    const orderRef =
+      doc(db, "orders", id);
+
+    await updateDoc(orderRef, {
+      status: "rejected",
+      rejectedAt: serverTimestamp(),
+      rejectedBy: auth.currentUser.uid
+    });
+
+    alert("❌ Free Fire Order Reject হয়েছে!");
+
+  } catch (error) {
+
+    console.error(
+      "Reject Free Fire Order Error:",
+      error
+    );
+
+    alert(
+      "❌ Reject করা যায়নি:\n\n" +
+      error.message
+    );
+
+  }
+}
 // =====================================
 // LOGOUT
 // =====================================
