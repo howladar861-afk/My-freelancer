@@ -93,6 +93,155 @@ body {
     font-size: 15px;
     font-weight: 600;
 }
+    /* ===== BUY NOW POPUP ===== */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 450px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 22px;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.30);
+    animation: popupOpen 0.25s ease;
+}
+
+@keyframes popupOpen {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f1f1;
+    color: #222;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.modal-box h2 {
+    text-align: center;
+    margin: 5px 35px 18px;
+    color: #111827;
+    font-size: 24px;
+}
+
+.selected-product {
+    background: #eef4ff;
+    border: 1px solid #d5e2ff;
+    border-radius: 12px;
+    padding: 13px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: #172554;
+    margin-bottom: 18px;
+}
+
+.payment-box {
+    background: #f8fafc;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 18px;
+}
+
+.payment-box h3 {
+    margin: 0 0 12px;
+    text-align: center;
+    font-size: 19px;
+    color: #111827;
+}
+
+.payment-box p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.payment-box span {
+    font-weight: 700;
+}
+
+.warning {
+    margin-top: 13px;
+    padding: 12px;
+    border-radius: 10px;
+    background: #fff4e5;
+    border: 1px solid #ffd59a;
+    color: #8a4b00;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.modal-box form label {
+    display: block;
+    margin: 12px 0 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.modal-box input {
+    width: 100%;
+    padding: 13px 14px;
+    box-sizing: border-box;
+    border: 1px solid #d1d5db;
+    border-radius: 11px;
+    outline: none;
+    font-size: 15px;
+    background: #ffffff;
+}
+
+.modal-box input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+}
+
+.submit-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+}
 </style>
 </head>
 
@@ -283,15 +432,102 @@ body {
 
 function buyNow(product, price) {
 
-    // এখানে পরবর্তীতে UID / Payment পেজে পাঠানো যাবে
+    document.getElementById("selectedProduct").innerText =
+        product + " - BDT " + price;
 
-    alert(
-        "Selected: " + product +
-        "\nPrice: BDT " + price
-    );
+    document.getElementById("buyModal").style.display = "flex";
+
+}
+
+function closeModal() {
+    document.getElementById("buyModal").style.display = "none";
 }
 
 </script>
+<!-- BUY NOW POPUP -->
+<div id="buyModal" class="modal">
 
+    <div class="modal-box">
+
+        <button class="close-btn" onclick="closeModal()">×</button>
+
+        <h2>💳 Complete Your Order</h2>
+
+        <div id="selectedProduct" class="selected-product">
+            Selected Offer
+        </div>
+
+        <div class="payment-box">
+            <h3>Payment Number</h3>
+
+            <p>
+                <b>বিকাশ:</b>
+                <span>01837976455</span>
+            </p>
+
+            <p>
+                <b>নগদ:</b>
+                <span>01404534868</span>
+            </p>
+
+            <div class="warning">
+                ⚠️ এই নাম্বারে শুধুমাত্র Send Money / Cash In
+                গ্রহণ করা হবে।<br><br>
+                ভুলবশত Flexiload দিলে সেই টাকা
+                ফেরতযোগ্য হবে না।
+            </div>
+        </div>
+
+        <form onsubmit="submitOrder(event)">
+
+            <label>1. আপনার নাম</label>
+            <input
+                type="text"
+                id="customerName"
+                placeholder="আপনার নাম লিখুন"
+                required
+            >
+
+            <label>2. জেলা</label>
+            <input
+                type="text"
+                id="district"
+                placeholder="আপনার জেলা লিখুন"
+                required
+            >
+
+            <label>3. আপনার গেমের UID</label>
+            <input
+                type="text"
+                id="gameUID"
+                placeholder="Free Fire UID"
+                required
+            >
+
+            <label>4. যে নাম্বার থেকে টাকা দিয়েছেন</label>
+            <input
+                type="tel"
+                id="senderNumber"
+                placeholder="01XXXXXXXXX"
+                required
+            >
+
+            <label>5. Transaction ID</label>
+            <input
+                type="text"
+                id="transactionID"
+                placeholder="Transaction ID লিখুন"
+                required
+            >
+
+            <button type="submit" class="submit-btn">
+                Submit
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
 </body>
           </html>
