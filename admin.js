@@ -1311,7 +1311,7 @@ console.log("🔥 loadFreeFireOrders চালু হয়েছে");
       ⏳ Free Fire Order Loading...
     </div>
   `;
-
+console.log("🔥 Orders collection তৈরি হচ্ছে");
   const ordersRef =
     collection(db, "orders");
 
@@ -1434,7 +1434,9 @@ console.log("🔥 loadFreeFireOrders চালু হয়েছে");
 
     (error) => {
 
-      console.error(
+  console.error("🔥 FIRESTORE ERROR:", error);
+
+  console.error(
         "❌ Free Fire Order Error:",
         error
       );
