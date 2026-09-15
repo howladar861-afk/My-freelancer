@@ -473,18 +473,157 @@ body{
   </div>
 
 </div>
+<div class="modal" id="rechargeModal">
 
+  <div class="modal-box">
+
+    <h2>💳 Recharge Details</h2>
+
+    <div class="payment">
+      <b>বিকাশ: 01837976455</b><br>
+      <b>নগদ: 01404534868</b>
+
+      <p>
+        ⚠️ এই নাম্বারে শুধুমাত্র
+        <b>Send Money / Cash In</b>
+        গ্রহণ করা হয়।
+      </p>
+
+      <p>
+        ভুলবশত <b>Flexiload</b> দিলে
+        টাকা ফেরতযোগ্য হবে না।
+      </p>
+    </div>
+
+    <div class="selected">
+      অফার: <span id="selectedPackage"></span><br>
+      মূল্য: BDT <span id="selectedPrice"></span>
+    </div>
+
+    <form onsubmit="submitRequest(event)">
+
+      <input
+        id="customerName"
+        type="text"
+        placeholder="আপনার নাম"
+        required
+      >
+
+      <input
+        id="district"
+        type="text"
+        placeholder="জেলা"
+        required
+      >
+
+      <input
+        id="gameUID"
+        type="text"
+        placeholder="Free Fire UID"
+        required
+      >
+
+      <input
+        id="senderNumber"
+        type="tel"
+        placeholder="যে নাম্বার থেকে টাকা দিয়েছেন"
+        required
+      >
+
+      <input
+        id="transactionID"
+        type="text"
+        placeholder="Transaction ID"
+        required
+      >
+
+      <button type="submit">
+        Submit
+      </button>
+
+      <button
+        type="button"
+        onclick="closeRecharge()">
+        Close
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
 
 <script>
 
-function selectRecharge(packageName,price){
+let selectedPackage = "";
+let selectedPrice = "";
 
-  alert(
-    "আপনি নির্বাচন করেছেন:\n\n" +
-    packageName +
-    "\nমূল্য: BDT " +
-    price
-  );
+function selectRecharge(packageName, price) {
+
+  selectedPackage = packageName;
+  selectedPrice = price;
+
+  document.getElementById("selectedPackage").textContent = packageName;
+  document.getElementById("selectedPrice").textContent = price;
+
+  document.getElementById("rechargeModal").style.display = "block";
+
+  document.body.style.overflow = "hidden";
+}
+
+
+function closeRecharge() {
+
+  document.getElementById("rechargeModal").style.display = "none";
+
+  document.body.style.overflow = "";
+
+}
+
+
+function submitRequest(event) {
+
+  event.preventDefault();
+
+  const name =
+    document.getElementById("customerName").value.trim();
+
+  const district =
+    document.getElementById("district").value.trim();
+
+  const uid =
+    document.getElementById("gameUID").value.trim();
+
+  const sender =
+    document.getElementById("senderNumber").value.trim();
+
+  const transaction =
+    document.getElementById("transactionID").value.trim();
+
+
+  const message =
+`আমি এই অফার নিতে চাই।
+
+অফার: ${selectedPackage}
+মূল্য: BDT ${selectedPrice}
+
+নাম: ${name}
+জেলা: ${district}
+Free Fire UID: ${uid}
+যে নাম্বার থেকে টাকা দিয়েছি: ${sender}
+Transaction ID: ${transaction}`;
+
+
+  const whatsappNumber = "8801837976455";
+
+  const whatsappURL =
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    encodeURIComponent(message);
+
+
+  window.open(whatsappURL, "_blank");
 
 }
 
