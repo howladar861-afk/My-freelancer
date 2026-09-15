@@ -1297,7 +1297,7 @@ async function deleteRequest(id) {
 // =====================================
 
 function loadFreeFireOrders() {
-
+console.log("🔥 loadFreeFireOrders চালু হয়েছে");
   const orderList =
     document.getElementById("freeFireOrders");
 
