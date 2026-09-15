@@ -3,16 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Level Up Pass</title>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
 
 body{
   margin:0;
-  font-family:Arial,sans-serif;
+  font-family:Arial,"Noto Sans Bengali",sans-serif;
   background:linear-gradient(145deg,#050b2b,#11195c,#080d30);
   color:white;
 }
@@ -21,6 +23,8 @@ body{
   min-height:100vh;
   padding:15px;
 }
+
+/* HEADER */
 
 .header{
   display:flex;
@@ -34,6 +38,7 @@ body{
   background:none;
   color:white;
   font-size:42px;
+  cursor:pointer;
 }
 
 .header h1{
@@ -42,19 +47,25 @@ body{
   font-weight:900;
 }
 
-/* Banner */
+
+/* BANNER */
 
 .banner{
   border:2px solid #8b2cff;
   border-radius:24px;
   padding:25px 15px;
   margin-bottom:25px;
-  background:linear-gradient(135deg,#3b0870,#120b46,#351070);
+
+  background:
+  linear-gradient(135deg,#3b0870,#120b46,#351070);
+
   display:flex;
   align-items:center;
   justify-content:center;
   gap:18px;
-  box-shadow:0 0 30px rgba(130,40,255,.5);
+
+  box-shadow:
+  0 0 30px rgba(130,40,255,.5);
 }
 
 .ticket{
@@ -77,7 +88,8 @@ body{
   font-weight:bold;
 }
 
-/* Offers */
+
+/* OFFER GRID */
 
 .offers{
   display:grid;
@@ -85,53 +97,116 @@ body{
   gap:17px;
 }
 
+
+/* CARD */
+
 .card{
   border-radius:22px;
   padding:11px;
-  background:linear-gradient(145deg,#07143d,#101b48);
+
+  background:
+  linear-gradient(145deg,#07143d,#101b48);
+
   border:3px solid;
-  box-shadow:0 8px 25px rgba(0,0,0,.4);
+
+  box-shadow:
+  0 8px 25px rgba(0,0,0,.4);
 }
 
-.blue{border-color:#00bfff;}
-.purple{border-color:#a02cff;}
-.green{border-color:#00df66;}
-.orange{border-color:#ff8a00;}
-.red{border-color:#ff3150;}
-.cyan{border-color:#00d9ff;}
+.blue{
+  border-color:#00bfff;
+}
+
+.purple{
+  border-color:#a02cff;
+}
+
+.green{
+  border-color:#00df66;
+}
+
+.orange{
+  border-color:#ff8a00;
+}
+
+.red{
+  border-color:#ff3150;
+}
+
+.cyan{
+  border-color:#00d9ff;
+}
+
+
+/* LEVEL TAG */
 
 .level{
   display:inline-block;
+
   padding:7px 16px;
+
   border-radius:0 0 15px 0;
+
   font-size:19px;
   font-weight:900;
 }
 
-.blue .level{background:#078de8;}
-.purple .level{background:#8e26e8;}
-.green .level{background:#13b956;}
-.orange .level{background:#ed7900;}
-.red .level{background:#ee2743;}
-.cyan .level{background:#08afd0;}
+.blue .level{
+  background:#078de8;
+}
+
+.purple .level{
+  background:#8e26e8;
+}
+
+.green .level{
+  background:#13b956;
+}
+
+.orange .level{
+  background:#ed7900;
+}
+
+.red .level{
+  background:#ee2743;
+}
+
+.cyan .level{
+  background:#08afd0;
+}
+
+
+/* CONTENT */
 
 .info{
   display:flex;
   align-items:center;
   gap:10px;
+
   padding:17px 3px;
 }
 
+
+/* BADGE */
+
 .badge{
+
   min-width:65px;
   height:65px;
+
   border-radius:50%;
+
   display:flex;
   flex-direction:column;
+
   justify-content:center;
   align-items:center;
-  background:radial-gradient(circle,#ffe76a,#9c5500);
+
+  background:
+  radial-gradient(circle,#ffe76a,#9c5500);
+
   border:4px solid #ffd43b;
+
   font-size:25px;
 }
 
@@ -148,26 +223,44 @@ body{
   font-size:20px;
 }
 
+
+/* PRICE */
+
 .price{
   display:inline-block;
+
   background:#ffd329;
+
   color:#111;
+
   padding:8px 12px;
+
   border-radius:13px;
+
   font-size:17px;
+
   font-weight:900;
 }
 
-/* Button */
+
+/* RECHARGE BUTTON */
 
 .recharge{
+
   width:100%;
+
   border:0;
+
   border-radius:30px;
+
   padding:14px 5px;
+
   color:white;
+
   font-size:14px;
+
   font-weight:900;
+
   cursor:pointer;
 }
 
@@ -199,19 +292,217 @@ body{
   transform:scale(.97);
 }
 
-/* Footer */
+
+/* FOOTER */
 
 .footer{
+
   margin-top:24px;
+
   padding:18px 8px;
+
   text-align:center;
+
   border:2px solid #252e85;
+
   border-radius:20px;
+
   font-weight:bold;
+
   font-size:14px;
 }
 
-/* Mobile */
+
+/* =========================
+   POPUP
+========================= */
+
+.modal{
+
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  background:rgba(0,0,0,.78);
+
+  z-index:100;
+
+  padding:14px;
+
+  overflow-y:auto;
+}
+
+
+.modal-box{
+
+  max-width:520px;
+
+  margin:25px auto 30px;
+
+  background:white;
+
+  color:#111;
+
+  border-radius:24px;
+
+  padding:20px;
+
+  box-shadow:
+  0 10px 45px rgba(0,0,0,.55);
+}
+
+
+/* POPUP TITLE */
+
+.modal-title{
+
+  text-align:center;
+
+  font-size:25px;
+
+  font-weight:900;
+
+  margin:0 0 14px;
+}
+
+
+/* PAYMENT INFO */
+
+.payment{
+
+  background:#fff4df;
+
+  border:2px solid #ffd28a;
+
+  border-radius:17px;
+
+  padding:15px;
+
+  margin-bottom:16px;
+
+  color:#7b4a13;
+}
+
+.payment .number{
+
+  font-size:19px;
+
+  font-weight:900;
+
+  margin:5px 0;
+}
+
+.warning{
+
+  margin-top:12px;
+
+  font-size:14px;
+
+  line-height:1.5;
+}
+
+
+/* SELECTED PACKAGE */
+
+.selected{
+
+  background:#edf4ff;
+
+  border-radius:12px;
+
+  padding:11px;
+
+  margin-bottom:12px;
+
+  font-weight:bold;
+}
+
+
+/* FORM */
+
+.form-label{
+
+  display:block;
+
+  font-weight:800;
+
+  margin:10px 0 5px;
+}
+
+.form-input{
+
+  width:100%;
+
+  padding:13px;
+
+  border:2px solid #ddd;
+
+  border-radius:12px;
+
+  font-size:16px;
+
+  outline:none;
+}
+
+.form-input:focus{
+
+  border-color:#2875ed;
+}
+
+
+/* SUBMIT */
+
+.submit{
+
+  width:100%;
+
+  margin-top:16px;
+
+  border:0;
+
+  border-radius:13px;
+
+  padding:14px;
+
+  background:#2166e8;
+
+  color:white;
+
+  font-size:17px;
+
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+
+/* CLOSE */
+
+.close{
+
+  width:100%;
+
+  margin-top:9px;
+
+  border:0;
+
+  border-radius:13px;
+
+  padding:12px;
+
+  background:#e9e9e9;
+
+  color:#222;
+
+  font-weight:bold;
+
+  cursor:pointer;
+}
+
+
+/* MOBILE */
 
 @media(max-width:600px){
 
@@ -226,111 +517,46 @@ body{
   .ticket{
     font-size:55px;
   }
-}
-  /* Recharge Popup */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  overflow-y: auto;
-  padding: 20px;
-  box-sizing: border-box;
+
 }
 
-.modal-box {
-  width: 100%;
-  max-width: 550px;
-  margin: 30px auto;
-  background: #ffffff;
-  border-radius: 22px;
-  padding: 22px;
-  box-sizing: border-box;
-  box-shadow: 0 15px 50px rgba(0,0,0,0.5);
-  color: #17203a;
-}
-
-.modal-box h2 {
-  text-align: center;
-  margin: 0 0 20px;
-  font-size: 26px;
-}
-
-.payment {
-  background: #fff4df;
-  border: 1px solid #ffd58a;
-  border-radius: 15px;
-  padding: 18px;
-  margin-bottom: 18px;
-  font-size: 16px;
-  line-height: 1.7;
-}
-
-.payment p {
-  margin: 10px 0 0;
-}
-
-.selected {
-  background: #eef4ff;
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 15px;
-  font-weight: bold;
-  line-height: 1.7;
-}
-
-.modal-box input {
-  width: 100%;
-  padding: 15px;
-  margin: 6px 0;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  box-sizing: border-box;
-  font-size: 16px;
-  outline: none;
-}
-
-.modal-box input:focus {
-  border-color: #2875f0;
-}
-
-.modal-box button {
-  width: 100%;
-  padding: 15px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 12px;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-  background: #2875f0;
-  color: white;
-}
-
-.modal-box button[type="button"] {
-  background: #777;
-}
 </style>
 </head>
 
+
 <body>
+
 
 <div class="page">
 
+
+  <!-- HEADER -->
+
   <div class="header">
-    <button class="back" onclick="history.back()">←</button>
-    <h1>Level Up Pass</h1>
+
+    <button
+      class="back"
+      onclick="history.back()">
+      ←
+    </button>
+
+    <h1>
+      Level Up Pass
+    </h1>
+
   </div>
+
+
+  <!-- BANNER -->
 
   <div class="banner">
 
-    <div class="ticket">🎫</div>
+    <div class="ticket">
+      🎫
+    </div>
 
     <div>
+
       <h2>
         LEVEL UP<br>
         <span>PASS</span>
@@ -340,12 +566,17 @@ body{
         Level Up Your Game<br>
         Get More Rewards!
       </p>
+
     </div>
 
   </div>
 
 
+
+  <!-- OFFERS -->
+
   <div class="offers">
+
 
     <!-- LEVEL 6 -->
 
@@ -363,22 +594,36 @@ body{
         </div>
 
         <div>
-          <small>Level Up Package -</small>
-          <h3>Level 6</h3>
+
+          <small>
+            Level Up Package -
+          </small>
+
+          <h3>
+            Level 6
+          </h3>
 
           <div class="price">
             🪙 BDT 40
           </div>
+
         </div>
 
       </div>
 
-      <button class="recharge"
-      onclick="selectRecharge('Level Up Package - Level 6','40')">
+      <button
+        class="recharge"
+        onclick="openRecharge(
+          'Level Up Package - Level 6',
+          40
+        )">
+
         ⚡ Select Recharge
+
       </button>
 
     </div>
+
 
 
     <!-- LEVEL 10 -->
@@ -397,22 +642,36 @@ body{
         </div>
 
         <div>
-          <small>Level Up Package -</small>
-          <h3>Level 10</h3>
+
+          <small>
+            Level Up Package -
+          </small>
+
+          <h3>
+            Level 10
+          </h3>
 
           <div class="price">
             🪙 BDT 75
           </div>
+
         </div>
 
       </div>
 
-      <button class="recharge"
-      onclick="selectRecharge('Level Up Package - Level 10','75')">
+      <button
+        class="recharge"
+        onclick="openRecharge(
+          'Level Up Package - Level 10',
+          75
+        )">
+
         ⚡ Select Recharge
+
       </button>
 
     </div>
+
 
 
     <!-- LEVEL 15 -->
@@ -431,22 +690,36 @@ body{
         </div>
 
         <div>
-          <small>Level Up Package -</small>
-          <h3>Level 15</h3>
+
+          <small>
+            Level Up Package -
+          </small>
+
+          <h3>
+            Level 15
+          </h3>
 
           <div class="price">
             🪙 BDT 75
           </div>
+
         </div>
 
       </div>
 
-      <button class="recharge"
-      onclick="selectRecharge('Level Up Package - Level 15','75')">
+      <button
+        class="recharge"
+        onclick="openRecharge(
+          'Level Up Package - Level 15',
+          75
+        )">
+
         ⚡ Select Recharge
+
       </button>
 
     </div>
+
 
 
     <!-- LEVEL 20 -->
@@ -465,22 +738,36 @@ body{
         </div>
 
         <div>
-          <small>Level Up Package -</small>
-          <h3>Level 20</h3>
+
+          <small>
+            Level Up Package -
+          </small>
+
+          <h3>
+            Level 20
+          </h3>
 
           <div class="price">
             🪙 BDT 75
           </div>
+
         </div>
 
       </div>
 
-      <button class="recharge"
-      onclick="selectRecharge('Level Up Package - Level 20','75')">
+      <button
+        class="recharge"
+        onclick="openRecharge(
+          'Level Up Package - Level 20',
+          75
+        )">
+
         ⚡ Select Recharge
+
       </button>
 
     </div>
+
 
 
     <!-- LEVEL 25 -->
@@ -499,22 +786,36 @@ body{
         </div>
 
         <div>
-          <small>Level Up Package -</small>
-          <h3>Level 25</h3>
+
+          <small>
+            Level Up Package -
+          </small>
+
+          <h3>
+            Level 25
+          </h3>
 
           <div class="price">
             🪙 BDT 75
           </div>
+
         </div>
 
       </div>
 
-      <button class="recharge"
-      onclick="selectRecharge('Level Up Package - Level 25','75')">
+      <button
+        class="recharge"
+        onclick="openRecharge(
+          'Level Up Package - Level 25',
+          75
+        )">
+
         ⚡ Select Recharge
+
       </button>
 
     </div>
+
 
 
     <!-- LEVEL 30 -->
@@ -533,162 +834,344 @@ body{
         </div>
 
         <div>
-          <small>Level Up Package -</small>
-          <h3>Level 30</h3>
+
+          <small>
+            Level Up Package -
+          </small>
+
+          <h3>
+            Level 30
+          </h3>
 
           <div class="price">
             🪙 BDT 105
           </div>
+
         </div>
 
       </div>
 
-      <button class="recharge"
-      onclick="selectRecharge('Level Up Package - Level 30','105')">
+      <button
+        class="recharge"
+        onclick="openRecharge(
+          'Level Up Package - Level 30',
+          105
+        )">
+
         ⚡ Select Recharge
+
       </button>
 
     </div>
+
 
   </div>
 
 
   <div class="footer">
-    👑 Play More &nbsp; • &nbsp;
-    Level Up &nbsp; • &nbsp;
+
+    👑 Play More
+    &nbsp; • &nbsp;
+    Level Up
+    &nbsp; • &nbsp;
     Get More Rewards
+
   </div>
 
+
 </div>
-<div class="modal" id="rechargeModal">
+
+
+
+<!-- =========================
+     RECHARGE POPUP
+========================= -->
+
+<div
+  class="modal"
+  id="rechargeModal">
+
 
   <div class="modal-box">
 
-    <h2>💳 Recharge Details</h2>
+
+    <h2 class="modal-title">
+      💳 Recharge Details
+    </h2>
+
+
+    <!-- PAYMENT NUMBERS -->
 
     <div class="payment">
-      <b>বিকাশ: 01837976455</b><br>
-      <b>নগদ: 01404534868</b>
 
-      <p>
+      <div class="number">
+        বিকাশ: 01837976455
+      </div>
+
+      <div class="number">
+        নগদ: 01404534868
+      </div>
+
+
+      <div class="warning">
+
         ⚠️ এই নাম্বারে শুধুমাত্র
-        <b>Send Money / Cash In</b>
+        <b>
+          Send Money / Cash In
+        </b>
         গ্রহণ করা হয়।
-      </p>
 
-      <p>
-        ভুলবশত <b>Flexiload</b> দিলে
-        টাকা ফেরতযোগ্য হবে না।
-      </p>
+        <br><br>
+
+        ভুলবশত
+        <b>
+          Flexiload
+        </b>
+        দিলে সেই টাকা
+        ফেরতযোগ্য হবে না।
+
+      </div>
+
     </div>
+
+
+
+    <!-- SELECTED OFFER -->
 
     <div class="selected">
-      অফার: <span id="selectedPackage"></span><br>
-      মূল্য: BDT <span id="selectedPrice"></span>
+
+      নির্বাচিত অফার:
+
+      <span id="selectedPackage">
+      </span>
+
+      <br>
+
+      মূল্য:
+
+      BDT
+
+      <span id="selectedPrice">
+      </span>
+
     </div>
 
-    <form onsubmit="submitRequest(event)">
+
+
+    <!-- FORM -->
+
+    <form
+      onsubmit="submitRequest(event)">
+
+
+      <label class="form-label">
+
+        আপনার নাম
+
+      </label>
 
       <input
+        class="form-input"
         id="customerName"
         type="text"
-        placeholder="আপনার নাম"
+        placeholder="আপনার নাম লিখুন"
         required
       >
 
+
+
+      <label class="form-label">
+
+        জেলা
+
+      </label>
+
       <input
+        class="form-input"
         id="district"
         type="text"
-        placeholder="জেলা"
+        placeholder="আপনার জেলা লিখুন"
         required
       >
 
+
+
+      <label class="form-label">
+
+        আপনার গেমের UID
+
+      </label>
+
       <input
+        class="form-input"
         id="gameUID"
         type="text"
         placeholder="Free Fire UID"
         required
       >
 
+
+
+      <label class="form-label">
+
+        যে নাম্বার থেকে টাকা দিয়েছেন
+
+      </label>
+
       <input
+        class="form-input"
         id="senderNumber"
         type="tel"
-        placeholder="যে নাম্বার থেকে টাকা দিয়েছেন"
+        placeholder="01XXXXXXXXX"
         required
       >
+
+
+
+      <label class="form-label">
+
+        Transaction ID
+
+      </label>
 
       <input
+        class="form-input"
         id="transactionID"
         type="text"
-        placeholder="Transaction ID"
+        placeholder="Transaction ID লিখুন"
         required
       >
 
-      <button type="submit">
-        Submit
-      </button>
+
 
       <button
-        type="button"
-        onclick="closeRecharge()">
-        Close
+        class="submit"
+        type="submit">
+
+        Submit
+
       </button>
 
+
+      <button
+        class="close"
+        type="button"
+        onclick="closeRecharge()">
+
+        Close
+
+      </button>
+
+
     </form>
+
 
   </div>
 
 </div>
 
+
+
 <script>
+
+
+/* SELECTED PACKAGE */
 
 let selectedPackage = "";
 let selectedPrice = "";
 
-function selectRecharge(packageName, price) {
+
+
+/* OPEN POPUP */
+
+function openRecharge(
+  packageName,
+  price
+){
 
   selectedPackage = packageName;
+
   selectedPrice = price;
 
-  document.getElementById("selectedPackage").textContent = packageName;
-  document.getElementById("selectedPrice").textContent = price;
 
-  document.getElementById("rechargeModal").style.display = "block";
+  document.getElementById(
+    "selectedPackage"
+  ).textContent = packageName;
+
+
+  document.getElementById(
+    "selectedPrice"
+  ).textContent = price;
+
+
+  document.getElementById(
+    "rechargeModal"
+  ).style.display = "block";
+
 
   document.body.style.overflow = "hidden";
+
 }
 
 
-function closeRecharge() {
 
-  document.getElementById("rechargeModal").style.display = "none";
+/* CLOSE POPUP */
+
+function closeRecharge(){
+
+  document.getElementById(
+    "rechargeModal"
+  ).style.display = "none";
+
 
   document.body.style.overflow = "";
 
 }
 
 
-function submitRequest(event) {
+
+/* SUBMIT */
+
+function submitRequest(event){
 
   event.preventDefault();
 
+
   const name =
-    document.getElementById("customerName").value.trim();
+    document.getElementById(
+      "customerName"
+    ).value.trim();
+
 
   const district =
-    document.getElementById("district").value.trim();
+    document.getElementById(
+      "district"
+    ).value.trim();
+
 
   const uid =
-    document.getElementById("gameUID").value.trim();
+    document.getElementById(
+      "gameUID"
+    ).value.trim();
+
 
   const sender =
-    document.getElementById("senderNumber").value.trim();
+    document.getElementById(
+      "senderNumber"
+    ).value.trim();
 
-  const transaction =
-    document.getElementById("transactionID").value.trim();
 
+  const trx =
+    document.getElementById(
+      "transactionID"
+    ).value.trim();
+
+
+
+  /* WHATSAPP MESSAGE */
 
   const message =
+
 `আমি এই অফার নিতে চাই।
 
 অফার: ${selectedPackage}
@@ -698,23 +1181,36 @@ function submitRequest(event) {
 জেলা: ${district}
 Free Fire UID: ${uid}
 যে নাম্বার থেকে টাকা দিয়েছি: ${sender}
-Transaction ID: ${transaction}`;
+Transaction ID: ${trx}`;
 
 
-  const whatsappNumber = "8801837976455";
 
-  const whatsappURL =
+  /* YOUR WHATSAPP NUMBER */
+
+  const whatsappNumber =
+    "8801837976455";
+
+
+  const url =
     "https://wa.me/" +
     whatsappNumber +
     "?text=" +
     encodeURIComponent(message);
 
 
-  window.open(whatsappURL, "_blank");
+
+  /* OPEN WHATSAPP */
+
+  window.open(
+    url,
+    "_blank"
+  );
 
 }
 
+
 </script>
 
+
 </body>
-      </html>
+</html>
