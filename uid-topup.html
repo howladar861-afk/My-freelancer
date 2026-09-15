@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>UID TopUp (BD)</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eef2ff;
+    color: #111827;
+}
+
+.header {
+    text-align: center;
+    padding: 25px 15px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.header p {
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 15px;
+}
+
+.container {
+    padding: 10px 20px 30px;
+}
+
+.offer {
+    background: white;
+    border-radius: 22px;
+    margin-bottom: 16px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+    border: 1px solid #e5e7eb;
+}
+
+.offer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.offer-name {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: 800;
+    color: #2563eb;
+}
+
+.buy-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 13px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.buy-btn:active {
+    transform: scale(0.98);
+}
+
+.back-btn {
+    display: block;
+    margin: 0 auto 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    background: #111827;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>💎 UID TopUp</h1>
+    <p>Free Fire Bangladesh Server</p>
+</div>
+
+<button class="back-btn" onclick="history.back()">← Back</button>
+
+<div class="container">
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">Weekly</div>
+            <div class="price">BDT 158</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('Weekly', '158')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">Monthly</div>
+            <div class="price">BDT 790</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('Monthly', '790')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">25 Diamond</div>
+            <div class="price">BDT 22</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('25 Diamond', '22')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">50 Diamond</div>
+            <div class="price">BDT 36</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('50 Diamond', '36')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">115 Diamond</div>
+            <div class="price">BDT 79</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('115 Diamond', '79')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">240 Diamond</div>
+            <div class="price">BDT 158</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('240 Diamond', '158')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">355 Diamond</div>
+            <div class="price">BDT 237</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('355 Diamond', '237')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">480 Diamond</div>
+            <div class="price">BDT 316</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('480 Diamond', '316')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">505 Diamond</div>
+            <div class="price">BDT 338</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('505 Diamond', '338')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">610 Diamond</div>
+            <div class="price">BDT 400</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('610 Diamond', '400')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">850 Diamond</div>
+            <div class="price">BDT 558</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('850 Diamond', '558')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">1090 Diamond</div>
+            <div class="price">BDT 716</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('1090 Diamond', '716')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">1240 Diamond</div>
+            <div class="price">BDT 800</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('1240 Diamond', '800')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">2090 Diamond</div>
+            <div class="price">BDT 1358</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('2090 Diamond', '1358')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">2530 Diamond</div>
+            <div class="price">BDT 1600</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('2530 Diamond', '1600')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">5060 Diamond</div>
+            <div class="price">BDT 3200</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('5060 Diamond', '3200')">
+            Buy Now
+        </button>
+    </div>
+
+    <div class="offer">
+        <div class="offer-top">
+            <div class="offer-name">10120 Diamond</div>
+            <div class="price">BDT 6400</div>
+        </div>
+        <button class="buy-btn" onclick="buyNow('10120 Diamond', '6400')">
+            Buy Now
+        </button>
+    </div>
+
+</div>
+
+<script>
+
+function buyNow(product, price) {
+
+    // এখানে পরবর্তীতে UID / Payment পেজে পাঠানো যাবে
+
+    alert(
+        "Selected: " + product +
+        "\nPrice: BDT " + price
+    );
+}
+
+</script>
+
+</body>
+          </html>
