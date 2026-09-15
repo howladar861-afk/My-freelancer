@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Free Fire TopUp</title>
+<title>Free Fire</title>
 
 <style>
 *{
@@ -14,7 +14,7 @@
 }
 
 body{
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
     background:#eef2ff;
     padding:20px 12px 40px;
 }
@@ -23,66 +23,63 @@ body{
     text-align:center;
     font-size:32px;
     font-weight:bold;
-    margin:15px 0 25px;
     color:#111827;
+    margin:15px 0 25px;
 }
 
 .cards{
-    display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    gap:16px;
-    max-width:600px;
+    max-width:650px;
     margin:auto;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
 }
 
 .card{
+    min-height:170px;
     background:white;
     border-radius:22px;
-    overflow:hidden;
-    box-shadow:0 6px 18px rgba(0,0,0,0.12);
-    cursor:pointer;
-    transition:0.2s;
-    border:2px solid #eeeeee;
-}
-
-.card:active{
-    transform:scale(0.96);
-}
-
-.card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    display:block;
-}
-
-.card-name{
-    min-height:85px;
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
-    padding:12px 5px;
-    font-size:20px;
+    padding:20px 10px;
+    font-size:21px;
     font-weight:bold;
-    color:#111;
-    line-height:1.35;
+    color:#111827;
+    box-shadow:0 8px 20px rgba(0,0,0,0.12);
+    border:2px solid #e5e7eb;
+    cursor:pointer;
+    transition:0.2s;
 }
 
-/* মোবাইল */
+.card:active{
+    transform:scale(0.95);
+}
+
+.card:hover{
+    transform:translateY(-4px);
+}
+
+.icon{
+    font-size:42px;
+    margin-bottom:12px;
+}
+
+.card-content{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
 @media(max-width:500px){
     .cards{
         grid-template-columns:1fr;
-        gap:18px;
     }
 
-    .card img{
-        height:240px;
-    }
-
-    .card-name{
+    .card{
+        min-height:155px;
         font-size:23px;
-        min-height:80px;
     }
 }
 </style>
@@ -90,71 +87,53 @@ body{
 
 <body>
 
-<h1 class="title">🔥 FREE FIRE TOPUP 🔥</h1>
+<h1 class="title">🔥 FREE FIRE 🔥</h1>
 
 <div class="cards">
 
-    <!-- UID TOPUP -->
     <div class="card" onclick="openPage('uid-topup.html')">
-        <img src="IMG-20260915-WA0034-3.jpg"
-             alt="UID TopUp">
-        <div class="card-name">
-            UID TopUp<br>(BD)
+        <div class="card-content">
+            <div class="icon">💎</div>
+            <div>UID TopUp<br>(BD)</div>
         </div>
     </div>
 
-
-    <!-- WEEKLY MONTHLY -->
     <div class="card" onclick="openPage('weekly-monthly.html')">
-        <img src="IMG-20260915-WA0034-8.jpg"
-             alt="Weekly Monthly">
-        <div class="card-name">
-            Weekly / Monthly<br>Offer
+        <div class="card-content">
+            <div class="icon">🎁</div>
+            <div>Weekly / Monthly<br>Offer</div>
         </div>
     </div>
 
-
-    <!-- WEEKLY LITE -->
     <div class="card" onclick="openPage('weekly-lite.html')">
-        <img src="IMG-20260915-WA0034-5.jpg"
-             alt="Weekly Lite">
-        <div class="card-name">
-            Weekly Lite<br>(BD Server)
+        <div class="card-content">
+            <div class="icon">⚡</div>
+            <div>Weekly Lite<br>(BD Server)</div>
         </div>
     </div>
 
-
-    <!-- LEVEL UP PASS -->
     <div class="card" onclick="openPage('level-up-pass.html')">
-        <img src="IMG-20260915-WA0034-6.jpg"
-             alt="Level Up Pass">
-        <div class="card-name">
-            Level Up Pass
+        <div class="card-content">
+            <div class="icon">🎫</div>
+            <div>Level Up Pass</div>
         </div>
     </div>
 
-
-    <!-- FF LIKES -->
     <div class="card" onclick="openPage('ff-likes.html')">
-        <img src="IMG-20260915-WA0034-7.jpg"
-             alt="FF Likes">
-        <div class="card-name">
-            FF Likes
+        <div class="card-content">
+            <div class="icon">❤️</div>
+            <div>FF Likes</div>
         </div>
     </div>
 
-
-    <!-- INDONESIA SERVER -->
     <div class="card" onclick="openPage('indonesia.html')">
-        <img src="IMG-20260915-WA0034-2.jpg"
-             alt="Indonesia Server">
-        <div class="card-name">
-            Indonesia<br>Server
+        <div class="card-content">
+            <div class="icon">🌐</div>
+            <div>Indonesia<br>Server</div>
         </div>
     </div>
 
 </div>
-
 
 <script>
 function openPage(page){
