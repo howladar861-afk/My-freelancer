@@ -1,666 +1,2059 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>ভিডিও দেখে ইনকাম</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0">
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f1f4ff;
-      color: #222;
-      padding: 15px;
-    }
+<title>ভিডিও দেখে ইনকাম</title>
 
-    .container {
-      max-width: 650px;
-      margin: auto;
-    }
+<style>
 
-    .header {
-      background: white;
-      border-radius: 25px;
-      padding: 25px 18px;
-      text-align: center;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
-    }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    .icon {
-      width: 90px;
-      height: 90px;
-      margin: auto;
-      border-radius: 25px;
-      background: #eef3ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-    }
+body{
+  font-family:Arial,sans-serif;
+  background:#f1f4ff;
+  color:#222;
+  padding:15px;
+}
 
-    h1 {
-      margin-top: 18px;
-      font-size: 29px;
-      color: #111;
-    }
+.container{
+  max-width:650px;
+  margin:auto;
+}
 
-    .subtitle {
-      margin-top: 12px;
-      color: #777;
-      font-size: 16px;
-      line-height: 1.7;
-    }
+/* HEADER */
 
-    /* Verification box */
+.header{
+  background:white;
+  border-radius:25px;
+  padding:25px 18px;
+  text-align:center;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
+}
 
-    .verify-box {
-      margin-top: 20px;
-      background: #eef3ff;
-      border-radius: 20px;
-      padding: 20px;
-      border: 1px solid #dce5ff;
-    }
+.icon{
+  width:90px;
+  height:90px;
+  margin:auto;
+  border-radius:25px;
+  background:#eef3ff;
 
-    .verify-title {
-      font-size: 19px;
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-    .verify-text {
-      color: #555;
-      line-height: 1.7;
-      font-size: 15px;
-    }
+  font-size:48px;
+}
 
-    .verify-count {
-      margin-top: 15px;
-      background: white;
-      padding: 14px;
-      border-radius: 14px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-    }
+h1{
+  margin-top:18px;
+  font-size:29px;
+  color:#111;
+}
 
-    .status {
-      margin-top: 12px;
-      padding: 13px;
-      border-radius: 12px;
-      text-align: center;
-      font-weight: bold;
-    }
+.subtitle{
+  margin-top:12px;
+  color:#777;
+  font-size:16px;
+  line-height:1.7;
+}
 
-    .locked {
-      background: #fff0f0;
-      color: #d60000;
-    }
 
-    .unlocked {
-      background: #eafff0;
-      color: #07852d;
-    }
+/* VERIFICATION */
 
-    /* Progress */
+.verify-box{
+  margin-top:20px;
+  background:#eef3ff;
+  border-radius:20px;
+  padding:20px;
+  border:1px solid #dce5ff;
+}
 
-    .progress-box {
-      background: white;
-      margin-top: 18px;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    }
+.verify-title{
+  font-size:19px;
+  font-weight:bold;
+  margin-bottom:12px;
+}
 
-    .progress-title {
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
+.verify-text{
+  color:#555;
+  line-height:1.7;
+  font-size:15px;
+}
 
-    .progress-bar {
-      height: 12px;
-      background: #e6e6e6;
-      border-radius: 20px;
-      overflow: hidden;
-    }
+.verify-count{
+  margin-top:15px;
+  background:white;
+  padding:14px;
+  border-radius:14px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+}
 
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: #315bea;
-      border-radius: 20px;
-      transition: 0.3s;
-    }
+.status{
+  margin-top:12px;
+  padding:13px;
+  border-radius:12px;
+  text-align:center;
+  font-weight:bold;
+  line-height:1.6;
+}
 
-    .progress-info {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      color: #666;
-    }
+.locked{
+  background:#fff0f0;
+  color:#d60000;
+}
 
-    /* Video cards */
+.unlocked{
+  background:#eafff0;
+  color:#07852d;
+}
 
-    .videos {
-      margin-top: 20px;
-    }
 
-    .section-title {
-      font-size: 21px;
-      font-weight: bold;
-      margin-bottom: 14px;
-    }
+/* PROGRESS */
 
-    .video-card {
-      background: white;
-      padding: 16px;
-      border-radius: 18px;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-    }
+.progress-box{
+  background:white;
+  margin-top:18px;
+  border-radius:18px;
+  padding:18px;
 
-    .video-number {
-      font-weight: bold;
-      font-size: 17px;
-    }
+  box-shadow:
+    0 4px 15px rgba(0,0,0,.05);
+}
 
-    .video-info {
-      color: #777;
-      font-size: 14px;
-      margin-top: 6px;
-    }
+.progress-title{
+  font-weight:bold;
+  margin-bottom:12px;
+  font-size:18px;
+}
 
-    .video-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 13px;
-    }
+.progress-bar{
+  height:12px;
+  background:#e6e6e6;
+  border-radius:20px;
+  overflow:hidden;
+}
 
-    button {
-      border: none;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: bold;
-      border-radius: 12px;
-      padding: 12px;
-    }
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:#315bea;
+  border-radius:20px;
+  transition:.3s;
+}
 
-    .watch-btn {
-      flex: 1;
-      background: #315bea;
-      color: white;
-    }
+.progress-info{
+  margin-top:10px;
 
-    .submit-btn {
-      flex: 1;
-      background: #08a63c;
-      color: white;
-      display: none;
-    }
+  display:flex;
+  justify-content:space-between;
 
-    .submit-btn:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
+  font-size:14px;
+  color:#666;
+}
 
-    .locked-card {
-      opacity: 0.55;
-    }
 
-    .message {
-      text-align: center;
-      padding: 20px;
-      background: white;
-      border-radius: 18px;
-      margin-top: 15px;
-      color: #777;
-    }
+/* LIMIT */
 
-    .limit-box {
-      margin-top: 18px;
-      padding: 17px;
-      border-radius: 17px;
-      background: #fff6df;
-      color: #8a5b00;
-      text-align: center;
-      font-weight: bold;
-      line-height: 1.7;
-      display: none;
-    }
+.limit-box{
+  margin-top:18px;
+  padding:18px;
 
-    @media(max-width:450px) {
-      h1 {
-        font-size: 25px;
-      }
+  border-radius:17px;
 
-      .video-actions {
-        flex-direction: column;
-      }
-    }
-  </style>
+  background:#fff6df;
+  color:#8a5b00;
+
+  text-align:center;
+
+  font-weight:bold;
+  line-height:1.8;
+
+  display:none;
+}
+
+
+/* VIDEOS */
+
+.videos{
+  margin-top:20px;
+}
+
+.section-title{
+  font-size:21px;
+  font-weight:bold;
+  margin-bottom:14px;
+}
+
+.video-card{
+  background:white;
+  padding:16px;
+
+  border-radius:18px;
+
+  margin-bottom:12px;
+
+  box-shadow:
+    0 4px 14px rgba(0,0,0,.05);
+}
+
+.video-number{
+  font-weight:bold;
+  font-size:17px;
+}
+
+.video-info{
+  color:#777;
+  font-size:14px;
+  margin-top:6px;
+}
+
+.video-actions{
+  display:flex;
+  gap:8px;
+  margin-top:13px;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+
+  font-size:15px;
+  font-weight:bold;
+
+  border-radius:12px;
+  padding:12px;
+}
+
+.watch-btn{
+  width:100%;
+  background:#315bea;
+  color:white;
+}
+
+.submit-btn{
+  width:100%;
+  background:#08a63c;
+  color:white;
+  display:none;
+}
+
+.submit-btn:disabled{
+  background:#aaa;
+  cursor:not-allowed;
+}
+
+.completed{
+  background:#e8f8ee;
+  border:1px solid #b8e8c8;
+}
+
+.completed-text{
+  color:#07852d;
+  font-weight:bold;
+  text-align:center;
+  margin-top:12px;
+}
+
+.locked-card{
+  opacity:.55;
+}
+
+
+/* LOADING */
+
+#loading{
+  margin-top:18px;
+
+  background:white;
+  border-radius:18px;
+
+  padding:25px;
+
+  text-align:center;
+
+  color:#666;
+}
+
+
+/* ERROR */
+
+#error{
+  display:none;
+
+  margin-top:18px;
+
+  background:#fff0f0;
+  color:#c00;
+
+  padding:18px;
+
+  border-radius:15px;
+
+  text-align:center;
+  line-height:1.7;
+}
+
+
+/* LOGIN */
+
+#loginBox{
+  display:none;
+
+  background:white;
+
+  margin-top:18px;
+
+  padding:30px 20px;
+
+  border-radius:20px;
+
+  text-align:center;
+}
+
+.login-btn{
+  margin-top:18px;
+
+  background:#315bea;
+  color:white;
+
+  padding:13px 25px;
+
+  border-radius:12px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:450px){
+
+  h1{
+    font-size:25px;
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-  <!-- Header -->
 
-  <div class="header">
+<!-- HEADER -->
 
-    <div class="icon">🎬</div>
+<div class="header">
 
-    <h1>ভিডিও দেখে ইনকাম করুন</h1>
-
-    <p class="subtitle">
-      প্রতিদিন ভিডিও দেখে ইনকাম করুন।<br>
-      একটি ভিডিও সম্পন্ন করলে পাবেন <b>১ টাকা</b>।
-    </p>
-
-    <!-- Verification -->
-
-    <div class="verify-box">
-
-      <div class="verify-title">
-        🔐 প্রথমে Account Verification সম্পন্ন করুন
-      </div>
-
-      <div class="verify-text">
-        এই ফিচারটি ব্যবহার করতে আপনার রেফার কোড দিয়ে
-        <b>২ জনকে Account Verify</b> করাতে হবে।
-      </div>
-
-      <div class="verify-count">
-        Verification: <span id="verifyCount">0</span> / 2
-      </div>
-
-      <div id="verifyStatus" class="status locked">
-        🔒 আরও ২টি Verification প্রয়োজন
-      </div>
-
-    </div>
-
+  <div class="icon">
+    🎬
   </div>
 
+  <h1>
+    ভিডিও দেখে ইনকাম করুন
+  </h1>
 
-  <!-- Progress -->
+  <p class="subtitle">
 
-  <div class="progress-box">
+    প্রতিদিন ভিডিও দেখে ইনকাম করুন।<br>
 
-    <div class="progress-title">
-      📊 আজকের ভিডিও
+    একটি ভিডিও সম্পন্ন করলে পাবেন
+    <b>১ টাকা</b>।
+
+  </p>
+
+
+  <!-- VERIFICATION -->
+
+  <div class="verify-box">
+
+    <div class="verify-title">
+
+      🔐 প্রথমে Account Verification সম্পন্ন করুন
+
     </div>
 
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill"></div>
+
+    <div class="verify-text">
+
+      এই ফিচারটি ব্যবহার করতে আপনার
+      রেফার কোড দিয়ে
+      <b>২ জনকে Account Verify</b>
+      করাতে হবে।
+
     </div>
 
-    <div class="progress-info">
-      <span id="todayText">0 / 5 ভিডিও</span>
-      <span id="todayIncome">৳0</span>
+
+    <div class="verify-count">
+
+      Verification:
+
+      <span id="verifyCount">
+        0
+      </span>
+
+      / 2
+
     </div>
 
-  </div>
 
+    <div
+      id="verifyStatus"
+      class="status locked">
 
-  <!-- Limit -->
+      🔒 আরও ২টি Verification প্রয়োজন
 
-  <div class="limit-box" id="limitBox">
-    🎉 আপনার বর্তমান লিমিট থেকে সর্বোচ্চ
-    <b>৳50</b> ইনকাম করা যাবে।<br><br>
-
-    লিমিট শেষ হয়ে গেলে আবার আপনার রেফার কোড দিয়ে
-    <b>২ জনকে Account Verify</b> করান।
-  </div>
-
-
-  <!-- Videos -->
-
-  <div class="videos">
-
-    <div class="section-title">
-      🎥 ভিডিও লিস্ট
     </div>
-
-    <div id="videoList"></div>
 
   </div>
 
 </div>
 
 
-<script>
 
-  /*
-   ==================================================
-   ভিডিও লিংক এখানে বসাবেন
-   ==================================================
+<!-- LOADING -->
 
-   উদাহরণ:
+<div id="loading">
 
-   "https://www.youtube.com/watch?v=XXXXXXXX"
+  ⏳ তথ্য লোড হচ্ছে...
 
-   বর্তমানে খালি রাখা হয়েছে।
-  */
-
-  const VIDEO_LINKS = [
-
-    "", // Video 01
-    "", // Video 02
-    "", // Video 03
-    "", // Video 04
-    "", // Video 05
-    "", // Video 06
-    "", // Video 07
-    "", // Video 08
-    "", // Video 09
-    "", // Video 10
-
-    "", // Video 11
-    "", // Video 12
-    "", // Video 13
-    "", // Video 14
-    "", // Video 15
-    "", // Video 16
-    "", // Video 17
-    "", // Video 18
-    "", // Video 19
-    "", // Video 20
-
-    "", // Video 21
-    "", // Video 22
-    "", // Video 23
-    "", // Video 24
-    "", // Video 25
-    "", // Video 26
-    "", // Video 27
-    "", // Video 28
-    "", // Video 29
-    ""  // Video 30
-
-  ];
+</div>
 
 
-  /*
-   ==================================================
-   বর্তমানে Demo Data
-   ==================================================
 
-   পরের ধাপে এগুলো Firebase থেকে নেওয়া হবে।
-  */
+<!-- LOGIN -->
 
-  let verifiedCount = 0;
+<div id="loginBox">
 
-  let todayWatched = 0;
+  <div style="font-size:55px;">
+    🔐
+  </div>
 
-  let totalIncome = 0;
+  <h2 style="margin-top:10px;">
+    আগে Login করুন
+  </h2>
 
+  <p style="margin-top:10px;color:#777;">
+    ভিডিও দেখে ইনকাম করতে Login করা প্রয়োজন।
+  </p>
 
-  const verifyCount =
-    document.getElementById("verifyCount");
+  <button
+    class="login-btn"
+    onclick="goLogin()">
 
-  const verifyStatus =
-    document.getElementById("verifyStatus");
+    Login করুন
 
-  const videoList =
-    document.getElementById("videoList");
+  </button>
 
-  const progressFill =
-    document.getElementById("progressFill");
-
-  const todayText =
-    document.getElementById("todayText");
-
-  const todayIncome =
-    document.getElementById("todayIncome");
-
-  const limitBox =
-    document.getElementById("limitBox");
+</div>
 
 
-  function updateStatus() {
 
-    verifyCount.innerText = verifiedCount;
+<!-- ERROR -->
 
-    if (verifiedCount >= 2) {
+<div id="error"></div>
 
-      verifyStatus.innerText =
-        "✅ ২টি Verification সম্পন্ন হয়েছে — ভিডিও আনলক হয়েছে";
 
-      verifyStatus.className =
-        "status unlocked";
 
-    } else {
+<!-- MAIN -->
 
-      verifyStatus.innerText =
-        "🔒 আরও " + (2 - verifiedCount) +
-        "টি Verification প্রয়োজন";
+<div id="mainPage" style="display:none;">
 
-      verifyStatus.className =
-        "status locked";
-    }
+
+<!-- TODAY PROGRESS -->
+
+<div class="progress-box">
+
+  <div class="progress-title">
+
+    📊 আজকের ভিডিও
+
+  </div>
+
+
+  <div class="progress-bar">
+
+    <div
+      id="progressFill"
+      class="progress-fill">
+    </div>
+
+  </div>
+
+
+  <div class="progress-info">
+
+    <span id="todayText">
+      0 / 5 ভিডিও
+    </span>
+
+    <span id="todayIncome">
+      ৳0
+    </span>
+
+  </div>
+
+</div>
+
+
+
+<!-- CURRENT LIMIT -->
+
+<div
+  class="limit-box"
+  id="limitBox">
+
+  🎉 আপনার বর্তমান ভিডিও ইনকাম লিমিট
+  <b>৳50</b>।
+
+  <br><br>
+
+  এই লিমিট সম্পন্ন হয়েছে।
+
+  <br><br>
+
+  আপনার লিমিট বাড়াতে আবার
+  আপনার রেফার কোড দিয়ে
+  <b>২ জনকে Account Verify</b>
+  করান।
+
+</div>
+
+
+
+<!-- VIDEO LIST -->
+
+<div class="videos">
+
+  <div class="section-title">
+
+    🎥 ভিডিও লিস্ট
+
+  </div>
+
+
+  <div id="videoList"></div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<script type="module">
+
+
+/* =====================================================
+   FIREBASE IMPORT
+===================================================== */
+
+import {
+  initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+
+import {
+  getAuth,
+  onAuthStateChanged
+}
+from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  runTransaction,
+  serverTimestamp
+}
+from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+
+/* =====================================================
+   FIREBASE CONFIG
+===================================================== */
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+
+  authDomain:
+    "rakib-freelancer-9c66b.firebaseapp.com",
+
+  projectId:
+    "rakib-freelancer-9c66b",
+
+  storageBucket:
+    "rakib-freelancer-9c66b.firebasestorage.app",
+
+  messagingSenderId:
+    "541209844482",
+
+  appId:
+    "1:541209844482:web:510568d5226c9bf47ac01b",
+
+  measurementId:
+    "G-F6QNE0QN5K"
+
+};
+
+
+
+/* =====================================================
+   FIREBASE START
+===================================================== */
+
+const app =
+  initializeApp(firebaseConfig);
+
+
+const auth =
+  getAuth(app);
+
+
+const db =
+  getFirestore(app);
+
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+const VERIFICATION_PER_LIMIT = 2;
+
+const VIDEOS_PER_DAY = 5;
+
+const MONEY_PER_VIDEO = 1;
+
+const MONEY_LIMIT_PER_CYCLE = 50;
+
+
+
+/* =====================================================
+   VIDEO LINKS
+===================================================== */
+
+const VIDEO_LINKS = [
+
+  "", // Video 01
+  "", // Video 02
+  "", // Video 03
+  "", // Video 04
+  "", // Video 05
+
+  "", // Video 06
+  "", // Video 07
+  "", // Video 08
+  "", // Video 09
+  "", // Video 10
+
+  "", // Video 11
+  "", // Video 12
+  "", // Video 13
+  "", // Video 14
+  "", // Video 15
+
+  "", // Video 16
+  "", // Video 17
+  "", // Video 18
+  "", // Video 19
+  "", // Video 20
+
+  "", // Video 21
+  "", // Video 22
+  "", // Video 23
+  "", // Video 24
+  "", // Video 25
+
+  "", // Video 26
+  "", // Video 27
+  "", // Video 28
+  "", // Video 29
+  ""  // Video 30
+
+];
+
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let currentUser = null;
+
+let verifiedCount = 0;
+
+let todayWatched = 0;
+
+let totalVideoIncome = 0;
+
+let completedToday = [];
+
+let currentDate = "";
+
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const loading =
+  document.getElementById("loading");
+
+const loginBox =
+  document.getElementById("loginBox");
+
+const mainPage =
+  document.getElementById("mainPage");
+
+const errorBox =
+  document.getElementById("error");
+
+const verifyCountElement =
+  document.getElementById("verifyCount");
+
+const verifyStatus =
+  document.getElementById("verifyStatus");
+
+const progressFill =
+  document.getElementById("progressFill");
+
+const todayText =
+  document.getElementById("todayText");
+
+const todayIncome =
+  document.getElementById("todayIncome");
+
+const videoList =
+  document.getElementById("videoList");
+
+const limitBox =
+  document.getElementById("limitBox");
+
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+window.goLogin = function(){
+
+  window.location.href =
+    "index.html";
+
+};
+
+
+
+/* =====================================================
+   TODAY DATE
+===================================================== */
+
+function getToday(){
+
+  const now =
+    new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(
+      now.getMonth() + 1
+    ).padStart(2,"0");
+
+  const day =
+    String(
+      now.getDate()
+    ).padStart(2,"0");
+
+  return (
+    year +
+    "-" +
+    month +
+    "-" +
+    day
+  );
+
+}
+
+
+
+/* =====================================================
+   LOAD VERIFICATION COUNT
+===================================================== */
+
+async function loadVerificationCount(user){
+
+  const userRef =
+    doc(
+      db,
+      "users",
+      user.uid
+    );
+
+
+  const userSnap =
+    await getDoc(userRef);
+
+
+  if(!userSnap.exists()){
+
+    throw new Error(
+      "আপনার User Account পাওয়া যায়নি।"
+    );
 
   }
 
 
-  function updateProgress() {
+  const userData =
+    userSnap.data();
 
-    todayText.innerText =
-      todayWatched + " / 5 ভিডিও";
 
-    todayIncome.innerText =
-      "৳" + todayWatched;
+  const myReferralCode =
+    userData.referralCode;
 
-    let percent =
-      (todayWatched / 5) * 100;
 
-    progressFill.style.width =
-      percent + "%";
+  if(!myReferralCode){
+
+    throw new Error(
+      "আপনার Referral Code পাওয়া যায়নি।"
+    );
 
   }
 
 
-  function createVideos() {
+  /*
+    Daily Bonus-এর একই structure:
 
-    videoList.innerHTML = "";
+    referredBy == নিজের referralCode
+    verified == true
+  */
 
-    VIDEO_LINKS.forEach((link, index) => {
+  const usersRef =
+    collection(
+      db,
+      "users"
+    );
 
-      const number = index + 1;
 
-      const card =
-        document.createElement("div");
+  const referralQuery =
+    query(
 
-      card.className = "video-card";
+      usersRef,
 
-      if (verifiedCount < 2) {
-        card.classList.add("locked-card");
-      }
+      where(
+        "referredBy",
+        "==",
+        myReferralCode
+      ),
 
-      card.innerHTML = `
+      where(
+        "verified",
+        "==",
+        true
+      )
 
-        <div class="video-number">
-          🎬 ভিডিও ${number}
-        </div>
+    );
 
-        <div class="video-info">
-          সম্পন্ন করলে পাবেন ৳1
-        </div>
 
-        <div class="video-actions">
+  const snapshot =
+    await getDocs(
+      referralQuery
+    );
 
-          <button
-            class="watch-btn"
-            onclick="watchVideo(${index})"
-          >
-            ▶️ ভিডিও দেখুন
-          </button>
 
-          <button
-            class="submit-btn"
-            id="submit-${index}"
-            onclick="submitVideo(${index})"
-          >
-            ✅ Submit
-          </button>
+  verifiedCount =
+    snapshot.size;
 
-        </div>
 
+  return verifiedCount;
+
+}
+
+
+
+/* =====================================================
+   LOAD VIDEO DATA
+===================================================== */
+
+async function loadVideoData(user){
+
+  const today =
+    getToday();
+
+
+  const videoDataRef =
+    doc(
+      db,
+      "videoEarnings",
+      user.uid
+    );
+
+
+  const snap =
+    await getDoc(
+      videoDataRef
+    );
+
+
+  if(!snap.exists()){
+
+    todayWatched = 0;
+
+    totalVideoIncome = 0;
+
+    completedToday = [];
+
+    currentDate = today;
+
+    return;
+
+  }
+
+
+  const data =
+    snap.data();
+
+
+  totalVideoIncome =
+    Number(
+      data.totalIncome || 0
+    );
+
+
+  /*
+    যদি নতুন দিন হয়,
+    আজকের count reset হবে।
+  */
+
+  if(data.date !== today){
+
+    todayWatched = 0;
+
+    completedToday = [];
+
+    currentDate = today;
+
+  }
+
+  else{
+
+    todayWatched =
+      Number(
+        data.todayWatched || 0
+      );
+
+
+    completedToday =
+      Array.isArray(
+        data.completedToday
+      )
+      ?
+      data.completedToday
+      :
+      [];
+
+
+    currentDate =
+      data.date;
+
+  }
+
+}
+
+
+
+/* =====================================================
+   GET CURRENT CYCLE
+===================================================== */
+
+function getCurrentCycle(){
+
+  return Math.floor(
+    totalVideoIncome /
+    MONEY_LIMIT_PER_CYCLE
+  ) + 1;
+
+}
+
+
+
+/* =====================================================
+   GET REQUIRED VERIFICATION
+===================================================== */
+
+function getRequiredVerification(){
+
+  return (
+    getCurrentCycle() *
+    VERIFICATION_PER_LIMIT
+  );
+
+}
+
+
+
+/* =====================================================
+   CHECK VIDEO ACCESS
+===================================================== */
+
+function canWatch(){
+
+  const required =
+    getRequiredVerification();
+
+
+  return (
+    verifiedCount >= required
+  );
+
+}
+
+
+
+/* =====================================================
+   UPDATE VERIFICATION UI
+===================================================== */
+
+function updateVerificationUI(){
+
+  const required =
+    getRequiredVerification();
+
+
+  const currentCycleStart =
+    (getCurrentCycle() - 1) *
+    VERIFICATION_PER_LIMIT;
+
+
+  /*
+    বর্তমান Cycle-এর জন্য যত verification আছে
+  */
+
+  const cycleVerification =
+    Math.max(
+      0,
+      verifiedCount -
+      currentCycleStart
+    );
+
+
+  const displayCount =
+    Math.min(
+      cycleVerification,
+      VERIFICATION_PER_LIMIT
+    );
+
+
+  verifyCountElement.innerText =
+    displayCount;
+
+
+  verifyCountElement.parentElement.innerHTML =
+    `
+      Verification:
+      <span id="verifyCount">
+        ${displayCount}
+      </span>
+      / ${VERIFICATION_PER_LIMIT}
+    `;
+
+
+  if(
+    verifiedCount >= required
+  ){
+
+    verifyStatus.className =
+      "status unlocked";
+
+
+    verifyStatus.innerHTML =
+      `
+        ✅ ${VERIFICATION_PER_LIMIT}টি Verification সম্পন্ন হয়েছে।
+        <br>
+        ভিডিও আনলক হয়েছে।
       `;
 
-      videoList.appendChild(card);
+  }
 
-    });
+  else{
+
+    const remaining =
+      required -
+      verifiedCount;
+
+
+    verifyStatus.className =
+      "status locked";
+
+
+    verifyStatus.innerHTML =
+      `
+        🔒 আরও ${remaining}টি Verification প্রয়োজন।
+        <br>
+        আপনার রেফার কোড দিয়ে Account Verify করান।
+      `;
+
+  }
+
+}
+
+
+
+/* =====================================================
+   UPDATE PROGRESS
+===================================================== */
+
+function updateProgress(){
+
+  todayText.innerText =
+    todayWatched +
+    " / " +
+    VIDEOS_PER_DAY +
+    " ভিডিও";
+
+
+  todayIncome.innerText =
+    "৳" +
+    (
+      todayWatched *
+      MONEY_PER_VIDEO
+    );
+
+
+  const percent =
+    Math.min(
+      100,
+      (
+        todayWatched /
+        VIDEOS_PER_DAY
+      ) * 100
+    );
+
+
+  progressFill.style.width =
+    percent +
+    "%";
+
+}
+
+
+
+/* =====================================================
+   UPDATE LIMIT BOX
+===================================================== */
+
+function updateLimitBox(){
+
+  const currentCycleIncome =
+    totalVideoIncome %
+    MONEY_LIMIT_PER_CYCLE;
+
+
+  if(
+    currentCycleIncome >=
+    MONEY_LIMIT_PER_CYCLE
+  ){
+
+    limitBox.style.display =
+      "block";
+
+    return;
 
   }
 
 
-  function watchVideo(index) {
+  /*
+    যদি বর্তমান Cycle শেষ হয়ে যায়
+    এবং নতুন 2 verification এখনও না হয়।
+  */
 
-    if (verifiedCount < 2) {
+  const required =
+    getRequiredVerification();
 
-      alert(
-        "ভিডিও দেখতে হলে আগে আপনার রেফার কোড দিয়ে ২ জনকে Account Verify করাতে হবে।"
+
+  if(
+    verifiedCount < required &&
+    totalVideoIncome > 0 &&
+    totalVideoIncome %
+      MONEY_LIMIT_PER_CYCLE === 0
+  ){
+
+    limitBox.style.display =
+      "block";
+
+  }
+
+  else{
+
+    limitBox.style.display =
+      "none";
+
+  }
+
+}
+
+
+
+/* =====================================================
+   CREATE VIDEO LIST
+===================================================== */
+
+function createVideos(){
+
+  videoList.innerHTML = "";
+
+
+  VIDEO_LINKS.forEach(
+    (link,index) => {
+
+      const number =
+        index + 1;
+
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "video-card";
+
+
+      /*
+        যদি আগে দেখা হয়ে থাকে
+      */
+
+      if(
+        completedToday.includes(
+          index
+        )
+      ){
+
+        card.classList.add(
+          "completed"
+        );
+
+
+        card.innerHTML =
+          `
+            <div class="video-number">
+              🎬 ভিডিও ${number}
+            </div>
+
+            <div class="video-info">
+              সম্পন্ন করলে পাবেন ৳1
+            </div>
+
+            <div class="completed-text">
+              ✅ আজকের ভিডিওটি সম্পন্ন হয়েছে
+            </div>
+          `;
+
+
+        videoList.appendChild(
+          card
+        );
+
+
+        return;
+
+      }
+
+
+
+      /*
+        Verification না থাকলে
+        ভিডিও Lock
+      */
+
+      if(
+        !canWatch()
+      ){
+
+        card.classList.add(
+          "locked-card"
+        );
+
+      }
+
+
+
+      card.innerHTML =
+        `
+
+          <div class="video-number">
+            🎬 ভিডিও ${number}
+          </div>
+
+          <div class="video-info">
+            সম্পন্ন করলে পাবেন ৳1
+          </div>
+
+          <div class="video-actions">
+
+            <button
+              class="watch-btn"
+              id="watch-${index}"
+            >
+              ▶️ ভিডিও দেখুন
+            </button>
+
+            <button
+              class="submit-btn"
+              id="submit-${index}"
+            >
+              ✅ Submit
+            </button>
+
+          </div>
+
+        `;
+
+
+      videoList.appendChild(
+        card
       );
 
-      return;
+
+
+      const watchButton =
+        document.getElementById(
+          "watch-" + index
+        );
+
+
+      const submitButton =
+        document.getElementById(
+          "submit-" + index
+        );
+
+
+      watchButton.onclick =
+        function(){
+
+          watchVideo(
+            index,
+            watchButton,
+            submitButton
+          );
+
+        };
+
+
+      submitButton.onclick =
+        function(){
+
+          submitVideo(
+            index,
+            submitButton
+          );
+
+        };
+
     }
+  );
+
+}
 
 
-    if (todayWatched >= 5) {
 
-      alert(
-        "আজকের ৫টি ভিডিও দেখা হয়ে গেছে। আগামীকাল আবার ৫টি ভিডিও দেখতে পারবেন।"
+/* =====================================================
+   WATCH VIDEO
+===================================================== */
+
+function watchVideo(
+  index,
+  watchButton,
+  submitButton
+){
+
+  if(
+    !canWatch()
+  ){
+
+    const required =
+      getRequiredVerification();
+
+
+    const remaining =
+      Math.max(
+        0,
+        required -
+        verifiedCount
       );
 
-      return;
-    }
+
+    alert(
+      "ভিডিও দেখতে হলে আরও " +
+      remaining +
+      "টি Verified Referral প্রয়োজন।"
+    );
 
 
-    if (totalIncome >= 50) {
-
-      limitBox.style.display = "block";
-
-      alert(
-        "আপনার বর্তমান ইনকাম লিমিট ৳50 সম্পন্ন হয়েছে।"
-      );
-
-      return;
-    }
-
-
-    const link = VIDEO_LINKS[index];
-
-    if (!link) {
-
-      alert(
-        "এই ভিডিওর লিংক এখনো যোগ করা হয়নি।"
-      );
-
-      return;
-    }
-
-
-    window.open(link, "_blank");
-
-
-    /*
-      Demo হিসেবে 15 সেকেন্ড পরে Submit button দেখাবে।
-
-      আসল সিস্টেমে এই যাচাই Firebase/backend
-      থেকে করতে হবে।
-    */
-
-    const submitButton =
-      document.getElementById("submit-" + index);
-
-    submitButton.style.display = "none";
-
-    setTimeout(() => {
-
-      submitButton.style.display = "block";
-
-    }, 15000);
+    return;
 
   }
 
 
-  function submitVideo(index) {
 
-    if (verifiedCount < 2) {
-      alert("আগে ২টি Verification সম্পন্ন করুন।");
-      return;
-    }
+  /*
+    Daily 5 limit
+  */
 
-    if (todayWatched >= 5) {
-      alert("আজকের ৫টি ভিডিও সম্পন্ন হয়েছে।");
-      return;
-    }
+  if(
+    todayWatched >=
+    VIDEOS_PER_DAY
+  ){
 
-    if (totalIncome >= 50) {
+    alert(
+      "আজকের ৫টি ভিডিও দেখা হয়ে গেছে। আগামীকাল আবার ৫টি ভিডিও দেখতে পারবেন।"
+    );
 
-      limitBox.style.display = "block";
 
-      return;
+    return;
+
+  }
+
+
+
+  /*
+    50 টাকা Cycle Limit
+  */
+
+  const cycleIncome =
+    totalVideoIncome %
+    MONEY_LIMIT_PER_CYCLE;
+
+
+  if(
+    cycleIncome >=
+    MONEY_LIMIT_PER_CYCLE
+  ){
+
+    updateLimitBox();
+
+
+    alert(
+      "আপনার বর্তমান ৳50 ভিডিও ইনকাম লিমিট সম্পন্ন হয়েছে।"
+    );
+
+
+    return;
+
+  }
+
+
+
+  /*
+    Link না থাকলে
+  */
+
+  const link =
+    VIDEO_LINKS[index];
+
+
+  if(!link){
+
+    alert(
+      "এই ভিডিওর লিংক এখনো যোগ করা হয়নি।"
+    );
+
+
+    return;
+
+  }
+
+
+
+  /*
+    ভিডিও খুলবে
+  */
+
+  window.open(
+    link,
+    "_blank"
+  );
+
+
+  /*
+    Watch button বন্ধ
+  */
+
+  watchButton.disabled =
+    true;
+
+  watchButton.innerText =
+    "⏳ ভিডিও দেখা হচ্ছে...";
+
+
+  /*
+    15 সেকেন্ড পরে Submit
+  */
+
+  setTimeout(
+    () => {
+
+      submitButton.style.display =
+        "block";
+
+
+      watchButton.style.display =
+        "none";
+
+    },
+    15000
+  );
+
+}
+
+
+
+/* =====================================================
+   SUBMIT VIDEO
+===================================================== */
+
+async function submitVideo(
+  index,
+  submitButton
+){
+
+  if(!currentUser){
+
+    alert(
+      "আগে Login করুন।"
+    );
+
+    return;
+  }
+
+
+  if(!canWatch()){
+
+    const required =
+      getRequiredVerification();
+
+    const remaining =
+      Math.max(
+        0,
+        required - verifiedCount
+      );
+
+    alert(
+      "ভিডিও দেখতে হলে আরও " +
+      remaining +
+      "টি Verified Referral প্রয়োজন।"
+    );
+
+    return;
+  }
+
+
+  if(todayWatched >= VIDEOS_PER_DAY){
+
+    alert(
+      "আজকের ৫টি ভিডিও সম্পন্ন হয়েছে। আগামীকাল আবার ৫টি ভিডিও দেখতে পারবেন।"
+    );
+
+    return;
+  }
+
+
+  if(completedToday.includes(index)){
+
+    alert(
+      "এই ভিডিওটি আজকে ইতোমধ্যে সম্পন্ন করেছেন।"
+    );
+
+    return;
+  }
+
+
+  const today =
+    getToday();
+
+
+  const userRef =
+    doc(
+      db,
+      "users",
+      currentUser.uid
+    );
+
+
+  const videoDataRef =
+    doc(
+      db,
+      "videoEarnings",
+      currentUser.uid
+    );
+
+
+  submitButton.disabled = true;
+
+  submitButton.innerText =
+    "⏳ যাচাই হচ্ছে...";
+
+
+  try{
+
+    await runTransaction(
+      db,
+      async (transaction) => {
+
+        const userSnap =
+          await transaction.get(
+            userRef
+          );
+
+
+        if(!userSnap.exists()){
+
+          throw new Error(
+            "User Account পাওয়া যায়নি।"
+          );
+
+        }
+
+
+        const userData =
+          userSnap.data();
+
+
+        const videoSnap =
+          await transaction.get(
+            videoDataRef
+          );
+
+
+        let data =
+          videoSnap.exists()
+          ? videoSnap.data()
+          : {};
+
+
+        let savedDate =
+          data.date || "";
+
+
+        let savedTodayWatched =
+          Number(
+            data.todayWatched || 0
+          );
+
+
+        let savedCompleted =
+          Array.isArray(
+            data.completedToday
+          )
+          ? [...data.completedToday]
+          : [];
+
+
+        if(savedDate !== today){
+
+          savedDate =
+            today;
+
+          savedTodayWatched =
+            0;
+
+          savedCompleted =
+            [];
+
+        }
+
+
+        if(
+          savedTodayWatched >=
+          VIDEOS_PER_DAY
+        ){
+
+          throw new Error(
+            "আজকের ৫টি ভিডিও ইতোমধ্যে সম্পন্ন হয়েছে।"
+          );
+
+        }
+
+
+        if(
+          savedCompleted.includes(index)
+        ){
+
+          throw new Error(
+            "এই ভিডিওটি আজকে ইতোমধ্যে সম্পন্ন হয়েছে।"
+          );
+
+        }
+
+
+        const savedTotalIncome =
+          Number(
+            data.totalIncome || 0
+          );
+
+
+        const cycleIncome =
+          savedTotalIncome %
+          MONEY_LIMIT_PER_CYCLE;
+
+
+        if(
+          cycleIncome >=
+          MONEY_LIMIT_PER_CYCLE
+        ){
+
+          throw new Error(
+            "আপনার বর্তমান ৳50 ভিডিও ইনকাম লিমিট সম্পন্ন হয়েছে।"
+          );
+
+        }
+
+
+        const referralCode =
+          userData.referralCode;
+
+
+        if(!referralCode){
+
+          throw new Error(
+            "Referral Code পাওয়া যায়নি।"
+          );
+
+        }
+
+
+        const currentBalance =
+          Number(
+            userData.balance || 0
+          );
+
+
+        const newBalance =
+          currentBalance +
+          MONEY_PER_VIDEO;
+
+
+        const newTotalIncome =
+          savedTotalIncome +
+          MONEY_PER_VIDEO;
+
+
+        const newTodayWatched =
+          savedTodayWatched +
+          1;
+
+
+        const newCompleted =
+          [
+            ...savedCompleted,
+            index
+          ];
+
+
+        /*
+          User Balance Update
+        */
+
+        transaction.update(
+          userRef,
+          {
+            balance:
+              newBalance
+          }
+        );
+
+
+        /*
+          Video Earning Data
+        */
+
+        transaction.set(
+          videoDataRef,
+          {
+
+            totalIncome:
+              newTotalIncome,
+
+            todayWatched:
+              newTodayWatched,
+
+            completedToday:
+              newCompleted,
+
+            date:
+              today,
+
+            updatedAt:
+              serverTimestamp()
+
+          },
+          {
+            merge:true
+          }
+        );
+
+      }
+    );
+
+
+    /*
+      Local Data Update
+    */
+
+    totalVideoIncome +=
+      MONEY_PER_VIDEO;
+
+
+    todayWatched +=
+      1;
+
+
+    if(
+      !completedToday.includes(index)
+    ){
+
+      completedToday.push(index);
+
     }
 
 
     /*
-      পরের ধাপে এখানে Firebase transaction
-      দিয়ে আসল টাকা যোগ করা হবে।
+      UI Update
     */
-
-    todayWatched++;
-
-    totalIncome++;
-
-    document.getElementById(
-      "submit-" + index
-    ).disabled = true;
-
-    document.getElementById(
-      "submit-" + index
-    ).innerText = "✅ সম্পন্ন";
-
 
     updateProgress();
 
+    updateLimitBox();
 
-    if (totalIncome >= 50) {
+    createVideos();
 
-      limitBox.style.display =
-        "block";
+
+    /*
+      Success Message
+    */
+
+    alert(
+      "🎉 ভিডিও সম্পন্ন হয়েছে!\n\n" +
+      "আপনার Account Balance-এ ৳1 যোগ হয়েছে।"
+    );
+
+
+    /*
+      Daily 5 Complete
+    */
+
+    if(
+      todayWatched >=
+      VIDEOS_PER_DAY
+    ){
+
+      setTimeout(
+        () => {
+
+          alert(
+            "🎉 আজকের ৫টি ভিডিও সম্পন্ন হয়েছে।\n\n" +
+            "আগামীকাল আবার ৫টি ভিডিও দেখতে পারবেন।"
+          );
+
+        },
+        500
+      );
 
     }
 
 
-    if (todayWatched >= 5) {
+    /*
+      50 Taka Limit
+    */
 
-      setTimeout(() => {
+    const currentCycleIncome =
+      totalVideoIncome %
+      MONEY_LIMIT_PER_CYCLE;
 
-        alert(
-          "🎉 আজকের ৫টি ভিডিও সম্পন্ন হয়েছে। আগামীকাল আবার ৫টি ভিডিও দেখতে পারবেন।"
-        );
 
-      }, 300);
+    if(
+      currentCycleIncome === 0 &&
+      totalVideoIncome > 0
+    ){
+
+      setTimeout(
+        () => {
+
+          alert(
+            "🎉 আপনার ৳50 ভিডিও ইনকাম লিমিট সম্পন্ন হয়েছে!\n\n" +
+            "লিমিট বাড়াতে আবার ২টি Account Verification সম্পন্ন করুন।"
+          );
+
+        },
+        700
+      );
 
     }
 
   }
 
+  catch(error){
 
-  updateStatus();
+    console.error(
+      "Submit Error:",
+      error
+    );
 
-  updateProgress();
 
-  createVideos();
+    alert(
+      "❌ ভিডিও Submit করা যায়নি।\n\n" +
+      error.message
+    );
+
+
+    submitButton.disabled =
+      false;
+
+
+    submitButton.innerText =
+      "✅ Submit";
+
+  }
+
+}
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
+
+onAuthStateChanged(
+  auth,
+  async (user) => {
+
+    loading.style.display =
+      "none";
+
+
+    if(!user){
+
+      loginBox.style.display =
+        "block";
+
+      mainPage.style.display =
+        "none";
+
+      return;
+
+    }
+
+
+    currentUser =
+      user;
+
+
+    loginBox.style.display =
+      "none";
+
+
+    mainPage.style.display =
+      "block";
+
+
+    errorBox.style.display =
+      "none";
+
+
+    try{
+
+      /*
+        Referral Verification Count
+      */
+
+      await loadVerificationCount(
+        user
+      );
+
+
+      /*
+        Video Income Data
+      */
+
+      await loadVideoData(
+        user
+      );
+
+
+      /*
+        Update Page
+      */
+
+      updateVerificationUI();
+
+      updateProgress();
+
+      updateLimitBox();
+
+      createVideos();
+
+    }
+
+    catch(error){
+
+      console.error(
+        error
+      );
+
+
+      mainPage.style.display =
+        "none";
+
+
+      errorBox.style.display =
+        "block";
+
+
+      errorBox.innerHTML =
+        `
+          ❌ তথ্য লোড করা যায়নি।
+
+          <br><br>
+
+          ${error.message}
+        `;
+
+    }
+
+  }
+);
 
 </script>
 
