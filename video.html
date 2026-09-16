@@ -822,10 +822,8 @@ async function loadVerificationCount(user){
       user.uid
     );
 
-
   const userSnap =
     await getDoc(userRef);
-
 
   if(!userSnap.exists()){
 
@@ -835,14 +833,11 @@ async function loadVerificationCount(user){
 
   }
 
-
   const userData =
     userSnap.data();
 
-
   const myReferralCode =
     userData.referralCode;
-
 
   if(!myReferralCode){
 
@@ -852,20 +847,11 @@ async function loadVerificationCount(user){
 
   }
 
-
-  /*
-    Daily Bonus-এর একই structure:
-
-    referredBy == নিজের referralCode
-    verified == true
-  */
-
   const usersRef =
     collection(
       db,
       "users"
     );
-
 
   const referralQuery =
     query(
@@ -886,16 +872,35 @@ async function loadVerificationCount(user){
 
     );
 
-
   const snapshot =
     await getDocs(
       referralQuery
     );
 
+  let count = 0;
 
-  verifiedCount =
-    snapshot.size;
+  snapshot.forEach((docSnap) => {
 
+    const referredUser =
+      docSnap.data();
+
+    /*
+      নিজের Account যেন
+      কখনো নিজের Verification
+      হিসেবে গণনা না হয়
+    */
+
+    if(
+      referredUser.uid !== user.uid
+    ){
+
+      count++;
+
+    }
+
+  });
+
+  verifiedCount = count;
 
   return verifiedCount;
 
