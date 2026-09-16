@@ -809,11 +809,11 @@ function getToday(){
 
 
 
-/* =====================================================
-   LOAD VIDEO VERIFICATION COUNT
-===================================================== */
+// =====================================
+// LOAD VIDEO VERIFICATION COUNT
+// =====================================
 
-async function loadVerificationCount(user){
+async function loadVerificationCount(user) {
 
   const userRef = doc(
     db,
@@ -823,12 +823,8 @@ async function loadVerificationCount(user){
 
   const userSnap = await getDoc(userRef);
 
-  if(!userSnap.exists()){
-
-    throw new Error(
-      "আপনার User Account পাওয়া যায়নি।"
-    );
-
+  if (!userSnap.exists()) {
+    throw new Error("আপনার User Account পাওয়া যায়নি");
   }
 
   const userData = userSnap.data();
@@ -836,33 +832,20 @@ async function loadVerificationCount(user){
   const myReferralCode =
     userData.referralCode;
 
-  if(!myReferralCode){
-
-    throw new Error(
-      "আপনার Referral Code পাওয়া যায়নি।"
-    );
-
+  if (!myReferralCode) {
+    throw new Error("আপনার Referral Code পাওয়া যায়নি");
   }
 
-
-  /*
-    IMPORTANT:
-
-    এখানে Daily Bonus-এর "verified"
-    field ব্যবহার করা হবে না।
-
-    Video Income-এর জন্য আলাদা:
-    videoVerified == true
-  */
+  // =====================================
+  // FIND VIDEO VERIFIED REFERRALS
+  // =====================================
 
   const usersRef = collection(
     db,
     "users"
   );
 
-
   const referralQuery = query(
-
     usersRef,
 
     where(
@@ -876,22 +859,20 @@ async function loadVerificationCount(user){
       "==",
       true
     )
-
   );
 
+  const snapshot = await getDocs(
+    referralQuery
+  );
 
-  const snapshot =
-    await getDocs(
-      referralQuery
-    );
+  // =====================================
+  // COUNT
+  // =====================================
 
-
-  verifiedCount =
+  const verifiedCount =
     snapshot.size;
 
-
   return verifiedCount;
-
 }
 
 
