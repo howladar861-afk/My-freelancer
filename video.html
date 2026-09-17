@@ -1475,37 +1475,81 @@ function closeCustomPopup(){
 
   popup.style.display = "none";
 }
-
+window.closeCustomPopup = closeCustomPopup;
 </script>
-<!-- CUSTOM POPUP -->
+<!-- =========================
+     BEAUTIFUL SUCCESS POPUP
+========================= -->
 
-<div
-  id="customPopup"
-  class="custom-popup">
+<div id="customPopup" class="custom-popup">
 
   <div class="custom-popup-box">
 
-    <div
-      id="popupIcon"
-      class="popup-icon">
-      🎉
+    <div class="success-check">
+      ✓
     </div>
 
-    <div
-      id="popupTitle"
-      class="popup-title">
-      সফল হয়েছে
+    <div id="popupTitle" class="popup-title">
+      🎉 ভিডিও সম্পূর্ণ হয়েছে!
     </div>
 
-    <div
-      id="popupMessage"
-      class="popup-message">
+    <div id="popupMessage" class="popup-message">
+      আপনি ৳৫ পেয়েছেন!
     </div>
+
+    <div class="popup-info">
+
+      <div class="popup-row">
+        <div class="popup-left">
+          🪙
+          <span>বর্তমান Balance</span>
+        </div>
+
+        <strong id="popupBalance">
+          ৳0
+        </strong>
+      </div>
+
+
+      <div class="popup-row">
+        <div class="popup-left">
+          ▶️
+          <span>এই Cycle-এর আয়</span>
+        </div>
+
+        <strong id="popupCycle">
+          ৳5
+        </strong>
+      </div>
+
+
+      <div class="popup-row">
+        <div class="popup-left">
+          ⭐
+          <span id="popupVideo">
+            ভিডিও সম্পূর্ণ হয়েছে
+          </span>
+        </div>
+
+        <div class="completed-check">
+          ✓
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="popup-bottom-text">
+      ── এখনই ভিডিও দেখে আয় করুন! ──
+    </div>
+
 
     <button
       class="popup-btn"
       onclick="closeCustomPopup()">
+
       ঠিক আছে
+
     </button>
 
   </div>
