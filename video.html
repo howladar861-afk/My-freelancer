@@ -472,8 +472,8 @@ async function loadUser() {
     }
 
 
-    const userData =
-      userSnap.data();
+    let userData =
+  userSnap.data();
 
 
     const balance =
@@ -523,61 +523,128 @@ async function loadUser() {
 
 
     // =================================
-    // VIDEO LOCK CHECK
-    // =================================
+// VIDEO CYCLE CHECK
+// =================================
 
-    if (
-      unlockCredits <= 0 ||
-      cycleEarned >= 50
-    ) {
+if (
+  unlockCredits > 0 &&
+  cycleEarned >= 50
+) {
 
-      lockBox.classList.remove(
-        "hidden"
-      );
+  await runTransaction(
+    db,
+    async (transaction) => {
 
-      unlockBox.classList.add(
-        "hidden"
-      );
+      const freshUserRef =
+        doc(
+          db,
+          "users",
+          currentUser.uid
+        );
 
-      videoList.innerHTML = "";
+      const freshSnap =
+        await transaction.get(
+          freshUserRef
+        );
 
-      return;
+      if (!freshSnap.exists()) {
+        throw new Error(
+          "User account পাওয়া যায়নি।"
+        );
+      }
+
+      const freshData =
+        freshSnap.data();
+
+      const freshCredits =
+        Number(
+          freshData.videoUnlockCredits || 0
+        );
+
+      const freshCycleEarned =
+        Number(
+          freshData.videoCycleEarned || 0
+        );
+
+      // নতুন unlock credit থাকলে
+      // নতুন video cycle শুরু হবে
+      if (
+        freshCredits > 0 &&
+        freshCycleEarned >= 50
+      ) {
+
+        transaction.update(
+          freshUserRef,
+          {
+
+            videoCycleEarned: 0,
+
+            completedVideos: {},
+
+            cycleStartedAt:
+              serverTimestamp()
+
+          }
+        );
+
+      }
+
     }
+  );
 
+  // নতুন cycle-এর জন্য local data reset
+  userData.videoCycleEarned = 0;
 
-    // =================================
-    // VIDEO UNLOCK
-    // =================================
+  userData.completedVideos = {};
 
-    lockBox.classList.add(
-      "hidden"
-    );
+  cycleEarned = 0;
 
-    unlockBox.classList.remove(
-      "hidden"
-    );
-
-
-    renderVideos(
-      userData
-    );
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "User Load Error:",
-      error
-    );
-
-    loading.textContent =
-      "❌ Data Load করা যায়নি: " +
-      error.message;
-
-  }
-
+  // Screen-এও ৳0 দেখাবে
+  cycleEarnedElement.textContent =
+    "৳ 0";
 }
+
+
+// =================================
+// FINAL VIDEO LOCK CHECK
+// =================================
+
+if (
+  Number(
+    userData.videoUnlockCredits || 0
+  ) <= 0
+) {
+
+  lockBox.classList.remove(
+    "hidden"
+  );
+
+  unlockBox.classList.add(
+    "hidden"
+  );
+
+  videoList.innerHTML = "";
+
+  return;
+}
+
+
+// =================================
+// VIDEO UNLOCK
+// =================================
+
+lockBox.classList.add(
+  "hidden"
+);
+
+unlockBox.classList.remove(
+  "hidden"
+);
+
+renderVideos(
+  userData
+);
+    
 
 
 // =====================================
