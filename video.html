@@ -151,7 +151,77 @@ body{
   padding:25px;
   color:#cbd5e1;
 }
+/* =========================
+   CUSTOM POPUP
+========================= */
 
+.custom-popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:20px;
+}
+
+.custom-popup-box{
+  width:100%;
+  max-width:380px;
+  background:#1e293b;
+  border-radius:20px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,.5);
+  animation:popupShow .25s ease;
+}
+
+@keyframes popupShow{
+  from{
+    transform:scale(.8);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.popup-icon{
+  font-size:50px;
+  margin-bottom:12px;
+}
+
+.popup-title{
+  font-size:22px;
+  font-weight:bold;
+  color:#ffc107;
+  margin-bottom:12px;
+}
+
+.popup-message{
+  color:#e2e8f0;
+  font-size:17px;
+  line-height:1.6;
+  white-space:pre-line;
+  margin-bottom:20px;
+}
+
+.popup-btn{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:12px;
+  background:#22c55e;
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+}
+
+.popup-btn:active{
+  transform:scale(.98);
+}
 </style>
 
 </head>
@@ -1314,12 +1384,11 @@ async function completeVideo(
   // SUCCESS MESSAGE
   // =====================================
 
-  alert(
-    "🎉 Video Completed!\n\n" +
-    "আপনি ৳৫ পেয়েছেন।\n\n" +
-    "বর্তমান Balance: ৳" +
-    result.balance
-  );
+  showSuccessPopup(
+  "🎉 ভিডিও সম্পূর্ণ হয়েছে!",
+  "আপনি ৳৫ পেয়েছেন।",
+  "বর্তমান Balance: ৳" + result.balance
+);
 
 
   // =====================================
@@ -1337,10 +1406,10 @@ catch (error) {
     error
   );
 
-  alert(
-    "❌ ভিডিও সম্পূর্ণ করা যায়নি:\n\n" +
-    error.message
-  );
+  showErrorPopup(
+  "ভিডিও সম্পূর্ণ করা যায়নি",
+  error.message
+);
 
 }
 
@@ -1348,10 +1417,99 @@ catch (error) {
 
 
 // =====================================
-// END SCRIPT
+// CUSTOM POPUP FUNCTIONS
 // =====================================
+
+function showSuccessPopup(title, message){
+
+  const popup =
+    document.getElementById("customPopup");
+
+  const icon =
+    document.getElementById("popupIcon");
+
+  const popupTitle =
+    document.getElementById("popupTitle");
+
+  const popupMessage =
+    document.getElementById("popupMessage");
+
+  icon.textContent = "🎉";
+
+  popupTitle.textContent = title;
+
+  popupMessage.textContent = message;
+
+  popup.style.display = "flex";
+}
+
+
+function showErrorPopup(title, message){
+
+  const popup =
+    document.getElementById("customPopup");
+
+  const icon =
+    document.getElementById("popupIcon");
+
+  const popupTitle =
+    document.getElementById("popupTitle");
+
+  const popupMessage =
+    document.getElementById("popupMessage");
+
+  icon.textContent = "❌";
+
+  popupTitle.textContent = title;
+
+  popupMessage.textContent = message;
+
+  popup.style.display = "flex";
+}
+
+
+function closeCustomPopup(){
+
+  const popup =
+    document.getElementById("customPopup");
+
+  popup.style.display = "none";
+}
 
 </script>
+<!-- CUSTOM POPUP -->
 
+<div
+  id="customPopup"
+  class="custom-popup">
+
+  <div class="custom-popup-box">
+
+    <div
+      id="popupIcon"
+      class="popup-icon">
+      🎉
+    </div>
+
+    <div
+      id="popupTitle"
+      class="popup-title">
+      সফল হয়েছে
+    </div>
+
+    <div
+      id="popupMessage"
+      class="popup-message">
+    </div>
+
+    <button
+      class="popup-btn"
+      onclick="closeCustomPopup()">
+      ঠিক আছে
+    </button>
+
+  </div>
+
+</div>
 </body>
 </html>
