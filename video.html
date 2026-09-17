@@ -1386,8 +1386,7 @@ async function completeVideo(
 
   showSuccessPopup(
   "🎉 ভিডিও সম্পূর্ণ হয়েছে!",
-  "আপনি ৳৫ পেয়েছেন।",
-  "বর্তমান Balance: ৳" + result.balance
+  "আপনি ৫৳ পেয়েছেন!\n\nবর্তমান Balance: ৳" + result.balance
 );
 
 
@@ -1485,7 +1484,7 @@ window.closeCustomPopup = closeCustomPopup;
 
   <div class="custom-popup-box">
 
-    <div class="success-check">
+    <div id="popupIcon" class="success-check">
       ✓
     </div>
 
