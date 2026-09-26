@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ludo Game</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6fb;
+    min-height:100vh;
+    padding:15px;
+    color:#222;
+}
+
+.top-message{
+    max-width:700px;
+    margin:0 auto 15px;
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    padding:18px;
+    border-radius:16px;
+    text-align:center;
+    box-shadow:0 6px 20px rgba(0,0,0,.12);
+}
+
+.top-message h1{
+    font-size:25px;
+    margin-bottom:7px;
+}
+
+.top-message p{
+    font-size:14px;
+    opacity:.95;
+}
+
+.game-panel{
+    max-width:700px;
+    margin:auto;
+    background:white;
+    padding:15px;
+    border-radius:18px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.player-select{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-bottom:15px;
+}
+
+.player-select button,
+.control-btn{
+    border:0;
+    padding:11px 18px;
+    border-radius:10px;
+    background:#4f46e5;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.player-select button.active{
+    background:#111827;
+}
+
+.status{
+    text-align:center;
+    background:#f1f5f9;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:15px;
+    font-weight:bold;
+}
+
+.board{
+    width:min(94vw,560px);
+    height:min(94vw,560px);
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(15,1fr);
+    grid-template-rows:repeat(15,1fr);
+    border:3px solid #222;
+    background:#fff;
+}
+
+.cell{
+    border:1px solid #d1d5db;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:10px;
+}
+
+.red-zone{
+    background:#fecaca;
+}
+
+.green-zone{
+    background:#bbf7d0;
+}
+
+.yellow-zone{
+    background:#fef08a;
+}
+
+.blue-zone{
+    background:#bfdbfe;
+}
+
+.path{
+    background:#fff;
+}
+
+.red-home{
+    background:#ef4444;
+}
+
+.green-home{
+    background:#22c55e;
+}
+
+.yellow-home{
+    background:#eab308;
+}
+
+.blue-home{
+    background:#3b82f6;
+}
+
+.center{
+    background:linear-gradient(135deg,#ef4444 25%,#22c55e 25%,#22c55e 50%,#eab308 50%,#eab308 75%,#3b82f6 75%);
+}
+
+.token{
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    border:2px solid white;
+    box-shadow:0 2px 5px rgba(0,0,0,.3);
+    cursor:pointer;
+    z-index:5;
+    position:absolute;
+}
+
+.token.red{
+    background:#dc2626;
+}
+
+.token.green{
+    background:#16a34a;
+}
+
+.token.yellow{
+    background:#ca8a04;
+}
+
+.token.blue{
+    background:#2563eb;
+}
+
+.controls{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    margin-top:15px;
+    flex-wrap:wrap;
+}
+
+.dice{
+    width:60px;
+    height:60px;
+    border-radius:12px;
+    background:#111827;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.message{
+    text-align:center;
+    margin-top:12px;
+    min-height:22px;
+    font-size:14px;
+}
+
+.rules{
+    margin-top:18px;
+    background:#f8fafc;
+    padding:15px;
+    border-radius:12px;
+    font-size:13px;
+    line-height:1.7;
+}
+
+.rules h3{
+    margin-bottom:5px;
+}
+
+@media(max-width:450px){
+    .token{
+        width:19px;
+        height:19px;
+    }
+
+    .top-message h1{
+        font-size:21px;
+    }
+
+    .game-panel{
+        padding:9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-message">
+    <h1>🎮 Ludo Game</h1>
+    <p>🚧 এই ফিচারটি বর্তমানে কাজ চলছে। সম্পূর্ণ হলে জানানো হবে।</p>
+</div>
+
+<div class="game-panel">
+
+    <div class="player-select">
+        <button id="twoBtn" class="active" onclick="setPlayers(2)">
+            2 Player
+        </button>
+
+        <button id="fourBtn" onclick="setPlayers(4)">
+            4 Player
+        </button>
+    </div>
+
+    <div class="status" id="status">
+        🔴 Red Player-এর Turn
+    </div>
+
+    <div class="board" id="board"></div>
+
+    <div class="controls">
+
+        <div class="dice" id="dice">
+            🎲
+        </div>
+
+        <button class="control-btn" onclick="rollDice()">
+            Dice Roll
+        </button>
+
+        <button class="control-btn" onclick="newGame()">
+            New Game
+        </button>
+
+    </div>
+
+    <div class="message" id="message">
+        Dice Roll করুন।
+    </div>
+
+    <div class="rules">
+        <h3>📌 খেলার নিয়ম</h3>
+
+        <p>
+            🎲 6 পেলে ঘুঁটি ঘর থেকে বের হবে।<br>
+            👉 Dice Roll করার পর যে ঘুঁটি চালানো যাবে সেটিতে চাপ দিন।<br>
+            ⚔️ একই ঘরে প্রতিপক্ষের ঘুঁটি থাকলে সেটি কাটা যাবে।<br>
+            🏆 নিজের সব ঘুঁটি Home-এ নিতে পারলে Winner।
+        </p>
+    </div>
+
+</div>
+
+<script>
+
+const board = document.getElementById("board");
+const statusText = document.getElementById("status");
+const message = document.getElementById("message");
+const diceBox = document.getElementById("dice");
+
+let playerCount = 2;
+let currentPlayer = 0;
+let diceValue = 0;
+let gameOver = false;
+
+const players = [
+    {
+        name:"Red",
+        color:"red",
+        start:0,
+        tokens:[-1,-1,-1,-1]
+    },
+    {
+        name:"Green",
+        color:"green",
+        start:13,
+        tokens:[-1,-1,-1,-1]
+    },
+    {
+        name:"Yellow",
+        color:"yellow",
+        start:26,
+        tokens:[-1,-1,-1,-1]
+    },
+    {
+        name:"Blue",
+        color:"blue",
+        start:39,
+        tokens:[-1,-1,-1,-1]
+    }
+];
+
+/*
+    Main 52-cell path
+*/
+const path = [];
+
+for(let i=0;i<52;i++){
+    path.push(i);
+}
+
+/*
+    Board তৈরি
+*/
+function createBoard(){
+
+    board.innerHTML="";
+
+    for(let r=0;r<15;r++){
+
+        for(let c=0;c<15;c++){
+
+            const cell=document.createElement("div");
+
+            cell.className="cell";
+
+            /*
+                চারটি Home area
+            */
+
+            if(r<6 && c<6){
+                cell.classList.add("red-zone");
+            }
+
+            if(r<6 && c>8){
+                cell.classList.add("green-zone");
+            }
+
+            if(r>8 && c<6){
+                cell.classList.add("yellow-zone");
+            }
+
+            if(r>8 && c>8){
+                cell.classList.add("blue-zone");
+            }
+
+            /*
+                Center
+            */
+
+            if(r>=6 && r<=8 && c>=6 && c<=8){
+                cell.classList.add("center");
+            }
+
+            /*
+                মাঝের path
+            */
+
+            if(
+                (r>=6 && r<=8) ||
+                (c>=6 && c<=8)
+            ){
+                cell.classList.add("path");
+            }
+
+            board.appendChild(cell);
+        }
+    }
+
+    drawTokens();
+}
+
+
+/*
+    Token drawing
+*/
+function drawTokens(){
+
+    document.querySelectorAll(".token").forEach(t=>t.remove());
+
+    players.forEach((player,pIndex)=>{
+
+        if(pIndex >= playerCount) return;
+
+        player.tokens.forEach((position,tIndex)=>{
+
+            const token=document.createElement("div");
+
+            token.className="token "+player.color;
+
+            token.title=player.name+" Token "+(tIndex+1);
+
+            token.onclick=function(e){
+
+                e.stopPropagation();
+
+                moveToken(pIndex,tIndex);
+            };
+
+            /*
+                Home অবস্থায় token board-এর corner-এ দেখানো
+            */
+
+            let cellIndex;
+
+            if(position === -1){
+
+                const homes = {
+
+                    red:[17,19,32,34],
+
+                    green:[17,19,32,34],
+
+                    yellow:[182,184,197,199],
+
+                    blue:[182,184,197,199]
+                };
+
+                const homeCells=homes[player.color];
+
+                cellIndex=homeCells[tIndex];
+
+            }else{
+
+                cellIndex=getPathCell(position);
+            }
+
+            const cell=board.children[cellIndex];
+
+            if(cell){
+                cell.appendChild(token);
+            }
+
+        });
+
+    });
+}
+
+
+/*
+    Path position থেকে board cell
+    এটি একটি simplified Ludo board path
+*/
+
+function getPathCell(pos){
+
+    const map=[];
+
+    /*
+        top horizontal
+    */
+
+    for(let c=0;c<15;c++){
+        map.push(6*15+c);
+    }
+
+    /*
+        right vertical
+    */
+
+    for(let r=7;r<15;r++){
+        map.push(r*15+8);
+    }
+
+    /*
+        bottom horizontal
+    */
+
+    for(let c=7;c>=0;c--){
+        map.push(8*15+c);
+    }
+
+    /*
+        left vertical
+    */
+
+    for(let r=7;r>=0;r--){
+        map.push(r*15+6);
+    }
+
+    return map[pos % map.length];
+}
+
+
+/*
+    Dice Roll
+*/
+
+function rollDice(){
+
+    if(gameOver) return;
+
+    if(diceValue !== 0){
+
+        message.innerText=
+        "আগের Dice-এর ঘুঁটি আগে চালান।";
+
+        return;
+    }
+
+    diceValue=
+    Math.floor(Math.random()*6)+1;
+
+    diceBox.innerText=diceValue;
+
+    const player=players[currentPlayer];
+
+    message.innerText=
+    player.name+
+    " Player "+diceValue+
+    " পেয়েছেন। ঘুঁটি নির্বাচন করুন।";
+
+    /*
+        কোনো token চালানো সম্ভব কিনা
+    */
+
+    const canMove=player.tokens.some(pos=>{
+
+        if(pos===-1 && diceValue===6)
+            return true;
+
+        if(pos>=0 && pos+diceValue<=56)
+            return true;
+
+        return false;
+    });
+
+    if(!canMove){
+
+        message.innerText=
+        player.name+
+        " Player-এর কোনো চাল নেই।";
+
+        setTimeout(nextTurn,900);
+    }
+}
+
+
+/*
+    Token move
+*/
+
+function moveToken(pIndex,tIndex){
+
+    if(gameOver) return;
+
+    if(pIndex!==currentPlayer){
+
+        message.innerText=
+        "এখন "+players[currentPlayer].name+
+        " Player-এর Turn।";
+
+        return;
+    }
+
+    if(diceValue===0){
+
+        message.innerText=
+        "আগে Dice Roll করুন।";
+
+        return;
+    }
+
+    const player=players[pIndex];
+
+    let position=player.tokens[tIndex];
+
+    /*
+        ঘর থেকে বের হওয়া
+    */
+
+    if(position===-1){
+
+        if(diceValue!==6){
+
+            message.innerText=
+            "ঘর থেকে বের হতে 6 লাগবে।";
+
+            return;
+        }
+
+        position=0;
+
+    }else{
+
+        position+=diceValue;
+    }
+
+    /*
+        Finish
+    */
+
+    if(position>56){
+
+        message.innerText=
+        "এই ঘুঁটি এতদূর যেতে পারবে না।";
+
+        return;
+    }
+
+    player.tokens[tIndex]=position;
+
+    /*
+        Opponent কাটাকাটি
+    */
+
+    if(position<52){
+
+        players.forEach((other,oIndex)=>{
+
+            if(oIndex===pIndex) return;
+
+            if(oIndex>=playerCount) return;
+
+            other.tokens.forEach((otherPos,otherToken)=>{
+
+                if(
+                    otherPos>=0 &&
+                    otherPos<52 &&
+                    getGlobalPosition(pIndex,position)
+                    ===
+                    getGlobalPosition(oIndex,otherPos)
+                ){
+
+                    /*
+                        opponent token home-এ ফেরত
+                    */
+
+                    other.tokens[otherToken]=-1;
+
+                    message.innerText=
+                    player.name+
+                    " Player "+other.name+
+                    " Player-এর ঘুঁটি কেটেছে! ⚔️";
+                }
+
+            });
+
+        });
+    }
+
+    drawTokens();
+
+    /*
+        Winner check
+    */
+
+    const finished=
+    player.tokens.every(x=>x>=52);
+
+    if(finished){
+
+        gameOver=true;
+
+        statusText.innerText=
+        "🏆 "+player.name+
+        " Player Winner!";
+
+        message.innerText=
+        "🎉 অভিনন্দন! "+player.name+
+        " Player জিতে গেছেন।";
+
+        return;
+    }
+
+    /*
+        6 পেলে আবার turn
+    */
+
+    if(diceValue===6){
+
+        message.innerText=
+        player.name+
+        " Player আবার Dice Roll করতে পারবেন।";
+
+        diceValue=0;
+
+        return;
+    }
+
+    nextTurn();
+}
+
+
+/*
+    Global position
+*/
+
+function getGlobalPosition(playerIndex,pos){
+
+    if(pos>=52)
+        return -1;
+
+    return(
+        players[playerIndex].start+
+        pos
+    )%52;
+}
+
+
+/*
+    Next Turn
+*/
+
+function nextTurn(){
+
+    diceValue=0;
+
+    diceBox.innerText="🎲";
+
+    currentPlayer++;
+
+    if(currentPlayer>=playerCount){
+        currentPlayer=0;
+    }
+
+    updateStatus();
+}
+
+
+/*
+    Status
+*/
+
+function updateStatus(){
+
+    const player=players[currentPlayer];
+
+    statusText.innerText=
+    "🎯 "+player.name+
+    " Player-এর Turn";
+
+    message.innerText=
+    "Dice Roll করুন।";
+}
+
+
+/*
+    Player count
+*/
+
+function setPlayers(count){
+
+    playerCount=count;
+
+    document.getElementById("twoBtn")
+        .classList.toggle("active",count===2);
+
+    document.getElementById("fourBtn")
+        .classList.toggle("active",count===4);
+
+    newGame();
+}
+
+
+/*
+    New Game
+*/
+
+function newGame(){
+
+    gameOver=false;
+
+    currentPlayer=0;
+
+    diceValue=0;
+
+    diceBox.innerText="🎲";
+
+    players.forEach(player=>{
+        player.tokens=[-1,-1,-1,-1];
+    });
+
+    createBoard();
+
+    updateStatus();
+}
+
+
+/*
+    Start
+*/
+
+createBoard();
+updateStatus();
+
+</script>
+
+</body>
+  </html>
