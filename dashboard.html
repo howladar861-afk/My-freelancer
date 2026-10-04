@@ -177,18 +177,49 @@ body{
   max-width:900px;
   margin:15px auto;
   padding:17px;
-  border:1px solid #ffb8bd;
-  border-left:0;
+  border:2px solid #86efac;
+  border-left:6px solid #16a34a;
   border-radius:18px;
-  background:linear-gradient(100deg,#fff5f5,#ffe7e9);
-  box-shadow:0 5px 18px rgba(239,68,68,.10);
+  background:linear-gradient(135deg,#ecfdf5,#d1fae5);
+  box-shadow:0 8px 25px rgba(22,163,74,.15);
 }
 
-.verification-title{
-  margin-bottom:7px;
-  color:#dc2626;
-  font-size:19px;
+ .verification-title{
+  margin:0;
+  padding:9px 18px;
+  display:inline-block;
+  border-radius:30px;
+  background:#16a34a;
+  color:#fff;
+  font-size:20px;
   font-weight:900;
+  text-align:center;
+  box-shadow:0 4px 10px rgba(22,163,74,.20);
+ }
+    .verification-card.verified{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  background:linear-gradient(135deg,#f0fff4,#dcfce7);
+  border:2px solid #86efac;
+  border-left:6px solid #16a34a;
+  min-height:110px;
+}
+
+.verification-card.verified::before{
+  content:"✓";
+  width:70px;
+  height:70px;
+  min-width:70px;
+  border-radius:50%;
+  background:#16a34a;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  font-weight:900;
+  box-shadow:0 0 0 10px #bbf7d0;
 }
 
 .verification-card p{
@@ -743,6 +774,29 @@ body{
     padding:7px 7px;
     font-size:11px;
   }
+  @media (max-width:600px){
+
+  .verification-card.verified{
+    width:calc(100% - 24px);
+    min-height:90px;
+    padding:15px 12px;
+    gap:14px;
+  }
+
+  .verification-card.verified::before{
+    width:58px;
+    height:58px;
+    min-width:58px;
+    font-size:34px;
+    box-shadow:0 0 0 7px #bbf7d0;
+  }
+
+  .verification-title{
+    padding:8px 14px;
+    font-size:18px;
+  }
+
+  }
   </style>
 </head>
 <body>
@@ -1220,16 +1274,10 @@ onAuthStateChanged(
         card.classList.add("verified");
 
         content.innerHTML = `
-
-          <div class="verification-title">
-            ✅ আপনার অ্যাকাউন্ট ভেরিফাই করা হয়েছে
-          </div>
-
-          <p>
-            অভিনন্দন! আপনার অ্যাকাউন্ট সফলভাবে Verification সম্পন্ন করেছে।
-          </p>
-
-        `;
+  <div class="verification-title">
+    Account Verified
+  </div>
+`;
 
       }
 
