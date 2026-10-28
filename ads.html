@@ -1,205 +1,207 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ads - My Freelancer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Freelancer - Ads Task</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #f1f5ff;
-      color: #222;
-      min-height: 100vh;
-      padding: 25px 15px;
-    }
-
-    .container {
-      max-width: 650px;
-      margin: 0 auto;
-    }
-
-    .ads-notice {
-      background: #ffffff;
-      border-radius: 28px;
-      padding: 35px 25px;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.10);
-      text-align: center;
-    }
-
-    .icon {
-      font-size: 65px;
-      margin-bottom: 15px;
-    }
-
-    h1 {
-      font-size: 32px;
-      color: #2563eb;
-      margin-bottom: 12px;
-    }
-
-    .subtitle {
-      font-size: 18px;
-      color: #64748b;
-      margin-bottom: 30px;
-    }
-
-    .notice-box {
-      background: #f8faff;
-      border-radius: 20px;
-      padding: 22px 18px;
-      margin: 18px 0;
-      border-left: 6px solid #2563eb;
-      text-align: left;
-    }
-
-    .notice-box h2 {
-      font-size: 21px;
-      color: #1d4ed8;
-      margin-bottom: 10px;
-    }
-
-    .notice-box p {
-      font-size: 17px;
-      line-height: 1.9;
-      color: #374151;
-    }
-
-    .success {
-      border-left-color: #16a34a;
-      background: #f0fdf4;
-    }
-
-    .success h2 {
-      color: #15803d;
-    }
-
-    .team {
-      border-left-color: #9333ea;
-      background: #faf5ff;
-    }
-
-    .team h2 {
-      color: #7e22ce;
-    }
-
-    .internet {
-      border-left-color: #f59e0b;
-      background: #fffbeb;
-    }
-
-    .internet h2 {
-      color: #d97706;
-    }
-
-    .bottom-message {
-      margin-top: 28px;
-      padding: 22px;
-      background: #2563eb;
-      color: white;
-      border-radius: 20px;
-      font-size: 18px;
-      line-height: 1.8;
-    }
-
-    .bottom-message strong {
-      font-size: 21px;
-    }
-
-    .back-btn {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 14px 30px;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      border-radius: 14px;
-      font-size: 17px;
-      font-weight: bold;
-    }
-
-    .back-btn:active {
-      transform: scale(0.97);
-    }
-  </style>
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f1f5f9;
+  color: #172033;
+}
+header {
+  background: linear-gradient(135deg, #0757d5, #673de6);
+  color: white;
+  padding: 18px 15px 25px;
+  border-radius: 0 0 25px 25px;
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.back {
+  background: white;
+  color: #1748b7;
+  border: none;
+  border-radius: 9px;
+  padding: 10px 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+header h2 {
+  text-align: center;
+  margin: 24px 0 8px;
+}
+header p {
+  text-align: center;
+  margin: 0;
+}
+.container {
+  max-width: 480px;
+  margin: 20px auto;
+  padding: 0 15px 25px;
+}
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 5px 18px #0000000c;
+}
+.reward {
+  text-align: center;
+  border: 1px solid #ccebd8;
+  background: #effcf4;
+}
+.reward h1 {
+  color: #07883d;
+  font-size: 38px;
+  margin: 8px;
+}
+.youtube {
+  display: block;
+  text-align: center;
+  background: #ff0033;
+  color: white;
+  text-decoration: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: bold;
+  margin-top: 16px;
+}
+.whatsapp {
+  display: block;
+  text-align: center;
+  background: #16a34a;
+  color: white;
+  text-decoration: none;
+  padding: 13px;
+  border-radius: 12px;
+  font-weight: bold;
+  margin-top: 12px;
+}
+.submit {
+  width: 100%;
+  background: #155eef;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.notice {
+  background: #fff8e6;
+  border: 1px solid #f4d58a;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.small {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
-
-    <div class="ads-notice">
-
-      <div class="icon">📺</div>
-
-      <h1>Ads কাজের আপডেট</h1>
-
-      <p class="subtitle">
-        My Freelancer — কাজের সর্বশেষ আপডেট
-      </p>
-
-
-      <div class="notice-box">
-        <h2>🚧 এই সাইটে কাজ চলছে</h2>
-        <p>
-          খুব শীঘ্রই Ads-এর কাজ সম্পূর্ণভাবে চালু হবে।
-          কাজটি সুন্দরভাবে প্রস্তুত করার জন্য আমাদের টিম কাজ করছে।
-        </p>
-      </div>
-
-
-      <div class="notice-box success">
-        <h2>✅ অন্যান্য কাজ চালু আছে</h2>
-        <p>
-          অন্যান্য কাজগুলো বর্তমানে চালু আছে।
-          আপনারা ধৈর্য ধরে অন্যান্য কাজ করতে থাকুন এবং নিয়মিত
-          সাইটে ভিজিট করুন।
-        </p>
-      </div>
-
-
-      <div class="notice-box team">
-        <h2>👥 বন্ধুদের শেয়ার করুন</h2>
-        <p>
-          আপনার বন্ধুদের সাথে সাইটটি শেয়ার করুন।
-          বন্ধুদের রেফার করে ইনকাম করার সুযোগ এখন চালু আছে।
-          সবাই মিলে টিম তৈরি করে কাজ করুন।
-        </p>
-      </div>
-
-
-      <div class="notice-box internet">
-        <h2>🌐 ইন্টারনেট / মিনিট</h2>
-        <p>
-          ইন্টারনেট / মিনিট বিক্রির কাজটি সফলভাবে চালু আছে।
-          আপনারা এই কাজটি করতে পারবেন এবং নিয়মিত ইনকাম করতে পারবেন।
-        </p>
-      </div>
-
-
-      <div class="bottom-message">
-        <strong>❤️ আমাদের পাশেই থাকবেন</strong>
-        <br><br>
-        ইনশাআল্লাহ, খুব শীঘ্রই এই সাইটের বাকি কাজগুলোও
-        সম্পূর্ণভাবে চালু হবে।
-        <br>
-        আপনাদের সহযোগিতা ও ধৈর্যের জন্য আন্তরিক ধন্যবাদ।
-      </div>
-
-
-      <a href="index.html" class="back-btn">
-        🏠 হোমে ফিরে যান
-      </a>
-
-    </div>
-
+<header>
+  <div class="top">
+    <button class="back" onclick="goBack()">← Back</button>
+    <strong>🪷 My Freelancer</strong>
   </div>
+
+  <h2>📺 YouTube Subscribe Task</h2>
+  <p>কাজ সম্পন্ন করুন এবং পুরস্কারের জন্য আবেদন করুন</p>
+</header>
+
+<div class="container">
+
+  <div class="card reward">
+    <p>🎁 এই কাজের পুরস্কার</p>
+    <h1>৳ ৫ টাকা</h1>
+    <p>সঠিকভাবে কাজ সম্পন্ন করে স্ক্রিনশট জমা দিন।</p>
+  </div>
+
+  <div class="card">
+    <h3>📌 কাজের নিয়ম</h3>
+    <p>১. নিচের বাটনে ক্লিক করে আমাদের YouTube চ্যানেলে যান।</p>
+    <p>২. চ্যানেলটি Subscribe করুন।</p>
+    <p>৩. Subscribe করার পর স্ক্রিনশট নিন।</p>
+    <p>৪. WhatsApp-এ স্ক্রিনশট পাঠিয়ে Submit করুন।</p>
+
+    <a class="youtube"
+       href="https://youtube.com/@rakibhowladar3017?si=Z5dLNDWwclSsS-Z5"
+       target="_blank"
+       rel="noopener">
+       ▶ YouTube চ্যানেল Subscribe করুন
+    </a>
+  </div>
+
+  <div class="card">
+    <h3>📸 স্ক্রিনশট জমা দিন</h3>
+    <p>আপনার Subscribe-এর স্ক্রিনশট WhatsApp-এ পাঠান।</p>
+
+    <a class="whatsapp"
+       href="https://wa.me/8801837976455?text=Assalamu%20Alaikum%2C%20আমি%20YouTube%20Subscribe%20Task%20সম্পন্ন%20করেছি।%20আমার%20স্ক্রিনশট%20যাচাই%20করুন।"
+       target="_blank"
+       rel="noopener">
+       💬 WhatsApp-এ স্ক্রিনশট পাঠান
+    </a>
+
+    <p class="small">
+      WhatsApp খুললে স্ক্রিনশটটি নিজে Attach করে পাঠাবেন।
+      এরপর নিচের Submit বাটনে চাপ দিন।
+    </p>
+
+    <button class="submit" onclick="submitTask()">
+      ✅ Submit Task
+    </button>
+
+    <p id="status" role="status" aria-live="polite"
+       class="small"></p>
+  </div>
+
+  <div class="notice">
+    <strong>⚠️ গুরুত্বপূর্ণ নোটিশ</strong><br>
+    পুরস্কার পাওয়ার জন্য কাজের শর্ত পূরণ করতে হবে।
+    Subscribe তুলে নিলে পুরস্কার বাতিল হতে পারে।
+    ১০ টাকা জরিমানা বা অ্যাকাউন্ট থেকে টাকা কাটার কোনো
+    ব্যবস্থা থাকলে তা আগে স্পষ্টভাবে জানাতে হবে এবং
+    আইনসম্মত হতে হবে। এই পেজ নিজে থেকে টাকা কাটবে না।
+  </div>
+
+  <p class="small" style="text-align:center">
+    © My Freelancer | Task & Reward
+  </p>
+
+</div>
+
+<script>
+function goBack() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = "index.html";
+  }
+}
+
+function submitTask() {
+  document.getElementById("status").textContent =
+    "আপনার Submit অনুরোধ দেখানো হয়েছে। WhatsApp-এ স্ক্রিনশট পাঠিয়ে অ্যাডমিনের যাচাই সম্পন্ন করুন। এই ডেমো পেজ থেকে স্বয়ংক্রিয়ভাবে টাকা যোগ হয়নি।";
+}
+</script>
 
 </body>
 </html>
