@@ -797,6 +797,42 @@ body{
   }
 
   }
+  
+.leader-option {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 18px 0;
+  padding: 16px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #172554, #4f46e5);
+  color: white;
+  box-shadow: 0 5px 15px #4338ca30;
+  cursor: pointer;
+}
+.leader-icon {
+  font-size: 32px;
+  background: #ffffff20;
+  padding: 10px;
+  border-radius: 12px;
+}
+.leader-info {
+  flex: 1;
+}
+.leader-info h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+.leader-info p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.leader-arrow {
+  font-size: 22px;
+  color: #facc15;
+}
+  
   </style>
 </head>
 <body>
@@ -919,6 +955,17 @@ body{
     <h1>My Freelancer</h1>
     <div class="section-title">💰 Easy Earning</div>
 
+<!-- Leader Option -->
+<div class="leader-option"
+     onclick="openVerifiedPage('leader.html')">
+  <div class="leader-icon">👑</div>
+  <div class="leader-info">
+    <h3>Leader Option</h3>
+    <p>লেভেল, ভেরিফিকেশন ও বোনাস দেখুন</p>
+  </div>
+  <div class="leader-arrow">❯</div>
+</div>
+  
     <div class="cards earning-options">
 <!-- Form Fill -->
 <div class="card" onclick="openVerifiedPage('form.html')">
