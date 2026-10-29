@@ -1,7 +1,9 @@
-// =====================================
-// Rakib Freelancer
-// REFERRAL COUNT + LIMIT + VIDEO UNLOCK
-// =====================================
+
+ // =====================================
+ // Rakib Freelancer
+ // REFERRAL COUNT + LIMIT + VIDEO UNLOCK
+ // + LEADER VERIFICATION COUNT
+ // =====================================
 
 export function addReferralCounts(
   transaction,
@@ -12,7 +14,7 @@ export function addReferralCounts(
 ) {
 
   // =====================================
-  // LEVEL 1
+  // LEVEL 1 - DIRECT REFERRAL
   // =====================================
 
   if (level1Ref && level1User) {
@@ -26,6 +28,9 @@ export function addReferralCounts(
     const currentUnlockCredits =
       Number(level1User.videoUnlockCredits || 0);
 
+    const currentLeaderCount =
+      Number(level1User.leaderVerifyCount || 0);
+
     transaction.update(level1Ref, {
 
       // Direct verified referral +1
@@ -38,13 +43,17 @@ export function addReferralCounts(
 
       // One new video unlock
       videoUnlockCredits:
-        currentUnlockCredits + 1
+        currentUnlockCredits + 1,
+
+      // Leader verification count +1
+      leaderVerifyCount:
+        currentLeaderCount + 1
     });
   }
 
 
   // =====================================
-  // LEVEL 2
+  // LEVEL 2 - REFERRAL COUNT ONLY
   // =====================================
 
   if (level2Ref && level2User) {
@@ -58,7 +67,7 @@ export function addReferralCounts(
       referralCount:
         currentCount + 1
 
-      // Level 2 does NOT get video unlock credit
+      // No video unlock or Leader count for Level 2
     });
   }
 
