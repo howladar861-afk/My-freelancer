@@ -292,12 +292,25 @@ footer {
   © My Freelancer — Leader Center
 </footer>
 
-<script>
-// Demo value only.
-// Connect this to verified member data in Firebase.
-function getVerifiedCount() {
-  return 0;
-}
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "তোমার-আসল-apiKey",
+  authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+  projectId: "rakib-freelancer-9c66b",
+  storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+  messagingSenderId: "541209844482",
+  appId: "1:541209844482:web:510568d5226c9bf47ac01b",
+  measurementId: "G-F6QNE0QN5K"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 function goBack() {
   if (window.history.length > 1) {
@@ -307,7 +320,33 @@ function goBack() {
   }
 }
 
-function renderLeaderPage(count) {
+async function loadLeaderPage(user) {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      alert("সদস্যের তথ্য পাওয়া যায়নি।");
+      return;
+    }
+
+    const data = userSnap.data();
+    const count = Number(data.leaderVerifyCount || 0);
+    renderLeaderPage(count);
+
+  } catch (error) {
+    console.error(error);
+    alert("Firebase থেকে তথ্য লোড হয়নি।");
+  }
+}
+
+onAuthStateChanged(auth, loadLeaderPage);
+  function renderLeaderPage(count) {
   count = Math.max(0, Number(count) || 0);
 
   const levels = [
@@ -325,43 +364,41 @@ function renderLeaderPage(count) {
 
   document.getElementById("currentLevel").textContent =
     current ? current.name : "শুরু করুন";
+
   document.getElementById("currentIcon").textContent =
     current ? current.icon : "🌱";
+
   document.getElementById("verifiedText").textContent =
-    count + "টি বৈধ ভেরিফিকেশন";
+    count + " টি বৈধ ভেরিফিকেশন";
 
   const next = levels.find(level => count < level.min);
-  const progress = next
-    ? Math.min(100, count / next.min * 100)
-    : 100;
 
   document.getElementById("progressBar").style.width =
-    progress + "%";
+    (next ? Math.min(100, count / next.min * 100) : 100) + "%";
 
   document.getElementById("nextLevelText").textContent =
     next
-      ? next.min + "টি ভেরিফিকেশনে " + next.name +
-        " লেভেল (" + count + "/" + next.min + ")"
-      : "সকল লেভেলের ভেরিফিকেশন সীমা পূরণ হয়েছে।";
+      ? next.min + " টি ভেরিফিকেশন — " + next.name
+      : "সব লেভেল সম্পন্ন হয়েছে!";
 
-  levels.forEach(level => {
+  levels.forEach((level, index) => {
     const row = document.getElementById("level-" + level.min);
+    if (!row) return;
+
     const status = row.querySelector(".status");
+    if (!status) return;
+
     row.classList.toggle("active", count >= level.min);
     status.textContent = count >= level.min
       ? "✓ অর্জিত"
-      : "Level " + (levels.indexOf(level) + 1);
+      : "Level " + (index + 1);
   });
 
   document.getElementById("bonusStatus").textContent =
     count >= 30
       ? "৩০টি ভেরিফিকেশন হয়েছে — অ্যাডমিনের অনুমোদন প্রয়োজন"
-      : "আরও " + (30 - count) +
-        "টি বৈধ ভেরিফিকেশন প্রয়োজন";
-}
-
-renderLeaderPage(getVerifiedCount());
+      : "আরও " + (30 - count) + " টি বৈধ ভেরিফিকেশন প্রয়োজন";
+  }
 </script>
-
 </body>
 </html>
