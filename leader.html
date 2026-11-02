@@ -7,173 +7,141 @@
 <title>Leader Center - My Freelancer</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:#172033;
+  background:#f3f6ff;
 }
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  color: #172033;
-  background: #f3f6ff;
+header{
+  background:linear-gradient(135deg,#14234b,#5145cd);
+  color:white;
+  padding:18px 16px 28px;
+  border-radius:0 0 25px 25px;
 }
-header {
-  background: linear-gradient(135deg,#14234b,#5145cd);
-  color: white;
-  padding: 18px 16px 28px;
-  border-radius: 0 0 25px 25px;
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.back{
+  border:0;
+  border-radius:9px;
+  padding:10px 14px;
+  background:white;
+  color:#243a80;
+  font-weight:bold;
+  cursor:pointer;
 }
-.back {
-  border: 0;
-  border-radius: 9px;
-  padding: 10px 14px;
-  background: white;
-  color: #243a80;
-  font-weight: bold;
-  cursor: pointer;
+header h1{font-size:25px;margin:24px 0 8px}
+header p{margin:0;color:#e0e7ff;line-height:1.6}
+.container{max-width:540px;margin:auto;padding:16px}
+.card{
+  background:white;
+  border-radius:17px;
+  padding:17px;
+  margin-bottom:15px;
+  box-shadow:0 4px 16px #1725540c;
 }
-header h1 {
-  font-size: 25px;
-  margin: 24px 0 8px;
+.card h2{font-size:18px;margin:0 0 13px}
+.current{display:flex;align-items:center;gap:14px}
+.big-icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:68px;
+  height:68px;
+  border-radius:17px;
+  background:#f1edff;
+  font-size:38px;
 }
-header p {
-  margin: 0;
-  color: #e0e7ff;
-  line-height: 1.6;
+.current-info{flex:1}
+.current-info h2{margin:0 0 6px;font-size:21px}
+.muted{font-size:13px;color:#64748b;line-height:1.6}
+.progress-bg{
+  background:#e7eaf2;
+  height:10px;
+  border-radius:20px;
+  overflow:hidden;
+  margin:12px 0 8px;
 }
-.container {
-  max-width: 540px;
-  margin: auto;
-  padding: 16px;
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#4f46e5,#8b5cf6);
+  border-radius:20px;
+  transition:width .3s;
 }
-.card {
-  background: white;
-  border-radius: 17px;
-  padding: 17px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 16px #1725540c;
+.level-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 0;
+  border-bottom:1px solid #edf0f5;
 }
-.card h2 {
-  font-size: 18px;
-  margin: 0 0 13px;
+.level-row:last-child{border-bottom:none}
+.level-icon{
+  width:48px;
+  height:48px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#f1f5f9;
+  font-size:27px;
 }
-.current {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+.level-info{flex:1}
+.level-info strong{display:block;margin-bottom:5px}
+.level-info small{color:#64748b}
+.status{
+  font-size:12px;
+  padding:6px 9px;
+  border-radius:20px;
+  background:#f1f5f9;
+  color:#475569;
+  white-space:nowrap;
 }
-.big-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 68px;
-  height: 68px;
-  border-radius: 17px;
-  background: #f1edff;
-  font-size: 38px;
+.active .level-icon{background:#dcfce7}
+.active .status{background:#dcfce7;color:#166534}
+.bonus{
+  background:linear-gradient(135deg,#fff7dc,#ffedb0);
+  border:1px solid #f3d77a;
 }
-.current-info {
-  flex: 1;
+.bonus-amount{
+  font-size:35px;
+  font-weight:800;
+  color:#956000;
+  margin:8px 0;
 }
-.current-info h2 {
-  margin: 0 0 6px;
-  font-size: 21px;
+.bonus p{font-size:14px;line-height:1.7}
+.notice{
+  padding:13px;
+  border-radius:12px;
+  background:#eff6ff;
+  color:#1e40af;
+  font-size:13px;
+  line-height:1.7;
 }
-.muted {
-  font-size: 13px;
-  color: #64748b;
-  line-height: 1.6;
+footer{
+  text-align:center;
+  color:#64748b;
+  font-size:12px;
+  padding:15px;
 }
-.progress-bg {
-  background: #e7eaf2;
-  height: 10px;
-  border-radius: 20px;
-  overflow: hidden;
-  margin: 12px 0 8px;
+#errorBox{
+  display:none;
+  background:#fee2e2;
+  color:#991b1b;
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:12px;
+  line-height:1.6;
 }
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg,#4f46e5,#8b5cf6);
-  border-radius: 20px;
-  transition: width .3s;
-}
-.level-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 0;
-  border-bottom: 1px solid #edf0f5;
-}
-.level-row:last-child {
-  border-bottom: none;
-}
-.level-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f1f5f9;
-  font-size: 27px;
-}
-.level-info {
-  flex: 1;
-}
-.level-info strong {
-  display: block;
-  margin-bottom: 5px;
-}
-.level-info small {
-  color: #64748b;
-}
-.status {
-  font-size: 12px;
-  padding: 6px 9px;
-  border-radius: 20px;
-  background: #f1f5f9;
-  color: #475569;
-  white-space: nowrap;
-}
-.active .level-icon {
-  background: #dcfce7;
-}
-.active .status {
-  background: #dcfce7;
-  color: #166534;
-}
-.bonus {
-  background: linear-gradient(135deg,#fff7dc,#ffedb0);
-  border: 1px solid #f3d77a;
-}
-.bonus-amount {
-  font-size: 35px;
-  font-weight: 800;
-  color: #956000;
-  margin: 8px 0;
-}
-.bonus p {
-  font-size: 14px;
-  line-height: 1.7;
-}
-.notice {
-  padding: 13px;
-  border-radius: 12px;
-  background: #eff6ff;
-  color: #1e40af;
-  font-size: 13px;
-  line-height: 1.7;
-}
-footer {
-  text-align: center;
-  color: #64748b;
-  font-size: 12px;
-  padding: 15px;
+#loading{
+  text-align:center;
+  padding:20px;
+  color:#64748b;
 }
 </style>
 </head>
@@ -186,11 +154,14 @@ footer {
     <strong>🪷 My Freelancer</strong>
   </div>
   <h1>👑 Leader Center</h1>
-  <p>আপনার লেভেল দেখুন, ভেরিফিকেশন সম্পন্ন করুন এবং
-  Leader Bonus-এর যোগ্যতা অর্জন করুন।</p>
+  <p>আপনার লেভেল দেখুন, ভেরিফিকেশন সম্পন্ন করুন এবং Leader Bonus-এর যোগ্যতা অর্জন করুন।</p>
 </header>
 
 <main class="container">
+
+  <div id="loading">⏳ Leader তথ্য লোড হচ্ছে...</div>
+
+  <div id="errorBox"></div>
 
   <!-- Current Level -->
   <section class="card">
@@ -198,16 +169,15 @@ footer {
       <div class="big-icon" id="currentIcon">🥉</div>
       <div class="current-info">
         <div class="muted">আপনার বর্তমান লেভেল</div>
-        <h2 id="currentLevel">Bronze</h2>
-        <div class="muted" id="verifiedText">
-          ০টি বৈধ ভেরিফিকেশন
-        </div>
+        <h2 id="currentLevel">লোড হচ্ছে...</h2>
+        <div class="muted" id="verifiedText">0টি বৈধ ভেরিফিকেশন</div>
       </div>
     </div>
 
     <div class="progress-bg">
       <div class="progress-bar" id="progressBar"></div>
     </div>
+
     <div class="muted" id="nextLevelText">
       পরবর্তী লেভেলের অগ্রগতি
     </div>
@@ -263,7 +233,7 @@ footer {
     </div>
   </section>
 
-  <!-- Leader Bonus -->
+  <!-- Bonus -->
   <section class="card bonus">
     <h2>🎁 Leader Bonus</h2>
     <div class="bonus-amount">৳ ৫০০</div>
@@ -275,14 +245,15 @@ footer {
     </p>
   </section>
 
+  <!-- Rules -->
   <section class="card">
     <h2>📋 বোনাস পাওয়ার নিয়ম</h2>
     <div class="notice">
       ✅ ভেরিফিকেশনগুলো বৈধ হতে হবে।<br>
-      ✅ প্রতিটি ভেরিফিকেশন একবারই গণনা হবে।<br>
+      ✅ প্রতিটি সদস্য একবারই গণনা হবে।<br>
       ✅ অ্যাডমিনের যাচাই ও অনুমোদন আবশ্যক।<br>
-      ✅ বোনাস একজন সদস্যকে একবারই দেওয়া হবে।<br>
-      ℹ️ এই পেজ থেকে সরাসরি টাকা যোগ বা উত্তোলন হয় না।
+      ✅ বোনাস একজন সদস্যকে একবারই দেওয়া হবে।<br>
+      ℹ️ এই পেজ থেকে সরাসরি টাকা যোগ বা উত্তোলন হয় না।
     </div>
   </section>
 
@@ -291,6 +262,252 @@ footer {
 <footer>
   © My Freelancer — Leader Center
 </footer>
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+// FIREBASE CONFIG
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBFUKPT7fo6sUofd09ffiZgjdlaR5evm8",
+  authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+  projectId: "rakib-freelancer-9c66b",
+  storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+  messagingSenderId: "541209844482",
+  appId: "1:541209844482:web:510568d5226c9bf47ac01b",
+  measurementId: "G-F6QNE0QN5K"
+};
+
+
+// FIREBASE START
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+// BACK BUTTON
+
+window.goBack = function(){
+  window.location.href = "dashboard.html";
+};
+
+
+// LEVEL SETTINGS
+
+const levels = [
+  {count:1, name:"Bronze", icon:"🥉"},
+  {count:5, name:"Silver", icon:"🥈"},
+  {count:10, name:"Gold", icon:"🥇"},
+  {count:20, name:"Platinum", icon:"💎"},
+  {count:30, name:"Leader", icon:"👑"}
+];
+
+
+// ELEMENTS
+
+const loading = document.getElementById("loading");
+const errorBox = document.getElementById("errorBox");
+
+
+// AUTH CHECK
+
+onAuthStateChanged(auth, async (user) => {
+
+  if(!user){
+
+    loading.style.display = "none";
+
+    document.getElementById("currentLevel").textContent =
+      "Login প্রয়োজন";
+
+    document.getElementById("verifiedText").textContent =
+      "আগে অ্যাকাউন্টে Login করুন";
+
+    document.getElementById("bonusStatus").textContent =
+      "Login করার পর তথ্য দেখা যাবে";
+
+    return;
+  }
+
+  try {
+
+    // GET USER DATA
+
+    const userRef = doc(db, "users", user.uid);
+
+    const userSnap = await getDoc(userRef);
+
+    if(!userSnap.exists()){
+      throw new Error("আপনার User Account পাওয়া যায়নি।");
+    }
+
+    const userData = userSnap.data();
+
+    const myReferralCode = userData.referralCode;
+
+    if(!myReferralCode){
+      throw new Error("আপনার Referral Code পাওয়া যায়নি।");
+    }
+
+
+    // GET ALL VERIFIED REFERRALS
+
+    const usersRef = collection(db, "users");
+
+    const referralQuery = query(
+      usersRef,
+      where("referredBy", "==", myReferralCode),
+      where("verified", "==", true)
+    );
+
+    const referralSnapshot = await getDocs(referralQuery);
+
+    const totalCount = referralSnapshot.size;
+
+
+    // UPDATE LEADER CENTER
+
+    updateLeader(totalCount);
+
+    loading.style.display = "none";
+
+  } catch(error) {
+
+    console.error("Leader Error:", error);
+
+    loading.style.display = "none";
+
+    errorBox.style.display = "block";
+
+    errorBox.textContent =
+      "তথ্য লোড করা যায়নি: " + error.message;
+
+  }
+
+});
+
+
+// UPDATE LEADER
+
+function updateLeader(count){
+
+  let current = null;
+  let next = null;
+
+  levels.forEach(level => {
+
+    if(count >= level.count){
+      current = level;
+    } else if(!next){
+      next = level;
+    }
+
+    const row = document.getElementById(
+      "level-" + level.count
+    );
+
+    if(row){
+
+      row.classList.toggle(
+        "active",
+        count >= level.count
+      );
+
+      const badge = row.querySelector(".status");
+
+      if(badge){
+
+        badge.textContent =
+          count >= level.count
+          ? "সম্পন্ন ✓"
+          : "অপেক্ষমাণ";
+
+      }
+
+    }
+
+  });
+
+
+  // CURRENT LEVEL
+
+  document.getElementById("currentIcon").textContent =
+    current ? current.icon : "🥉";
+
+  document.getElementById("currentLevel").textContent =
+    current ? current.name : "Bronze";
+
+  document.getElementById("verifiedText").textContent =
+    count + "টি বৈধ ভেরিফিকেশন";
+
+
+  // PROGRESS BAR
+
+  let percent = 100;
+
+  if(next){
+
+    const previousCount = current ? current.count : 0;
+
+    percent = Math.round(
+      ((count - previousCount) /
+      (next.count - previousCount)) * 100
+    );
+
+    document.getElementById("nextLevelText").textContent =
+      "পরবর্তী লেভেল " + next.name +
+      " | আরও " + (next.count - count) +
+      "টি Verify প্রয়োজন";
+
+  } else {
+
+    document.getElementById("nextLevelText").textContent =
+      "🎉 অভিনন্দন! আপনি Leader হয়েছেন।";
+
+  }
+
+  document.getElementById("progressBar").style.width =
+    percent + "%";
+
+
+  // BONUS STATUS
+
+  if(count >= 30){
+
+    document.getElementById("bonusStatus").textContent =
+      "🎉 Leader অর্জন করেছেন! ৳৫০০ বোনাসের জন্য Admin Approval প্রয়োজন।";
+
+  } else {
+
+    document.getElementById("bonusStatus").textContent =
+      "Leader হতে আরও " + (30 - count) +
+      "টি Verified Referral প্রয়োজন।";
+
+  }
+
+}
+
 </script>
+
 </body>
 </html>
