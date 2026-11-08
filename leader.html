@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -323,10 +322,10 @@ window.goBack = function(){
 // LEVEL SETTINGS
 
 const levels = [
-  {count:1, name:"Bronze", icon:"🥉"},
-  {count:5, name:"Silver", icon:"🥈"},
-  {count:10, name:"Gold", icon:"🥇"},
-  {count:20, name:"Platinum", icon:"💎"},
+  {count:1, name:"Bronze Member", icon:"🥉"},
+  {count:5, name:"Silver Member", icon:"🥈"},
+  {count:10, name:"Gold Member", icon:"🥇"},
+  {count:20, name:"Platinum Member", icon:"💎"},
   {count:30, name:"Leader", icon:"👑"}
 ];
 
@@ -362,7 +361,6 @@ onAuthStateChanged(auth, async (user) => {
     // GET USER DATA
 
     const userRef = doc(db, "users", user.uid);
-
     const userSnap = await getDoc(userRef);
 
     if(!userSnap.exists()){
@@ -370,7 +368,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     const userData = userSnap.data();
-
     const myReferralCode = userData.referralCode;
 
     if(!myReferralCode){
@@ -389,26 +386,20 @@ onAuthStateChanged(auth, async (user) => {
     );
 
     const referralSnapshot = await getDocs(referralQuery);
-
     const totalCount = referralSnapshot.size;
 
 
     // UPDATE LEADER CENTER
 
     updateLeader(totalCount);
-
     loading.style.display = "none";
 
   } catch(error) {
 
     console.error("Leader Error:", error);
-
     loading.style.display = "none";
-
     errorBox.style.display = "block";
-
-    errorBox.textContent =
-      "তথ্য লোড করা যায়নি: " + error.message;
+    errorBox.textContent = "তথ্য লোড করা যায়নি: " + error.message;
 
   }
 
@@ -419,54 +410,46 @@ onAuthStateChanged(auth, async (user) => {
 
 function updateLeader(count){
 
-  let current = null;
-  let next = null;
+  let current = {count: 0, name: "Bronze Member", icon: "🥉"};
+  let next = levels[0];
 
   levels.forEach(level => {
-
     if(count >= level.count){
       current = level;
-    } else if(!next){
-      next = level;
     }
+  });
 
-    const row = document.getElementById(
-      "level-" + level.count
-    );
+  // Find next level
+  for(let i = 0; i < levels.length; i++){
+    if(levels[i].count > count){
+      next = levels[i];
+      break;
+    }
+    if(i === levels.length - 1 && count >= levels[i].count){
+      next = null; // Max level reached
+    }
+  }
 
+  // Update UI rows
+  levels.forEach(level => {
+    const row = document.getElementById("level-" + level.count);
     if(row){
-
-      row.classList.toggle(
-        "active",
-        count >= level.count
-      );
+      const isAchieved = count >= level.count;
+      row.classList.toggle("active", isAchieved);
 
       const badge = row.querySelector(".status");
-
       if(badge){
-
-        badge.textContent =
-          count >= level.count
-          ? "সম্পন্ন ✓"
-          : "অপেক্ষমাণ";
-
+        badge.textContent = isAchieved ? "সম্পন্ন ✓" : "অপেক্ষমাণ";
       }
-
     }
-
   });
 
 
-  // CURRENT LEVEL
+  // CURRENT LEVEL DISPLAY
 
-  document.getElementById("currentIcon").textContent =
-    current ? current.icon : "🥉";
-
-  document.getElementById("currentLevel").textContent =
-    current ? current.name : "Bronze";
-
-  document.getElementById("verifiedText").textContent =
-    count + "টি বৈধ ভেরিফিকেশন";
+  document.getElementById("currentIcon").textContent = current.icon;
+  document.getElementById("currentLevel").textContent = current.name;
+  document.getElementById("verifiedText").textContent = count + "টি বৈধ ভেরিফিকেশন";
 
 
   // PROGRESS BAR
@@ -474,13 +457,17 @@ function updateLeader(count){
   let percent = 100;
 
   if(next){
-
-    const previousCount = current ? current.count : 0;
-
-    percent = Math.round(
-      ((count - previousCount) /
-      (next.count - previousCount)) * 100
-    );
+    const previousCount = current.count === 0 ? 0 : current.count;
+    
+    // Calculate progress towards next level
+    let range = next.count - previousCount;
+    let achievedInTier = count - previousCount;
+    
+    percent = Math.min(Math.max(Math.round((achievedInTier / range) * 100), 0), 100);
+    
+    if(count === 0){
+      percent = Math.round((count / next.count) * 100);
+    }
 
     document.getElementById("nextLevelText").textContent =
       "পরবর্তী লেভেল " + next.name +
@@ -488,29 +475,23 @@ function updateLeader(count){
       "টি Verify প্রয়োজন";
 
   } else {
-
     document.getElementById("nextLevelText").textContent =
-      "🎉 অভিনন্দন! আপনি Leader হয়েছেন।";
-
+      "🎉 অভিনন্দন! আপনি সর্বোচ্চ লেভেলে পৌঁছে গেছেন।";
+    percent = 100;
   }
 
-  document.getElementById("progressBar").style.width =
-    percent + "%";
+  document.getElementById("progressBar").style.width = percent + "%";
 
 
   // BONUS STATUS
 
   if(count >= 30){
-
     document.getElementById("bonusStatus").textContent =
       "🎉 Leader অর্জন করেছেন! ৳৫০০ বোনাসের জন্য Admin Approval প্রয়োজন।";
-
   } else {
-
     document.getElementById("bonusStatus").textContent =
       "Leader হতে আরও " + (30 - count) +
       "টি Verified Referral প্রয়োজন।";
-
   }
 
 }
