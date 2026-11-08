@@ -336,25 +336,27 @@ const loading = document.getElementById("loading");
 const errorBox = document.getElementById("errorBox");
 
 
-// AUTH CHECK
+// AUTH CHECK WITH TIMEOUT FIX
+
+let authResolved = false;
+
+const authTimeout = setTimeout(() => {
+  if (!authResolved && !auth.currentUser) {
+    loading.style.display = "none";
+    document.getElementById("currentLevel").textContent = "Login প্রয়োজন";
+    document.getElementById("verifiedText").textContent = "আগে অ্যাকাউন্টে Login করুন";
+    document.getElementById("bonusStatus").textContent = "Login করার পর তথ্য দেখা যাবে";
+  }
+}, 4000);
 
 onAuthStateChanged(auth, async (user) => {
 
   if(!user){
-
-    loading.style.display = "none";
-
-    document.getElementById("currentLevel").textContent =
-      "Login প্রয়োজন";
-
-    document.getElementById("verifiedText").textContent =
-      "আগে অ্যাকাউন্টে Login করুন";
-
-    document.getElementById("bonusStatus").textContent =
-      "Login করার পর তথ্য দেখা যাবে";
-
     return;
   }
+
+  authResolved = true;
+  clearTimeout(authTimeout);
 
   try {
 
@@ -419,18 +421,16 @@ function updateLeader(count){
     }
   });
 
-  // Find next level
   for(let i = 0; i < levels.length; i++){
     if(levels[i].count > count){
       next = levels[i];
       break;
     }
     if(i === levels.length - 1 && count >= levels[i].count){
-      next = null; // Max level reached
+      next = null;
     }
   }
 
-  // Update UI rows
   levels.forEach(level => {
     const row = document.getElementById("level-" + level.count);
     if(row){
@@ -458,8 +458,6 @@ function updateLeader(count){
 
   if(next){
     const previousCount = current.count === 0 ? 0 : current.count;
-    
-    // Calculate progress towards next level
     let range = next.count - previousCount;
     let achievedInTier = count - previousCount;
     
