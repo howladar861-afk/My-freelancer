@@ -158,8 +158,7 @@ footer{
 
 <main class="container">
 
-  <div id="loading">⏳ Leader তথ্য লোড হচ্ছে...</div>
-
+  <div id="loading">⏳ তথ্য চেক করা হচ্ছে...</div>
   <div id="errorBox"></div>
 
   <!-- Current Level -->
@@ -264,30 +263,11 @@ footer{
 
 <script type="module">
 
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
-import {
-  getAuth,
-  onAuthStateChanged,
-  setPersistence,
-  browserLocalPersistence
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  collection,
-  query,
-  where,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 // FIREBASE CONFIG
-
 const firebaseConfig = {
   apiKey: "AIzaSyBFUKPT7fo6sUofd09ffiZgjdlaR5evm8",
   authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
@@ -298,89 +278,52 @@ const firebaseConfig = {
   measurementId: "G-F6QNE0QN5K"
 };
 
-
-// FIREBASE START
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-await setPersistence(
-  auth,
-  browserLocalPersistence
-);
-
+await setPersistence(auth, browserLocalPersistence);
 const db = getFirestore(app);
-
-
-// BACK BUTTON
 
 window.goBack = function(){
   window.location.href = "dashboard.html";
 };
 
-
-// LEVEL SETTINGS
-
 const levels = [
-  {count:1, name:"Bronze Member", icon:"🥉"},
-  {count:5, name:"Silver Member", icon:"🥈"},
-  {count:10, name:"Gold Member", icon:"🥇"},
-  {count:20, name:"Platinum Member", icon:"💎"},
-  {count:30, name:"Leader", icon:"👑"}
+  {count: 1, name: "Bronze Member", icon: "🥉"},
+  {count: 5, name: "Silver Member", icon: "🥈"},
+  {count: 10, name: "Gold Member", icon: "🥇"},
+  {count: 20, name: "Platinum Member", icon: "💎"},
+  {count: 30, name: "Leader", icon: "👑"}
 ];
-
-
-// ELEMENTS
 
 const loading = document.getElementById("loading");
 const errorBox = document.getElementById("errorBox");
 
-
-// AUTH CHECK WITH TIMEOUT FIX
-
-let authResolved = false;
-
-const authTimeout = setTimeout(() => {
-  if (!authResolved && !auth.currentUser) {
+// AUTH & DATA FETCHING
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
     loading.style.display = "none";
     document.getElementById("currentLevel").textContent = "Login প্রয়োজন";
     document.getElementById("verifiedText").textContent = "আগে অ্যাকাউন্টে Login করুন";
-    document.getElementById("bonusStatus").textContent = "Login করার পর তথ্য দেখা যাবে";
-  }
-}, 4000);
-
-onAuthStateChanged(auth, async (user) => {
-
-  if(!user){
+    document.getElementById("bonusStatus").textContent = "Login করার পর তথ্য দেখা যাবেফ";
     return;
   }
 
-  authResolved = true;
-  clearTimeout(authTimeout);
-
   try {
-
-    // GET USER DATA
-
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
 
-    if(!userSnap.exists()){
+    if (!userSnap.exists()) {
       throw new Error("আপনার User Account পাওয়া যায়নি।");
     }
 
     const userData = userSnap.data();
     const myReferralCode = userData.referralCode;
 
-    if(!myReferralCode){
+    if (!myReferralCode) {
       throw new Error("আপনার Referral Code পাওয়া যায়নি।");
     }
 
-
-    // GET ALL VERIFIED REFERRALS
-
     const usersRef = collection(db, "users");
-
     const referralQuery = query(
       usersRef,
       where("referredBy", "==", myReferralCode),
@@ -390,108 +333,78 @@ onAuthStateChanged(auth, async (user) => {
     const referralSnapshot = await getDocs(referralQuery);
     const totalCount = referralSnapshot.size;
 
-
-    // UPDATE LEADER CENTER
-
     updateLeader(totalCount);
     loading.style.display = "none";
 
-  } catch(error) {
-
+  } catch (error) {
     console.error("Leader Error:", error);
     loading.style.display = "none";
     errorBox.style.display = "block";
     errorBox.textContent = "তথ্য লোড করা যায়নি: " + error.message;
-
   }
-
 });
 
-
-// UPDATE LEADER
-
-function updateLeader(count){
-
+function updateLeader(count) {
   let current = {count: 0, name: "Bronze Member", icon: "🥉"};
   let next = levels[0];
 
   levels.forEach(level => {
-    if(count >= level.count){
+    if (count >= level.count) {
       current = level;
     }
   });
 
-  for(let i = 0; i < levels.length; i++){
-    if(levels[i].count > count){
+  for (let i = 0; i < levels.length; i++) {
+    if (levels[i].count > count) {
       next = levels[i];
       break;
     }
-    if(i === levels.length - 1 && count >= levels[i].count){
+    if (i === levels.length - 1 && count >= levels[i].count) {
       next = null;
     }
   }
 
   levels.forEach(level => {
     const row = document.getElementById("level-" + level.count);
-    if(row){
+    if (row) {
       const isAchieved = count >= level.count;
       row.classList.toggle("active", isAchieved);
-
       const badge = row.querySelector(".status");
-      if(badge){
+      if (badge) {
         badge.textContent = isAchieved ? "সম্পন্ন ✓" : "অপেক্ষমাণ";
       }
     }
   });
 
-
-  // CURRENT LEVEL DISPLAY
-
   document.getElementById("currentIcon").textContent = current.icon;
   document.getElementById("currentLevel").textContent = current.name;
   document.getElementById("verifiedText").textContent = count + "টি বৈধ ভেরিফিকেশন";
 
-
-  // PROGRESS BAR
-
   let percent = 100;
-
-  if(next){
+  if (next) {
     const previousCount = current.count === 0 ? 0 : current.count;
     let range = next.count - previousCount;
     let achievedInTier = count - previousCount;
-    
     percent = Math.min(Math.max(Math.round((achievedInTier / range) * 100), 0), 100);
     
-    if(count === 0){
+    if (count === 0) {
       percent = Math.round((count / next.count) * 100);
     }
 
     document.getElementById("nextLevelText").textContent =
-      "পরবর্তী লেভেল " + next.name +
-      " | আরও " + (next.count - count) +
-      "টি Verify প্রয়োজন";
-
+      "পরবর্তী লেভেল " + next.name + " | আরও " + (next.count - count) + "টি Verify প্রয়োজন";
   } else {
-    document.getElementById("nextLevelText").textContent =
-      "🎉 অভিনন্দন! আপনি সর্বোচ্চ লেভেলে পৌঁছে গেছেন।";
+    document.getElementById("nextLevelText").textContent = "🎉 অভিনন্দন! আপনি সর্বোচ্চ লেভেলে পৌঁছে গেছেন।";
     percent = 100;
   }
 
   document.getElementById("progressBar").style.width = percent + "%";
 
-
-  // BONUS STATUS
-
-  if(count >= 30){
-    document.getElementById("bonusStatus").textContent =
-      "🎉 Leader অর্জন করেছেন! ৳৫০০ বোনাসের জন্য Admin Approval প্রয়োজন।";
+  if (count >= 30) {
+    document.getElementById("bonusStatus").textContent = "🎉 Leader অর্জন করেছেন! ৳৫০০ বোনাসের জন্য Admin Approval প্রয়োজন।";
   } else {
-    document.getElementById("bonusStatus").textContent =
-      "Leader হতে আরও " + (30 - count) +
-      "টি Verified Referral প্রয়োজন।";
+    document.getElementById("bonusStatus").textContent = "Leader হতে আরও " + (30 - count) + "টি Verified Referral প্রয়োজন।";
   }
-
 }
 
 </script>
