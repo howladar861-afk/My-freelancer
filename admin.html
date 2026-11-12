@@ -194,6 +194,19 @@ button{
       Job Submission Loading...
     </p>
   </div>
+  </div>
+
+<!-- RESELLING ORDERS -->
+<div class="card" style="margin-top:20px;">
+  <h2 style="color:#ffc107;">
+    🛍️ Reselling Orders
+  </h2>
+  <div id="resellingOrders">
+    <p class="empty">Orders Loading...</p>
+  </div>
+</div>
+
+  </div>
 </div>
   </div>
 
@@ -316,6 +329,7 @@ loginBtn.onclick = async function () {
 loadVerificationRequests();
 loadCompanyWallet();
 loadJobSubmissions();
+  loadResellingOrders();
   }
 
   catch (error) {
@@ -974,6 +988,192 @@ async function deleteRequest(id) {
 }
 
 
+/* =================================
+   RESELLING ORDER MANAGEMENT
+================================= */
+
+function loadResellingOrders() {
+
+  const orderList =
+    document.getElementById("resellingOrders");
+
+  const ordersRef =
+    collection(db, "reselling_orders");
+
+  onSnapshot(
+    ordersRef,
+
+    function(snapshot) {
+
+      orderList.innerHTML = "";
+
+      if (snapshot.empty) {
+        orderList.innerHTML =
+          '<p class="empty">কোনো অর্ডার নেই।</p>';
+        return;
+      }
+
+      // নতুন অর্ডার আগে দেখাবে
+      const orders = snapshot.docs.sort((a, b) => {
+        const ta = a.data().createdAt?.seconds || 0;
+        const tb = b.data().createdAt?.seconds || 0;
+        return tb - ta;
+      });
+
+      orders.forEach(orderDoc => {
+
+        const data = orderDoc.data();
+        const id = orderDoc.id;
+
+        const card = document.createElement("div");
+        card.className = "request";
+
+        const title = document.createElement("h3");
+        title.textContent = "🛍️ Reselling Order";
+
+        const details = [
+          ["Order ID", id],
+          ["Customer", data.customerName],
+          ["Mobile", data.phone],
+          ["District", data.district],
+          ["Address", data.address],
+          ["Product", data.productName],
+          ["Product Price", "৳" + (data.productPrice || 0)],
+          ["Quantity", data.quantity],
+          ["Delivery Area",
+            data.deliveryArea === "inside"
+              ? "ঢাকার ভিতরে"
+              : "ঢাকার বাইরে"
+          ],
+          ["Delivery Charge", "৳" + (data.deliveryCharge || 0)],
+          ["Total Amount", "৳" + (data.total || 0)],
+          ["Payment", "Cash on Delivery"]
+        ];
+
+        card.appendChild(title);
+
+        details.forEach(([label, value]) => {
+          const p = document.createElement("p");
+          const b = document.createElement("b");
+
+          b.textContent = label + ": ";
+
+          p.appendChild(b);
+          p.appendChild(
+            document.createTextNode(String(value ?? "নেই"))
+          );
+
+          card.appendChild(p);
+        });
+
+        const status = document.createElement("p");
+        status.className = "status";
+        status.textContent =
+          "বর্তমান Status: " + (data.status || "Pending");
+
+        card.appendChild(status);
+
+        const select = document.createElement("select");
+
+        select.style.width = "100%";
+        select.style.padding = "12px";
+        select.style.borderRadius = "8px";
+        select.style.marginTop = "10px";
+
+        [
+          "Pending",
+          "Delivery চলছে",
+          "Confirmed"
+        ].forEach(value => {
+
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+
+          select.appendChild(option);
+
+        });
+
+        const currentStatus = [
+          "Pending",
+          "Delivery চলছে",
+          "Confirmed"
+        ].includes(data.status)
+          ? data.status
+          : "Pending";
+
+        select.value = currentStatus;
+
+        const updateBtn = document.createElement("button");
+
+        updateBtn.className = "approve";
+        updateBtn.textContent = "✅ Update Order Status";
+
+        updateBtn.onclick = async function() {
+
+          const newStatus = select.value;
+
+          if (newStatus === currentStatus) {
+            alert("কোনো পরিবর্তন করা হয়নি।");
+            return;
+          }
+
+          if (!confirm(
+            "অর্ডারের Status পরিবর্তন করবেন?"
+          )) return;
+
+          updateBtn.disabled = true;
+
+          try {
+
+            await updateDoc(
+              doc(db, "reselling_orders", id),
+              {
+                status: newStatus,
+                updatedAt: serverTimestamp(),
+                updatedBy: auth.currentUser.uid
+              }
+            );
+
+            alert("✅ Order Status Updated!");
+
+          } catch(error) {
+
+            console.error(error);
+
+            alert(
+              "Status Update করা যায়নি:\n" +
+              error.message
+            );
+
+          } finally {
+
+            updateBtn.disabled = false;
+
+          }
+        };
+
+        card.appendChild(status);
+        card.appendChild(select);
+        card.appendChild(updateBtn);
+
+        orderList.appendChild(card);
+
+      });
+
+    },
+
+    function(error) {
+
+      console.error("Reselling Orders Error:", error);
+
+      orderList.textContent =
+        "অর্ডার লোড করা যায়নি: " + error.message;
+
+    }
+  );
+        }
+  
 /* =========================
    LOGOUT
 ========================= */
