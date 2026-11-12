@@ -3,392 +3,627 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Freelancer - Reselling</title>
+<title>Rakib Shopping</title>
 
 <style>
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-  margin:0;
-  padding:15px;
-  background:#f2f4f8;
   font-family:Arial,sans-serif;
+  background:#f4f5f9;
   color:#222;
+  padding-bottom:75px;
 }
-.container{
-  max-width:600px;
-  margin:auto;
+header{
+  background:#e85b18;
+  color:white;
+  padding:14px;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+.top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.back{
+  border:0;
   background:white;
-  padding:22px;
-  border-radius:20px;
+  color:#e85b18;
+  padding:9px 13px;
+  border-radius:8px;
+  font-weight:bold;
+  font-size:17px;
 }
-h2{text-align:center;color:#087b49}
-label{
-  display:block;
+.logo{font-size:21px;font-weight:bold}
+.search{
+  margin-top:13px;
+  display:flex;
+  background:white;
+  border-radius:8px;
+  overflow:hidden;
+}
+.search input{
+  width:100%;
+  padding:13px;
+  border:0;
+  outline:none;
+  font-size:15px;
+}
+.search button{
+  background:#ffb300;
+  border:0;
+  padding:0 18px;
+  font-size:19px;
+}
+.banner{
+  margin:12px;
+  padding:23px 15px;
+  border-radius:12px;
+  color:white;
+  background:linear-gradient(120deg,#ff7a18,#ffb347);
+}
+.banner h2{font-size:23px}
+.banner p{margin-top:7px;font-size:14px}
+.section{padding:12px}
+.section-title{
+  font-size:19px;
+  font-weight:bold;
+  margin-bottom:12px;
+}
+.categories{
+  display:flex;
+  gap:9px;
+  overflow-x:auto;
+  padding-bottom:8px;
+}
+.cat{
+  white-space:nowrap;
+  border:1px solid #ddd;
+  background:white;
+  border-radius:20px;
+  padding:9px 15px;
+}
+.cat.active{background:#e85b18;color:white}
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:11px;
+}
+.product{
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 2px 7px #00000010;
+}
+.product img{
+  width:100%;
+  height:155px;
+  object-fit:cover;
+  background:#f1f1f1;
+}
+.pinfo{padding:10px}
+.pname{
+  font-size:14px;
+  min-height:36px;
+  line-height:1.4;
+}
+.price{
+  color:#e85b18;
   font-size:18px;
   font-weight:bold;
-  margin-top:20px;
+  margin:8px 0;
+}
+.stock{font-size:12px;color:#777}
+.add{
+  background:#e85b18;
+  color:white;
+  border:0;
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  margin-top:9px;
+  font-weight:bold;
+}
+.nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  padding:12px 5px;
+  box-shadow:0 -2px 10px #0001;
+  z-index:20;
+}
+.nav button{
+  border:0;background:white;
+  font-size:13px;
+  color:#444;
+}
+.page{display:none;padding:14px}
+.page.active{display:block}
+.card{
+  background:white;
+  padding:14px;
+  border-radius:10px;
+  margin-bottom:12px;
 }
 input,select,textarea{
   width:100%;
-  padding:15px;
-  margin-top:10px;
-  border:1px solid #ccc;
-  border-radius:12px;
-  font-size:17px;
+  padding:12px;
+  margin:7px 0 12px;
+  border:1px solid #ddd;
+  border-radius:7px;
+  font-size:15px;
 }
-textarea{height:110px}
-.total{
-  background:#e6f7ee;
-  padding:18px;
-  border-radius:15px;
-  margin-top:25px;
-  font-size:19px;
-  font-weight:bold;
-  line-height:1.7;
-}
-button{
-  width:100%;
-  padding:16px;
-  margin-top:18px;
+.primary{
+  background:#e85b18;
+  color:white;
   border:0;
-  border-radius:12px;
-  font-size:19px;
-  cursor:pointer;
-}
-.confirm{background:#087b49;color:white}
-.back{background:#555;color:white}
-.history{background:#2563eb;color:white}
-#popup{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#0009;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
-.popup-box{
-  background:white;
-  color:#222;
-  padding:25px;
-  border-radius:18px;
+  border-radius:7px;
+  padding:13px;
   width:100%;
-  max-width:400px;
-  text-align:center;
+  font-weight:bold;
 }
-.popup-box button{font-size:16px}
-.order-item{
-  background:#f1f5f9;
-  padding:15px;
-  border-radius:12px;
-  margin-top:12px;
-  line-height:1.8;
+.cart-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid #eee;
+  padding:12px 0;
+}
+.qty button{
+  padding:5px 10px;
+  border:0;
+  background:#eee;
+  border-radius:5px;
+}
+.total{
+  display:flex;
+  justify-content:space-between;
+  margin:12px 0;
+}
+.empty{text-align:center;color:#888;padding:35px 5px}
+.order-status{
+  color:#e85b18;
+  font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<header>
+  <div class="top">
+    <button class="back" onclick="goBack()">←</button>
+    <div class="logo">🛍️ Rakib Shopping</div>
+  </div>
 
-<h2>🛍️ My Freelancer Reselling</h2>
+  <div class="search">
+    <input id="searchInput" placeholder="পণ্য খুঁজুন..." oninput="renderProducts()">
+    <button>⌕</button>
+  </div>
+</header>
 
-<label>পণ্যের নাম</label>
-<input id="productName" value="My Freelancer Product" readonly>
+<div id="shopPage">
+  <div class="banner">
+    <h2>Rakib Shopping 🛍️</h2>
+    <p>আপনার পছন্দের পণ্য কিনুন সহজেই</p>
+    <p>Cash on Delivery সুবিধা রয়েছে</p>
+  </div>
 
-<label>পণ্যের দাম</label>
-<input id="productPrice" type="number" value="10000" readonly>
+  <div class="section">
+    <div class="section-title">ক্যাটাগরি</div>
+    <div class="categories" id="categories"></div>
+  </div>
 
-<label>আপনার নাম</label>
-<input id="customerName" placeholder="আপনার নাম লিখুন">
-
-<label>মোবাইল নম্বর</label>
-<input id="phone" type="tel" placeholder="01XXXXXXXXX">
-
-<label>জেলা</label>
-<input id="district" placeholder="আপনার জেলা">
-
-<label>সম্পূর্ণ ঠিকানা</label>
-<textarea id="address" placeholder="বাড়ি, গ্রাম, থানা ও ঠিকানা"></textarea>
-
-<label>ডেলিভারি এলাকা</label>
-<select id="deliveryArea">
-  <option value="70">ঢাকার ভিতরে - ৳70</option>
-  <option value="130">ঢাকার বাইরে - ৳130</option>
-</select>
-
-<label>পরিমাণ</label>
-<input id="quantity" type="number" value="1" min="1">
-
-<div class="total" id="totalBox">
-  পণ্যের দাম: ৳10000<br>
-  ডেলিভারি: ৳70<br>
-  সর্বমোট: ৳10070
-</div>
-
-<p>💵 পেমেন্ট: Cash on Delivery</p>
-<p>পণ্য হাতে পেয়ে টাকা পরিশোধ করবেন।</p>
-
-<button class="confirm" id="confirmBtn">
-অর্ডার কনফার্ম করুন
-</button>
-
-<button class="history" onclick="showHistory()">
-📦 আমার অর্ডার
-</button>
-
-<button class="back" onclick="history.back()">
-ফিরে যান
-</button>
-
-<div id="historyBox"></div>
-
-</div>
-
-<!-- Confirmation Popup -->
-<div id="popup">
-  <div class="popup-box">
-    <h2>🛍️ অর্ডার নিশ্চিত করুন</h2>
-    <p id="popupDetails"></p>
-    <button class="confirm" id="finalConfirm">
-      হ্যাঁ, অর্ডার করুন
-    </button>
-    <button class="back" onclick="closePopup()">
-      বাতিল
-    </button>
+  <div class="section">
+    <div class="section-title">✨ সব পণ্য</div>
+    <div class="products" id="products">
+      <div class="empty">পণ্য লোড হচ্ছে...</div>
+    </div>
   </div>
 </div>
 
+<div id="cartPage" class="page">
+  <div class="section-title">🛒 আমার কার্ট</div>
+  <div class="card" id="cartItems"></div>
+  <div class="card">
+    <div class="total"><span>পণ্যের মূল্য</span><b id="subtotal">৳০</b></div>
+    <div class="total"><span>ডেলিভারি চার্জ</span><b id="delivery">৳০</b></div>
+    <hr>
+    <div class="total"><b>সর্বমোট</b><b id="grandTotal">৳০</b></div>
+    <button class="primary" onclick="showCheckout()">অর্ডার করুন</button>
+  </div>
+</div>
+
+<div id="checkoutPage" class="page">
+  <div class="section-title">📦 Checkout</div>
+  <div class="card">
+    <label>আপনার নাম</label>
+    <input id="customerName" placeholder="নাম লিখুন">
+
+    <label>মোবাইল নম্বর</label>
+    <input id="phone" type="tel" placeholder="01XXXXXXXXX">
+
+    <label>এলাকা</label>
+    <select id="area" onchange="updateTotals()">
+      <option value="outside">ঢাকার বাইরে</option>
+      <option value="dhaka">ঢাকার ভিতরে</option>
+    </select>
+
+    <label>সম্পূর্ণ ঠিকানা</label>
+    <textarea id="address" rows="3" placeholder="আপনার ঠিকানা লিখুন"></textarea>
+
+    <div class="total"><span>পণ্যের মূল্য</span><b id="checkoutSubtotal">৳০</b></div>
+    <div class="total"><span>ডেলিভারি চার্জ</span><b id="checkoutDelivery">৳১৩০</b></div>
+    <div class="total"><b>সর্বমোট</b><b id="checkoutTotal">৳০</b></div>
+
+    <p style="margin:12px 0">💵 পেমেন্ট: Cash on Delivery</p>
+    <button class="primary" onclick="placeOrder()">অর্ডার নিশ্চিত করুন</button>
+  </div>
+</div>
+
+<div id="historyPage" class="page">
+  <div class="section-title">📋 আমার অর্ডার</div>
+  <div id="orderHistory"></div>
+</div>
+
+<div class="nav">
+  <button onclick="showPage('shop')">🏠<br>হোম</button>
+  <button onclick="showPage('cart')">🛒<br>কার্ট <span id="cartCount">0</span></button>
+  <button onclick="showPage('history')">📦<br>অর্ডার</button>
+</div>
+
 <script type="module">
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
-import {
- getAuth,
- onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getAuth,onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
- getFirestore,
- collection,
- addDoc,
- query,
- where,
- getDocs,
- serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+ getFirestore,collection,onSnapshot,addDoc,
+ query,where,orderBy,serverTimestamp
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
+/* নিজের Firebase Config বসাবে */
 const firebaseConfig = {
- apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+ apiKey: "YOUR_API_KEY",
  authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
  projectId: "rakib-freelancer-9c66b",
  storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
- messagingSenderId: "541209844482",
- appId: "1:541209844482:web:510568d5226c9bf47ac01b"
+ messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+ appId: "YOUR_APP_ID"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-const PRICE = 10000;
-let currentUser = null;
+let currentUser=null;
+let allProducts=[];
+let selectedCategory="সব";
+let cart=JSON.parse(localStorage.getItem("rakibCart")||"[]");
 
-onAuthStateChanged(auth, user => {
- currentUser = user;
+const $=id=>document.getElementById(id);
 
- if(!user){
-   alert("অর্ডার করতে আগে Login করুন।");
- }
+onAuthStateChanged(auth,user=>{
+ currentUser=user;
+ if(user) loadOrders();
+ else $("orderHistory").innerHTML=
+ '<div class="empty">অর্ডার দেখতে লগইন করুন</div>';
 });
 
-// হিসাব
-function calculateTotal(){
-
- const quantity = Math.max(
-   1,
-   Number(document.getElementById("quantity").value) || 1
- );
-
- const delivery = Number(
-   document.getElementById("deliveryArea").value
- );
-
- const productTotal = PRICE * quantity;
- const total = productTotal + delivery;
-
- document.getElementById("totalBox").innerHTML =
- `পণ্যের দাম: ৳${productTotal}<br>
- ডেলিভারি: ৳${delivery}<br>
- সর্বমোট: ৳${total}`;
-
- return {quantity,delivery,productTotal,total};
+function fallbackImage(){
+ return "data:image/svg+xml;charset=UTF-8,"+
+ encodeURIComponent(`
+ <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
+ <rect width="100%" height="100%" fill="#fff0df"/>
+ <circle cx="200" cy="125" r="65" fill="#ffb36b"/>
+ <path d="M155 150 L200 70 L245 150Z" fill="#e85b18"/>
+ <text x="200" y="235" text-anchor="middle"
+ font-size="24" fill="#9b4818">Rakib Shopping</text>
+ </svg>`);
 }
 
-document.getElementById("quantity")
-.addEventListener("input",calculateTotal);
-
-document.getElementById("deliveryArea")
-.addEventListener("change",calculateTotal);
-
-// Popup
-document.getElementById("confirmBtn").onclick = () => {
-
- if(!currentUser){
-   alert("আগে Login করুন।");
-   return;
- }
-
- const name = document.getElementById("customerName").value.trim();
- const phone = document.getElementById("phone").value.trim();
- const district = document.getElementById("district").value.trim();
- const address = document.getElementById("address").value.trim();
-
- if(!name || !phone || !district || !address){
-   alert("সব তথ্য পূরণ করুন।");
-   return;
- }
-
- const bill = calculateTotal();
-
- document.getElementById("popupDetails").innerHTML =
- `নাম: ${name}<br>
- মোবাইল: ${phone}<br>
- জেলা: ${district}<br>
- পরিমাণ: ${bill.quantity}<br>
- সর্বমোট: ৳${bill.total}<br>
- পেমেন্ট: Cash on Delivery`;
-
- document.getElementById("popup").style.display = "flex";
+window.goBack=()=>{
+ if(history.length>1) history.back();
+ else location.href="dashboard.html";
 };
 
-window.closePopup = function(){
- document.getElementById("popup").style.display = "none";
+window.showPage=page=>{
+ ["shop","cart","checkout","history"].forEach(p=>{
+  $(p+"Page").style.display="none";
+ });
+ if(page==="shop") $("shopPage").style.display="block";
+ else $(page+"Page").style.display="block";
+
+ if(page==="cart") renderCart();
+ if(page==="history") loadOrders();
 };
 
-// অর্ডার Firebase-এ জমা
-document.getElementById("finalConfirm").onclick =
-async function(){
-
- const btn = this;
- if(!currentUser) return;
-
- btn.disabled = true;
- btn.textContent = "অর্ডার জমা হচ্ছে...";
-
- try{
-
- const bill = calculateTotal();
-
- await addDoc(collection(db,"reselling_orders"),{
-
-   userId: currentUser.uid,
-   userName: document.getElementById("customerName").value.trim(),
-   email: currentUser.email || "",
-
-   productName: "My Freelancer Product",
-   productPrice: PRICE,
-
-   phone: document.getElementById("phone").value.trim(),
-   district: document.getElementById("district").value.trim(),
-   address: document.getElementById("address").value.trim(),
-
-   deliveryArea:
-     bill.delivery === 70 ? "ঢাকার ভিতরে" : "ঢাকার বাইরে",
-
-   deliveryCharge: bill.delivery,
-   quantity: bill.quantity,
-   productTotal: bill.productTotal,
-   totalAmount: bill.total,
-
-   paymentMethod: "Cash on Delivery",
-
-   status: "pending",
-   createdAt: serverTimestamp()
-
+window.renderProducts=()=>{
+ const search=$("searchInput").value.toLowerCase();
+ const list=allProducts.filter(p=>{
+  const matchName=(p.name||"").toLowerCase().includes(search);
+  const matchCat=selectedCategory==="সব" ||
+                 p.category===selectedCategory;
+  return matchName && matchCat && Number(p.stock)>0;
  });
 
- closePopup();
+ $("products").innerHTML="";
 
- alert("✅ আপনার অর্ডার সফলভাবে জমা হয়েছে!");
+ if(!list.length){
+  $("products").innerHTML=
+  '<div class="empty">কোনো পণ্য পাওয়া যায়নি</div>';
+  return;
+ }
 
- document.getElementById("historyBox").innerHTML = "";
+ list.forEach(p=>{
+  const div=document.createElement("div");
+  div.className="product";
+  const img=document.createElement("img");
+  img.src=p.imageUrl||p.image||fallbackImage();
+  img.onerror=()=>img.src=fallbackImage();
 
- }catch(error){
+  const info=document.createElement("div");
+  info.className="pinfo";
 
- console.error(error);
- alert("অর্ডার জমা হয়নি: " + error.message);
+  const name=document.createElement("div");
+  name.className="pname";
+  name.textContent=p.name||"নাম নেই";
 
- }finally{
+  const price=document.createElement("div");
+  price.className="price";
+  price.textContent="৳"+Number(p.price||0);
 
- btn.disabled = false;
- btn.textContent = "হ্যাঁ, অর্ডার করুন";
+  const stock=document.createElement("div");
+  stock.className="stock";
+  stock.textContent="স্টক: "+p.stock;
 
+  const btn=document.createElement("button");
+  btn.className="add";
+  btn.textContent="কার্টে যোগ করুন";
+  btn.onclick=()=>addToCart(p.id);
+
+  info.append(name,price,stock,btn);
+  div.append(img,info);
+  $("products").append(div);
+ });
+};
+
+function loadProducts(){
+ onSnapshot(collection(db,"products"),snap=>{
+  allProducts=snap.docs.map(d=>({id:d.id,...d.data()}));
+  const cats=["সব",...new Set(allProducts.map(p=>p.category).filter(Boolean))];
+
+  $("categories").innerHTML="";
+  cats.forEach(c=>{
+   const b=document.createElement("button");
+   b.className="cat"+(c===selectedCategory?" active":"");
+   b.textContent=c;
+   b.onclick=()=>{
+    selectedCategory=c;
+    loadCategoriesActive();
+    renderProducts();
+   };
+   $("categories").append(b);
+  });
+  renderProducts();
+ });
+}
+
+function loadCategoriesActive(){
+ [...$("categories").children].forEach(b=>{
+  b.classList.toggle("active",b.textContent===selectedCategory);
+ });
+}
+
+window.addToCart=id=>{
+ const p=allProducts.find(x=>x.id===id);
+ if(!p)return;
+ const item=cart.find(x=>x.id===id);
+ if(item){
+  if(item.qty>=Number(p.stock)){
+   alert("এই পণ্যের পর্যাপ্ত স্টক নেই");
+   return;
+  }
+  item.qty++;
+ }else{
+  cart.push({
+   id:p.id,name:p.name,price:Number(p.price),
+   image:p.imageUrl||p.image||"",
+   qty:1,stock:Number(p.stock)
+  });
+ }
+ saveCart();
+ alert("পণ্য কার্টে যোগ হয়েছে");
+};
+
+function saveCart(){
+ localStorage.setItem("rakibCart",JSON.stringify(cart));
+ $("cartCount").textContent=cart.reduce((s,x)=>s+x.qty,0);
+ renderCart();
+}
+
+function subtotal(){
+ return cart.reduce((s,x)=>s+x.price*x.qty,0);
+}
+
+function deliveryCharge(){
+ return $("area")?.value==="dhaka"?70:130;
+}
+
+function renderCart(){
+ $("cartItems").innerHTML="";
+ if(!cart.length){
+  $("cartItems").innerHTML='<div class="empty">কার্ট খালি</div>';
+ }else{
+  cart.forEach((x,i)=>{
+   const row=document.createElement("div");
+   row.className="cart-row";
+   const info=document.createElement("div");
+   info.textContent=x.name+" — ৳"+x.price;
+
+   const controls=document.createElement("div");
+   controls.className="qty";
+
+   const minus=document.createElement("button");
+   minus.textContent="−";
+   minus.onclick=()=>changeQty(i,-1);
+
+   const count=document.createElement("b");
+   count.textContent=" "+x.qty+" ";
+
+   const plus=document.createElement("button");
+   plus.textContent="+";
+   plus.onclick=()=>changeQty(i,1);
+
+   const remove=document.createElement("button");
+   remove.textContent=" ✕ ";
+   remove.onclick=()=>{cart.splice(i,1);saveCart()};
+
+   controls.append(minus,count,plus,remove);
+   row.append(info,controls);
+   $("cartItems").append(row);
+  });
+ }
+ updateTotals();
+}
+
+function changeQty(i,amount){
+ const next=cart[i].qty+amount;
+ if(next<1) cart.splice(i,1);
+ else if(next>cart[i].stock) alert("স্টক শেষ");
+ else cart[i].qty=next;
+ saveCart();
+}
+
+window.updateTotals=()=>{
+ const sub=subtotal();
+ const charge=deliveryCharge();
+ $("subtotal").textContent="৳"+sub;
+ $("delivery").textContent="৳"+charge;
+ $("grandTotal").textContent="৳"+(sub+charge);
+
+ $("checkoutSubtotal").textContent="৳"+sub;
+ $("checkoutDelivery").textContent="৳"+charge;
+ $("checkoutTotal").textContent="৳"+(sub+charge);
+};
+
+window.showCheckout=()=>{
+ if(!cart.length)return alert("আগে কার্টে পণ্য যোগ করুন");
+ if(!currentUser)return alert("অর্ডার করতে আগে লগইন করুন");
+ showPage("checkout");
+ updateTotals();
+};
+
+window.placeOrder=async()=>{
+ if(!currentUser)return alert("আগে লগইন করুন");
+ if(!cart.length)return alert("কার্ট খালি");
+
+ const name=$("customerName").value.trim();
+ const phone=$("phone").value.trim();
+ const address=$("address").value.trim();
+ const area=$("area").value;
+
+ if(!name||!phone||!address)
+  return alert("সব তথ্য পূরণ করুন");
+
+ if(!/^01[0-9]{9}$/.test(phone))
+  return alert("সঠিক মোবাইল নম্বর দিন");
+
+ try{
+  const charge=area==="dhaka"?70:130;
+  const sub=subtotal();
+
+  await addDoc(collection(db,"reselling_orders"),{
+   uid:currentUser.uid,
+   customerName:name,
+   phone,
+   address,
+   area,
+   items:cart.map(x=>({
+    productId:x.id,
+    productName:x.name,
+    price:x.price,
+    quantity:x.qty
+   })),
+   subtotal:sub,
+   deliveryCharge:charge,
+   totalAmount:sub+charge,
+   paymentMethod:"Cash on Delivery",
+   status:"pending",
+   createdAt:serverTimestamp()
+  });
+
+  cart=[];
+  saveCart();
+  alert("আপনার অর্ডার সফলভাবে জমা হয়েছে!");
+  showPage("history");
+  loadOrders();
+
+ }catch(e){
+  console.error(e);
+  alert("অর্ডার জমা হয়নি। Firebase Rules ও সংযোগ পরীক্ষা করুন।");
  }
 };
 
-// অর্ডারের ইতিহাস
-window.showHistory = async function(){
+function loadOrders(){
+ if(!currentUser)return;
 
- const box = document.getElementById("historyBox");
-
- if(!currentUser){
-   alert("আগে Login করুন।");
-   return;
- }
-
- box.innerHTML = "<p>অর্ডার লোড হচ্ছে...</p>";
-
- try{
-
- const q = query(
-   collection(db,"reselling_orders"),
-   where("userId","==",currentUser.uid)
+ const q=query(
+  collection(db,"reselling_orders"),
+  where("uid","==",currentUser.uid)
  );
 
- const snapshot = await getDocs(q);
-
- box.innerHTML = "<h3>📦 অর্ডারের ইতিহাস</h3>";
-
- if(snapshot.empty){
-   box.innerHTML += "<p>কোনো অর্ডার নেই।</p>";
+ onSnapshot(q,snap=>{
+  $("orderHistory").innerHTML="";
+  if(snap.empty){
+   $("orderHistory").innerHTML=
+   '<div class="empty">এখনো কোনো অর্ডার নেই</div>';
    return;
- }
+  }
 
- snapshot.forEach(orderDoc => {
+  snap.docs.forEach(d=>{
+   const o=d.data();
+   const card=document.createElement("div");
+   card.className="card";
 
-   const data = orderDoc.data();
+   const title=document.createElement("b");
+   title.textContent="অর্ডার #"+d.id;
 
-   const item = document.createElement("div");
-   item.className = "order-item";
+   const details=document.createElement("p");
+   details.style.margin="10px 0";
+   details.textContent=(o.items||[]).map(x=>
+    x.productName+" × "+x.quantity
+   ).join(", ");
 
-   const statusNames = {
-     pending: "পেন্ডিং",
-     delivery: "ডেলিভারি চলছে",
-     confirmed: "কনফার্ম"
+   const total=document.createElement("p");
+   total.textContent="সর্বমোট: ৳"+o.totalAmount;
+
+   const status=document.createElement("p");
+   status.className="order-status";
+   const labels={
+    pending:"অপেক্ষমাণ",
+    delivery:"ডেলিভারি চলছে",
+    confirmed:"কনফার্মড"
    };
+   status.textContent="অবস্থা: "+(labels[o.status]||o.status||"অপেক্ষমাণ");
 
-   item.textContent =
-     "পণ্য: " + (data.productName || "") +
-     " | মোট: ৳" + (data.totalAmount || 0) +
-     " | অবস্থা: " +
-     (statusNames[data.status] || data.status);
-
-   box.appendChild(item);
-
+   card.append(title,details,total,status);
+   $("orderHistory").append(card);
+  });
  });
+}
 
- }catch(error){
-
- box.textContent = "অর্ডার লোড করা যায়নি: " + error.message;
-
- }
-
-};
-
-calculateTotal();
-
+saveCart();
+loadProducts();
 </script>
 </body>
 </html>
