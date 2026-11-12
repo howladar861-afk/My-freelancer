@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reselling | My Freelancer</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f3f5f9;
+  color:#222;
+}
+header{
+  background:#123d72;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+header h2{margin:0}
+header p{margin:8px 0 0}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:15px;
+}
+.section-title{
+  font-size:21px;
+  font-weight:bold;
+  margin:18px 0;
+}
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px;
+}
+.product{
+  background:white;
+  border-radius:12px;
+  padding:12px;
+  box-shadow:0 2px 9px #0001;
+}
+.product img{
+  width:100%;
+  height:145px;
+  object-fit:contain;
+  border-radius:8px;
+}
+.product h3{font-size:16px}
+.price{
+  color:#087d42;
+  font-size:19px;
+  font-weight:bold;
+}
+button{
+  border:0;
+  background:#087d42;
+  color:white;
+  padding:12px;
+  border-radius:8px;
+  width:100%;
+  font-size:15px;
+  cursor:pointer;
+}
+button:disabled{opacity:.6}
+.order-box{
+  background:white;
+  padding:18px;
+  border-radius:12px;
+  margin-top:25px;
+  display:none;
+}
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  margin:8px 0 14px;
+  border:1px solid #ccc;
+  border-radius:7px;
+  font-size:15px;
+}
+label{font-weight:bold}
+.total{
+  background:#e8f7ed;
+  padding:13px;
+  border-radius:8px;
+  margin:12px 0;
+  font-weight:bold;
+}
+.back{
+  background:#555;
+  margin-top:10px;
+}
+@media(max-width:400px){
+  .products{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>🛍️ My Freelancer</h2>
+  <p>Reselling Shop</p>
+  <p>পছন্দের পণ্য কিনুন সহজেই</p>
+</header>
+
+<div class="container">
+
+  <div class="section-title">🛒 আমাদের প্রোডাক্ট</div>
+
+  <div class="products" id="products"></div>
+
+  <div class="order-box" id="orderBox">
+
+    <h2>📦 অর্ডার ফর্ম</h2>
+
+    <p id="selectedProduct"></p>
+
+    <label>আপনার নাম</label>
+    <input id="customerName" placeholder="আপনার নাম লিখুন">
+
+    <label>মোবাইল নম্বর</label>
+    <input id="phone" type="tel" placeholder="01XXXXXXXXX">
+
+    <label>জেলা</label>
+    <input id="district" placeholder="আপনার জেলার নাম">
+
+    <label>সম্পূর্ণ ঠিকানা</label>
+    <textarea id="address" rows="3"
+      placeholder="গ্রাম, ইউনিয়ন, থানা ও বিস্তারিত ঠিকানা"></textarea>
+
+    <label>ডেলিভারি এলাকা</label>
+    <select id="deliveryArea" onchange="calculateTotal()">
+      <option value="inside">ঢাকার ভিতরে</option>
+      <option value="outside">ঢাকার বাইরে</option>
+    </select>
+
+    <label>পরিমাণ</label>
+    <input id="quantity" type="number"
+      min="1" value="1" onchange="calculateTotal()">
+
+    <div class="total" id="total">মোট: ৳০</div>
+
+    <p>💵 পেমেন্ট: Cash on Delivery</p>
+    <p>পণ্য হাতে পেয়ে টাকা পরিশোধ করবেন।</p>
+
+    <button id="submitBtn" onclick="placeOrder()">
+      অর্ডার কনফার্ম করুন
+    </button>
+
+    <button class="back" onclick="closeOrder()">
+      ফিরে যান
+    </button>
+
+    <p id="message"></p>
+
+  </div>
+</div>
+
+<script type="module">
+
+// Firebase configuration এখানে বসাতে হবে
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ডেলিভারি চার্জ পরে নির্ধারণ করবে
+const deliveryInside = 0;
+const deliveryOutside = 0;
+
+// নমুনা প্রোডাক্ট
+const products = [
+  {
+    id: 1,
+    name: "প্রোডাক্ট ১",
+    price: 500,
+    image: "https://placehold.co/300x200?text=Product+1"
+  },
+  {
+    id: 2,
+    name: "প্রোডাক্ট ২",
+    price: 750,
+    image: "https://placehold.co/300x200?text=Product+2"
+  },
+  {
+    id: 3,
+    name: "প্রোডাক্ট ৩",
+    price: 1000,
+    image: "https://placehold.co/300x200?text=Product+3"
+  },
+  {
+    id: 4,
+    name: "প্রোডাক্ট ৪",
+    price: 1200,
+    image: "https://placehold.co/300x200?text=Product+4"
+  }
+];
+
+let selected = null;
+
+const productsDiv = document.getElementById("products");
+
+products.forEach(product => {
+  productsDiv.innerHTML += `
+    <div class="product">
+      <img src="${product.image}" alt="Product">
+      <h3>${product.name}</h3>
+      <div class="price">৳${product.price}</div>
+      <button onclick="selectProduct(${product.id})">
+        Buy Now
+      </button>
+    </div>
+  `;
+});
+
+window.selectProduct = function(id) {
+  selected = products.find(p => p.id === id);
+
+  document.getElementById("orderBox").style.display = "block";
+  document.getElementById("selectedProduct").textContent =
+    "নির্বাচিত পণ্য: " + selected.name;
+
+  calculateTotal();
+
+  document.getElementById("orderBox").scrollIntoView({
+    behavior: "smooth"
+  });
+};
+
+window.closeOrder = function() {
+  document.getElementById("orderBox").style.display = "none";
+};
+
+window.calculateTotal = function() {
+  if (!selected) return;
+
+  const qty = Math.max(
+    1,
+    Number(document.getElementById("quantity").value) || 1
+  );
+
+  const area = document.getElementById("deliveryArea").value;
+
+  const charge = area === "inside"
+    ? deliveryInside
+    : deliveryOutside;
+
+  const total = (selected.price * qty) + charge;
+
+  document.getElementById("total").textContent =
+    "পণ্যের দাম: ৳" + (selected.price * qty) +
+    " | ডেলিভারি: ৳" + charge +
+    " | সর্বমোট: ৳" + total;
+};
+
+window.placeOrder = async function() {
+
+  if (!selected) return;
+
+  const name = document.getElementById("customerName").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const district = document.getElementById("district").value.trim();
+  const address = document.getElementById("address").value.trim();
+
+  const qty = Math.max(
+    1,
+    Number(document.getElementById("quantity").value) || 1
+  );
+
+  const area = document.getElementById("deliveryArea").value;
+
+  if (!name || !phone || !district || !address) {
+    alert("সব তথ্য পূরণ করুন");
+    return;
+  }
+
+  if (!/^01[3-9]\d{8}$/.test(phone)) {
+    alert("সঠিক বাংলাদেশি মোবাইল নম্বর দিন");
+    return;
+  }
+
+  if (!Number.isInteger(qty) || qty < 1 || qty > 100) {
+    alert("সঠিক পরিমাণ লিখুন");
+    return;
+  }
+
+  const charge = area === "inside"
+    ? deliveryInside
+    : deliveryOutside;
+
+  const total = selected.price * qty + charge;
+
+  const btn = document.getElementById("submitBtn");
+  const message = document.getElementById("message");
+
+  btn.disabled = true;
+  btn.textContent = "অর্ডার পাঠানো হচ্ছে...";
+
+  try {
+
+    await addDoc(collection(db, "reselling_orders"), {
+      customerName: name,
+      phone: phone,
+      district: district,
+      address: address,
+      deliveryArea: area,
+      productId: selected.id,
+      productName: selected.name,
+      productPrice: selected.price,
+      quantity: qty,
+      deliveryCharge: charge,
+      total: total,
+      paymentMethod: "Cash on Delivery",
+      status: "Pending",
+      createdAt: serverTimestamp()
+    });
+
+    message.textContent =
+      "✅ আপনার অর্ডার সফলভাবে জমা হয়েছে!";
+
+    message.style.color = "green";
+
+    document.getElementById("customerName").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("district").value = "";
+    document.getElementById("address").value = "";
+
+  } catch(error) {
+
+    console.error(error);
+
+    message.textContent =
+      "অর্ডার জমা হয়নি। Firebase Configuration ও Database Rules পরীক্ষা করুন।";
+
+    message.style.color = "red";
+
+  } finally {
+
+    btn.disabled = false;
+    btn.textContent = "অর্ডার কনফার্ম করুন";
+
+  }
+};
+
+</script>
+
+</body>
+</html>
