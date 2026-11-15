@@ -649,11 +649,17 @@ function buyPlan(amount){
 
     selectedAmount = amount;
 
-    document.getElementById("selectedPlan").innerText =
-        plans[amount].name + " - ৳" + amount;
+    const plan = plans[amount];
 
-    document.getElementById("purchaseModal").style.display =
-        "flex";
+    if(!plan){
+        alert("Plan নির্বাচন করা যায়নি!");
+        return;
+    }
+
+    document.getElementById("selectedPlan").innerText =
+        plan.name + " - ৳" + amount;
+
+    document.getElementById("purchaseModal").style.display = "flex";
 }
 
 // Close Modal
