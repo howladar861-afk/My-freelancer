@@ -1,0 +1,722 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Income - My Freelancer</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f1f3fc;
+    color:#18233b;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#172b59,#3159a8);
+    color:white;
+    padding:20px 16px;
+    border-radius:0 0 25px 25px;
+}
+
+.topbar{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:20px;
+}
+
+.back{
+    border:1px solid #ffffff55;
+    background:#ffffff20;
+    color:white;
+    padding:10px 15px;
+    border-radius:12px;
+    font-size:17px;
+    cursor:pointer;
+}
+
+.topbar h2{
+    font-size:21px;
+}
+
+.subtitle{
+    color:#d6e2ff;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.balance-box{
+    background:linear-gradient(120deg,#334f91,#263b72);
+    padding:18px;
+    border-radius:18px;
+    border:1px solid #ffffff25;
+}
+
+.balance-box small{
+    color:#d8e3ff;
+}
+
+.balance-box h1{
+    font-size:34px;
+    margin:10px 0;
+}
+
+.balance-info{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    color:#e2eaff;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:15px;
+}
+
+.stat{
+    background:#ffffff18;
+    padding:13px;
+    border-radius:13px;
+}
+
+.stat small{
+    color:#d8e3ff;
+    font-size:12px;
+}
+
+.stat h3{
+    margin-top:8px;
+    font-size:21px;
+}
+
+.container{
+    padding:18px 15px;
+}
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.section-title h3{
+    font-size:19px;
+}
+
+.section-title span{
+    color:#3764c9;
+    font-size:12px;
+}
+
+.plans{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px;
+}
+
+.plan{
+    background:white;
+    border-radius:18px;
+    padding:15px 12px;
+    box-shadow:0 5px 18px #203e7410;
+    border:1px solid #e0e7f5;
+    position:relative;
+    overflow:hidden;
+}
+
+.plan-icon{
+    width:43px;
+    height:43px;
+    border-radius:13px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:23px;
+    margin-bottom:12px;
+}
+
+.starter .plan-icon{background:#e6efff;}
+.silver .plan-icon{background:#eee8ff;}
+.gold .plan-icon{background:#fff1d6;}
+.diamond .plan-icon{background:#e1f4ff;}
+
+.plan h3{
+    font-size:15px;
+    margin-bottom:8px;
+}
+
+.price{
+    font-size:25px;
+    font-weight:bold;
+    margin-bottom:12px;
+    color:#2856ad;
+}
+
+.plan-details{
+    font-size:12px;
+    color:#69758a;
+    line-height:2;
+}
+
+.plan-details b{
+    color:#263653;
+}
+
+.plan button{
+    width:100%;
+    border:none;
+    background:linear-gradient(110deg,#2869ed,#5144d8);
+    color:white;
+    padding:11px 5px;
+    border-radius:11px;
+    font-size:13px;
+    font-weight:bold;
+    margin-top:13px;
+    cursor:pointer;
+}
+
+.plan button:disabled{
+    background:#9ba8bd;
+    cursor:not-allowed;
+}
+
+.badge{
+    display:inline-block;
+    font-size:10px;
+    padding:5px 9px;
+    border-radius:20px;
+    background:#fff0ce;
+    color:#a66b00;
+    margin-bottom:8px;
+}
+
+.info-box{
+    background:white;
+    padding:17px;
+    margin-top:20px;
+    border-radius:17px;
+    box-shadow:0 4px 15px #203e7410;
+}
+
+.info-box h3{
+    margin-bottom:13px;
+}
+
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px solid #edf0f6;
+    font-size:13px;
+}
+
+.info-row:last-child{
+    border-bottom:none;
+}
+
+.info-row span:last-child{
+    font-weight:bold;
+}
+
+.withdraw-btn{
+    background:linear-gradient(110deg,#172b59,#426ad1);
+    color:white;
+    border:none;
+    border-radius:12px;
+    width:100%;
+    padding:14px;
+    margin-top:14px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.notice{
+    background:#fff7e6;
+    border:1px solid #f3dfad;
+    color:#76520b;
+    padding:13px;
+    border-radius:12px;
+    font-size:12px;
+    line-height:1.8;
+    margin-top:15px;
+}
+
+.history-item{
+    background:#f5f7fc;
+    padding:12px;
+    border-radius:10px;
+    margin-top:9px;
+    font-size:12px;
+}
+
+.history-item strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+.empty{
+    color:#8792a5;
+    text-align:center;
+    padding:15px;
+    font-size:13px;
+}
+
+/* Modal */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#0009;
+    z-index:100;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.modal-content{
+    background:white;
+    width:100%;
+    max-width:380px;
+    border-radius:20px;
+    padding:22px;
+}
+
+.modal-content h3{
+    margin-bottom:15px;
+}
+
+.modal-content p{
+    font-size:13px;
+    line-height:1.8;
+    color:#536078;
+    margin-bottom:12px;
+}
+
+.modal-content input{
+    width:100%;
+    padding:13px;
+    border:1px solid #d9e1ef;
+    border-radius:10px;
+    margin-bottom:12px;
+    outline:none;
+}
+
+.modal-actions{
+    display:flex;
+    gap:10px;
+}
+
+.modal-actions button{
+    flex:1;
+    padding:12px;
+    border:0;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.confirm{
+    background:#285de0;
+    color:white;
+}
+
+.cancel{
+    background:#e9edf5;
+    color:#27344c;
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="topbar">
+        <button class="back" onclick="goBack()">←</button>
+
+        <div>
+            <h2>Task Income</h2>
+            <div class="subtitle">Complete Tasks • Earn Rewards</div>
+        </div>
+    </div>
+
+    <div class="balance-box">
+        <small>MY TASK BALANCE</small>
+        <h1 id="balance">৳ 0.00</h1>
+
+        <div class="balance-info">
+            <span>Verified Task Rewards</span>
+            <span>My Wallet</span>
+        </div>
+
+        <div class="stats">
+
+            <div class="stat">
+                <small>Today's Earnings</small>
+                <h3 id="today">৳0</h3>
+            </div>
+
+            <div class="stat">
+                <small>Monthly Withdrawals</small>
+                <h3 id="withdrawCount">0 / 2</h3>
+            </div>
+
+        </div>
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <div class="section-title">
+        <h3>💎 Available Plans</h3>
+        <span>4 Plans</span>
+    </div>
+
+    <div class="plans">
+
+        <div class="plan starter">
+            <div class="plan-icon">🌱</div>
+            <span class="badge" id="status-500">LOCKED</span>
+            <h3>Starter Plan</h3>
+            <div class="price">৳500</div>
+
+            <div class="plan-details">
+                Daily reward target<br>
+                <b>৳200</b><br>
+                Task reward limit
+            </div>
+
+            <button onclick="buyPlan(500)">
+                Buy Plan
+            </button>
+        </div>
+
+
+        <div class="plan silver">
+            <div class="plan-icon">🥈</div>
+            <span class="badge" id="status-1000">LOCKED</span>
+            <h3>Silver Plan</h3>
+            <div class="price">৳1,000</div>
+
+            <div class="plan-details">
+                Daily reward target<br>
+                <b>৳500</b><br>
+                Task reward limit
+            </div>
+
+            <button onclick="buyPlan(1000)">
+                Buy Plan
+            </button>
+        </div>
+
+
+        <div class="plan gold">
+            <div class="plan-icon">🥇</div>
+            <span class="badge" id="status-1500">LOCKED</span>
+            <h3>Gold Plan</h3>
+            <div class="price">৳1,500</div>
+
+            <div class="plan-details">
+                Daily reward target<br>
+                <b>৳800</b><br>
+                Task reward limit
+            </div>
+
+            <button onclick="buyPlan(1500)">
+                Buy Plan
+            </button>
+        </div>
+
+
+        <div class="plan diamond">
+            <div class="plan-icon">💎</div>
+            <span class="badge" id="status-2000">LOCKED</span>
+            <h3>Diamond Plan</h3>
+            <div class="price">৳2,000</div>
+
+            <div class="plan-details">
+                Daily reward target<br>
+                <b>৳1,200</b><br>
+                Task reward limit
+            </div>
+
+            <button onclick="buyPlan(2000)">
+                Buy Plan
+            </button>
+        </div>
+
+    </div>
+
+
+    <div class="info-box">
+
+        <h3>📊 My Account Details</h3>
+
+        <div class="info-row">
+            <span>Plan Status</span>
+            <span id="planStatus">No Active Plan</span>
+        </div>
+
+        <div class="info-row">
+            <span>Today's Reward Claimed</span>
+            <span id="claimed">No</span>
+        </div>
+
+        <div class="info-row">
+            <span>First Verified Reward</span>
+            <span id="firstReward">Not yet</span>
+        </div>
+
+        <div class="info-row">
+            <span>Withdrawal Eligibility</span>
+            <span id="eligible">Not Eligible</span>
+        </div>
+
+        <button class="withdraw-btn" onclick="withdraw()">
+            💳 Withdraw Money
+        </button>
+
+    </div>
+
+
+    <div class="info-box">
+        <h3>📜 Purchase History</h3>
+        <div id="history" class="empty">
+            No purchase requests yet.
+        </div>
+    </div>
+
+
+    <div class="info-box">
+        <h3>📌 How It Works</h3>
+
+        <div class="info-row">
+            <span>1. Plan Request</span>
+            <span>Submit</span>
+        </div>
+
+        <div class="info-row">
+            <span>2. Admin Review</span>
+            <span>Approval</span>
+        </div>
+
+        <div class="info-row">
+            <span>3. Complete Tasks</span>
+            <span>Verification</span>
+        </div>
+
+        <div class="info-row">
+            <span>4. Withdrawal</span>
+            <span>After 15 Days</span>
+        </div>
+
+    </div>
+
+
+    <div class="notice">
+        ⚠️ গুরুত্বপূর্ণ: Plan-এর Daily Reward হলো প্রকৃত কাজের ভিত্তিতে
+        সর্বোচ্চ পুরস্কারের লক্ষ্য, নিশ্চিত বা গ্যারান্টিযুক্ত আয় নয়।
+        Admin যাচাই ছাড়া কোনো টাকা Balance-এ যোগ হবে না।
+        Withdrawal-এর জন্য প্রথম Verified Reward থেকে ১৫ দিন অপেক্ষা
+        এবং মাসে সর্বোচ্চ ২ বার উত্তোলনের নিয়ম প্রযোজ্য।
+    </div>
+
+</main>
+
+
+<!-- Purchase Modal -->
+
+<div class="modal" id="purchaseModal">
+    <div class="modal-content">
+
+        <h3>💎 Plan Request</h3>
+
+        <p id="selectedPlan"></p>
+
+        <p>
+            Plan Activation-এর জন্য Admin Approval প্রয়োজন।
+            পেমেন্ট যাচাই না হওয়া পর্যন্ত Plan Locked থাকবে।
+        </p>
+
+        <input
+            type="text"
+            id="paymentReference"
+            placeholder="Payment Reference / Transaction ID"
+        >
+
+        <div class="modal-actions">
+            <button class="cancel" onclick="closeModal()">
+                Cancel
+            </button>
+
+            <button class="confirm" onclick="submitRequest()">
+                Submit Request
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+// Main Dashboard Back Button
+function goBack(){
+    window.location.href = "index.html";
+}
+
+
+// Plan Information
+const plans = {
+    500: {
+        name:"Starter Plan",
+        reward:200
+    },
+
+    1000: {
+        name:"Silver Plan",
+        reward:500
+    },
+
+    1500: {
+        name:"Gold Plan",
+        reward:800
+    },
+
+    2000: {
+        name:"Diamond Plan",
+        reward:1200
+    }
+};
+
+
+// Demo request history only.
+// Local storage is NOT an authoritative database.
+let requests = JSON.parse(
+    localStorage.getItem("taskPlanRequests") || "[]"
+);
+
+let selectedAmount = null;
+
+
+// Purchase Plan
+function buyPlan(amount){
+
+    selectedAmount = amount;
+
+    document.getElementById("selectedPlan").innerText =
+        plans[amount].name +
+        " - ৳" + amount;
+
+    document.getElementById("purchaseModal").style.display =
+        "flex";
+}
+
+
+// Close Modal
+function closeModal(){
+
+    document.getElementById("purchaseModal").style.display =
+        "none";
+}
+
+
+// Submit Request
+function submitRequest(){
+
+    const reference = document
+        .getElementById("paymentReference")
+        .value.trim();
+
+    if(!reference){
+        alert("Payment Reference দিন।");
+        return;
+    }
+
+    const request = {
+        amount:selectedAmount,
+        plan:plans[selectedAmount].name,
+        reference:reference,
+        status:"Pending",
+        date:new Date().toISOString()
+    };
+
+    requests.push(request);
+
+    localStorage.setItem(
+        "taskPlanRequests",
+        JSON.stringify(requests)
+    );
+
+    alert(
+        "Request জমা হয়েছে। Admin Approval-এর অপেক্ষা করুন।"
+    );
+
+    document.getElementById("paymentReference").value = "";
+
+    closeModal();
+
+    showHistory();
+}
+
+
+// Purchase History
+function showHistory(){
+
+    const history = document.getElementById("history");
+
+    if(requests.length === 0){
+        history.innerHTML = "No purchase requests yet.";
+        return;
+    }
+
+    history.innerHTML = "";
+
+    requests.slice().reverse().forEach(item => {
+
+        const div = document.createElement("div");
+
+        div.className = "history-item";
+
+        const title = document.createElement("strong");
+        title.textContent = item.plan + " - ৳" + item.amount;
+
+        const status = document.createElement("div");
+        status.textContent = "Status: " + item.status;
+
+        const date = document.createElement("div");
+        date.textContent = new Date(item.date).toLocaleDateString();
+
+        div.append(title, status, date);
+
+        history.appendChild(div);
+
+    });
+}
+
+
+// Initial UI
+showHistory();
+
+</script>
+
+</body>
+  </html>
+  
