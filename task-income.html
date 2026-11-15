@@ -429,10 +429,28 @@ body{
     background:#edf0f7;
     color:#27344c;
     }
-    
+
 </style>
 </head>
+<!-- কাস্টম অ্যালার্ট বক্স -->
+<div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
+    <div style="background: #ffffff; color: #18233b; padding: 22px; border-radius: 20px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        <h3 style="margin-bottom: 10px; font-size: 18px; color: #182b52;">Rakib Freelancer</h3>
+        <p id="alertMessage" style="margin-bottom: 20px; font-size: 14px; color: #536078; line-height: 1.6;"></p>
+        <button onclick="closeCustomAlert()" style="background: linear-gradient(110deg,#2869ed,#5144d8); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer;">OK</button>
+    </div>
+</div>
 
+<script>
+function showCustomAlert(msg) {
+    document.getElementById('alertMessage').innerText = msg;
+    document.getElementById('customAlert').style.display = 'flex';
+}
+function closeCustomAlert() {
+    document.getElementById('customAlert').style.display = 'none';
+}
+</script>
+    
 <body>
 
 <header class="header">
@@ -615,7 +633,8 @@ function buyPlan(amount){
     const plan = plans[amount];
 
     if(!plan){
-        alert("Plan নির্বাচন করা যায়নি!");
+        showCustomAlert("Plan নির্বাচন করা যায়নি!");
+        
         return;
     }
 
@@ -645,12 +664,14 @@ function submitRequest(){
         .getElementById("customerName").value.trim();
 
     if(!senderNumber || !reference || !customerName){
-        alert("সবগুলো তথ্য পূরণ করুন।");
+        showCustomAlert("সবগুলো তথ্য পূরণ করুন।");
+        
         return;
     }
 
     if(!selectedAmount || !plans[selectedAmount]){
-        alert("একটি Plan নির্বাচন করুন।");
+        showCustomAlert("একটি Plan নির্বাচন করুন।");
+        
         return;
     }
 
@@ -675,7 +696,8 @@ function submitRequest(){
         JSON.stringify(requests)
     );
 
-    alert("আপনার Payment Request জমা হয়েছে। Admin যাচাই করবেন।");
+    showCustomAlert("আপনার Payment Request জমা হয়েছে। Admin যাচাই করবেন।");
+    
 
     document.getElementById("senderNumber").value = "";
     document.getElementById("paymentReference").value = "";
@@ -686,7 +708,8 @@ function submitRequest(){
 
 // Withdrawal placeholder
 function withdraw(){
-    alert("Withdrawal-এর জন্য Admin Approval এবং Verified Reward প্রয়োজন।");
+    showCustomAlert("Withdrawal-এর জন্য Admin Approval এবং Verified Reward প্রয়োজন।");
+    
 }
 
 </script>
