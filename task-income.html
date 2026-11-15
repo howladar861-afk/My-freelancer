@@ -288,6 +288,148 @@ body{
     background:#e9edf5;
     color:#27344c;
 }
+    
+/* Premium Payment Popup */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(8,18,40,.78);
+    backdrop-filter:blur(5px);
+    z-index:1000;
+    justify-content:center;
+    align-items:center;
+    padding:16px;
+}
+
+.modal-content{
+    background:#fff;
+    width:100%;
+    max-width:420px;
+    max-height:90vh;
+    overflow-y:auto;
+    border-radius:25px;
+    padding:23px 20px;
+    box-shadow:0 15px 50px #0004;
+    animation:popup .25s ease;
+}
+
+@keyframes popup{
+    from{
+        opacity:0;
+        transform:translateY(25px) scale(.96);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+.modal-content h3{
+    font-size:23px;
+    margin-bottom:18px;
+    color:#182b52;
+}
+
+.payment-methods{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.payment-card{
+    padding:15px 10px;
+    border-radius:15px;
+    text-align:center;
+    border:1px solid #e2e8f5;
+    background:#f7f9ff;
+}
+
+.payment-card strong{
+    display:block;
+    font-size:18px;
+    margin-bottom:8px;
+}
+
+.payment-card p{
+    font-size:15px;
+    font-weight:bold;
+    color:#263e77;
+    margin:0;
+}
+
+.payment-card button{
+    margin-top:10px;
+    border:0;
+    background:#e4ebff;
+    color:#2455b5;
+    padding:7px 13px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.payment-warning{
+    background:#fff5e5;
+    border:1px solid #f4d79b;
+    padding:12px;
+    border-radius:12px;
+    color:#805500;
+    font-size:12px;
+    line-height:1.8;
+    margin-bottom:17px;
+}
+
+.form-label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    color:#273653;
+    margin-bottom:7px;
+}
+
+.payment-input{
+    width:100%;
+    padding:14px;
+    border:1px solid #dce3ef;
+    border-radius:12px;
+    outline:none;
+    font-size:14px;
+    margin-bottom:14px;
+    background:#fafbff;
+}
+
+.payment-input:focus{
+    border-color:#3265dc;
+    background:white;
+}
+
+.modal-actions{
+    display:flex;
+    gap:10px;
+    margin-top:5px;
+}
+
+.modal-actions button{
+    flex:1;
+    padding:14px 5px;
+    border:0;
+    border-radius:12px;
+    font-weight:bold;
+    font-size:14px;
+}
+
+.confirm{
+    background:linear-gradient(110deg,#2869ed,#5144d8);
+    color:white;
+}
+
+.cancel{
+    background:#edf0f7;
+    color:#27344c;
+    }
+    
 </style>
 </head>
 
@@ -521,15 +663,20 @@ function closeModal(){
         "none";
 }
 
-// Submit Request
+// Submit Payment Request
 function submitRequest(){
 
-    const reference = document
-        .getElementById("paymentReference")
-        .value.trim();
+    const senderNumber = document
+        .getElementById("senderNumber").value.trim();
 
-    if(!reference){
-        alert("Payment Reference দিন।");
+    const reference = document
+        .getElementById("paymentReference").value.trim();
+
+    const customerName = document
+        .getElementById("customerName").value.trim();
+
+    if(!senderNumber || !reference || !customerName){
+        alert("সবগুলো তথ্য পূরণ করুন।");
         return;
     }
 
@@ -539,11 +686,13 @@ function submitRequest(){
     }
 
     const request = {
-        amount:selectedAmount,
-        plan:plans[selectedAmount].name,
-        reference:reference,
-        status:"Pending",
-        date:new Date().toISOString()
+        amount: selectedAmount,
+        plan: plans[selectedAmount].name,
+        senderNumber: senderNumber,
+        transactionID: reference,
+        customerName: customerName,
+        status: "Pending",
+        date: new Date().toISOString()
     };
 
     let requests = JSON.parse(
@@ -557,9 +706,11 @@ function submitRequest(){
         JSON.stringify(requests)
     );
 
-    alert("Request জমা হয়েছে। Admin Approval-এর অপেক্ষা করুন।");
+    alert("আপনার Payment Request জমা হয়েছে। Admin যাচাই করবেন।");
 
+    document.getElementById("senderNumber").value = "";
     document.getElementById("paymentReference").value = "";
+    document.getElementById("customerName").value = "";
 
     closeModal();
 }
@@ -571,5 +722,75 @@ function withdraw(){
 
 </script>
 
+<!-- Payment Popup -->
+<div class="modal" id="purchaseModal">
+
+    <div class="modal-content payment-popup">
+
+        <h2>💎 Plan Payment</h2>
+
+        <p id="selectedPlan"></p>
+
+        <div class="payment-card">
+            <h3>📱 পেমেন্ট নাম্বার</h3>
+
+            <p>Bkash Personal</p>
+            <h3>01837976455</h3>
+            <button onclick="copyPayment('01837976455')">
+                Copy Bkash Number
+            </button>
+
+            <hr>
+
+            <p>Nagad Personal</p>
+            <h3>01404534868</h3>
+            <button onclick="copyPayment('01404534868')">
+                Copy Nagad Number
+            </button>
+        </div>
+
+        <div class="payment-warning">
+            ⚠️ গুরুত্বপূর্ণ সতর্কবার্তা:
+            বিকাশ ও নগদ পার্সোনাল নাম্বারে টাকা পাঠাবেন।
+            ভুলবশত Flexiload করলে টাকা ফেরতযোগ্য হবেনা।
+        </div>
+
+        <label class="form-label">
+            যে নাম্বার থেকে টাকা দিয়েছেন
+        </label>
+        <input class="payment-input"
+               type="tel"
+               id="senderNumber"
+               placeholder="আপনার পেমেন্ট নাম্বার">
+
+        <label class="form-label">
+            Transaction ID
+        </label>
+        <input class="payment-input"
+               type="text"
+               id="paymentReference"
+               placeholder="Transaction ID লিখুন">
+
+        <label class="form-label">
+            আপনার নাম
+        </label>
+        <input class="payment-input"
+               type="text"
+               id="customerName"
+               placeholder="আপনার নাম লিখুন">
+
+        <div class="modal-actions">
+            <button class="cancel" onclick="closeModal()">
+                Cancel
+            </button>
+
+            <button class="confirm" onclick="submitRequest()">
+                Submit Request
+            </button>
+        </div>
+
+    </div>
+</div>
+    
 </body>
 </html>
