@@ -446,7 +446,33 @@ body{
 }
     
 </style>
-</head>
+    </head>
+
+<!-- ফায়ারবেস কনফিগারেশন ও মডিউল -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBFUKPT7fo6sUofdO09ffiZgjdlaR5evm8",
+    authDomain: "rakib-freelancer-9c66b.firebaseapp.com",
+    projectId: "rakib-freelancer-9c66b",
+    storageBucket: "rakib-freelancer-9c66b.firebasestorage.app",
+    messagingSenderId: "541209844482",
+    appId: "1:541209844482:web:510568d5226c9bf47ac01b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  window.db = db;
+  window.auth = auth;
+  window.addDoc = addDoc;
+  window.collection = collection;
+  window.serverTimestamp = serverTimestamp;
+</script>
 <!-- কাস্টম অ্যালার্ট বক্স -->
 <div id="customAlert" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
     <div style="background: #ffffff; color: #18233b; padding: 22px; border-radius: 20px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
@@ -682,60 +708,52 @@ function closeModal(){
         "none";
 }
 
-// Submit Payment Request
-function submitRequest(){
+// Submit Payment Request to Firebase Firestore
+async function submitRequest(){
 
-    const senderNumber = document
-        .getElementById("senderNumber").value.trim();
-
-    const reference = document
-        .getElementById("paymentReference").value.trim();
-
-    const customerName = document
-        .getElementById("customerName").value.trim();
+    const senderNumber = document.getElementById("senderNumber").value.trim();
+    const reference = document.getElementById("paymentReference").value.trim();
+    const customerName = document.getElementById("customerName").value.trim();
 
     if(!senderNumber || !reference || !customerName){
         showCustomAlert("সবগুলো তথ্য পূরণ করুন।");
-        
         return;
     }
 
     if(!selectedAmount || !plans[selectedAmount]){
         showCustomAlert("একটি Plan নির্বাচন করুন।");
-        
         return;
     }
 
-    const request = {
-        amount: selectedAmount,
-        plan: plans[selectedAmount].name,
-        senderNumber: senderNumber,
-        transactionID: reference,
-        customerName: customerName,
-        status: "Pending",
-        date: new Date().toISOString()
-    };
+    const currentUser = window.auth.currentUser;
+    const userId = currentUser ? currentUser.uid : "unknown_user";
 
-    let requests = JSON.parse(
-        localStorage.getItem("taskPlanRequests") || "[]"
-    );
+    try {
+        await window.addDoc(window.collection(window.db, "taskPlanRequests"), {
+            userId: userId,
+            amount: selectedAmount,
+            plan: plans[selectedAmount].name,
+            senderNumber: senderNumber,
+            transactionID: reference,
+            customerName: customerName,
+            status: "Pending",
+            date: window.serverTimestamp()
+        });
 
-    requests.push(request);
+        showCustomAlert("আপনার Payment Request জমা হয়েছে। Admin যাচাই করবেন।");
 
-    localStorage.setItem(
-        "taskPlanRequests",
-        JSON.stringify(requests)
-    );
+        document.getElementById("senderNumber").value = "";
+        document.getElementById("paymentReference").value = "";
+        document.getElementById("customerName").value = "";
 
-    showCustomAlert("আপনার Payment Request জমা হয়েছে। Admin যাচাই করবেন।");
-    
+        closeModal();
 
-    document.getElementById("senderNumber").value = "";
-    document.getElementById("paymentReference").value = "";
-    document.getElementById("customerName").value = "";
-
-    closeModal();
+    } catch (error) {
+        console.error("Firebase Error:", error);
+        showCustomAlert("রিকোয়েস্ট সাবমিট করতে সমস্যা হয়েছে, আবার চেষ্টা করুন।");
+    }
 }
+    
 
 // Withdrawal placeholder
 function withdraw(){
