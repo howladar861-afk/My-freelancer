@@ -1233,67 +1233,126 @@ function loadPlanRequests() {
 }
 
 /* =========================
-   APPROVE PLAN REQUEST
+   LOAD TASK PLAN REQUESTS
 ========================= */
-async function approvePlanRequest(id, data) {
-  if (!confirm(`${data.customerName}-এর ${data.plan} Approve করবেন? (৩০ দিনের জন্য সচল হবে)`)) return;
+function loadPlanRequests() {
+  const planList = document.getElementById("planRequestsList");
+  const plansRef = collection(db, "taskPlanRequests");
+
+  onSnapshot(plansRef, function(snapshot) {
+    planList.innerHTML = "";
+
+    if (snapshot.empty) {
+      planList.innerHTML = '<p class="empty">কোনো প্ল্যান রিকোয়েস্ট নেই।</p>';
+      return;
+    }
+
+    snapshot.forEach(function(requestDoc) {
+      const data = requestDoc.data();
+      const id = requestDoc.id;
+
+      const card = document.createElement("div");
+      card.className = "request";
+
+      card.innerHTML = `
+        <h3>💎 Task Plan Request</h3>
+        <p><b>User ID:</b> ${data.userId || "নেই"}</p>
+        <p><b>Customer Name:</b> ${data.customerName || "নেই"}</p>
+        <p><b>Plan Name:</b> ${data.plan || "নেই"}</p>
+        <p><b>Amount:</b> ৳${data.amount || 0}</p>
+        <p><b>Sender Number:</b> ${data.senderNumber || "নেই"}</p>
+        <p><b>Transaction ID:</b> ${data.transactionID || "নেই"}</p>
+        <p class="status">Status: ${data.status || "Pending"}</p>
+      `;
+
+      // যদি স্ট্যাটাস Pending হয়, তবেই Approve ও Reject বাটন দেখাবে
+      if (data.status === "Pending") {
+        const approveBtn = document.createElement("button");
+        approveBtn.className = "approve";
+        approveBtn.textContent = "✅ Approve Plan";
+        
+        approveBtn.onclick = function() {
+          approvePlanRequest(id, data.userId, data.plan);
+        };
+
+        const rejectBtn = document.createElement("button");
+        rejectBtn.className = "reject";
+        rejectBtn.textContent = "❌ Reject Plan";
+
+        rejectBtn.onclick = function() {
+          rejectPlanRequest(id);
+        };
+
+        card.appendChild(approveBtn);
+        card.appendChild(rejectBtn);
+      }
+
+      planList.appendChild(card);
+    });
+  }, function(error) {
+    console.error("Plan Requests Error:", error);
+    planList.innerHTML = '<p class="empty">প্ল্যান রিকোয়েস্ট লোড করা যায়নি।</p>';
+  });
+}
+
+/* =========================
+   APPROVE TASK PLAN
+========================= */
+async function approvePlanRequest(requestId, userId, planName) {
+  if (!confirm(`এই ${planName} রিকোয়েস্টটি Approve করবেন?`)) {
+    return;
+  }
 
   try {
-    const now = new Date();
-    const expiryDate = new Date();
-    expiryDate.setDate(now.getDate() + 30);
-
-    await updateDoc(doc(db, "taskPlanRequests", id), {
+    // ১. রিকোয়েস্টের স্ট্যাটাস Approved করা
+    await updateDoc(doc(db, "taskPlanRequests", requestId), {
       status: "Approved",
       approvedAt: serverTimestamp()
     });
 
-    if (data.userId) {
-      await updateDoc(doc(db, "users", data.userId), {
+    // ২. ইউজারের কালেকশনে activePlan আপডেট করা (যাতে ইউজার পেজে Unlocked দেখায়)
+    if (userId && userId !== "unknown_user") {
+      const userRef = doc(db, "users", userId);
+      await updateDoc(userRef, {
         activePlan: {
-          planName: data.plan,
-          amount: data.amount,
-          startDate: now.toISOString(),
-          expiryDate: expiryDate.toISOString(),
-          isActive: true
+          planName: planName,
+          isActive: true,
+          approvedAt: serverTimestamp(),
+          expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // ৩০ দিনের মেয়াদ
         }
       });
     }
 
-    alert("✅ Plan সফলভাবে Approve করা হয়েছে!");
+    alert("✅ Plan Successfully Approved and Unlocked for User!");
+
   } catch (error) {
-    console.error(error);
-    alert("Approve করতে সমস্যা হয়েছে: " + error.message);
+    console.error("Approve Plan Error:", error);
+    alert("❌ Approve করা যায়নি:\n\n" + error.message);
   }
 }
 
 /* =========================
-   REJECT PLAN REQUEST
+   REJECT TASK PLAN
 ========================= */
-async function rejectPlanRequest(id) {
-  if (!confirm("এই রিকোয়েস্টটি Reject করতে চান?")) return;
+async function rejectPlanRequest(requestId) {
+  if (!confirm("এই প্ল্যান রিকোয়েস্টটি Reject করবেন?")) {
+    return;
+  }
+
   try {
-    await updateDoc(doc(db, "taskPlanRequests", id), {
-      status: "Rejected"
+    await updateDoc(doc(db, "taskPlanRequests", requestId), {
+      status: "Rejected",
+      rejectedAt: serverTimestamp()
     });
-    alert("❌ Plan Request Rejected!");
-  } catch (error) {
-    alert("Reject করা যায়নি: " + error.message);
-  }
-}
 
-/* =========================
-   DELETE PLAN REQUEST
-========================= */
-async function deletePlanRequest(id) {
-  if (!confirm("এই রিকোয়েস্টটি স্থায়ীভাবে মুছে ফেলতে চান?")) return;
-  try {
-    await deleteDoc(doc(db, "taskPlanRequests", id));
-    alert("🗑️ Request Deleted!");
+    alert("❌ Plan Request Rejected!");
+
   } catch (error) {
-    alert("Delete করা যায়নি: " + error.message);
+    console.error("Reject Plan Error:", error);
+    alert("❌ Reject করা যায়নি:\n\n" + error.message);
   }
 }
+  
   
 /* =========================
    LOGOUT
