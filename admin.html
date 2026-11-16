@@ -195,7 +195,16 @@ button{
     </p>
   </div>
   </div>
-
+<!-- TASK PLAN REQUESTS -->
+<div class="card" style="margin-top:20px;">
+  <h2 style="color:#ffc107;">
+    💎 Task Plan Requests
+  </h2>
+  <div id="planRequestsList">
+    <p class="empty">Plan Requests Loading...</p>
+  </div>
+</div>
+    
 <!-- RESELLING ORDERS -->
 <div class="card" style="margin-top:20px;">
   <h2 style="color:#ffc107;">
@@ -330,6 +339,8 @@ loadVerificationRequests();
 loadCompanyWallet();
 loadJobSubmissions();
   loadResellingOrders();
+    loadPlanRequests();
+    
   }
 
   catch (error) {
@@ -1173,6 +1184,116 @@ function loadResellingOrders() {
     }
   );
         }
+  /* =========================
+   LOAD TASK PLAN REQUESTS
+========================= */
+function loadPlanRequests() {
+  const planList = document.getElementById("planRequestsList");
+  const plansRef = collection(db, "taskPlanRequests");
+
+  onSnapshot(plansRef, function(snapshot) {
+    planList.innerHTML = "";
+
+    if (snapshot.empty) {
+      planList.innerHTML = '<p class="empty">কোনো প্ল্যান রিকোয়েস্ট নেই।</p>';
+      return;
+    }
+
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const id = docSnap.id;
+
+      if (data.status && data.status !== "Pending") return;
+
+      const card = document.createElement("div");
+      card.className = "request";
+
+      card.innerHTML = `
+        <h3>💎 Plan Request: ${data.plan || "Plan"}</h3>
+        <p><b>নাম:</b> ${data.customerName || "নেই"}</p>
+        <p><b>প্ল্যানের মূল্য:</b> ৳${data.amount || 0}</p>
+        <p><b>প্রেরক নম্বর:</b> ${data.senderNumber || "নেই"}</p>
+        <p><b>Transaction ID (TrxID):</b> ${data.transactionID || "নেই"}</p>
+        <p class="status">Status: ${data.status || "Pending"}</p>
+        <button class="approve">✅ Approve (৩০ দিন)</button>
+        <button class="reject">❌ Reject</button>
+        <button class="delete">🗑️ Delete</button>
+      `;
+
+      card.querySelector(".approve").onclick = () => approvePlanRequest(id, data);
+      card.querySelector(".reject").onclick = () => rejectPlanRequest(id);
+      card.querySelector(".delete").onclick = () => deletePlanRequest(id);
+
+      planList.appendChild(card);
+    });
+  }, function(error) {
+    console.error("Plan Requests Error:", error);
+    planList.textContent = "প্ল্যান রিকোয়েস্ট লোড করা যায়নি: " + error.message;
+  });
+}
+
+/* =========================
+   APPROVE PLAN REQUEST
+========================= */
+async function approvePlanRequest(id, data) {
+  if (!confirm(`${data.customerName}-এর ${data.plan} Approve করবেন? (৩০ দিনের জন্য সচল হবে)`)) return;
+
+  try {
+    const now = new Date();
+    const expiryDate = new Date();
+    expiryDate.setDate(now.getDate() + 30);
+
+    await updateDoc(doc(db, "taskPlanRequests", id), {
+      status: "Approved",
+      approvedAt: serverTimestamp()
+    });
+
+    if (data.userId) {
+      await updateDoc(doc(db, "users", data.userId), {
+        activePlan: {
+          planName: data.plan,
+          amount: data.amount,
+          startDate: now.toISOString(),
+          expiryDate: expiryDate.toISOString(),
+          isActive: true
+        }
+      });
+    }
+
+    alert("✅ Plan সফলভাবে Approve করা হয়েছে!");
+  } catch (error) {
+    console.error(error);
+    alert("Approve করতে সমস্যা হয়েছে: " + error.message);
+  }
+}
+
+/* =========================
+   REJECT PLAN REQUEST
+========================= */
+async function rejectPlanRequest(id) {
+  if (!confirm("এই রিকোয়েস্টটি Reject করতে চান?")) return;
+  try {
+    await updateDoc(doc(db, "taskPlanRequests", id), {
+      status: "Rejected"
+    });
+    alert("❌ Plan Request Rejected!");
+  } catch (error) {
+    alert("Reject করা যায়নি: " + error.message);
+  }
+}
+
+/* =========================
+   DELETE PLAN REQUEST
+========================= */
+async function deletePlanRequest(id) {
+  if (!confirm("এই রিকোয়েস্টটি স্থায়ীভাবে মুছে ফেলতে চান?")) return;
+  try {
+    await deleteDoc(doc(db, "taskPlanRequests", id));
+    alert("🗑️ Request Deleted!");
+  } catch (error) {
+    alert("Delete করা যায়নি: " + error.message);
+  }
+}
   
 /* =========================
    LOGOUT
