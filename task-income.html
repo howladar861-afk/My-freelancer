@@ -760,7 +760,46 @@ function withdraw(){
     showCustomAlert("Withdrawal-এর জন্য Admin Approval এবং Verified Reward প্রয়োজন।");
     
 }
+// ইউজারের অ্যাক্টিভ প্ল্যান ফায়ারবেস থেকে লোড করে UI আপডেট করা
+async function checkUserActivePlan() {
+    const currentUser = window.auth ? window.auth.currentUser : null;
+    if (!currentUser) return;
 
+    try {
+        const userDocRef = window.doc(window.db, "users", currentUser.uid);
+        const userDocSnap = await window.getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            const activePlan = userData.activePlan;
+
+            if (activePlan && activePlan.isActive) {
+                document.getElementById("planStatus").innerText = activePlan.planName + " (Active)";
+                
+                let planAmount = 500;
+                if (activePlan.planName.includes("Silver")) planAmount = 1000;
+                else if (activePlan.planName.includes("Gold")) planAmount = 1500;
+                else if (activePlan.planName.includes("Diamond")) planAmount = 2000;
+
+                const badge = document.getElementById("status-" + planAmount);
+                if (badge) {
+                    badge.innerText = "UNLOCKED";
+                    badge.style.background = "#dcfce7";
+                    badge.style.color = "#16a34a";
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Plan Check Error:", error);
+    }
+}
+
+window.auth.onAuthStateChanged((user) => {
+    if (user) {
+        checkUserActivePlan();
+    }
+});
+                
 </script>
 
 <!-- Payment Popup -->
