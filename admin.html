@@ -1405,36 +1405,23 @@ async function deletePlanRequest(id) {
     alert("Delete করা যায়নি: " + error.message);
   }
 }
-/* =========================
+
+  /* =========================
    LOGOUT
 ========================= */
-
-logoutBtn.onclick =
-  async function () {
-
+const logoutBtnElement = document.getElementById("logoutBtn");
+if (logoutBtnElement) {
+  logoutBtnElement.onclick = async function () {
     try {
-
       await signOut(auth);
-
-      adminPanel.style.display =
-        "none";
-
-      loginBox.style.display =
-        "block";
-
-      requestList.innerHTML =
-        '<p class="empty">Request Loading...</p>';
-
+      adminPanel.style.display = "none";
+      loginBox.style.display = "block";
+      requestList.innerHTML = '<p class="empty">Request Loading...</p>';
+    } catch (error) {
+      alert("❌ Logout করা যায়নি!");
     }
-
-    catch (error) {
-
-      alert(
-        "❌ Logout করা যায়নি।"
-      );
-
-    }
-
   };
+}
+  
 
 </script>
