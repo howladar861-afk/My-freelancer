@@ -429,7 +429,22 @@ body{
     background:#edf0f7;
     color:#27344c;
     }
-
+.plan-validity {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #69758a;
+    line-height: 1.4;
+}
+.plan-validity b {
+    color: #263653;
+}
+.expiry-note {
+    color: #e53e3e;
+    font-size: 10px;
+    display: block;
+    margin-top: 2px;
+}
+    
 </style>
 </head>
 <!-- কাস্টম অ্যালার্ট বক্স -->
@@ -508,7 +523,11 @@ function closeCustomAlert() {
             <div class="plan-details">
                 Daily reward target<br>
                 <b>৳200</b><br>
-                Task reward limit
+                <div class="plan-validity">
+    মেয়াদ: <b>৩০ দিন</b>
+    <span class="expiry-note">(৩০ দিন পর মেয়াদ শেষ)</span>
+                </div>
+                
             </div>
 
             <button onclick="buyPlan(500)">Buy Plan</button>
@@ -523,7 +542,11 @@ function closeCustomAlert() {
             <div class="plan-details">
                 Daily reward target<br>
                 <b>৳500</b><br>
-                Task reward limit
+                <div class="plan-validity">
+    মেয়াদ: <b>৩০ দিন</b>
+    <span class="expiry-note">(৩০ দিন পর মেয়াদ শেষ)</span>
+                </div>
+                
             </div>
 
             <button onclick="buyPlan(1000)">Buy Plan</button>
@@ -538,7 +561,11 @@ function closeCustomAlert() {
             <div class="plan-details">
                 Daily reward target<br>
                 <b>৳800</b><br>
-                Task reward limit
+                <div class="plan-validity">
+    মেয়াদ: <b>৩০ দিন</b>
+    <span class="expiry-note">(৩০ দিন পর মেয়াদ শেষ)</span>
+                </div>
+                
             </div>
 
             <button onclick="buyPlan(1500)">Buy Plan</button>
@@ -553,7 +580,11 @@ function closeCustomAlert() {
             <div class="plan-details">
                 Daily reward target<br>
                 <b>৳1,200</b><br>
-                Task reward limit
+                <div class="plan-validity">
+    মেয়াদ: <b>৩০ দিন</b>
+    <span class="expiry-note">(৩০ দিন পর মেয়াদ শেষ)</span>
+                </div>
+                
             </div>
 
             <button onclick="buyPlan(2000)">Buy Plan</button>
