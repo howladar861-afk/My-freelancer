@@ -1343,69 +1343,6 @@ function loadPlanRequests() {
   });
 }
 
-/* =========================
-   APPROVE PLAN REQUEST
-========================= */
-async function approvePlanRequest(id, data) {
-  if (!confirm(`${data.customerName}-এর ${data.plan} Approve করবেন? (৩০ দিনের জন্য সচল হবে)`)) return;
-
-  try {
-    const now = new Date();
-    const expiryDate = new Date();
-    expiryDate.setDate(now.getDate() + 30);
-
-    await updateDoc(doc(db, "taskPlanRequests", id), {
-      status: "Approved",
-      approvedAt: serverTimestamp()
-    });
-
-    if (data.userId) {
-      await updateDoc(doc(db, "users", data.userId), {
-        activePlan: {
-          planName: data.plan,
-          amount: data.amount,
-          startDate: now.toISOString(),
-          expiryDate: expiryDate.toISOString(),
-          isActive: true
-        }
-      });
-    }
-
-    alert("✅ Plan সফলভাবে Approve করা হয়েছে!");
-  } catch (error) {
-    console.error(error);
-    alert("Approve করতে সমস্যা হয়েছে: " + error.message);
-  }
-}
-
-/* =========================
-   REJECT PLAN REQUEST
-========================= */
-async function rejectPlanRequest(id) {
-  if (!confirm("এই রিকোয়েস্টটি Reject করতে চান?")) return;
-  try {
-    await updateDoc(doc(db, "taskPlanRequests", id), {
-      status: "Rejected"
-    });
-    alert("❌ Plan Request Rejected!");
-  } catch (error) {
-    alert("Reject করা যায়নি: " + error.message);
-  }
-}
-
-/* =========================
-   DELETE PLAN REQUEST
-========================= */
-async function deletePlanRequest(id) {
-  if (!confirm("এই রিকোয়েস্টটি স্থায়ীভাবে মুছে ফেলতে চান?")) return;
-  try {
-    await deleteDoc(doc(db, "taskPlanRequests", id));
-    alert("🗑️ Request Deleted!");
-  } catch (error) {
-    alert("Delete করা যায়নি: " + error.message);
-  }
-}
-
   /* =========================
    LOGOUT
 ========================= */
