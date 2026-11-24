@@ -188,7 +188,7 @@ export async function processReferralCommission(db, requestId) {
         level1User =
           level1Snap.data();
 
-        level1Amount = 30;
+        level1Amount = 10;
       }
 
       // =================================
@@ -249,7 +249,7 @@ export async function processReferralCommission(db, requestId) {
               level2User =
                 level2Snap.data();
 
-              level2Amount = 10;
+              level2Amount = 5;
             }
           }
         }
